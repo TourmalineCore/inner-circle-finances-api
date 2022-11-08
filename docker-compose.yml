@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  employees-db-debug:
+    image: postgres:13
+    restart: always
+    networks:
+      - employees-backend
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: Employees
+    ports:
+      - 10012:5432
+
+networks:
+  employees-backend: {}

@@ -1,5 +1,6 @@
 ﻿using SalaryService.Application.Dtos;
 using SalaryService.DataAccess;
+using SalaryService.DataAccess.Repositories;
 
 namespace SalaryService.Application.Queries
 {
@@ -10,15 +11,15 @@ namespace SalaryService.Application.Queries
 
     public class GetEmployeeSalaryParametersQueryHandler
     {
-        private readonly FakeDatabase _fakeDataBase;
+        private readonly EmployeeRepository _employeeRepository;
 
-        public GetEmployeeSalaryParametersQueryHandler(FakeDatabase fakeDataBase)
+        public GetEmployeeSalaryParametersQueryHandler(EmployeeRepository employeeRepository)
         {
-            _fakeDataBase = fakeDataBase;
+            _employeeRepository = employeeRepository;
         }
-        public SalaryParametersDto Handle(GetEmployeeSalaryParametersQuery request)
+        public async Task<SalaryParametersDto> Handle(GetEmployeeSalaryParametersQuery request)
         {
-            var employee = _fakeDataBase.GetById(request.EmployeeId);
+            var employee = await _employeeRepository.GetEmployeeByIdAsync(request.EmployeeId);
             return new SalaryParametersDto(
                 employee.Id,
                 employee.RatePerHour,

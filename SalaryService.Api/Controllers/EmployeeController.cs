@@ -25,13 +25,13 @@ namespace SalaryService.Api.Controllers
         }
 
         [HttpGet("getById/{EmployeeId}")]
-        public EmployeeDto GetEmployeeById([FromRoute] GetEmployeeByIdQuery getEmployeeByIdQuery)
+        public Task<EmployeeDto> GetEmployeeById([FromRoute] GetEmployeeByIdQuery getEmployeeByIdQuery)
         {
             return _getEmployeeByIdQueryHandler.Handle(getEmployeeByIdQuery);
         }
 
         [HttpGet("getSalaryParameters/{EmployeeId}")]
-        public SalaryParametersDto GetSalaryParameters([FromRoute] GetEmployeeSalaryParametersQuery getEmployeeSalaryParametersQuery)
+        public Task<SalaryParametersDto> GetSalaryParameters([FromRoute] GetEmployeeSalaryParametersQuery getEmployeeSalaryParametersQuery)
         {
             return _getEmployeeSalaryParametersQueryHandler.Handle(getEmployeeSalaryParametersQuery);
         }

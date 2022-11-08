@@ -1,4 +1,5 @@
 ﻿using SalaryService.DataAccess;
+using SalaryService.DataAccess.Repositories;
 using SalaryService.Domain;
 
 namespace SalaryService.Application.Commands
@@ -21,15 +22,15 @@ namespace SalaryService.Application.Commands
     }
     public class UpdateEmployeeCommandHandler
     {
-        private readonly FakeDatabase _fakeDataBase;
+        private readonly EmployeeRepository _employeeRepository;
 
-        public UpdateEmployeeCommandHandler(FakeDatabase fakeDataBase)
+        public UpdateEmployeeCommandHandler(EmployeeRepository employeeRepository)
         {
-            _fakeDataBase = fakeDataBase;
+            _employeeRepository = employeeRepository;
         }
         public void Handle(UpdateEmployeeCommand request)
         {
-            _fakeDataBase.UpdateAsync(request.Id, new Employee(
+            _employeeRepository.UpdateEmployee(new Employee(
                 request.Id,
                 request.Name,
                 request.Surname,
