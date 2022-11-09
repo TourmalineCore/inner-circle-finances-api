@@ -11,7 +11,7 @@ using SalaryService.DataAccess;
 namespace SalaryService.DataAccess.Migrations
 {
     [DbContext(typeof(EmployeeDbContext))]
-    [Migration("20221109084442_Init")]
+    [Migration("20221109184233_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,6 +22,37 @@ namespace SalaryService.DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("SalaryService.Domain.BasicSalaryParameters", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("EmployeeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<double>("EmploymentType")
+                        .HasColumnType("double precision");
+
+                    b.Property<bool>("HasParking")
+                        .HasColumnType("boolean");
+
+                    b.Property<double>("Pay")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("RatePerHour")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId")
+                        .IsUnique();
+
+                    b.ToTable("BasicSalaryParameters");
+                });
 
             modelBuilder.Entity("SalaryService.Domain.Employee", b =>
                 {
@@ -64,42 +95,11 @@ namespace SalaryService.DataAccess.Migrations
                     b.ToTable("Employees");
                 });
 
-            modelBuilder.Entity("SalaryService.Domain.EmployeeSalaryPerformance", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("EmployeeId")
-                        .HasColumnType("bigint");
-
-                    b.Property<double>("EmploymentType")
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("FullSalary")
-                        .HasColumnType("double precision");
-
-                    b.Property<bool>("HasParking")
-                        .HasColumnType("boolean");
-
-                    b.Property<double>("RatePerHour")
-                        .HasColumnType("double precision");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId")
-                        .IsUnique();
-
-                    b.ToTable("EmployeeSalaryPerformances");
-                });
-
-            modelBuilder.Entity("SalaryService.Domain.EmployeeSalaryPerformance", b =>
+            modelBuilder.Entity("SalaryService.Domain.BasicSalaryParameters", b =>
                 {
                     b.HasOne("SalaryService.Domain.Employee", "Employee")
                         .WithOne("Performances")
-                        .HasForeignKey("SalaryService.Domain.EmployeeSalaryPerformance", "EmployeeId")
+                        .HasForeignKey("SalaryService.Domain.BasicSalaryParameters", "EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

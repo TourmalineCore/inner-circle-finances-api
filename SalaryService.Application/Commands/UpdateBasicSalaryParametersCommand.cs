@@ -8,36 +8,36 @@ using System.Threading.Tasks;
 
 namespace SalaryService.Application.Commands
 {
-    public partial class UpdateEmployeeSalaryPerformanceCommand
+    public partial class UpdateBasicSalaryParametersCommand
     {
         public long Id { get; set; }
         public long EmployeeId { get; set; }
 
         public double RatePerHour { get; set; }
 
-        public double FullSalary { get; set; }
+        public double Pay { get; set; }
 
         public double EmploymentType { get; set; }
 
         public bool HasParking { get; set; }
     }
 
-    public class UpdateEmployeeSalaryPerformanceCommandHandler
+    public class UpdateBasicSalaryParametersCommandHandler
     {
-        private readonly SalaryPerformanceRepository _salaryPerformanceRepository;
+        private readonly BasicSalaryParametersRepository _basicSalaryParametersRepository;
 
-        public UpdateEmployeeSalaryPerformanceCommandHandler(SalaryPerformanceRepository salaryPerformanceRepository)
+        public UpdateBasicSalaryParametersCommandHandler(BasicSalaryParametersRepository basicSalaryParametersRepository)
         {
-            _salaryPerformanceRepository = salaryPerformanceRepository;
+            _basicSalaryParametersRepository = basicSalaryParametersRepository;
         }
 
-        public void Handle(UpdateEmployeeSalaryPerformanceCommand request)
+        public async void Handle(UpdateBasicSalaryParametersCommand request)
         {
-            _salaryPerformanceRepository.UpdateEmployeeSalaryPerformance(new EmployeeSalaryPerformance(
+           await _basicSalaryParametersRepository.UpdateBasicSalaryParameters(new BasicSalaryParameters(
                 request.Id,
                 request.EmployeeId,
                 request.RatePerHour,
-                request.FullSalary,
+                request.Pay,
                 request.EmploymentType,
                 request.HasParking));
         }

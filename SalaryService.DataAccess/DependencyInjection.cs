@@ -18,7 +18,7 @@ namespace SalaryService.DataAccess
 
             services.AddScoped<EmployeeDbContext>();
             services.AddTransient<EmployeeRepository>();
-            services.AddTransient<SalaryPerformanceRepository>();
+            services.AddTransient<BasicSalaryParametersRepository>();
             return services;
         }
     }

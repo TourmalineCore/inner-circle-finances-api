@@ -9,25 +9,25 @@ namespace SalaryService.Api.Controllers
     public class EmployeeController : Controller
     {
         private readonly GetEmployeeByIdQueryHandler _getEmployeeByIdQueryHandler;
-        private readonly GetEmployeeSalaryPerformanceQueryHandler _getEmployeeSalaryParametersQueryHandler;
+        private readonly GetBasicSalaryParametersQueryHandler _getBasicSalaryParametersQueryHandler;
         private readonly CreateEmployeeCommandHandler _createEmployeeCommandHandler;
         private readonly UpdateEmployeeCommandHandler _updateEmployeeCommandHandler;
-        private readonly CreateEmployeeSalaryPerformanceCommandHandler _createEmployeeSalaryPerformanceCommandHandler;
-        private readonly UpdateEmployeeSalaryPerformanceCommandHandler _updateEmployeeSalaryPerformanceCommandHandler;
+        private readonly CreateBasicSalaryParametersCommandHandler _createBasicSalaryParametersCommandHandler;
+        private readonly UpdateBasicSalaryParametersCommandHandler _updateBasicSalaryParametersCommandHandler;
 
         public EmployeeController(GetEmployeeByIdQueryHandler getEmployeeByIdQueryHandler, 
-            GetEmployeeSalaryPerformanceQueryHandler getEmployeeSalaryParametersQueryHandler,
+            GetBasicSalaryParametersQueryHandler getEmployeeSalaryParametersQueryHandler,
             CreateEmployeeCommandHandler createEmployeeCommandHandler,
             UpdateEmployeeCommandHandler updateEmployeeCommandHandler,
-            CreateEmployeeSalaryPerformanceCommandHandler createEmployeeSalaryPerformanceCommandHandler,
-            UpdateEmployeeSalaryPerformanceCommandHandler updateEmployeeSalaryPerformanceCommandHandler)
+            CreateBasicSalaryParametersCommandHandler createEmployeeSalaryPerformanceCommandHandler,
+            UpdateBasicSalaryParametersCommandHandler updateEmployeeSalaryPerformanceCommandHandler)
         {
             _getEmployeeByIdQueryHandler = getEmployeeByIdQueryHandler;
-            _getEmployeeSalaryParametersQueryHandler = getEmployeeSalaryParametersQueryHandler;
+            _getBasicSalaryParametersQueryHandler = getEmployeeSalaryParametersQueryHandler;
             _createEmployeeCommandHandler = createEmployeeCommandHandler;
             _updateEmployeeCommandHandler = updateEmployeeCommandHandler;
-            _createEmployeeSalaryPerformanceCommandHandler = createEmployeeSalaryPerformanceCommandHandler;
-            _updateEmployeeSalaryPerformanceCommandHandler = updateEmployeeSalaryPerformanceCommandHandler;
+            _createBasicSalaryParametersCommandHandler = createEmployeeSalaryPerformanceCommandHandler;
+            _updateBasicSalaryParametersCommandHandler = updateEmployeeSalaryPerformanceCommandHandler;
         }
 
         [HttpGet("getById/{EmployeeId}")]
@@ -37,9 +37,9 @@ namespace SalaryService.Api.Controllers
         }
 
         [HttpGet("getSalaryParameters/{EmployeeId}")]
-        public Task<SalaryParametersDto> GetSalaryPerformance([FromRoute] GetEmployeeSalaryParametersQuery getEmployeeSalaryParametersQuery)
+        public Task<BasicSalaryParametersDto> GetBasicSalaryParameters([FromRoute] GetEmployeeSalaryParametersQuery getEmployeeSalaryParametersQuery)
         {
-            return _getEmployeeSalaryParametersQueryHandler.Handle(getEmployeeSalaryParametersQuery);
+            return _getBasicSalaryParametersQueryHandler.Handle(getEmployeeSalaryParametersQuery);
         }
 
         [HttpPost("create-employee")]
@@ -48,10 +48,10 @@ namespace SalaryService.Api.Controllers
            return _createEmployeeCommandHandler.Handle(createEmployeeCommand);
         }
 
-        [HttpPost("create-performances")]
-        public Task<long> CreatePerformances([FromBody] CreateEmployeeSalaryPerformanceCommand createEmployeeSalaryPerformanceCommand)
+        [HttpPost("create-salary-parameters")]
+        public Task<long> CreateBasicSaalryParameters([FromBody] CreateBasicSalaryParametersCommand createEmployeeSalaryPerformanceCommand)
         {
-            return _createEmployeeSalaryPerformanceCommandHandler.Handle(createEmployeeSalaryPerformanceCommand);
+            return _createBasicSalaryParametersCommandHandler.Handle(createEmployeeSalaryPerformanceCommand);
         }
 
         [HttpPost("update-employee")]
@@ -60,10 +60,10 @@ namespace SalaryService.Api.Controllers
             _updateEmployeeCommandHandler.Handle(updateEmployeeCommand);
         }
 
-        [HttpPost("update-performances")]
-        public void UpdatePerformances([FromBody] UpdateEmployeeSalaryPerformanceCommand updateEmployeeSalaryPerformanceCommand)
+        [HttpPost("update-salary-parameters")]
+        public void UpdateBasicSalaryParameters([FromBody] UpdateBasicSalaryParametersCommand updateEmployeeSalaryPerformanceCommand)
         {
-            _updateEmployeeSalaryPerformanceCommandHandler.Handle(updateEmployeeSalaryPerformanceCommand);
+            _updateBasicSalaryParametersCommandHandler.Handle(updateEmployeeSalaryPerformanceCommand);
         }
     }
 }

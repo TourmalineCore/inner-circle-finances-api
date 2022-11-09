@@ -20,7 +20,7 @@ namespace SalaryService.Domain
 
         public string Telegram { get; private set; }
 
-        public EmployeeSalaryPerformance Performances { get; private set; }
+        public BasicSalaryParameters Performances { get; private set; }
 
         public Employee() { }
 

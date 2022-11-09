@@ -1,14 +1,13 @@
 ﻿
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SalaryService.Domain
 {
-    public class EmployeeSalaryPerformance
+    public class BasicSalaryParameters
     {
         public long Id { get; private set; }
         public double RatePerHour { get; private set; }
 
-        public double FullSalary { get; private set; }
+        public double Pay { get; private set; }
 
         public double EmploymentType { get; private set; }
 
@@ -17,13 +16,13 @@ namespace SalaryService.Domain
 
         public Employee Employee { get; private set; }
 
-        private EmployeeSalaryPerformance() { }
-        public EmployeeSalaryPerformance(long id, long employeeId, double ratePerHour, double fullSalary, double employmentType, bool hasParking)
+        private BasicSalaryParameters() { }
+        public BasicSalaryParameters(long id, long employeeId, double ratePerHour, double pay, double employmentType, bool hasParking)
         {
             Id = id;
             EmployeeId = employeeId;
             RatePerHour = ratePerHour;
-            FullSalary = fullSalary;
+            Pay = pay;
             EmploymentType = employmentType;
             HasParking = hasParking;
         }

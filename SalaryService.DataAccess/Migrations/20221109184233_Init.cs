@@ -29,22 +29,22 @@ namespace SalaryService.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EmployeeSalaryPerformances",
+                name: "BasicSalaryParameters",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     RatePerHour = table.Column<double>(type: "double precision", nullable: false),
-                    FullSalary = table.Column<double>(type: "double precision", nullable: false),
+                    Pay = table.Column<double>(type: "double precision", nullable: false),
                     EmploymentType = table.Column<double>(type: "double precision", nullable: false),
                     HasParking = table.Column<bool>(type: "boolean", nullable: false),
                     EmployeeId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EmployeeSalaryPerformances", x => x.Id);
+                    table.PrimaryKey("PK_BasicSalaryParameters", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_EmployeeSalaryPerformances_Employees_EmployeeId",
+                        name: "FK_BasicSalaryParameters_Employees_EmployeeId",
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
                         principalColumn: "Id",
@@ -52,8 +52,8 @@ namespace SalaryService.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_EmployeeSalaryPerformances_EmployeeId",
-                table: "EmployeeSalaryPerformances",
+                name: "IX_BasicSalaryParameters_EmployeeId",
+                table: "BasicSalaryParameters",
                 column: "EmployeeId",
                 unique: true);
         }
@@ -61,7 +61,7 @@ namespace SalaryService.DataAccess.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "EmployeeSalaryPerformances");
+                name: "BasicSalaryParameters");
 
             migrationBuilder.DropTable(
                 name: "Employees");

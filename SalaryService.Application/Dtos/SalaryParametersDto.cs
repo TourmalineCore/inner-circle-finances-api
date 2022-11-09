@@ -1,20 +1,20 @@
 ﻿namespace SalaryService.Application.Dtos
 {
-    public class SalaryParametersDto
+    public class BasicSalaryParametersDto
     {
         public long Id { get; private set; }
 
         public double RatePerHour { get; set; }
 
-        public double FullSalary { get; set; }
+        public double Pay { get; set; }
 
         public double EmploymentType { get; set; }
 
-        public SalaryParametersDto(long id, double ratePerHour, double fullSalary, double employmentType)
+        public BasicSalaryParametersDto(long id, double ratePerHour, double pay, double employmentType)
         {
             Id = id;
             RatePerHour = ratePerHour;
-            FullSalary = fullSalary;
+            Pay = pay;
             EmploymentType = employmentType;
         }
     }
