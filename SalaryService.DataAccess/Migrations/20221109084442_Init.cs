@@ -17,7 +17,8 @@ namespace SalaryService.DataAccess.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Surname = table.Column<string>(type: "text", nullable: false),
-                    Email = table.Column<string>(type: "text", nullable: false),
+                    WorkEmail = table.Column<string>(type: "text", nullable: false),
+                    PersonalEmail = table.Column<string>(type: "text", nullable: false),
                     Phone = table.Column<string>(type: "text", nullable: false),
                     Skype = table.Column<string>(type: "text", nullable: false),
                     Telegram = table.Column<string>(type: "text", nullable: false)

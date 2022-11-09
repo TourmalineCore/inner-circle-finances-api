@@ -12,7 +12,9 @@ namespace SalaryService.Application.Commands
 
         public string Surname { get; private set; }
 
-        public string Email { get; private set; }
+        public string WorkEmail { get; set; }
+
+        public string PersonalEmail { get; set; }
 
         public string Phone { get; private set; }
 
@@ -34,7 +36,8 @@ namespace SalaryService.Application.Commands
                 request.Id,
                 request.Name,
                 request.Surname,
-                request.Email,
+                request.WorkEmail,
+                request.PersonalEmail,
                 request.Phone,
                 request.Skype,
                 request.Telegram));

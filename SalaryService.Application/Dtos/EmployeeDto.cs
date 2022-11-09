@@ -8,7 +8,9 @@
 
         public string Surname { get; private set; }
 
-        public string Email { get; private set; }
+        public string WorkEmail { get; private set; }
+
+        public string PersonalEmail { get; private set; }
 
         public string Phone { get; private set; }
 
@@ -16,12 +18,13 @@
 
         public string Telegram { get; private set; }
 
-        public EmployeeDto(long id, string name, string surname, string email, string phone, string skype, string telegram)
+        public EmployeeDto(long id, string name, string surname, string workEmail, string personalEmail, string phone, string skype, string telegram)
         {
             Id = id;
             Name = name;
             Surname = surname;
-            Email = email;
+            WorkEmail = workEmail;
+            PersonalEmail = personalEmail;
             Phone = phone;
             Skype = skype;
             Telegram = telegram;

@@ -24,7 +24,8 @@ namespace SalaryService.Application.Queries
                 employee.Id,
                 employee.Name,
                 employee.Surname,
-                employee.Email,
+                employee.WorkEmail,
+                employee.PersonalEmail,
                 employee.Phone,
                 employee.Skype,
                 employee.Telegram);

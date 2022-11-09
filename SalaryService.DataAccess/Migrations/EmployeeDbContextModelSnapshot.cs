@@ -29,11 +29,11 @@ namespace SalaryService.DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("Email")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("PersonalEmail")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -50,6 +50,10 @@ namespace SalaryService.DataAccess.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Telegram")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("WorkEmail")
                         .IsRequired()
                         .HasColumnType("text");
 
