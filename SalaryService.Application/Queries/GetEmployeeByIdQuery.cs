@@ -25,9 +25,9 @@ namespace SalaryService.Application.Queries
                 employee.Name,
                 employee.Surname,
                 employee.Email,
-                employee.RatePerHour,
-                employee.FullSalary,
-                employee.EmploymentType);
+                employee.Phone,
+                employee.Skype,
+                employee.Telegram);
         }
     }
 }

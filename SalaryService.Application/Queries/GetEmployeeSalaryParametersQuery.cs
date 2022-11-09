@@ -9,19 +9,19 @@ namespace SalaryService.Application.Queries
         public long EmployeeId { get; set; }
     }
 
-    public class GetEmployeeSalaryParametersQueryHandler
+    public class GetEmployeeSalaryPerformanceQueryHandler
     {
-        private readonly EmployeeRepository _employeeRepository;
+        private readonly SalaryPerformanceRepository _salaryPerformanceRepository;
 
-        public GetEmployeeSalaryParametersQueryHandler(EmployeeRepository employeeRepository)
+        public GetEmployeeSalaryPerformanceQueryHandler(SalaryPerformanceRepository salaryPerformanceRepository)
         {
-            _employeeRepository = employeeRepository;
+            _salaryPerformanceRepository = salaryPerformanceRepository;
         }
         public async Task<SalaryParametersDto> Handle(GetEmployeeSalaryParametersQuery request)
         {
-            var employee = await _employeeRepository.GetEmployeeByIdAsync(request.EmployeeId);
+            var employee = await _salaryPerformanceRepository.GetSalaryPerformanceByEmployeeIdAsync(request.EmployeeId);
             return new SalaryParametersDto(
-                employee.Id,
+                employee.EmployeeId,
                 employee.RatePerHour,
                 employee.FullSalary,
                 employee.EmploymentType);

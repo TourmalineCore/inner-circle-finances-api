@@ -10,9 +10,11 @@ namespace SalaryService.Application
         {
 
             services.AddTransient<GetEmployeeByIdQueryHandler>();
-            services.AddTransient<GetEmployeeSalaryParametersQueryHandler>();
+            services.AddTransient<GetEmployeeSalaryPerformanceQueryHandler>();
             services.AddTransient<CreateEmployeeCommandHandler>();
             services.AddTransient<UpdateEmployeeCommandHandler>();
+            services.AddTransient<CreateEmployeeSalaryPerformanceCommandHandler>();
+            services.AddTransient<UpdateEmployeeSalaryPerformanceCommandHandler>();
 
             return services;
         }

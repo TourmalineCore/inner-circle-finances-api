@@ -10,21 +10,21 @@
 
         public string Email { get; private set; }
 
-        public double RatePerHour { get; set; }
+        public string Phone { get; private set; }
 
-        public double FullSalary { get; set; }
+        public string Skype { get; private set; }
 
-        public double EmploymentType { get; set; }
+        public string Telegram { get; private set; }
 
-        public EmployeeDto(long id, string name, string surname, string email, double ratePerHour, double fullSalary, double employmentType)
+        public EmployeeDto(long id, string name, string surname, string email, string phone, string skype, string telegram)
         {
             Id = id;
             Name = name;
             Surname = surname;
             Email = email;
-            RatePerHour = ratePerHour;
-            FullSalary = fullSalary;
-            EmploymentType = employmentType;
+            Phone = phone;
+            Skype = skype;
+            Telegram = telegram;
         }
     }
 }

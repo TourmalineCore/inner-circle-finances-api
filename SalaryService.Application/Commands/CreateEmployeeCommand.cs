@@ -14,11 +14,11 @@ namespace SalaryService.Application.Commands
 
         public string Email { get; set; }
 
-        public double RatePerHour { get; set; }
+        public string Phone { get; set; }
 
-        public double FullSalary { get; set; }
+        public string Skype { get; set; }
 
-        public double EmploymentType { get; set; }
+        public string Telegram { get; set; }
     }
     public class CreateEmployeeCommandHandler
     {
@@ -28,16 +28,16 @@ namespace SalaryService.Application.Commands
         {
             _employeeRepository = employeeRepository;
         }
-        public void Handle(CreateEmployeeCommand request)
+        public Task<long> Handle(CreateEmployeeCommand request)
         {
-            _employeeRepository.CreateEmployee(new Employee(
+            return _employeeRepository.CreateEmployee(new Employee(
                 request.Id,
                 request.Name,
                 request.Surname,
                 request.Email,
-                request.RatePerHour,
-                request.FullSalary,
-                request.EmploymentType));
+                request.Phone,
+                request.Skype,
+                request.Telegram));
         }
     }
 }

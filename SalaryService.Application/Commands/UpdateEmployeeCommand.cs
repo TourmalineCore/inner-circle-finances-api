@@ -14,11 +14,11 @@ namespace SalaryService.Application.Commands
 
         public string Email { get; private set; }
 
-        public double RatePerHour { get; set; }
+        public string Phone { get; private set; }
 
-        public double FullSalary { get; set; }
+        public string Skype { get; private set; }
 
-        public double EmploymentType { get; set; }
+        public string Telegram { get; private set; }
     }
     public class UpdateEmployeeCommandHandler
     {
@@ -35,9 +35,9 @@ namespace SalaryService.Application.Commands
                 request.Name,
                 request.Surname,
                 request.Email,
-                request.RatePerHour,
-                request.FullSalary,
-                request.EmploymentType));
+                request.Phone,
+                request.Skype,
+                request.Telegram));
         }
     }
 }

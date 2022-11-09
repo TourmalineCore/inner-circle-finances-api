@@ -15,6 +15,8 @@ namespace SalaryService.DataAccess
     {
         public DbSet<Employee> Employees { get; set; }
 
+        public DbSet<EmployeeSalaryPerformance> EmployeeSalaryPerformances { get; set; }
+
 
         public EmployeeDbContext(DbContextOptions<EmployeeDbContext> options) : base(options)
         {
