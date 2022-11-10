@@ -14,7 +14,7 @@ namespace SalaryService.Application.Commands
 
         public double Pay { get; set; }
 
-        public double EmploymentType { get; set; }
+        public EmploymentTypes EmploymentType { get; set; }
 
         public bool HasParking { get; set; }
     }
@@ -30,6 +30,7 @@ namespace SalaryService.Application.Commands
 
         public async Task<long> Handle(CreateBasicSalaryParametersCommand request)
         {
+            
             return await _basicSalaryParametersRepository.CreateBasicSalaryParameters(new BasicSalaryParameters(
                 request.Id,
                 request.EmployeeId,

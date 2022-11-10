@@ -2,7 +2,7 @@
 {
     public class BasicSalaryParametersDto
     {
-        public long Id { get; private set; }
+        public long EmployeeId { get; private set; }
 
         public double RatePerHour { get; set; }
 
@@ -10,12 +10,15 @@
 
         public double EmploymentType { get; set; }
 
-        public BasicSalaryParametersDto(long id, double ratePerHour, double pay, double employmentType)
+        public bool HasParking { get; set; }
+
+        public BasicSalaryParametersDto(long id, double ratePerHour, double pay, double employmentType, bool hasParking)
         {
-            Id = id;
+            EmployeeId = id;
             RatePerHour = ratePerHour;
             Pay = pay;
             EmploymentType = employmentType;
+            HasParking = hasParking;
         }
     }
 }

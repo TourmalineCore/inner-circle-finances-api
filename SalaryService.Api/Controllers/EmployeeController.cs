@@ -2,6 +2,7 @@
 using SalaryService.Application.Commands;
 using SalaryService.Application.Dtos;
 using SalaryService.Application.Queries;
+using SalaryService.Application.Services.FakeCalculationService;
 
 namespace SalaryService.Api.Controllers
 {
@@ -14,13 +15,14 @@ namespace SalaryService.Api.Controllers
         private readonly UpdateEmployeeCommandHandler _updateEmployeeCommandHandler;
         private readonly CreateBasicSalaryParametersCommandHandler _createBasicSalaryParametersCommandHandler;
         private readonly UpdateBasicSalaryParametersCommandHandler _updateBasicSalaryParametersCommandHandler;
-
+        private readonly CalculationService _calculationService;
         public EmployeeController(GetEmployeeByIdQueryHandler getEmployeeByIdQueryHandler, 
             GetBasicSalaryParametersQueryHandler getEmployeeSalaryParametersQueryHandler,
             CreateEmployeeCommandHandler createEmployeeCommandHandler,
             UpdateEmployeeCommandHandler updateEmployeeCommandHandler,
             CreateBasicSalaryParametersCommandHandler createEmployeeSalaryPerformanceCommandHandler,
-            UpdateBasicSalaryParametersCommandHandler updateEmployeeSalaryPerformanceCommandHandler)
+            UpdateBasicSalaryParametersCommandHandler updateEmployeeSalaryPerformanceCommandHandler,
+            CalculationService calculationService)
         {
             _getEmployeeByIdQueryHandler = getEmployeeByIdQueryHandler;
             _getBasicSalaryParametersQueryHandler = getEmployeeSalaryParametersQueryHandler;
@@ -28,6 +30,13 @@ namespace SalaryService.Api.Controllers
             _updateEmployeeCommandHandler = updateEmployeeCommandHandler;
             _createBasicSalaryParametersCommandHandler = createEmployeeSalaryPerformanceCommandHandler;
             _updateBasicSalaryParametersCommandHandler = updateEmployeeSalaryPerformanceCommandHandler;
+            _calculationService = calculationService;
+        }
+
+        [HttpGet("get-full-employee-info/{EmployeeId}")]
+        public Task<FullEmployeeInformationDto> GetFullEmployeeInformation([FromRoute] CalculationServiceParameters parameters)
+        {
+            return _calculationService.GetFullEmployeeInformation(parameters);
         }
 
         [HttpGet("getById/{EmployeeId}")]

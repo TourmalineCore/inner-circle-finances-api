@@ -17,7 +17,7 @@ namespace SalaryService.Application.Commands
 
         public double Pay { get; set; }
 
-        public double EmploymentType { get; set; }
+        public EmploymentTypes EmploymentType { get; set; }
 
         public bool HasParking { get; set; }
     }

@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using SalaryService.Application;
 using SalaryService.DataAccess;
 
@@ -12,6 +13,12 @@ builder.Services.AddApplication();
 builder.Services.AddPersistence(configuration);
 
 var app = builder.Build();
+
+using (var serviceScope = app.Services.CreateScope())
+{
+    var context = serviceScope.ServiceProvider.GetRequiredService<EmployeeDbContext>();
+    await context.Database.MigrateAsync();
+}
 
 app.UseRouting();
 

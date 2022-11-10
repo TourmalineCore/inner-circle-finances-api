@@ -22,7 +22,7 @@ namespace SalaryService.Domain
 
         public BasicSalaryParameters Performances { get; private set; }
 
-        public Employee() { }
+        private Employee() { }
 
         public Employee(long id, string name, string surname, string workEmail, string personalEmail, string phone, string skype, string telegram)
         {

@@ -1,5 +1,4 @@
 ﻿using SalaryService.Application.Dtos;
-using SalaryService.DataAccess;
 using SalaryService.DataAccess.Repositories;
 
 namespace SalaryService.Application.Queries
@@ -24,7 +23,8 @@ namespace SalaryService.Application.Queries
                 employee.EmployeeId,
                 employee.RatePerHour,
                 employee.Pay,
-                employee.EmploymentType);
+                employee.EmploymentTypeValue, 
+                employee.HasParking);
         }
     }
 }
