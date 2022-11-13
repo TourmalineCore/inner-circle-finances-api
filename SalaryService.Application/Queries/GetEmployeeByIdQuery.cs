@@ -19,7 +19,7 @@ namespace SalaryService.Application.Queries
         }
         public async Task<EmployeeDto> Handle(GetEmployeeByIdQuery request)
         {
-            var employee = await _employeeRepository.GetEmployeeByIdAsync(request.EmployeeId);
+            var employee = await _employeeRepository.GetByIdAsync(request.EmployeeId);
             return new EmployeeDto(
                 employee.Id,
                 employee.Name,

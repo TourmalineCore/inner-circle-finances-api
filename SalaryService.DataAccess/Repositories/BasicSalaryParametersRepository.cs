@@ -12,20 +12,20 @@ namespace SalaryService.DataAccess.Repositories
             _employeeDbContext = employeeDbContext;
         }
 
-        public async Task<long> CreateBasicSalaryParameters(BasicSalaryParameters basicSalaryParameters)
+        public async Task<long> CreateAsync(BasicSalaryParameters basicSalaryParameters)
         {
             await _employeeDbContext.AddAsync(basicSalaryParameters);
             await _employeeDbContext.SaveChangesAsync();
-            return basicSalaryParameters.EmployeeId;
+            return basicSalaryParameters.Id;
         }
 
-        public async Task UpdateBasicSalaryParameters(BasicSalaryParameters basicSalaryParameters)
+        public Task UpdateAsync(BasicSalaryParameters basicSalaryParameters)
         {
             _employeeDbContext.Update(basicSalaryParameters);
-            await _employeeDbContext.SaveChangesAsync();
+            return _employeeDbContext.SaveChangesAsync();
         }
 
-        public Task<BasicSalaryParameters> GetBasicSalaryParametersByEmployeeIdAsync(long employeeId)
+        public Task<BasicSalaryParameters> GetByEmployeeIdAsync(long employeeId)
         {
             return _employeeDbContext
                     .Set<BasicSalaryParameters>()

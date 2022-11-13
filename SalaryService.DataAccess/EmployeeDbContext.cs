@@ -1,13 +1,6 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+
 using SalaryService.Domain;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SalaryService.DataAccess
 {
@@ -17,6 +10,9 @@ namespace SalaryService.DataAccess
 
         public DbSet<BasicSalaryParameters> BasicSalaryParameters { get; set; }
 
+        public DbSet<EmployeeFinancialMetrics> EmployeeFinancialMetrics { get; set; }
+
+        public DbSet<EmployeeFinancialMetricsHistory> EmployeeFinancialMetricsHistory { get; set; }
 
         public EmployeeDbContext(DbContextOptions<EmployeeDbContext> options) : base(options)
         {
@@ -24,10 +20,13 @@ namespace SalaryService.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+            
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
 
             base.OnModelCreating(modelBuilder);
+
+            
+
         }
     }
 }

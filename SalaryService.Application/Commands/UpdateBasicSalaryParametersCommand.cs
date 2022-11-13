@@ -31,15 +31,15 @@ namespace SalaryService.Application.Commands
             _basicSalaryParametersRepository = basicSalaryParametersRepository;
         }
 
-        public async void Handle(UpdateBasicSalaryParametersCommand request)
+        public async Task Handle(UpdateBasicSalaryParametersCommand request)
         {
-           await _basicSalaryParametersRepository.UpdateBasicSalaryParameters(new BasicSalaryParameters(
-                request.Id,
-                request.EmployeeId,
-                request.RatePerHour,
+            var basicParameters = _basicSalaryParametersRepository.GetByEmployeeIdAsync(request.EmployeeId).Result;
+            basicParameters.Update(request.RatePerHour,
                 request.Pay,
                 request.EmploymentType,
-                request.HasParking));
+                request.HasParking);
+
+           await _basicSalaryParametersRepository.UpdateAsync(basicParameters);
         }
     }
 }

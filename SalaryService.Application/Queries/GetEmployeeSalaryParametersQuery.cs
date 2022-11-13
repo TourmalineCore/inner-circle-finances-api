@@ -18,7 +18,7 @@ namespace SalaryService.Application.Queries
         }
         public async Task<BasicSalaryParametersDto> Handle(GetEmployeeSalaryParametersQuery request)
         {
-            var employee = await _salaryPerformanceRepository.GetBasicSalaryParametersByEmployeeIdAsync(request.EmployeeId);
+            var employee = await _salaryPerformanceRepository.GetByEmployeeIdAsync(request.EmployeeId);
             return new BasicSalaryParametersDto(
                 employee.EmployeeId,
                 employee.RatePerHour,

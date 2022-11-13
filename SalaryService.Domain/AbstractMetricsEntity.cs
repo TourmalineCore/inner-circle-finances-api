@@ -1,74 +1,76 @@
-﻿using SalaryService.Domain;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SalaryService.Application.Services.FakeCalculationService
+namespace SalaryService.Domain
 {
-    public class EmployeeFinancialMetrics
+    public abstract class AbstractMetricsEntity
     {
-        public long Id { get; private set; }
-
-        public long EmployeeId { get; private set; }
+        public long Id { get; protected set; }
+        [JsonProperty]
+        public long EmployeeId { get; protected set; }
+        [JsonProperty]
+        public DateTime CreatedAt { get; protected set; }
 
         private double salary;
-        public double Salary { get { return salary; } private set { if (value >= 0) salary = value; else throw new ArgumentException(); } }
+        [JsonProperty]
+        public double Salary { get { return salary; } protected set { if (value >= 0) salary = value; else throw new ArgumentException(); } }
 
         private double hourlyCostFact;
-
-        public double HourlyCostFact { get { return hourlyCostFact; } private set { if (value >= 0) hourlyCostFact = value; else throw new ArgumentException(); } }
+        [JsonProperty]
+        public double HourlyCostFact { get { return hourlyCostFact; } protected set { if (value >= 0) hourlyCostFact = value; else throw new ArgumentException(); } }
 
         private double hourlyCostHand;
-
-        public double HourlyCostHand { get { return hourlyCostHand; } private set { if (value >= 0) hourlyCostHand = value; else throw new ArgumentException(); } }
+        [JsonProperty]
+        public double HourlyCostHand { get { return hourlyCostHand; } protected set { if (value >= 0) hourlyCostHand = value; else throw new ArgumentException(); } }
 
         private double earnings;
-
-        public double Earnings { get { return earnings; } private set { if (value >= 0) earnings = value; else throw new ArgumentException(); } }
+        [JsonProperty]
+        public double Earnings { get { return earnings; } protected set { if (value >= 0) earnings = value; else throw new ArgumentException(); } }
 
         private double expenses;
-
-        public double Expenses { get { return expenses; } private set { if (value >= 0) expenses = value; else throw new ArgumentException(); } }
+        [JsonProperty]
+        public double Expenses { get { return expenses; } protected set { if (value >= 0) expenses = value; else throw new ArgumentException(); } }
 
         private double profit;
-
-        public double Profit { get { return profit; } private set { if (value >= 0) profit = value; else throw new ArgumentException(); } }
+        [JsonProperty]
+        public double Profit { get { return profit; } protected set { if (value >= 0) profit = value; else throw new ArgumentException(); } }
 
         private double profitability;
-
-        public double ProfitAbility { get { return profitability; } private set { if (value >= 0) profitability = value; else throw new ArgumentException(); } }
+        [JsonProperty]
+        public double ProfitAbility { get { return profitability; } protected set { if (value >= 0) profitability = value; else throw new ArgumentException(); } }
 
         private double grossSalary;
-
-        public double GrossSalary { get { return grossSalary; } private set { if (value >= 0) grossSalary = value; else throw new ArgumentException(); } }
+        [JsonProperty]
+        public double GrossSalary { get { return grossSalary; } protected set { if (value >= 0) grossSalary = value; else throw new ArgumentException(); } }
 
         private double netSalary;
-
-        public double NetSalary { get { return netSalary; } private set { if (value >= 0) netSalary = value; else throw new ArgumentException(); } }
+        [JsonProperty]
+        public double NetSalary { get { return netSalary; } protected set { if (value >= 0) netSalary = value; else throw new ArgumentException(); } }
 
         private double ratePerHour;
 
-        public double RatePerHour { get { return ratePerHour; } private set { if (value >= 0) ratePerHour = value; else throw new ArgumentException(); } }
+        public double RatePerHour { get { return ratePerHour; } protected set { if (value >= 0) ratePerHour = value; else throw new ArgumentException(); } }
 
         private double pay;
 
-        public double Pay { get { return pay; } private set { if (value >= 0) pay = value; else throw new ArgumentException(); } }
+        public double Pay { get { return pay; } protected set { if (value >= 0) pay = value; else throw new ArgumentException(); } }
 
         private double retainer;
+        [JsonProperty]
+        public double Retainer { get { return retainer; } protected set { if (value >= 0) retainer = value; else throw new ArgumentException(); } }
 
-        public double Retainer { get { return retainer; } private set { if (value >= 0) retainer = value; else throw new ArgumentException(); } }
+        public double EmploymentType { get; protected set; }
 
-        public double EmploymentType { get; private set; }
+        public bool HasParking { get; protected set; }
+        [JsonProperty]
+        public double ParkingCostPerMonth { get; protected set; }
+        [JsonProperty]
+        public double AccountingPerMonth { get; protected set; }
 
-        public bool HasParking { get; private set; }
-
-        public double ParkingCostPerMonth { get; private set; }
-
-        public double AccountingPerMonth { get; private set; }
-
-        // move to constants file
 
         public const double WorkingDaysInYear = 247;
 
@@ -80,14 +82,15 @@ namespace SalaryService.Application.Services.FakeCalculationService
 
         public const double WorkingHoursInMonth = WorkingDaysInMonth * 8;
 
-        public EmployeeFinancialMetrics(long employeeId, double ratePerHour, double pay, double employmentType, bool hasParking)
+        public AbstractMetricsEntity(long employeeId, double ratePerHour, double pay, double employmentType, bool hasParking)
         {
             EmployeeId = employeeId;
+            CreatedAt = DateTime.UtcNow.Date;
             RatePerHour = ratePerHour;
             Pay = pay;
             EmploymentType = employmentType;
             HasParking = hasParking;
-            ParkingCostPerMonth = hasParking ? 1800 : 0; // получить из констант
+            ParkingCostPerMonth = hasParking ? 1800 : 0;
             AccountingPerMonth = 600;
         }
 
@@ -190,4 +193,3 @@ namespace SalaryService.Application.Services.FakeCalculationService
         }
     }
 }
-

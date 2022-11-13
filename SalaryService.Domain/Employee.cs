@@ -24,9 +24,8 @@ namespace SalaryService.Domain
 
         private Employee() { }
 
-        public Employee(long id, string name, string surname, string workEmail, string personalEmail, string phone, string skype, string telegram)
+        public Employee(string name, string surname, string workEmail, string personalEmail, string phone, string skype, string telegram)
         {
-            Id = id;
             Name = name;
             Surname = surname;
             WorkEmail = workEmail;

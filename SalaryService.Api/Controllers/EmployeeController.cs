@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SalaryService.Application.Commands;
 using SalaryService.Application.Dtos;
 using SalaryService.Application.Queries;
-using SalaryService.Application.Services.FakeCalculationService;
+using SalaryService.Application.Services;
 
 namespace SalaryService.Api.Controllers
 {
@@ -11,68 +10,44 @@ namespace SalaryService.Api.Controllers
     {
         private readonly GetEmployeeByIdQueryHandler _getEmployeeByIdQueryHandler;
         private readonly GetBasicSalaryParametersQueryHandler _getBasicSalaryParametersQueryHandler;
-        private readonly CreateEmployeeCommandHandler _createEmployeeCommandHandler;
-        private readonly UpdateEmployeeCommandHandler _updateEmployeeCommandHandler;
-        private readonly CreateBasicSalaryParametersCommandHandler _createBasicSalaryParametersCommandHandler;
-        private readonly UpdateBasicSalaryParametersCommandHandler _updateBasicSalaryParametersCommandHandler;
-        private readonly CalculationService _calculationService;
+        private readonly EmployeeSalaryService _employeeSalaryService;
         public EmployeeController(GetEmployeeByIdQueryHandler getEmployeeByIdQueryHandler, 
             GetBasicSalaryParametersQueryHandler getEmployeeSalaryParametersQueryHandler,
-            CreateEmployeeCommandHandler createEmployeeCommandHandler,
-            UpdateEmployeeCommandHandler updateEmployeeCommandHandler,
-            CreateBasicSalaryParametersCommandHandler createEmployeeSalaryPerformanceCommandHandler,
-            UpdateBasicSalaryParametersCommandHandler updateEmployeeSalaryPerformanceCommandHandler,
-            CalculationService calculationService)
+            EmployeeSalaryService employeeService)
         {
             _getEmployeeByIdQueryHandler = getEmployeeByIdQueryHandler;
             _getBasicSalaryParametersQueryHandler = getEmployeeSalaryParametersQueryHandler;
-            _createEmployeeCommandHandler = createEmployeeCommandHandler;
-            _updateEmployeeCommandHandler = updateEmployeeCommandHandler;
-            _createBasicSalaryParametersCommandHandler = createEmployeeSalaryPerformanceCommandHandler;
-            _updateBasicSalaryParametersCommandHandler = updateEmployeeSalaryPerformanceCommandHandler;
-            _calculationService = calculationService;
-        }
-
-        [HttpGet("get-full-employee-info/{EmployeeId}")]
-        public Task<FullEmployeeInformationDto> GetFullEmployeeInformation([FromRoute] CalculationServiceParameters parameters)
-        {
-            return _calculationService.GetFullEmployeeInformation(parameters);
-        }
-
-        [HttpGet("getById/{EmployeeId}")]
-        public Task<EmployeeDto> GetEmployeeById([FromRoute] GetEmployeeByIdQuery getEmployeeByIdQuery)
-        {
-            return _getEmployeeByIdQueryHandler.Handle(getEmployeeByIdQuery);
-        }
-
-        [HttpGet("getSalaryParameters/{EmployeeId}")]
-        public Task<BasicSalaryParametersDto> GetBasicSalaryParameters([FromRoute] GetEmployeeSalaryParametersQuery getEmployeeSalaryParametersQuery)
-        {
-            return _getBasicSalaryParametersQueryHandler.Handle(getEmployeeSalaryParametersQuery);
+            _employeeSalaryService = employeeService;
         }
 
         [HttpPost("create-employee")]
-        public Task<long> CreateEmployee([FromBody] CreateEmployeeCommand createEmployeeCommand)
+        public Task CreateEmployee([FromBody] SalaryServiceParameters salaryServiceParameters)
         {
-           return _createEmployeeCommandHandler.Handle(createEmployeeCommand);
-        }
-
-        [HttpPost("create-salary-parameters")]
-        public Task<long> CreateBasicSaalryParameters([FromBody] CreateBasicSalaryParametersCommand createEmployeeSalaryPerformanceCommand)
-        {
-            return _createBasicSalaryParametersCommandHandler.Handle(createEmployeeSalaryPerformanceCommand);
+            return _employeeSalaryService.CreateEmployee(salaryServiceParameters);
         }
 
         [HttpPost("update-employee")]
-        public void UpdateEmployee([FromBody] UpdateEmployeeCommand updateEmployeeCommand)
+        public Task UpdateEmployee([FromBody] SalaryServiceParameters salaryServiceParameters)
         {
-            _updateEmployeeCommandHandler.Handle(updateEmployeeCommand);
+            return _employeeSalaryService.UpdateEmployee(salaryServiceParameters);
         }
 
-        [HttpPost("update-salary-parameters")]
-        public void UpdateBasicSalaryParameters([FromBody] UpdateBasicSalaryParametersCommand updateEmployeeSalaryPerformanceCommand)
+        [HttpGet("get-full-employee-info/{EmployeeId}")]
+        public Task<FullEmployeeInformationDto> GetFullEmployeeInformation([FromRoute] SalaryServiceParameters parameters)
         {
-            _updateBasicSalaryParametersCommandHandler.Handle(updateEmployeeSalaryPerformanceCommand);
+            return _employeeSalaryService.GetFullEmployeeInformation(parameters);
+        }
+
+        [HttpGet("get-by-id/{EmployeeId}")]
+        public async Task<EmployeeDto> GetEmployeeById([FromRoute] GetEmployeeByIdQuery getEmployeeByIdQuery)
+        {
+            return await _getEmployeeByIdQueryHandler.Handle(getEmployeeByIdQuery);
+        }
+
+        [HttpGet("get-salary-parameters/{EmployeeId}")]
+        public Task<BasicSalaryParametersDto> GetBasicSalaryParameters([FromRoute] GetEmployeeSalaryParametersQuery getEmployeeSalaryParametersQuery)
+        {
+            return _getBasicSalaryParametersQueryHandler.Handle(getEmployeeSalaryParametersQuery);
         }
     }
 }

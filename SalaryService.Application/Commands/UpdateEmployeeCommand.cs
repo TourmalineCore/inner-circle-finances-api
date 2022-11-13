@@ -30,10 +30,9 @@ namespace SalaryService.Application.Commands
         {
             _employeeRepository = employeeRepository;
         }
-        public void Handle(UpdateEmployeeCommand request)
+        public Task Handle(UpdateEmployeeCommand request)
         {
-            _employeeRepository.UpdateEmployee(new Employee(
-                request.Id,
+            return _employeeRepository.UpdateAsync(new Employee(
                 request.Name,
                 request.Surname,
                 request.WorkEmail,

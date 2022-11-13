@@ -6,8 +6,6 @@ namespace SalaryService.Application.Commands
 {
     public partial class CreateEmployeeCommand
     {
-        public long Id { get; set; }
-
         public string Name { get; set; }
 
         public string Surname { get; set; }
@@ -21,6 +19,7 @@ namespace SalaryService.Application.Commands
         public string Skype { get; set; }
 
         public string Telegram { get; set; }
+
     }
     public class CreateEmployeeCommandHandler
     {
@@ -30,17 +29,17 @@ namespace SalaryService.Application.Commands
         {
             _employeeRepository = employeeRepository;
         }
-        public Task<long> Handle(CreateEmployeeCommand request)
+        public async Task<long> Handle(CreateEmployeeCommand request)
         {
-            return _employeeRepository.CreateEmployee(new Employee(
-                request.Id,
+            var employee = new Employee(
                 request.Name,
                 request.Surname,
                 request.WorkEmail,
                 request.PersonalEmail,
                 request.Phone,
                 request.Skype,
-                request.Telegram));
+                request.Telegram);
+            return await _employeeRepository.CreateAsync(employee);
         }
     }
 }

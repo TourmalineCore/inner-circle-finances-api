@@ -25,9 +25,8 @@ namespace SalaryService.Domain
         public Employee Employee { get; private set; }
 
         private BasicSalaryParameters() { }
-        public BasicSalaryParameters(long id, long employeeId, double ratePerHour, double pay, EmploymentTypes employmentType, bool hasParking)
+        public BasicSalaryParameters(long employeeId, double ratePerHour, double pay, EmploymentTypes employmentType, bool hasParking)
         {
-            Id = id;
             EmployeeId = employeeId;
             RatePerHour = ratePerHour;
             Pay = pay;
@@ -41,6 +40,14 @@ namespace SalaryService.Domain
                     EmploymentTypeValue = 0.5;
                     break;
             }
+            HasParking = hasParking;
+        }
+
+        public void Update(double ratePerHour, double pay, EmploymentTypes employmentType, bool hasParking)
+        {
+            RatePerHour = ratePerHour;
+            Pay = pay;
+            EmploymentType = employmentType;
             HasParking = hasParking;
         }
     }

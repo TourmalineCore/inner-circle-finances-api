@@ -12,26 +12,25 @@ namespace SalaryService.DataAccess.Repositories
             _employeeDbContext = employeeDbContext;
         }
 
-        public async Task<long> CreateEmployee(Employee employee)
+        public async Task<long> CreateAsync(Employee employee)
         {
             await _employeeDbContext.AddAsync(employee);
             await _employeeDbContext.SaveChangesAsync();
+
             return employee.Id;
         }
 
-        public Task<Employee> GetEmployeeByIdAsync(long employeeId)
+        public Task<Employee> GetByIdAsync(long employeeId)
         {
             return _employeeDbContext
                     .Set<Employee>()
                     .SingleAsync(x => x.Id == employeeId);
         }
 
-        public async void UpdateEmployee(Employee employee)
+        public Task UpdateAsync(Employee employee)
         {
             _employeeDbContext.Update(employee);
-            await _employeeDbContext.SaveChangesAsync();
+            return _employeeDbContext.SaveChangesAsync();
         }
-
-        
     }
 }

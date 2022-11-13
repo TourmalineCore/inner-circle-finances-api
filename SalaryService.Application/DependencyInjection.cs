@@ -2,7 +2,6 @@
 using SalaryService.Application.Commands;
 using SalaryService.Application.Queries;
 using SalaryService.Application.Services;
-using SalaryService.Application.Services.FakeCalculationService;
 using SalaryService.Application.Services.HelpServices;
 
 namespace SalaryService.Application
@@ -18,7 +17,9 @@ namespace SalaryService.Application
             services.AddTransient<UpdateEmployeeCommandHandler>();
             services.AddTransient<CreateBasicSalaryParametersCommandHandler>();
             services.AddTransient<UpdateBasicSalaryParametersCommandHandler>();
-            services.AddTransient<CalculationService>();
+            services.AddTransient<UpdateFinancialMetricsCommandHandler>();
+            services.AddTransient<CreateHistoryMetricsCommandHandler>();
+            services.AddTransient<EmployeeSalaryService>();
             services.AddTransient<FakeTaxService>();
             return services;
         }
