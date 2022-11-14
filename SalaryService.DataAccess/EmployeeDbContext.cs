@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
 using SalaryService.Domain;
+using System.Reflection.Metadata;
 
 namespace SalaryService.DataAccess
 {
@@ -20,13 +21,24 @@ namespace SalaryService.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+            modelBuilder.Entity<EmployeeFinancialMetricsHistory>().OwnsOne(history => history.MetricsPeriod,
+                navigationBuilder =>
+                {
+                    navigationBuilder.Property(history => history.StartedAtUtc)
+                        .HasColumnName("StartedAtUtc");
+                    navigationBuilder.Property(history => history.UpdatedAtUtc)
+                        .HasColumnName("UpdatedAtUtc");
+                });
+            modelBuilder.Entity<EmployeeFinancialMetrics>().OwnsOne(history => history.MetricsPeriod,
+                navigationBuilder =>
+                {
+                    navigationBuilder.Property(history => history.StartedAtUtc)
+                        .HasColumnName("StartedAtUtc");
+                    navigationBuilder.Property(history => history.UpdatedAtUtc)
+                        .HasColumnName("UpdatedAtUtc");
+                });
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
-
             base.OnModelCreating(modelBuilder);
-
-            
-
         }
     }
 }

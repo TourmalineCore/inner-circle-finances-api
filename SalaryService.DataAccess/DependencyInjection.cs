@@ -14,8 +14,9 @@ namespace SalaryService.DataAccess
             services.AddDbContext<EmployeeDbContext>(options =>
             {
                 options.UseNpgsql(connectionString);
+                options.UseNpgsql(connectionString,
+                                o => o.UseNodaTime());
             });
-
             services.AddScoped<EmployeeDbContext>();
             services.AddTransient<EmployeeRepository>();
             services.AddTransient<BasicSalaryParametersRepository>();

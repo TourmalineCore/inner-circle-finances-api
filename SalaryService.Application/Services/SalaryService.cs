@@ -1,4 +1,5 @@
-﻿using SalaryService.Application.Commands;
+﻿using NodaTime;
+using SalaryService.Application.Commands;
 using SalaryService.Application.Dtos;
 using SalaryService.Application.Services.HelpServices;
 using SalaryService.DataAccess.Repositories;
@@ -30,14 +31,7 @@ namespace SalaryService.Application.Services
 
         public EmploymentTypes EmploymentType { get; set; }
         
-        public double EmploymentTypeValue
-        {
-            get
-            {
-                if (EmploymentType == EmploymentTypes.FullTime) return 1.0;
-                else return 0.5;
-            }
-        }
+        public double EmploymentTypeValue => EmploymentType == EmploymentTypes.FullTime ? 1.0 : 0.5;
 
         public bool HasParking { get; set; }
     }
@@ -51,7 +45,8 @@ namespace SalaryService.Application.Services
         private readonly CreateBasicSalaryParametersCommandHandler _createBasicSalaryParametersCommandHandler;
         private readonly UpdateBasicSalaryParametersCommandHandler _updateBasicSalaryParametersCommandHandler;
         private readonly UpdateFinancialMetricsCommandHandler _updateFinancialMetricsCommandHandler;
-        private readonly CreateHistoryMetricsCommandHandler _createHisoryMetricsCommandHandler;
+        private readonly CreateHistoryMetricsCommandHandler _createHistoryMetricsCommandHandler;
+        private readonly IClock _clock;
 
         public EmployeeSalaryService(EmployeeRepository employeeRepository,
             FakeTaxService fakeTaxService,
@@ -60,7 +55,8 @@ namespace SalaryService.Application.Services
             CreateEmployeeCommandHandler createEmployeeCommandHandler, 
             UpdateBasicSalaryParametersCommandHandler updateBasicSalaryParametersCommandHandler,
             UpdateFinancialMetricsCommandHandler updateFinancialMetricsCommandHandler,
-            CreateHistoryMetricsCommandHandler createHisoryMetricsCommandHandler)
+            CreateHistoryMetricsCommandHandler createHistoryMetricsCommandHandler,
+            IClock clock)
         {
             _employeeRepository = employeeRepository;
             _fakeTaxService = fakeTaxService;
@@ -69,18 +65,24 @@ namespace SalaryService.Application.Services
             _createEmployeeCommandHandler = createEmployeeCommandHandler;
             _updateBasicSalaryParametersCommandHandler = updateBasicSalaryParametersCommandHandler;
             _updateFinancialMetricsCommandHandler = updateFinancialMetricsCommandHandler;
-            _createHisoryMetricsCommandHandler = createHisoryMetricsCommandHandler;
+            _createHistoryMetricsCommandHandler = createHistoryMetricsCommandHandler;
+            _clock = clock;
         }
 
         private EmployeeFinancialMetrics CalculateMetrics(SalaryServiceParameters parameters)
         {
-            var calculatedSalaryData = new EmployeeFinancialMetrics(parameters.EmployeeId, parameters.RatePerHour, parameters.Pay, parameters.EmploymentTypeValue, parameters.HasParking);
+            var calculatedSalaryData = new EmployeeFinancialMetrics(parameters.EmployeeId, 
+                parameters.RatePerHour, 
+                parameters.Pay, 
+                parameters.EmploymentTypeValue, 
+                parameters.HasParking);
 
             var districtCoeff = _fakeTaxService.GetChelyabinskDistrictCoeff();
             var personalIncomeTaxPercent =  _fakeTaxService.GetPersonalIncomeTaxPercent();
             var minimalSizeOfSalary = _fakeTaxService.GetMinimalSizeOfSalary();
 
-            calculatedSalaryData.CalculateMetrics(districtCoeff.Result, minimalSizeOfSalary.Result, personalIncomeTaxPercent.Result);
+            calculatedSalaryData.CalculateMetrics(districtCoeff.Result, minimalSizeOfSalary.Result, personalIncomeTaxPercent.Result,
+                new MetricsPeriod(_clock.GetCurrentInstant(), null));
 
             return calculatedSalaryData;
         }
@@ -160,11 +162,11 @@ namespace SalaryService.Application.Services
 
         public Task<long> CreateHistoryRecord(SalaryServiceParameters parameters)
         {
-            return _createHisoryMetricsCommandHandler.Handle(new CreateHistoryMetricsCommand
+            return _createHistoryMetricsCommandHandler.Handle(new CreateHistoryMetricsCommand
             {
                 EmployeeId = parameters.EmployeeId
             });
-        } 
+        }
 
         public async Task UpdateEmployee(SalaryServiceParameters parameters)
         {

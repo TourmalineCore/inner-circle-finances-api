@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
+using NodaTime;
 using SalaryService.DataAccess.Repositories;
+using SalaryService.Domain;
 
 namespace SalaryService.Application.Commands
 {
@@ -62,29 +64,33 @@ namespace SalaryService.Application.Commands
     public class UpdateFinancialMetricsCommandHandler
     {
         private readonly EmployeeFinancialMetricsRepository _employeeFinancialMetricsRepository;
+        private readonly IClock _clock;
 
-        public UpdateFinancialMetricsCommandHandler(EmployeeFinancialMetricsRepository basicSalaryParametersRepository)
+        public UpdateFinancialMetricsCommandHandler(EmployeeFinancialMetricsRepository basicSalaryParametersRepository, IClock clock)
         {
             _employeeFinancialMetricsRepository = basicSalaryParametersRepository;
+            _clock = clock;
         }
 
         public async Task Handle(UpdateFinancialMetricsCommand request)
         {
             var salaryMetrics = _employeeFinancialMetricsRepository.GetById(request.EmployeeId).Result;
+            
             salaryMetrics.Update(request.Salary,
-                request.HourlyCostFact,
-                request.HourlyCostHand,
-                request.Earnings,
-                request.Expenses,
-                request.Profit,
-                request.ProfitAbility,
                 request.GrossSalary,
                 request.NetSalary,
+                request.Earnings,
+                request.Expenses,
+                request.HourlyCostFact,
+                request.HourlyCostHand,
+                request.Retainer,
+                request.Profit,
+                request.ProfitAbility,
                 request.RatePerHour,
                 request.Pay,
-                request.Retainer,
                 request.EmploymentType,
-                request.HasParking);
+                request.HasParking,
+                new MetricsPeriod(_clock.GetCurrentInstant(), null));
 
             await _employeeFinancialMetricsRepository.UpdateAsync(salaryMetrics);
         }

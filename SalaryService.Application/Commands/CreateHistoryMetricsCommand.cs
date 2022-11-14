@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using NodaTime;
 using SalaryService.DataAccess.Repositories;
 using SalaryService.Domain;
 using System;
@@ -17,19 +18,41 @@ namespace SalaryService.Application.Commands
     {
         private readonly EmployeeFinancialMetricsRepository _employeeFinancialMetricsRepository;
         private readonly MetricsHistoryRepository _metricsHistoryRepository;
+        private readonly IClock _clock;
 
 
         public CreateHistoryMetricsCommandHandler( EmployeeFinancialMetricsRepository employeeFinancialMetricsRepository,
-            MetricsHistoryRepository metricsHistoryRepository)
+            MetricsHistoryRepository metricsHistoryRepository,
+            IClock clock)
         {
             _employeeFinancialMetricsRepository = employeeFinancialMetricsRepository;
             _metricsHistoryRepository = metricsHistoryRepository;
+            _clock = clock;
         }
         public async Task<long> Handle(CreateHistoryMetricsCommand request)
         {
             var latestMetrics = await _employeeFinancialMetricsRepository.GetById(request.EmployeeId);
-            var serializedMetrics = JsonConvert.SerializeObject(latestMetrics);
-            var history = JsonConvert.DeserializeObject<EmployeeFinancialMetricsHistory>(serializedMetrics);
+            var history = new EmployeeFinancialMetricsHistory
+            {
+                EmployeeId = latestMetrics.EmployeeId,
+                MetricsPeriod = new MetricsPeriod(latestMetrics.MetricsPeriod.StartedAtUtc, _clock.GetCurrentInstant()),
+                Salary = latestMetrics.Salary,
+                HourlyCostFact = latestMetrics.HourlyCostFact,
+                HourlyCostHand = latestMetrics.HourlyCostHand,
+                Earnings = latestMetrics.Earnings,
+                Expenses = latestMetrics.Expenses,
+                Profit = latestMetrics.Profit,
+                ProfitAbility = latestMetrics.ProfitAbility,
+                GrossSalary = latestMetrics.GrossSalary,
+                NetSalary = latestMetrics.NetSalary,
+                RatePerHour = latestMetrics.RatePerHour,
+                Pay = latestMetrics.Pay,
+                Retainer = latestMetrics.Retainer,
+                EmploymentType = latestMetrics.EmploymentType,
+                HasParking = latestMetrics.HasParking,
+                ParkingCostPerMonth = latestMetrics.ParkingCostPerMonth,
+                AccountingPerMonth = latestMetrics.AccountingPerMonth
+            };
             return await _metricsHistoryRepository.CreateAsync(history);
         }
     }

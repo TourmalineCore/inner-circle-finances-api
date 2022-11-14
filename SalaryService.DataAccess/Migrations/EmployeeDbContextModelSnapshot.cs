@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SalaryService.DataAccess;
 
@@ -53,7 +54,7 @@ namespace SalaryService.DataAccess.Migrations
                     b.HasIndex("EmployeeId")
                         .IsUnique();
 
-                    b.ToTable("BasicSalaryParameters");
+                    b.ToTable("BasicSalaryParameters", (string)null);
                 });
 
             modelBuilder.Entity("SalaryService.Domain.Employee", b =>
@@ -94,7 +95,7 @@ namespace SalaryService.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employees", (string)null);
                 });
 
             modelBuilder.Entity("SalaryService.Domain.EmployeeFinancialMetrics", b =>
@@ -108,9 +109,6 @@ namespace SalaryService.DataAccess.Migrations
                     b.Property<double>("AccountingPerMonth")
                         .HasColumnType("double precision");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<double>("Earnings")
                         .HasColumnType("double precision");
 
@@ -161,7 +159,7 @@ namespace SalaryService.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EmployeeFinancialMetrics");
+                    b.ToTable("EmployeeFinancialMetrics", (string)null);
                 });
 
             modelBuilder.Entity("SalaryService.Domain.EmployeeFinancialMetricsHistory", b =>
@@ -175,12 +173,6 @@ namespace SalaryService.DataAccess.Migrations
                     b.Property<double>("AccountingPerMonth")
                         .HasColumnType("double precision");
 
-                    b.Property<DateTime>("ChangedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<double>("Earnings")
                         .HasColumnType("double precision");
 
@@ -231,7 +223,7 @@ namespace SalaryService.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EmployeeFinancialMetricsHistory");
+                    b.ToTable("EmployeeFinancialMetricsHistory", (string)null);
                 });
 
             modelBuilder.Entity("SalaryService.Domain.BasicSalaryParameters", b =>
@@ -243,6 +235,60 @@ namespace SalaryService.DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("SalaryService.Domain.EmployeeFinancialMetrics", b =>
+                {
+                    b.OwnsOne("SalaryService.Domain.EmployeeFinancialMetrics.MetricsPeriod#SalaryService.Domain.MetricsPeriod", "MetricsPeriod", b1 =>
+                        {
+                            b1.Property<long>("EmployeeFinancialMetricsId")
+                                .HasColumnType("bigint");
+
+                            b1.Property<Instant>("StartedAtUtc")
+                                .HasColumnType("timestamp with time zone")
+                                .HasColumnName("StartedAtUtc");
+
+                            b1.Property<Instant?>("UpdatedAtUtc")
+                                .HasColumnType("timestamp with time zone")
+                                .HasColumnName("UpdatedAtUtc");
+
+                            b1.HasKey("EmployeeFinancialMetricsId");
+
+                            b1.ToTable("EmployeeFinancialMetrics", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("EmployeeFinancialMetricsId");
+                        });
+
+                    b.Navigation("MetricsPeriod")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SalaryService.Domain.EmployeeFinancialMetricsHistory", b =>
+                {
+                    b.OwnsOne("SalaryService.Domain.EmployeeFinancialMetricsHistory.MetricsPeriod#SalaryService.Domain.MetricsPeriod", "MetricsPeriod", b1 =>
+                        {
+                            b1.Property<long>("EmployeeFinancialMetricsHistoryId")
+                                .HasColumnType("bigint");
+
+                            b1.Property<Instant>("StartedAtUtc")
+                                .HasColumnType("timestamp with time zone")
+                                .HasColumnName("StartedAtUtc");
+
+                            b1.Property<Instant?>("UpdatedAtUtc")
+                                .HasColumnType("timestamp with time zone")
+                                .HasColumnName("UpdatedAtUtc");
+
+                            b1.HasKey("EmployeeFinancialMetricsHistoryId");
+
+                            b1.ToTable("EmployeeFinancialMetricsHistory", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("EmployeeFinancialMetricsHistoryId");
+                        });
+
+                    b.Navigation("MetricsPeriod")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SalaryService.Domain.Employee", b =>

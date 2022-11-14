@@ -1,5 +1,5 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -17,7 +17,8 @@ namespace SalaryService.DataAccess.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     EmployeeId = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    StartedAtUtc = table.Column<Instant>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAtUtc = table.Column<Instant>(type: "timestamp with time zone", nullable: true),
                     Salary = table.Column<double>(type: "double precision", nullable: false),
                     HourlyCostFact = table.Column<double>(type: "double precision", nullable: false),
                     HourlyCostHand = table.Column<double>(type: "double precision", nullable: false),
@@ -46,9 +47,9 @@ namespace SalaryService.DataAccess.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ChangedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EmployeeId = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    StartedAtUtc = table.Column<Instant>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAtUtc = table.Column<Instant>(type: "timestamp with time zone", nullable: true),
                     Salary = table.Column<double>(type: "double precision", nullable: false),
                     HourlyCostFact = table.Column<double>(type: "double precision", nullable: false),
                     HourlyCostHand = table.Column<double>(type: "double precision", nullable: false),
