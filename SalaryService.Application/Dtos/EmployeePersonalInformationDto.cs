@@ -1,6 +1,6 @@
 ﻿namespace SalaryService.Application.Dtos
 {
-    public class EmployeeDto
+    public class EmployeePersonalInformationDto
     {
         public long Id { get; private set; }
 
@@ -18,7 +18,9 @@
 
         public string Telegram { get; private set; }
 
-        public EmployeeDto(long id, string name, string surname, string workEmail, string personalEmail, string phone, string skype, string telegram)
+        public double NetSalary { get; private set; }
+
+        public EmployeePersonalInformationDto(long id, string name, string surname, string workEmail, string personalEmail, string phone, string skype, string telegram, double netSalary)
         {
             Id = id;
             Name = name;
@@ -28,6 +30,7 @@
             Phone = phone;
             Skype = skype;
             Telegram = telegram;
+            NetSalary = netSalary;
         }
     }
 }

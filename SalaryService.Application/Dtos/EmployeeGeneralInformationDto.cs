@@ -1,8 +1,12 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace SalaryService.Domain
+namespace SalaryService.Application.Dtos
 {
-    public class Employee : IIdentityEntity
+    public class EmployeeGeneralInformationDto
     {
         public long Id { get; private set; }
 
@@ -20,12 +24,9 @@ namespace SalaryService.Domain
 
         public string Telegram { get; private set; }
 
-        public BasicSalaryParameters Performances { get; private set; }
-
-        private Employee() { }
-
-        public Employee(string name, string surname, string workEmail, string personalEmail, string phone, string skype, string telegram)
+        public EmployeeGeneralInformationDto(long id, string name, string surname, string workEmail, string personalEmail, string phone, string skype, string telegram)
         {
+            Id = id;
             Name = name;
             Surname = surname;
             WorkEmail = workEmail;

@@ -1,27 +1,32 @@
-﻿using SalaryService.Application.Dtos;
-using SalaryService.DataAccess;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using SalaryService.Application.Dtos;
 using SalaryService.DataAccess.Repositories;
+using SalaryService.Domain;
 
 namespace SalaryService.Application.Queries
 {
-    public partial class GetEmployeeByIdQuery
+    public partial class GetEmployeeGeneralInformationQuery
     {
         public long EmployeeId { get; set; }
     }
 
-    public class GetEmployeeByIdQueryHandler
+    public class GetEmployeeGeneralInformationQueryHandler
     {
         private readonly EmployeeRepository _employeeRepository;
 
-        public GetEmployeeByIdQueryHandler(EmployeeRepository employeeRepository)
+        public GetEmployeeGeneralInformationQueryHandler(EmployeeRepository employeeRepository)
         {
             _employeeRepository = employeeRepository;
         }
-        public async Task<EmployeeDto> Handle(GetEmployeeByIdQuery request)
+        public async Task<EmployeeGeneralInformationDto> Handle(GetEmployeeGeneralInformationQuery request)
         {
             var employee = await _employeeRepository.GetByIdAsync(request.EmployeeId);
-            return new EmployeeDto(
-                employee.Id,
+
+            return new EmployeeGeneralInformationDto(employee.Id,
                 employee.Name,
                 employee.Surname,
                 employee.WorkEmail,

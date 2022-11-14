@@ -1,28 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace SalaryService.Application.Dtos
 {
-    public class FullEmployeeInformationDto
+    public class SEOAnalyticsInformationDto
     {
         public long Id { get; private set; }
 
         public string Name { get; private set; }
 
         public string Surname { get; private set; }
-
-        public string WorkEmail { get; private set; }
-
-        public string PersonalEmail { get; private set; }
-
-        public string Phone { get; private set; }
-
-        public string Skype { get; private set; }
-
-        public string Telegram { get; private set; }
 
         public double Pay { get; private set; }
 
@@ -50,36 +35,26 @@ namespace SalaryService.Application.Dtos
 
         public double NetSalary { get; private set; }
 
-        public FullEmployeeInformationDto(long id, 
-            string name, 
-            string surname, 
-            string workEmail, 
-            string personalEmail, 
-            string phone, 
-            string skype, 
-            string telegram, 
-            double pay, 
+        public SEOAnalyticsInformationDto(long id,
+            string name,
+            string surname,
+            double pay,
             double ratePerHour,
             double employmentType,
             bool hasParking,
-            double hourlyCostFact, 
-            double hourlyCostHand, 
-            double earnings, 
-            double expenses, 
-            double profit, 
-            double profitAbility, 
-            double grossSalary, 
-            double retainer, 
+            double hourlyCostFact,
+            double hourlyCostHand,
+            double earnings,
+            double expenses,
+            double profit,
+            double profitAbility,
+            double grossSalary,
+            double retainer,
             double netSalary)
         {
             Id = id;
             Name = name;
             Surname = surname;
-            WorkEmail = workEmail;
-            PersonalEmail = personalEmail;
-            Phone = phone;
-            Skype = skype;
-            Telegram = telegram;
             Pay = pay;
             RatePerHour = ratePerHour;
             EmploymentType = employmentType;

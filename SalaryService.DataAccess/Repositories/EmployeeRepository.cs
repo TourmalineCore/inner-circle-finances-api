@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
+using Microsoft.EntityFrameworkCore;
 using SalaryService.Domain;
 
 namespace SalaryService.DataAccess.Repositories
@@ -25,6 +26,13 @@ namespace SalaryService.DataAccess.Repositories
             return _employeeDbContext
                     .Set<Employee>()
                     .SingleAsync(x => x.Id == employeeId);
+        }
+
+        public async Task<IEnumerable<Employee>> GetAllAsync()
+        {
+            return await _employeeDbContext
+                .QueryableAsNoTracking<Employee>()
+                .ToListAsync();
         }
 
         public Task UpdateAsync(Employee employee)

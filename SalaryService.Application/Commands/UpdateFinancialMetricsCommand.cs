@@ -74,7 +74,7 @@ namespace SalaryService.Application.Commands
 
         public async Task Handle(UpdateFinancialMetricsCommand request)
         {
-            var salaryMetrics = _employeeFinancialMetricsRepository.GetById(request.EmployeeId).Result;
+            var salaryMetrics = _employeeFinancialMetricsRepository.GetByEmployeeId(request.EmployeeId).Result;
             
             salaryMetrics.Update(request.Salary,
                 request.GrossSalary,

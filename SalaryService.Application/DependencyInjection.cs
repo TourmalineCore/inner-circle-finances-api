@@ -13,8 +13,11 @@ namespace SalaryService.Application
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
 
-            services.AddTransient<GetEmployeeByIdQueryHandler>();
-            services.AddTransient<GetBasicSalaryParametersQueryHandler>();
+            services.AddTransient<GetEmployeePersonalInformationQueryHandler>();
+            services.AddTransient<GetEmployeeGeneralInformationQueryHandler>();
+            services.AddTransient<GetSEOAnalyticsInformationQueryHandler>();
+            services.AddTransient<GetEmployeeInformationListQueryHandler>();
+            services.AddTransient<GetSEOAnalyticsInformationListQueryHandler>();
             services.AddTransient<CreateEmployeeCommandHandler>();
             services.AddTransient<UpdateEmployeeCommandHandler>();
             services.AddTransient<CreateBasicSalaryParametersCommandHandler>();

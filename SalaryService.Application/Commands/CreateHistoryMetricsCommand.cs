@@ -31,7 +31,7 @@ namespace SalaryService.Application.Commands
         }
         public async Task<long> Handle(CreateHistoryMetricsCommand request)
         {
-            var latestMetrics = await _employeeFinancialMetricsRepository.GetById(request.EmployeeId);
+            var latestMetrics = await _employeeFinancialMetricsRepository.GetByEmployeeId(request.EmployeeId);
             var history = new EmployeeFinancialMetricsHistory
             {
                 EmployeeId = latestMetrics.EmployeeId,

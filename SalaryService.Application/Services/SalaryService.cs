@@ -174,33 +174,5 @@ namespace SalaryService.Application.Services
             await UpdateBasicInfo(parameters);
             await UpdateMetrics(parameters);
         }
-
-        public async Task<FullEmployeeInformationDto> GetFullEmployeeInformation(SalaryServiceParameters request)
-        {
-            var employee = await _employeeRepository.GetByIdAsync(request.EmployeeId);
-            var employeeFinancialMetrics = await _employeeFinancialMetricsRepository.GetById(request.EmployeeId);
-
-            return new FullEmployeeInformationDto(employee.Id,
-                employee.Name,
-                employee.Surname,
-                employee.WorkEmail,
-                employee.PersonalEmail,
-                employee.Phone,
-                employee.Skype,
-                employee.Telegram,
-                Math.Round(employeeFinancialMetrics.Pay, 2),
-                Math.Round(employeeFinancialMetrics.RatePerHour, 2),
-                Math.Round(employeeFinancialMetrics.EmploymentType, 2),
-                employeeFinancialMetrics.HasParking,
-                Math.Round(employeeFinancialMetrics.HourlyCostFact, 2),
-                Math.Round(employeeFinancialMetrics.HourlyCostHand, 2),
-                Math.Round(employeeFinancialMetrics.Earnings, 2),
-                Math.Round(employeeFinancialMetrics.Expenses, 2),
-                Math.Round(employeeFinancialMetrics.Profit, 2),
-                Math.Round(employeeFinancialMetrics.ProfitAbility, 2),
-                Math.Round(employeeFinancialMetrics.GrossSalary, 2),
-                Math.Round(employeeFinancialMetrics.Retainer, 2),
-                Math.Round(employeeFinancialMetrics.NetSalary, 2));
-        }
     }
 }

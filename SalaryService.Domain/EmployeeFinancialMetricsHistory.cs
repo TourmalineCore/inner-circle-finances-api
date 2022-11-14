@@ -22,7 +22,7 @@ namespace SalaryService.Domain
             yield return UpdatedAtUtc;
         }
     }
-    public class EmployeeFinancialMetricsHistory
+    public class EmployeeFinancialMetricsHistory : IIdentityEntity
     {
         public long Id { get; set; }
         public long EmployeeId { get; set; }

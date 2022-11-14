@@ -1,6 +1,6 @@
 ﻿namespace SalaryService.Domain
 {
-    public class EmployeeFinancialMetrics
+    public class EmployeeFinancialMetrics : IIdentityEntity
     {
         public long Id { get; set; }
         public long EmployeeId { get; set; }

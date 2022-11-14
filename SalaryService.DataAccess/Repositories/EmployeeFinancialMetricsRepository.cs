@@ -24,11 +24,18 @@ namespace SalaryService.DataAccess.Repositories
             return _employeeDbContext.SaveChangesAsync();
         }
 
-        public Task<EmployeeFinancialMetrics> GetById(long employeeId)
+        public Task<EmployeeFinancialMetrics> GetByEmployeeId(long employeeId)
         {
             return _employeeDbContext
                     .Set<EmployeeFinancialMetrics>()
                     .SingleAsync(x => x.EmployeeId == employeeId);
+        }
+
+        public async Task<IEnumerable<EmployeeFinancialMetrics>> GetAllAsync()
+        {
+            return await _employeeDbContext
+                .QueryableAsNoTracking<EmployeeFinancialMetrics>()
+                .ToListAsync();
         }
     }
 }
