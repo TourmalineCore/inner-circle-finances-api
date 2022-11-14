@@ -1,5 +1,4 @@
 ﻿using SalaryService.DataAccess.Repositories;
-using System;
 using SalaryService.Application.Dtos;
 
 namespace SalaryService.Application.Queries

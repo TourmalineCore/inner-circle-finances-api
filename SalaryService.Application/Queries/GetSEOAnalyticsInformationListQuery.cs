@@ -5,6 +5,7 @@ namespace SalaryService.Application.Queries
 {
     public partial class GetSEOAnalyticsInformationListQuery
     {
+
     }
 
     public class GetSEOAnalyticsInformationListQueryHandler
@@ -41,6 +42,7 @@ namespace SalaryService.Application.Queries
                     m.GrossSalary,
                     m.Retainer,
                     m.NetSalary);
+
             return query;
         }
     }

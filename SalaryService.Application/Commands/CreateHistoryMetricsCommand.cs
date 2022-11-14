@@ -1,12 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿
 using NodaTime;
 using SalaryService.DataAccess.Repositories;
 using SalaryService.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SalaryService.Application.Commands
 {
@@ -19,8 +14,7 @@ namespace SalaryService.Application.Commands
         private readonly EmployeeFinancialMetricsRepository _employeeFinancialMetricsRepository;
         private readonly MetricsHistoryRepository _metricsHistoryRepository;
         private readonly IClock _clock;
-
-
+        
         public CreateHistoryMetricsCommandHandler( EmployeeFinancialMetricsRepository employeeFinancialMetricsRepository,
             MetricsHistoryRepository metricsHistoryRepository,
             IClock clock)
@@ -53,6 +47,7 @@ namespace SalaryService.Application.Commands
                 ParkingCostPerMonth = latestMetrics.ParkingCostPerMonth,
                 AccountingPerMonth = latestMetrics.AccountingPerMonth
             };
+
             return await _metricsHistoryRepository.CreateAsync(history);
         }
     }

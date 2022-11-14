@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using SalaryService.Application.Dtos;
 using SalaryService.DataAccess.Repositories;
-using SalaryService.Domain;
 
 namespace SalaryService.Application.Queries
 {

@@ -1,6 +1,4 @@
-﻿using SalaryService.DataAccess;
-using SalaryService.DataAccess.Repositories;
-using SalaryService.Domain;
+﻿using SalaryService.DataAccess.Repositories;
 
 namespace SalaryService.Application.Commands
 {
@@ -30,16 +28,13 @@ namespace SalaryService.Application.Commands
         {
             _employeeRepository = employeeRepository;
         }
-        public Task Handle(UpdateEmployeeCommand request)
+        public async Task Handle(UpdateEmployeeCommand request)
         {
-            return _employeeRepository.UpdateAsync(new Employee(
-                request.Name,
-                request.Surname,
-                request.WorkEmail,
-                request.PersonalEmail,
-                request.Phone,
-                request.Skype,
-                request.Telegram));
+            var employee = await _employeeRepository.GetByIdAsync(request.Id);
+
+            employee.Update(request.Name, request.Surname, request.WorkEmail, request.PersonalEmail, request.Phone, request.Skype, request.Telegram);
+
+            await _employeeRepository.UpdateAsync(employee);
         }
     }
 }

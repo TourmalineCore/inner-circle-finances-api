@@ -1,16 +1,10 @@
 ﻿using SalaryService.DataAccess.Repositories;
 using SalaryService.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SalaryService.Application.Commands
 {
     public partial class UpdateBasicSalaryParametersCommand
     {
-        public long Id { get; set; }
         public long EmployeeId { get; set; }
 
         public double RatePerHour { get; set; }

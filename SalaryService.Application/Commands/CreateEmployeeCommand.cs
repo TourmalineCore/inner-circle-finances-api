@@ -1,4 +1,4 @@
-﻿using SalaryService.DataAccess;
+﻿
 using SalaryService.DataAccess.Repositories;
 using SalaryService.Domain;
 
@@ -39,6 +39,7 @@ namespace SalaryService.Application.Commands
                 request.Phone,
                 request.Skype,
                 request.Telegram);
+
             return await _employeeRepository.CreateAsync(employee);
         }
     }

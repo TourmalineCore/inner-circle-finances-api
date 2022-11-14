@@ -1,5 +1,4 @@
 ﻿
-
 namespace SalaryService.Domain
 {
     public enum EmploymentTypes

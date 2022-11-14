@@ -1,5 +1,4 @@
 ﻿
-
 namespace SalaryService.Domain
 {
     public class Employee : IIdentityEntity
@@ -20,11 +19,20 @@ namespace SalaryService.Domain
 
         public string Telegram { get; private set; }
 
-        public BasicSalaryParameters Performances { get; private set; }
-
         private Employee() { }
 
         public Employee(string name, string surname, string workEmail, string personalEmail, string phone, string skype, string telegram)
+        {
+            Name = name;
+            Surname = surname;
+            WorkEmail = workEmail;
+            PersonalEmail = personalEmail;
+            Phone = phone;
+            Skype = skype;
+            Telegram = telegram;
+        }
+
+        public void Update(string name, string surname, string workEmail, string personalEmail, string phone, string skype, string telegram)
         {
             Name = name;
             Surname = surname;

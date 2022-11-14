@@ -1,5 +1,4 @@
 ﻿
-
 using SalaryService.DataAccess.Repositories;
 using SalaryService.Domain;
 
@@ -35,6 +34,7 @@ namespace SalaryService.Application.Commands
                 request.Pay,
                 request.EmploymentType,
                 request.HasParking);
+
             return await _basicSalaryParametersRepository.CreateAsync(basicSalaryParameters);
         }
     }

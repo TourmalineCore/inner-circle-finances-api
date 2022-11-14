@@ -1,10 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using NodaTime;
-using static NodaTime.TimeZones.TzdbZone1970Location;
+﻿using NodaTime;
 
 namespace SalaryService.Domain
 {
-    
     public class MetricsPeriod : BaseValueObject
     {
         public Instant StartedAtUtc { get; set; }

@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
 using SalaryService.Domain;
-using System.Reflection.Metadata;
 
 namespace SalaryService.DataAccess
 {

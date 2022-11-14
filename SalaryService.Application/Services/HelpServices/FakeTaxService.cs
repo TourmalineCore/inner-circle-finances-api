@@ -1,5 +1,4 @@
 ﻿
-
 namespace SalaryService.Application.Services.HelpServices
 {
     public class FakeTaxService : ITaxDataService
