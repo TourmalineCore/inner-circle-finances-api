@@ -9,15 +9,15 @@ namespace SalaryService.Domain
 
         public string Surname { get; private set; }
 
-        public string WorkEmail { get; private set; }
+        public string? WorkEmail { get; private set; }
 
-        public string PersonalEmail { get; private set; }
+        public string? PersonalEmail { get; private set; }
 
-        public string Phone { get; private set; }
+        public string? Phone { get; private set; }
 
-        public string Skype { get; private set; }
+        public string? Skype { get; private set; }
 
-        public string Telegram { get; private set; }
+        public string? Telegram { get; private set; }
 
         private Employee() { }
 
