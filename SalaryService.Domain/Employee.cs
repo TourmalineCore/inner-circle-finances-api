@@ -1,4 +1,6 @@
 ﻿
+using NodaTime;
+
 namespace SalaryService.Domain
 {
     public class Employee : IIdentityEntity
@@ -21,9 +23,9 @@ namespace SalaryService.Domain
 
         public string? Telegram { get; private set; }
 
-        private Employee() { }
+        public Instant EmploymentDate { get; private set; }
 
-        public Employee(string name, string surname, string middleName, string workEmail, string personalEmail, string phone, string skype, string telegram)
+        public Employee(string name, string surname, string middleName, string workEmail, string personalEmail, string phone, string skype, string telegram, Instant employmentDate)
         {
             Name = name;
             Surname = surname;
@@ -33,6 +35,7 @@ namespace SalaryService.Domain
             Phone = phone;
             Skype = skype;
             Telegram = telegram;
+            EmploymentDate = employmentDate;
         }
 
         public void Update(string name, string surname, string middleName, string workEmail, string personalEmail, string phone, string skype, string telegram)

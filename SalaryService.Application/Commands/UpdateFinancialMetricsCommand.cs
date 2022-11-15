@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using NodaTime;
 using SalaryService.DataAccess.Repositories;
-using SalaryService.Domain;
+using Period = SalaryService.Domain.Common.Period;
 
 namespace SalaryService.Application.Commands
 {
@@ -186,7 +186,7 @@ namespace SalaryService.Application.Commands
                 request.Pay,
                 request.EmploymentType,
                 request.HasParking,
-                new MetricsPeriod(_clock.GetCurrentInstant(), null));
+                _clock.GetCurrentInstant());
 
             await _employeeFinancialMetricsRepository.UpdateAsync(salaryMetrics);
         }

@@ -19,12 +19,12 @@ namespace SalaryService.Application.Queries
             _employeeFinancialMetricsRepository = employeeFinancialMetricsRepository;
         }
 
-        public async Task<EmployeePersonalInformationDto> Handle(GetEmployeePersonalInformationQuery request)
+        public async Task<EmployeeProfileDto> Handle(GetEmployeePersonalInformationQuery request)
         {
             var employee = await _employeeRepository.GetByIdAsync(request.EmployeeId);
             var basicSalaryParameters = await _employeeFinancialMetricsRepository.GetByEmployeeId(request.EmployeeId);
 
-            return new EmployeePersonalInformationDto(employee.Id,
+            return new EmployeeProfileDto(employee.Id,
                 employee.Name,
                 employee.Surname,
                 employee.MiddleName,
@@ -33,7 +33,9 @@ namespace SalaryService.Application.Queries
                 employee.Phone,
                 employee.Skype,
                 employee.Telegram,
-                basicSalaryParameters.NetSalary);
+                employee.EmploymentDate,
+                basicSalaryParameters.NetSalary
+                );
         }
     }
 }

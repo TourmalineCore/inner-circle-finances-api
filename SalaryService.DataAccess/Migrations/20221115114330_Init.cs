@@ -17,8 +17,7 @@ namespace SalaryService.DataAccess.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     EmployeeId = table.Column<long>(type: "bigint", nullable: false),
-                    StartedAtUtc = table.Column<Instant>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAtUtc = table.Column<Instant>(type: "timestamp with time zone", nullable: true),
+                    ActualFromUtc = table.Column<Instant>(type: "timestamp with time zone", nullable: false),
                     Salary = table.Column<double>(type: "double precision", nullable: false),
                     HourlyCostFact = table.Column<double>(type: "double precision", nullable: false),
                     HourlyCostHand = table.Column<double>(type: "double precision", nullable: false),
@@ -85,7 +84,8 @@ namespace SalaryService.DataAccess.Migrations
                     PersonalEmail = table.Column<string>(type: "text", nullable: true),
                     Phone = table.Column<string>(type: "text", nullable: true),
                     Skype = table.Column<string>(type: "text", nullable: true),
-                    Telegram = table.Column<string>(type: "text", nullable: true)
+                    Telegram = table.Column<string>(type: "text", nullable: true),
+                    EmploymentDate = table.Column<Instant>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {

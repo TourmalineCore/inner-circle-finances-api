@@ -2,6 +2,7 @@
 using NodaTime;
 using SalaryService.DataAccess.Repositories;
 using SalaryService.Domain;
+using Period = SalaryService.Domain.Common.Period;
 
 namespace SalaryService.Application.Commands
 {
@@ -29,7 +30,7 @@ namespace SalaryService.Application.Commands
             var history = new EmployeeFinancialMetricsHistory
             {
                 EmployeeId = latestMetrics.EmployeeId,
-                MetricsPeriod = new MetricsPeriod(latestMetrics.MetricsPeriod.StartedAtUtc, _clock.GetCurrentInstant()),
+                Period = new Period(latestMetrics.ActualFromUtc, _clock.GetCurrentInstant()),
                 Salary = latestMetrics.Salary,
                 HourlyCostFact = latestMetrics.HourlyCostFact,
                 HourlyCostHand = latestMetrics.HourlyCostHand,

@@ -2,6 +2,7 @@
 using SalaryService.Application.Commands;
 using SalaryService.DataAccess.Repositories;
 using SalaryService.Domain;
+using Period = SalaryService.Domain.Common.Period;
 
 namespace SalaryService.Application.Services
 {
@@ -69,74 +70,155 @@ namespace SalaryService.Application.Services
             _clock = clock;
         }
 
-        private EmployeeFinancialMetrics CalculateMetrics(SalaryServiceParameters parameters)
+
+        public async Task CreateEmployee(SalaryServiceParameters parameters)
         {
-            var calculatedSalaryData = new EmployeeFinancialMetrics(parameters.EmployeeId, 
+            var employee = CreateEmployeePersonalInfo(parameters.Name, 
+                parameters.Surname, 
+                parameters.MiddleName, 
+                parameters.WorkEmail, 
+                parameters.PersonalEmail, 
+                parameters.Phone, 
+                parameters.Skype, 
+                parameters.Telegram);
+
+            await CreateBasicSalaryParametersInfo(employee.Result,
+                parameters.RatePerHour,
+                parameters.Pay,
+                parameters.EmploymentType,
+                parameters.HasParking);
+
+            await CreateMetrics(CalculateMetrics(employee.Result, 
                 parameters.RatePerHour, 
                 parameters.Pay, 
                 parameters.EmploymentTypeValue, 
+                parameters.HasParking, 
+                parameters.DistrictCoefficient, 
+                parameters.MinimumWage, 
+                parameters.IncomeTax));
+        }
+
+        public async Task UpdateEmployee(SalaryServiceParameters parameters)
+        {
+            await CreateHistoryRecord(parameters.EmployeeId);
+            await UpdateBasicInfo(parameters.EmployeeId, 
+                parameters.RatePerHour, 
+                parameters.Pay, 
+                parameters.EmploymentType, 
                 parameters.HasParking);
 
-            calculatedSalaryData.CalculateMetrics(parameters.DistrictCoefficient, parameters.MinimumWage, parameters.IncomeTax,
-                new MetricsPeriod(_clock.GetCurrentInstant(), null));
+            await UpdateMetrics(parameters.EmployeeId, 
+                parameters.RatePerHour, 
+                parameters.Pay, 
+                parameters.EmploymentTypeValue, 
+                parameters.HasParking, 
+                parameters.DistrictCoefficient, 
+                parameters.MinimumWage, 
+                parameters.IncomeTax);
+        }
+
+        private Task<long> CreateHistoryRecord(long employeeId)
+        {
+            return _createHistoryMetricsCommandHandler.Handle(new CreateHistoryMetricsCommand
+            {
+                EmployeeId = employeeId
+            });
+        }
+
+        private EmployeeFinancialMetrics CalculateMetrics(long employeeId, 
+            double ratePerHour, 
+            double pay, 
+            double employmentTypeValue, 
+            bool hasParking, 
+            double districtCoefficient, 
+            double minimumWage, 
+            double incomeTax)
+        {
+            var calculatedSalaryData = new EmployeeFinancialMetrics(employeeId,
+                ratePerHour,
+                pay,
+                employmentTypeValue,
+                hasParking);
+
+            calculatedSalaryData.CalculateMetrics(districtCoefficient, minimumWage, incomeTax,
+                _clock.GetCurrentInstant());
 
             return calculatedSalaryData;
         }
-        private Task<long> CreateEmployeePersonalInfo(SalaryServiceParameters parameters)
+
+        private Task CreateMetrics(EmployeeFinancialMetrics metrics)
+        {
+            return _employeeFinancialMetricsRepository.CreateAsync(metrics);
+        }
+
+        private Task<long> CreateEmployeePersonalInfo(string name, 
+            string surname, 
+            string middleName, 
+            string workEmail, 
+            string personalEmail, 
+            string phone, 
+            string skype, 
+            string telegram)
         {
             return _createEmployeeCommandHandler.Handle(
                 new CreateEmployeeCommand
                 {
-                    Name = parameters.Name,
-                    Surname = parameters.Surname,
-                    MiddleName = parameters.MiddleName,
-                    WorkEmail = parameters.WorkEmail,
-                    PersonalEmail = parameters.PersonalEmail,
-                    Phone = parameters.Phone,
-                    Skype = parameters.Skype,
-                    Telegram = parameters.Telegram
+                    Name = name,
+                    Surname = surname,
+                    MiddleName = middleName,
+                    WorkEmail = workEmail,
+                    PersonalEmail = personalEmail,
+                    Phone = phone,
+                    Skype = skype,
+                    Telegram = telegram
                 }
             );
         }
 
-        private Task<long> CreateEmployeeBasicInfo(SalaryServiceParameters parameters)
+        private Task<long> CreateBasicSalaryParametersInfo(long employeeId, double ratePerHour, double pay, EmploymentTypes employmentType, bool hasParking)
         {
             return _createBasicSalaryParametersCommandHandler.Handle(
                 new CreateBasicSalaryParametersCommand
                 {
-                    EmployeeId = parameters.EmployeeId,
-                    RatePerHour = parameters.RatePerHour,
-                    Pay = parameters.Pay,
-                    EmploymentType = parameters.EmploymentType,
-                    HasParking = parameters.HasParking
+                    EmployeeId = employeeId,
+                    RatePerHour = ratePerHour,
+                    Pay = pay,
+                    EmploymentType = employmentType,
+                    HasParking = hasParking
                 }
             );
         }
-        public Task CreateEmployee(SalaryServiceParameters parameters)
-        {
-            CreateEmployeePersonalInfo(parameters);
-            CreateEmployeeBasicInfo(parameters);
-
-            var calculatedMetrics = CalculateMetrics(parameters);
-
-            return _employeeFinancialMetricsRepository.CreateAsync(calculatedMetrics);
-        }
-
-        private async Task UpdateBasicInfo(SalaryServiceParameters parameters)
+        
+        private async Task UpdateBasicInfo(long employeeId, double ratePerHour, double pay, EmploymentTypes employmentType, bool hasParking)
         {
             await _updateBasicSalaryParametersCommandHandler.Handle(new UpdateBasicSalaryParametersCommand
             {
-                EmployeeId = parameters.EmployeeId,
-                RatePerHour = parameters.RatePerHour,
-                Pay = parameters.Pay,
-                EmploymentType = parameters.EmploymentType,
-                HasParking = parameters.HasParking
+                EmployeeId = employeeId,
+                RatePerHour = ratePerHour,
+                Pay = pay,
+                EmploymentType = employmentType,
+                HasParking = hasParking
             });
         }
 
-        private async Task UpdateMetrics(SalaryServiceParameters parameters)
+        private async Task UpdateMetrics(long employeeId, 
+            double ratePerHour, 
+            double pay, 
+            double employmentTypeValue, 
+            bool hasParking, 
+            double districtCoefficient, 
+            double minimumWage, 
+            double incomeTax)
         {
-            var newMetrics = CalculateMetrics(parameters);
+            var newMetrics = CalculateMetrics(employeeId,
+                ratePerHour,
+                pay,
+                employmentTypeValue,
+                hasParking,
+                districtCoefficient,
+                minimumWage,
+                incomeTax);
+
             await _updateFinancialMetricsCommandHandler.Handle(new UpdateFinancialMetricsCommand
             {
                 EmployeeId = newMetrics.EmployeeId,
@@ -157,19 +239,6 @@ namespace SalaryService.Application.Services
             });
         }
 
-        public Task<long> CreateHistoryRecord(SalaryServiceParameters parameters)
-        {
-            return _createHistoryMetricsCommandHandler.Handle(new CreateHistoryMetricsCommand
-            {
-                EmployeeId = parameters.EmployeeId
-            });
-        }
-
-        public async Task UpdateEmployee(SalaryServiceParameters parameters)
-        {
-            await CreateHistoryRecord(parameters);
-            await UpdateBasicInfo(parameters);
-            await UpdateMetrics(parameters);
-        }
+        
     }
 }

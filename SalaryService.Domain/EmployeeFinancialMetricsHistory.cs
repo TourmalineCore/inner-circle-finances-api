@@ -1,29 +1,13 @@
-﻿using NodaTime;
+﻿
+using SalaryService.Domain.Common;
 
 namespace SalaryService.Domain
 {
-    public class MetricsPeriod : BaseValueObject
-    {
-        public Instant StartedAtUtc { get; set; }
-        public Instant? UpdatedAtUtc { get; set; }
-
-        public MetricsPeriod(Instant startedAtUtc, Instant? updatedAtUtc)
-        {
-            StartedAtUtc = startedAtUtc;
-            UpdatedAtUtc = updatedAtUtc;
-        }
-
-        protected override IEnumerable<object?> GetEqualityComponents()
-        {
-            yield return StartedAtUtc;
-            yield return UpdatedAtUtc;
-        }
-    }
     public class EmployeeFinancialMetricsHistory : IIdentityEntity
     {
         public long Id { get; set; }
         public long EmployeeId { get; set; }
-        public MetricsPeriod MetricsPeriod { get; set; }
+        public Period Period { get; set; }
         public double Salary { get; set; }
 
         public double HourlyCostFact { get; set; }
@@ -55,10 +39,5 @@ namespace SalaryService.Domain
         public double ParkingCostPerMonth { get; set; }
 
         public double AccountingPerMonth { get; set; }
-
-        public EmployeeFinancialMetricsHistory()
-        {
-            
-        }
     }
 }

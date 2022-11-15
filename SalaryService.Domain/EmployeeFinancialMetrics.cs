@@ -1,10 +1,13 @@
-﻿namespace SalaryService.Domain
+﻿using NodaTime;
+using SalaryService.Domain.Common;
+
+namespace SalaryService.Domain
 {
     public class EmployeeFinancialMetrics : IIdentityEntity
     {
         public long Id { get; set; }
         public long EmployeeId { get; set; }
-        public MetricsPeriod MetricsPeriod { get; set; }
+        public Instant ActualFromUtc { get; set; }
 
         private double salary;
         public double Salary
@@ -167,20 +170,10 @@
         public double EmploymentType { get; set; }
 
         public bool HasParking { get; set; }
+
         public double ParkingCostPerMonth { get; set; }
+
         public double AccountingPerMonth { get; set; }
-
-        // move to consts
-
-        public const double WorkingDaysInYear = 247;
-
-        public const double WorkingDaysInYearWithoutVacation = WorkingDaysInYear - 24;
-
-        public const double WorkingDaysInYearWithoutVacationAndSick = WorkingDaysInYearWithoutVacation - 20;
-
-        public const double WorkingDaysInMonth = WorkingDaysInYearWithoutVacationAndSick / 12;
-
-        public const double WorkingHoursInMonth = WorkingDaysInMonth * 8;
 
         public EmployeeFinancialMetrics(long employeeId, double ratePerHour, double pay, double employmentType, bool hasParking)
         {
@@ -189,17 +182,16 @@
             Pay = pay;
             EmploymentType = employmentType;
             HasParking = hasParking;
-            ParkingCostPerMonth = hasParking ? 1800 : 0;
-            AccountingPerMonth = 600;
-            
+            ParkingCostPerMonth = hasParking ? ThirdPartyServicesPriceConsts.ParkingCostPerMonth : 0;
+            AccountingPerMonth = ThirdPartyServicesPriceConsts.AccountingPerMonth;
         }
 
         public void CalculateMetrics(double districtCoeff,
             double mrot,
             double tax,
-            MetricsPeriod metricsPeriod)
+            Instant actualFromUtc)
         {
-            MetricsPeriod = metricsPeriod;
+            ActualFromUtc = actualFromUtc;
             Salary = CalculateSalary();
             GrossSalary = CalculateGrossSalary(districtCoeff);
             NetSalary = CalculateNetSalary(tax);
@@ -226,7 +218,7 @@
             double pay,
             double employmentType,
             bool hasParking,
-            MetricsPeriod metricsPeriod)
+            Instant actualFromUtc)
         {
             RatePerHour = ratePerHour;
             Pay = pay;
@@ -242,12 +234,12 @@
             Retainer = retainer;
             Profit = profit;
             ProfitAbility = profitability;
-            MetricsPeriod = metricsPeriod;
+            ActualFromUtc = actualFromUtc;
         }
 
         private double CalculateHourlyCostFact()
         {
-            return Expenses / WorkingHoursInMonth;
+            return Expenses / WorkingPlanConsts.WorkingHoursInMonth;
         }
 
         private double CalculateRetainer()
@@ -262,7 +254,7 @@
 
         private double CalculateEarnings()
         {
-            return RatePerHour * WorkingHoursInMonth * EmploymentType;
+            return RatePerHour * WorkingPlanConsts.WorkingHoursInMonth * EmploymentType;
         }
 
         private double CalculateExpenses(double mrot)

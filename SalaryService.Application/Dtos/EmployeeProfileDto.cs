@@ -1,7 +1,8 @@
-﻿
+﻿using NodaTime;
+
 namespace SalaryService.Application.Dtos
 {
-    public class EmployeeGeneralInformationDto
+    public class EmployeeProfileDto
     {
         public long Id { get; private set; }
 
@@ -21,7 +22,21 @@ namespace SalaryService.Application.Dtos
 
         public string Telegram { get; private set; }
 
-        public EmployeeGeneralInformationDto(long id, string name, string surname, string middleName, string workEmail, string personalEmail, string phone, string skype, string telegram)
+        public Instant EmploymentDate { get; private set; }
+
+        public double NetSalary { get; private set; }
+
+        public EmployeeProfileDto(long id, 
+            string name, 
+            string surname, 
+            string middleName, 
+            string workEmail, 
+            string personalEmail, 
+            string phone, 
+            string skype, 
+            string telegram,
+            Instant employmentDate,
+            double netSalary)
         {
             Id = id;
             Name = name;
@@ -32,6 +47,8 @@ namespace SalaryService.Application.Dtos
             Phone = phone;
             Skype = skype;
             Telegram = telegram;
+            EmploymentDate = employmentDate;
+            NetSalary = netSalary;
         }
     }
 }

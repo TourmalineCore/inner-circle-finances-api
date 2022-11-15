@@ -13,7 +13,7 @@ using SalaryService.DataAccess;
 namespace SalaryService.DataAccess.Migrations
 {
     [DbContext(typeof(EmployeeDbContext))]
-    [Migration("20221115062517_Init")]
+    [Migration("20221115114330_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,6 +66,9 @@ namespace SalaryService.DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<Instant>("EmploymentDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("MiddleName")
                         .IsRequired()
                         .HasColumnType("text");
@@ -108,6 +111,9 @@ namespace SalaryService.DataAccess.Migrations
 
                     b.Property<double>("AccountingPerMonth")
                         .HasColumnType("double precision");
+
+                    b.Property<Instant>("ActualFromUtc")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<double>("Earnings")
                         .HasColumnType("double precision");
@@ -237,45 +243,18 @@ namespace SalaryService.DataAccess.Migrations
                     b.Navigation("Employee");
                 });
 
-            modelBuilder.Entity("SalaryService.Domain.EmployeeFinancialMetrics", b =>
-                {
-                    b.OwnsOne("SalaryService.Domain.MetricsPeriod", "MetricsPeriod", b1 =>
-                        {
-                            b1.Property<long>("EmployeeFinancialMetricsId")
-                                .HasColumnType("bigint");
-
-                            b1.Property<Instant>("StartedAtUtc")
-                                .HasColumnType("timestamp with time zone")
-                                .HasColumnName("StartedAtUtc");
-
-                            b1.Property<Instant?>("UpdatedAtUtc")
-                                .HasColumnType("timestamp with time zone")
-                                .HasColumnName("UpdatedAtUtc");
-
-                            b1.HasKey("EmployeeFinancialMetricsId");
-
-                            b1.ToTable("EmployeeFinancialMetrics");
-
-                            b1.WithOwner()
-                                .HasForeignKey("EmployeeFinancialMetricsId");
-                        });
-
-                    b.Navigation("MetricsPeriod")
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("SalaryService.Domain.EmployeeFinancialMetricsHistory", b =>
                 {
-                    b.OwnsOne("SalaryService.Domain.MetricsPeriod", "MetricsPeriod", b1 =>
+                    b.OwnsOne("SalaryService.Domain.Common.Period", "Period", b1 =>
                         {
                             b1.Property<long>("EmployeeFinancialMetricsHistoryId")
                                 .HasColumnType("bigint");
 
-                            b1.Property<Instant>("StartedAtUtc")
+                            b1.Property<Instant>("FromUtc")
                                 .HasColumnType("timestamp with time zone")
                                 .HasColumnName("StartedAtUtc");
 
-                            b1.Property<Instant?>("UpdatedAtUtc")
+                            b1.Property<Instant?>("ToUtc")
                                 .HasColumnType("timestamp with time zone")
                                 .HasColumnName("UpdatedAtUtc");
 
@@ -287,7 +266,7 @@ namespace SalaryService.DataAccess.Migrations
                                 .HasForeignKey("EmployeeFinancialMetricsHistoryId");
                         });
 
-                    b.Navigation("MetricsPeriod")
+                    b.Navigation("Period")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

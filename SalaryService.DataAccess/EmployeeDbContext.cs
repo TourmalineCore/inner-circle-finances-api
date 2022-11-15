@@ -19,20 +19,12 @@ namespace SalaryService.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<EmployeeFinancialMetricsHistory>().OwnsOne(history => history.MetricsPeriod,
+            modelBuilder.Entity<EmployeeFinancialMetricsHistory>().OwnsOne(history => history.Period,
                 navigationBuilder =>
                 {
-                    navigationBuilder.Property(history => history.StartedAtUtc)
+                    navigationBuilder.Property(history => history.FromUtc)
                         .HasColumnName("StartedAtUtc");
-                    navigationBuilder.Property(history => history.UpdatedAtUtc)
-                        .HasColumnName("UpdatedAtUtc");
-                });
-            modelBuilder.Entity<EmployeeFinancialMetrics>().OwnsOne(history => history.MetricsPeriod,
-                navigationBuilder =>
-                {
-                    navigationBuilder.Property(history => history.StartedAtUtc)
-                        .HasColumnName("StartedAtUtc");
-                    navigationBuilder.Property(history => history.UpdatedAtUtc)
+                    navigationBuilder.Property(history => history.ToUtc)
                         .HasColumnName("UpdatedAtUtc");
                 });
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);

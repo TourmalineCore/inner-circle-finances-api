@@ -23,8 +23,6 @@ namespace SalaryService.Domain
         public bool HasParking { get; private set; }
 
         public long EmployeeId { get; private set; }
-        
-        private BasicSalaryParameters() { }
 
         public BasicSalaryParameters(long employeeId, double ratePerHour, double pay, EmploymentTypes employmentType, bool hasParking)
         {

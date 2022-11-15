@@ -1,4 +1,5 @@
 ﻿
+using NodaTime;
 using SalaryService.DataAccess.Repositories;
 using SalaryService.Domain;
 
@@ -26,14 +27,16 @@ namespace SalaryService.Application.Commands
     public class CreateEmployeeCommandHandler
     {
         private readonly EmployeeRepository _employeeRepository;
+        private readonly IClock _clock;
 
-        public CreateEmployeeCommandHandler(EmployeeRepository employeeRepository)
+        public CreateEmployeeCommandHandler(EmployeeRepository employeeRepository, IClock clock)
         {
             _employeeRepository = employeeRepository;
+            _clock = clock;
         }
         public async Task<long> Handle(CreateEmployeeCommand request)
         {
-            var employee = new Employee(
+            return await _employeeRepository.CreateAsync(new Employee(
                 request.Name,
                 request.Surname,
                 request.MiddleName,
@@ -41,9 +44,8 @@ namespace SalaryService.Application.Commands
                 request.PersonalEmail,
                 request.Phone,
                 request.Skype,
-                request.Telegram);
-
-            return await _employeeRepository.CreateAsync(employee);
+                request.Telegram,
+                _clock.GetCurrentInstant()));
         }
     }
 }

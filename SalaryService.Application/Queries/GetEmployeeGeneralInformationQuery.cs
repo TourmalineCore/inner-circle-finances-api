@@ -17,11 +17,11 @@ namespace SalaryService.Application.Queries
         {
             _employeeRepository = employeeRepository;
         }
-        public async Task<EmployeeGeneralInformationDto> Handle(GetEmployeeGeneralInformationQuery request)
+        public async Task<EmployeeContactInfoDto> Handle(GetEmployeeGeneralInformationQuery request)
         {
             var employee = await _employeeRepository.GetByIdAsync(request.EmployeeId);
 
-            return new EmployeeGeneralInformationDto(employee.Id,
+            return new EmployeeContactInfoDto(employee.Id,
                 employee.Name,
                 employee.Surname,
                 employee.MiddleName,
