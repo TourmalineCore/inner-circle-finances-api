@@ -80,11 +80,12 @@ namespace SalaryService.DataAccess.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Surname = table.Column<string>(type: "text", nullable: false),
-                    WorkEmail = table.Column<string>(type: "text", nullable: false),
-                    PersonalEmail = table.Column<string>(type: "text", nullable: false),
-                    Phone = table.Column<string>(type: "text", nullable: false),
-                    Skype = table.Column<string>(type: "text", nullable: false),
-                    Telegram = table.Column<string>(type: "text", nullable: false)
+                    MiddleName = table.Column<string>(type: "text", nullable: false),
+                    WorkEmail = table.Column<string>(type: "text", nullable: true),
+                    PersonalEmail = table.Column<string>(type: "text", nullable: true),
+                    Phone = table.Column<string>(type: "text", nullable: true),
+                    Skype = table.Column<string>(type: "text", nullable: true),
+                    Telegram = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -118,8 +119,7 @@ namespace SalaryService.DataAccess.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_BasicSalaryParameters_EmployeeId",
                 table: "BasicSalaryParameters",
-                column: "EmployeeId",
-                unique: true);
+                column: "EmployeeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

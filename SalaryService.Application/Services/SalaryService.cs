@@ -14,6 +14,8 @@ namespace SalaryService.Application.Services
 
         public string Surname { get; set; }
 
+        public string MiddleName { get; set; }
+
         public string WorkEmail { get; set; }
 
         public string PersonalEmail { get; set; }
@@ -89,6 +91,7 @@ namespace SalaryService.Application.Services
                 {
                     Name = parameters.Name,
                     Surname = parameters.Surname,
+                    MiddleName = parameters.MiddleName,
                     WorkEmail = parameters.WorkEmail,
                     PersonalEmail = parameters.PersonalEmail,
                     Phone = parameters.Phone,

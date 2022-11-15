@@ -8,6 +8,8 @@
 
         public string Surname { get; private set; }
 
+        public string MiddleName { get; private set; }
+
         public string WorkEmail { get; private set; }
 
         public string PersonalEmail { get; private set; }
@@ -20,11 +22,12 @@
 
         public double NetSalary { get; private set; }
 
-        public EmployeePersonalInformationDto(long id, string name, string surname, string workEmail, string personalEmail, string phone, string skype, string telegram, double netSalary)
+        public EmployeePersonalInformationDto(long id, string name, string surname, string middleName, string workEmail, string personalEmail, string phone, string skype, string telegram, double netSalary)
         {
             Id = id;
             Name = name;
             Surname = surname;
+            MiddleName = middleName;
             WorkEmail = workEmail;
             PersonalEmail = personalEmail;
             Phone = phone;

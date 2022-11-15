@@ -29,6 +29,7 @@ namespace SalaryService.Application.Queries
                 select new SEOAnalyticsInformationDto(e.Id,
                     e.Name,
                     e.Surname,
+                    e.MiddleName,
                     m.Pay,
                     m.RatePerHour,
                     m.EmploymentType,

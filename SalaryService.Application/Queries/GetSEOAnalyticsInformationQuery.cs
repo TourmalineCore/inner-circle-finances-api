@@ -28,6 +28,7 @@ namespace SalaryService.Application.Queries
             return new SEOAnalyticsInformationDto(employee.Id,
                 employee.Name,
                 employee.Surname,
+                employee.MiddleName,
                 Math.Round(metrics.Pay, 2),
                 Math.Round(metrics.RatePerHour, 2),
                 metrics.EmploymentType,

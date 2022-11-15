@@ -9,6 +9,9 @@ namespace SalaryService.Domain
     public class BasicSalaryParameters
     {
         public long Id { get; private set; }
+
+        public Employee Employee { get; private set; }
+
         public double RatePerHour { get; private set; }
 
         public double Pay { get; private set; }
@@ -20,10 +23,9 @@ namespace SalaryService.Domain
         public bool HasParking { get; private set; }
 
         public long EmployeeId { get; private set; }
-
-        public Employee Employee { get; private set; }
-
+        
         private BasicSalaryParameters() { }
+
         public BasicSalaryParameters(long employeeId, double ratePerHour, double pay, EmploymentTypes employmentType, bool hasParking)
         {
             EmployeeId = employeeId;

@@ -24,6 +24,7 @@ namespace SalaryService.Application.Queries
             return new EmployeeGeneralInformationDto(employee.Id,
                 employee.Name,
                 employee.Surname,
+                employee.MiddleName,
                 employee.WorkEmail,
                 employee.PersonalEmail,
                 employee.Phone,

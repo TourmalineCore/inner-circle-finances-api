@@ -9,6 +9,8 @@ namespace SalaryService.Application.Dtos
 
         public string Surname { get; private set; }
 
+        public string MiddleName { get; private set; }
+
         public double Pay { get; private set; }
 
         public double RatePerHour { get; private set; }
@@ -38,6 +40,7 @@ namespace SalaryService.Application.Dtos
         public SEOAnalyticsInformationDto(long id,
             string name,
             string surname,
+            string middleName,
             double pay,
             double ratePerHour,
             double employmentType,
@@ -55,6 +58,7 @@ namespace SalaryService.Application.Dtos
             Id = id;
             Name = name;
             Surname = surname;
+            MiddleName = middleName;
             Pay = pay;
             RatePerHour = ratePerHour;
             EmploymentType = employmentType;

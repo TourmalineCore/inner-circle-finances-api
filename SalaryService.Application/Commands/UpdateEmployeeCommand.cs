@@ -4,21 +4,23 @@ namespace SalaryService.Application.Commands
 {
     public partial class UpdateEmployeeCommand
     {
-        public long Id { get; private set; }
+        public long Id { get; set; }
 
-        public string Name { get; private set; }
+        public string Name { get; set; }
 
-        public string Surname { get; private set; }
+        public string Surname { get; set; }
+
+        public string MiddleName { get; set; }
 
         public string WorkEmail { get; set; }
 
         public string PersonalEmail { get; set; }
 
-        public string Phone { get; private set; }
+        public string Phone { get; set; }
 
-        public string Skype { get; private set; }
+        public string Skype { get; set; }
 
-        public string Telegram { get; private set; }
+        public string Telegram { get; set; }
     }
     public class UpdateEmployeeCommandHandler
     {
@@ -32,7 +34,7 @@ namespace SalaryService.Application.Commands
         {
             var employee = await _employeeRepository.GetByIdAsync(request.Id);
 
-            employee.Update(request.Name, request.Surname, request.WorkEmail, request.PersonalEmail, request.Phone, request.Skype, request.Telegram);
+            employee.Update(request.Name, request.Surname, request.MiddleName, request.WorkEmail, request.PersonalEmail, request.Phone, request.Skype, request.Telegram);
 
             await _employeeRepository.UpdateAsync(employee);
         }
