@@ -10,6 +10,12 @@ namespace SalaryService.Application.Services
     {
         public long EmployeeId { get; set; }
 
+        public double DistrictCoefficient { get; set; }
+
+        public double MinimumWage { get; set; }
+
+        public double IncomeTax { get; set; }
+
         public string Name { get; set; }
 
         public string Surname { get; set; }
@@ -75,11 +81,7 @@ namespace SalaryService.Application.Services
                 parameters.EmploymentTypeValue, 
                 parameters.HasParking);
 
-            var districtCoeff = _fakeTaxService.GetChelyabinskDistrictCoeff();
-            var personalIncomeTaxPercent =  _fakeTaxService.GetPersonalIncomeTaxPercent();
-            var minimalSizeOfSalary = _fakeTaxService.GetMinimalSizeOfSalary();
-
-            calculatedSalaryData.CalculateMetrics(districtCoeff.Result, minimalSizeOfSalary.Result, personalIncomeTaxPercent.Result,
+            calculatedSalaryData.CalculateMetrics(parameters.DistrictCoefficient, parameters.MinimumWage, parameters.IncomeTax,
                 new MetricsPeriod(_clock.GetCurrentInstant(), null));
 
             return calculatedSalaryData;
