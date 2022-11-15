@@ -5,7 +5,7 @@ using SalaryService.Domain;
 
 namespace SalaryService.Application.Commands
 {
-    public partial class CreateEmployeeCommand
+    public partial class CreateEmployeeProfileInfoCommand
     {
         public string Name { get; set; }
 
@@ -24,19 +24,19 @@ namespace SalaryService.Application.Commands
         public string Telegram { get; set; }
 
     }
-    public class CreateEmployeeCommandHandler
+    public class CreateEmployeeProfileInfoCommandHandler
     {
-        private readonly EmployeeRepository _employeeRepository;
+        private readonly EmployeeProfileInfoRepository _employeeProfileInfoRepository;
         private readonly IClock _clock;
 
-        public CreateEmployeeCommandHandler(EmployeeRepository employeeRepository, IClock clock)
+        public CreateEmployeeProfileInfoCommandHandler(EmployeeProfileInfoRepository employeeProfileInfoRepository, IClock clock)
         {
-            _employeeRepository = employeeRepository;
+            _employeeProfileInfoRepository = employeeProfileInfoRepository;
             _clock = clock;
         }
-        public async Task<long> Handle(CreateEmployeeCommand request)
+        public async Task<long> Handle(CreateEmployeeProfileInfoCommand request)
         {
-            return await _employeeRepository.CreateAsync(new Employee(
+            return await _employeeProfileInfoRepository.CreateAsync(new Employee(
                 request.Name,
                 request.Surname,
                 request.MiddleName,

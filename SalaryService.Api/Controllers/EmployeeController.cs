@@ -6,8 +6,8 @@ namespace SalaryService.Api.Controllers
     [Route("api/employees")]
     public class EmployeeController : Controller
     {
-        
         private readonly EmployeeSalaryService _employeeSalaryService;
+
         public EmployeeController(EmployeeSalaryService employeeService)
         {
             _employeeSalaryService = employeeService;

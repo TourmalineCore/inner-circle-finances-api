@@ -2,7 +2,6 @@
 using SalaryService.Application.Commands;
 using SalaryService.DataAccess.Repositories;
 using SalaryService.Domain;
-using Period = SalaryService.Domain.Common.Period;
 
 namespace SalaryService.Application.Services
 {
@@ -46,25 +45,25 @@ namespace SalaryService.Application.Services
     public class EmployeeSalaryService
     {
         private readonly EmployeeFinancialMetricsRepository _employeeFinancialMetricsRepository;
-        private readonly CreateEmployeeCommandHandler _createEmployeeCommandHandler;
-        private readonly CreateBasicSalaryParametersCommandHandler _createBasicSalaryParametersCommandHandler;
-        private readonly UpdateBasicSalaryParametersCommandHandler _updateBasicSalaryParametersCommandHandler;
+        private readonly CreateEmployeeProfileInfoCommandHandler _createEmployeeProfileInfoCommandHandler;
+        private readonly CreateEmployeeFinanceForPayrollCommandHandler _createEmployeeFinanceForPayrollCommandHandler;
+        private readonly UpdateEmployeeFinanceForPayrollCommandHandler _updateEmployeeFinanceForPayrollCommandHandler;
         private readonly UpdateFinancialMetricsCommandHandler _updateFinancialMetricsCommandHandler;
         private readonly CreateHistoryMetricsCommandHandler _createHistoryMetricsCommandHandler;
         private readonly IClock _clock;
 
         public EmployeeSalaryService(EmployeeFinancialMetricsRepository employeeFinancialMetricsRepository,
-            CreateBasicSalaryParametersCommandHandler createBasicSalaryParametersCommandHandler, 
-            CreateEmployeeCommandHandler createEmployeeCommandHandler, 
-            UpdateBasicSalaryParametersCommandHandler updateBasicSalaryParametersCommandHandler,
+            CreateEmployeeFinanceForPayrollCommandHandler createEmployeeFinanceForPayrollCommandHandler, 
+            CreateEmployeeProfileInfoCommandHandler createEmployeeProfileInfoCommandHandler, 
+            UpdateEmployeeFinanceForPayrollCommandHandler updateEmployeeFinanceForPayrollCommandHandler,
             UpdateFinancialMetricsCommandHandler updateFinancialMetricsCommandHandler,
             CreateHistoryMetricsCommandHandler createHistoryMetricsCommandHandler,
             IClock clock)
         {
             _employeeFinancialMetricsRepository = employeeFinancialMetricsRepository;
-            _createBasicSalaryParametersCommandHandler = createBasicSalaryParametersCommandHandler;
-            _createEmployeeCommandHandler = createEmployeeCommandHandler;
-            _updateBasicSalaryParametersCommandHandler = updateBasicSalaryParametersCommandHandler;
+            _createEmployeeFinanceForPayrollCommandHandler = createEmployeeFinanceForPayrollCommandHandler;
+            _createEmployeeProfileInfoCommandHandler = createEmployeeProfileInfoCommandHandler;
+            _updateEmployeeFinanceForPayrollCommandHandler = updateEmployeeFinanceForPayrollCommandHandler;
             _updateFinancialMetricsCommandHandler = updateFinancialMetricsCommandHandler;
             _createHistoryMetricsCommandHandler = createHistoryMetricsCommandHandler;
             _clock = clock;
@@ -73,7 +72,7 @@ namespace SalaryService.Application.Services
 
         public async Task CreateEmployee(SalaryServiceParameters parameters)
         {
-            var employee = CreateEmployeePersonalInfo(parameters.Name, 
+            var employee = await CreateEmployeeProfileInfo(parameters.Name, 
                 parameters.Surname, 
                 parameters.MiddleName, 
                 parameters.WorkEmail, 
@@ -82,13 +81,13 @@ namespace SalaryService.Application.Services
                 parameters.Skype, 
                 parameters.Telegram);
 
-            await CreateBasicSalaryParametersInfo(employee.Result,
+            await CreateEmployeeFinanceForPayroll(employee,
                 parameters.RatePerHour,
                 parameters.Pay,
                 parameters.EmploymentType,
                 parameters.HasParking);
 
-            await CreateMetrics(CalculateMetrics(employee.Result, 
+            await CreateMetrics(CalculateMetrics(employee, 
                 parameters.RatePerHour, 
                 parameters.Pay, 
                 parameters.EmploymentTypeValue, 
@@ -101,7 +100,7 @@ namespace SalaryService.Application.Services
         public async Task UpdateEmployee(SalaryServiceParameters parameters)
         {
             await CreateHistoryRecord(parameters.EmployeeId);
-            await UpdateBasicInfo(parameters.EmployeeId, 
+            await UpdateEmployeeFinanceForPayroll(parameters.EmployeeId, 
                 parameters.RatePerHour, 
                 parameters.Pay, 
                 parameters.EmploymentType, 
@@ -134,16 +133,16 @@ namespace SalaryService.Application.Services
             double minimumWage, 
             double incomeTax)
         {
-            var calculatedSalaryData = new EmployeeFinancialMetrics(employeeId,
+            var calculateMetrics = new EmployeeFinancialMetrics(employeeId,
                 ratePerHour,
                 pay,
                 employmentTypeValue,
                 hasParking);
 
-            calculatedSalaryData.CalculateMetrics(districtCoefficient, minimumWage, incomeTax,
+            calculateMetrics.CalculateMetrics(districtCoefficient, minimumWage, incomeTax,
                 _clock.GetCurrentInstant());
 
-            return calculatedSalaryData;
+            return calculateMetrics;
         }
 
         private Task CreateMetrics(EmployeeFinancialMetrics metrics)
@@ -151,7 +150,7 @@ namespace SalaryService.Application.Services
             return _employeeFinancialMetricsRepository.CreateAsync(metrics);
         }
 
-        private Task<long> CreateEmployeePersonalInfo(string name, 
+        private Task<long> CreateEmployeeProfileInfo(string name, 
             string surname, 
             string middleName, 
             string workEmail, 
@@ -160,8 +159,8 @@ namespace SalaryService.Application.Services
             string skype, 
             string telegram)
         {
-            return _createEmployeeCommandHandler.Handle(
-                new CreateEmployeeCommand
+            return _createEmployeeProfileInfoCommandHandler.Handle(
+                new CreateEmployeeProfileInfoCommand
                 {
                     Name = name,
                     Surname = surname,
@@ -175,10 +174,10 @@ namespace SalaryService.Application.Services
             );
         }
 
-        private Task<long> CreateBasicSalaryParametersInfo(long employeeId, double ratePerHour, double pay, EmploymentTypes employmentType, bool hasParking)
+        private Task<long> CreateEmployeeFinanceForPayroll(long employeeId, double ratePerHour, double pay, EmploymentTypes employmentType, bool hasParking)
         {
-            return _createBasicSalaryParametersCommandHandler.Handle(
-                new CreateBasicSalaryParametersCommand
+            return _createEmployeeFinanceForPayrollCommandHandler.Handle(
+                new CreateEmployeeFinanceForPayrollCommand
                 {
                     EmployeeId = employeeId,
                     RatePerHour = ratePerHour,
@@ -189,9 +188,9 @@ namespace SalaryService.Application.Services
             );
         }
         
-        private async Task UpdateBasicInfo(long employeeId, double ratePerHour, double pay, EmploymentTypes employmentType, bool hasParking)
+        private async Task UpdateEmployeeFinanceForPayroll(long employeeId, double ratePerHour, double pay, EmploymentTypes employmentType, bool hasParking)
         {
-            await _updateBasicSalaryParametersCommandHandler.Handle(new UpdateBasicSalaryParametersCommand
+            await _updateEmployeeFinanceForPayrollCommandHandler.Handle(new UpdateEmployeeFinanceForPayrollCommand
             {
                 EmployeeId = employeeId,
                 RatePerHour = ratePerHour,

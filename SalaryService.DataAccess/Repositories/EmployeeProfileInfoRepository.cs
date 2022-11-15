@@ -4,11 +4,11 @@ using SalaryService.Domain;
 
 namespace SalaryService.DataAccess.Repositories
 {
-    public class EmployeeRepository
+    public class EmployeeProfileInfoRepository
     {
         private readonly EmployeeDbContext _employeeDbContext;
 
-        public EmployeeRepository(EmployeeDbContext employeeDbContext)
+        public EmployeeProfileInfoRepository(EmployeeDbContext employeeDbContext)
         {
             _employeeDbContext = employeeDbContext;
         }

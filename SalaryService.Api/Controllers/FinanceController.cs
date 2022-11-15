@@ -7,53 +7,53 @@ namespace SalaryService.Api.Controllers
     [Route("api/finances")]
     public class FinanceController : Controller
     {
-        private readonly GetEmployeePersonalInformationQueryHandler _getEmployeePersonalInformationByIdQueryHandler;
-        private readonly GetEmployeeGeneralInformationQueryHandler _getEmployeeGeneralInformationByIdQueryHandler;
-        private readonly GetSEOAnalyticsInformationQueryHandler _getSEOAnalyticsInformationByIdQueryHandler;
-        private readonly GetEmployeeInformationListQueryHandler _getEmployeeInformationListQueryHandler;
-        private readonly GetSEOAnalyticsInformationListQueryHandler _seoAnalyticsInformationListQueryHandler;
+        private readonly GetEmployeeProfileInfoQueryHandler _getEmployeeProfileInfoByIdQueryHandler;
+        private readonly GetEmployeeContactInfoQueryHandler _getEmployeeContactInfoByIdQueryHandler;
+        private readonly GetSEOAnalyticsInfoQueryHandler _getSeoAnalyticsInfoByIdQueryHandler;
+        private readonly GetEmployeeContactInfoListQueryHandler _getEmployeeContactInfoListQueryHandler;
+        private readonly GetSEOAnalyticsInfoListQueryHandler _seoAnalyticsInfoListQueryHandler;
 
-        public FinanceController(GetEmployeePersonalInformationQueryHandler getEmployeePersonalInformationByIdQueryHandler, 
-            GetEmployeeGeneralInformationQueryHandler getEmployeeGeneralInformationByIdQueryHandler, 
-            GetSEOAnalyticsInformationQueryHandler getSEOAnalyticsInformationByIdQueryHandler, 
-            GetEmployeeInformationListQueryHandler getEmployeeInformationListQueryHandler, 
-            GetSEOAnalyticsInformationListQueryHandler seoAnalyticsInformationListQueryHandler)
+        public FinanceController(GetEmployeeProfileInfoQueryHandler getEmployeeProfileInfoByIdQueryHandler, 
+            GetEmployeeContactInfoQueryHandler getEmployeeContactInfoByIdQueryHandler, 
+            GetSEOAnalyticsInfoQueryHandler getSeoAnalyticsInfoByIdQueryHandler, 
+            GetEmployeeContactInfoListQueryHandler getEmployeeContactInfoListQueryHandler, 
+            GetSEOAnalyticsInfoListQueryHandler seoAnalyticsInfoListQueryHandler)
         {
-            _getEmployeePersonalInformationByIdQueryHandler = getEmployeePersonalInformationByIdQueryHandler;
-            _getEmployeeGeneralInformationByIdQueryHandler = getEmployeeGeneralInformationByIdQueryHandler;
-            _getSEOAnalyticsInformationByIdQueryHandler = getSEOAnalyticsInformationByIdQueryHandler;
-            _getEmployeeInformationListQueryHandler = getEmployeeInformationListQueryHandler;
-            _seoAnalyticsInformationListQueryHandler = seoAnalyticsInformationListQueryHandler;
+            _getEmployeeProfileInfoByIdQueryHandler = getEmployeeProfileInfoByIdQueryHandler;
+            _getEmployeeContactInfoByIdQueryHandler = getEmployeeContactInfoByIdQueryHandler;
+            _getSeoAnalyticsInfoByIdQueryHandler = getSeoAnalyticsInfoByIdQueryHandler;
+            _getEmployeeContactInfoListQueryHandler = getEmployeeContactInfoListQueryHandler;
+            _seoAnalyticsInfoListQueryHandler = seoAnalyticsInfoListQueryHandler;
         }
 
-        [HttpGet("get-personal-information/{EmployeeId}")]
-        public Task<EmployeeProfileDto> GetEmployeePersonalInformation([FromRoute] GetEmployeePersonalInformationQuery getEmployeePersonalInformationQuery)
+        [HttpGet("get-profile-information/{EmployeeId}")]
+        public Task<EmployeeProfileDto> GetEmployeeProfileInformation([FromRoute] GetEmployeeProfileInfoQuery getEmployeeProfileInfoQuery)
         {
-            return _getEmployeePersonalInformationByIdQueryHandler.Handle(getEmployeePersonalInformationQuery);
+            return _getEmployeeProfileInfoByIdQueryHandler.Handle(getEmployeeProfileInfoQuery);
         }
 
-        [HttpGet("get-general-information/{EmployeeId}")]
-        public Task<EmployeeContactInfoDto> GetEmployeeGeneralInformation([FromRoute] GetEmployeeGeneralInformationQuery getEmployeeGeneralInformationQuery)
+        [HttpGet("get-contact-information/{EmployeeId}")]
+        public Task<EmployeeContactInfoDto> GetEmployeeContactInformation([FromRoute] GetEmployeeContactInfoQuery getEmployeeContactInfoQuery)
         {
-            return _getEmployeeGeneralInformationByIdQueryHandler.Handle(getEmployeeGeneralInformationQuery);
+            return _getEmployeeContactInfoByIdQueryHandler.Handle(getEmployeeContactInfoQuery);
         }
 
-        [HttpGet("get-finance-data/{EmployeeId}")]
-        public Task<SEOAnalyticsInformationDto> GetSEOAnalyticsInformation([FromRoute] GetSEOAnalyticsInformationQuery getSeoAnalyticsInformationQuery)
+        [HttpGet("get-analytics-data/{EmployeeId}")]
+        public Task<SEOAnalyticsInformationDto> GetAnalyticsInformation([FromRoute] GetSEOAnalyticsInfoQuery getSeoAnalyticsInfoQuery)
         {
-            return _getSEOAnalyticsInformationByIdQueryHandler.Handle(getSeoAnalyticsInformationQuery);
+            return _getSeoAnalyticsInfoByIdQueryHandler.Handle(getSeoAnalyticsInfoQuery);
         }
 
-        [HttpGet("get-general-information")]
-        public Task<IEnumerable<EmployeeContactInfoDto>> GetEmployeePersonalInformation()
+        [HttpGet("get-contact-information")]
+        public Task<IEnumerable<EmployeeContactInfoDto>> GetEmployeeContactInformation()
         {
-            return _getEmployeeInformationListQueryHandler.Handle();
+            return _getEmployeeContactInfoListQueryHandler.Handle();
         }
 
         [HttpGet("get-finance-data")]
-        public Task<IEnumerable<SEOAnalyticsInformationDto>> GetSEOAnalyticsInformationList()
+        public Task<IEnumerable<SEOAnalyticsInformationDto>> GetAnalyticsInformationList()
         {
-            return _seoAnalyticsInformationListQueryHandler.Handle();
+            return _seoAnalyticsInfoListQueryHandler.Handle();
         }
     }
 }

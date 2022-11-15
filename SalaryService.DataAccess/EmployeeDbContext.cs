@@ -7,7 +7,7 @@ namespace SalaryService.DataAccess
     {
         public DbSet<Employee> Employees { get; set; }
 
-        public DbSet<BasicSalaryParameters> BasicSalaryParameters { get; set; }
+        public DbSet<EmployeeFinanceForPayroll> EmployeeFinanceForPayroll { get; set; }
 
         public DbSet<EmployeeFinancialMetrics> EmployeeFinancialMetrics { get; set; }
 

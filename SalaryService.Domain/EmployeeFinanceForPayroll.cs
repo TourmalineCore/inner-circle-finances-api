@@ -6,7 +6,7 @@ namespace SalaryService.Domain
         FullTime,
         PartTime
     }
-    public class BasicSalaryParameters
+    public class EmployeeFinanceForPayroll
     {
         public long Id { get; private set; }
 
@@ -24,7 +24,7 @@ namespace SalaryService.Domain
 
         public long EmployeeId { get; private set; }
 
-        public BasicSalaryParameters(long employeeId, double ratePerHour, double pay, EmploymentTypes employmentType, bool hasParking)
+        public EmployeeFinanceForPayroll(long employeeId, double ratePerHour, double pay, EmploymentTypes employmentType, bool hasParking)
         {
             EmployeeId = employeeId;
             RatePerHour = ratePerHour;

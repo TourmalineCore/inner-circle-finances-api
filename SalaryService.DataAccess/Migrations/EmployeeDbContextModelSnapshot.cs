@@ -23,39 +23,6 @@ namespace SalaryService.DataAccess.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("SalaryService.Domain.BasicSalaryParameters", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("EmployeeId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("EmploymentType")
-                        .HasColumnType("integer");
-
-                    b.Property<double>("EmploymentTypeValue")
-                        .HasColumnType("double precision");
-
-                    b.Property<bool>("HasParking")
-                        .HasColumnType("boolean");
-
-                    b.Property<double>("Pay")
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("RatePerHour")
-                        .HasColumnType("double precision");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.ToTable("BasicSalaryParameters");
-                });
-
             modelBuilder.Entity("SalaryService.Domain.Employee", b =>
                 {
                     b.Property<long>("Id")
@@ -97,6 +64,39 @@ namespace SalaryService.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Employees");
+                });
+
+            modelBuilder.Entity("SalaryService.Domain.EmployeeFinanceForPayroll", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("EmployeeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("EmploymentType")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("EmploymentTypeValue")
+                        .HasColumnType("double precision");
+
+                    b.Property<bool>("HasParking")
+                        .HasColumnType("boolean");
+
+                    b.Property<double>("Pay")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("RatePerHour")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("EmployeeFinanceForPayroll");
                 });
 
             modelBuilder.Entity("SalaryService.Domain.EmployeeFinancialMetrics", b =>
@@ -230,7 +230,7 @@ namespace SalaryService.DataAccess.Migrations
                     b.ToTable("EmployeeFinancialMetricsHistory");
                 });
 
-            modelBuilder.Entity("SalaryService.Domain.BasicSalaryParameters", b =>
+            modelBuilder.Entity("SalaryService.Domain.EmployeeFinanceForPayroll", b =>
                 {
                     b.HasOne("SalaryService.Domain.Employee", "Employee")
                         .WithMany()

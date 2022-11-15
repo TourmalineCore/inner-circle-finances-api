@@ -93,7 +93,7 @@ namespace SalaryService.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BasicSalaryParameters",
+                name: "EmployeeFinanceForPayroll",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -107,9 +107,9 @@ namespace SalaryService.DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BasicSalaryParameters", x => x.Id);
+                    table.PrimaryKey("PK_EmployeeFinanceForPayroll", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BasicSalaryParameters_Employees_EmployeeId",
+                        name: "FK_EmployeeFinanceForPayroll_Employees_EmployeeId",
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
                         principalColumn: "Id",
@@ -117,15 +117,15 @@ namespace SalaryService.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_BasicSalaryParameters_EmployeeId",
-                table: "BasicSalaryParameters",
+                name: "IX_EmployeeFinanceForPayroll_EmployeeId",
+                table: "EmployeeFinanceForPayroll",
                 column: "EmployeeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "BasicSalaryParameters");
+                name: "EmployeeFinanceForPayroll");
 
             migrationBuilder.DropTable(
                 name: "EmployeeFinancialMetrics");

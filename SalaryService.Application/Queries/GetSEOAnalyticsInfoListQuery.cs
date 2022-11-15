@@ -3,25 +3,25 @@ using SalaryService.Application.Dtos;
 
 namespace SalaryService.Application.Queries
 {
-    public partial class GetSEOAnalyticsInformationListQuery
+    public partial class GetSEOAnalyticsInfoListQuery
     {
 
     }
 
-    public class GetSEOAnalyticsInformationListQueryHandler
+    public class GetSEOAnalyticsInfoListQueryHandler
     {
-        private readonly EmployeeRepository _employeeRepository;
+        private readonly EmployeeProfileInfoRepository _employeeProfileInfoRepository;
         private readonly EmployeeFinancialMetricsRepository _employeeFinancialMetricsRepository;
 
-        public GetSEOAnalyticsInformationListQueryHandler(EmployeeRepository employeeRepository, EmployeeFinancialMetricsRepository employeeFinancialMetricsRepository)
+        public GetSEOAnalyticsInfoListQueryHandler(EmployeeProfileInfoRepository employeeProfileInfoRepository, EmployeeFinancialMetricsRepository employeeFinancialMetricsRepository)
         {
-            _employeeRepository = employeeRepository;
+            _employeeProfileInfoRepository = employeeProfileInfoRepository;
             _employeeFinancialMetricsRepository = employeeFinancialMetricsRepository;
         }
 
         public async Task<IEnumerable<SEOAnalyticsInformationDto>> Handle()
         {
-            var employee = await _employeeRepository.GetAllAsync();
+            var employee = await _employeeProfileInfoRepository.GetAllAsync();
             var metrics = await _employeeFinancialMetricsRepository.GetAllAsync();
 
             var query = from e in employee

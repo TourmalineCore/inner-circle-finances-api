@@ -4,22 +4,22 @@ using SalaryService.DataAccess.Repositories;
 
 namespace SalaryService.Application.Queries
 {
-    public partial class GetEmployeeGeneralInformationQuery
+    public partial class GetEmployeeContactInfoQuery
     {
         public long EmployeeId { get; set; }
     }
 
-    public class GetEmployeeGeneralInformationQueryHandler
+    public class GetEmployeeContactInfoQueryHandler
     {
-        private readonly EmployeeRepository _employeeRepository;
+        private readonly EmployeeProfileInfoRepository _employeeProfileInfoRepository;
 
-        public GetEmployeeGeneralInformationQueryHandler(EmployeeRepository employeeRepository)
+        public GetEmployeeContactInfoQueryHandler(EmployeeProfileInfoRepository employeeProfileInfoRepository)
         {
-            _employeeRepository = employeeRepository;
+            _employeeProfileInfoRepository = employeeProfileInfoRepository;
         }
-        public async Task<EmployeeContactInfoDto> Handle(GetEmployeeGeneralInformationQuery request)
+        public async Task<EmployeeContactInfoDto> Handle(GetEmployeeContactInfoQuery request)
         {
-            var employee = await _employeeRepository.GetByIdAsync(request.EmployeeId);
+            var employee = await _employeeProfileInfoRepository.GetByIdAsync(request.EmployeeId);
 
             return new EmployeeContactInfoDto(employee.Id,
                 employee.Name,

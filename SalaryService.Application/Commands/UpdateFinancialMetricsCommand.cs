@@ -1,7 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿
 using NodaTime;
 using SalaryService.DataAccess.Repositories;
-using Period = SalaryService.Domain.Common.Period;
 
 namespace SalaryService.Application.Commands
 {

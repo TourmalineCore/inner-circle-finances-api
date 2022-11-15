@@ -3,25 +3,25 @@ using SalaryService.Application.Dtos;
 
 namespace SalaryService.Application.Queries
 {
-    public partial class GetEmployeePersonalInformationQuery
+    public partial class GetEmployeeProfileInfoQuery
     {
         public long EmployeeId { get; set; }
     }
 
-    public class GetEmployeePersonalInformationQueryHandler
+    public class GetEmployeeProfileInfoQueryHandler
     {
-        private readonly EmployeeRepository _employeeRepository;
+        private readonly EmployeeProfileInfoRepository _employeeProfileInfoRepository;
         private readonly EmployeeFinancialMetricsRepository _employeeFinancialMetricsRepository;
 
-        public GetEmployeePersonalInformationQueryHandler(EmployeeRepository employeeRepository, EmployeeFinancialMetricsRepository employeeFinancialMetricsRepository)
+        public GetEmployeeProfileInfoQueryHandler(EmployeeProfileInfoRepository employeeProfileInfoRepository, EmployeeFinancialMetricsRepository employeeFinancialMetricsRepository)
         {
-            _employeeRepository = employeeRepository;
+            _employeeProfileInfoRepository = employeeProfileInfoRepository;
             _employeeFinancialMetricsRepository = employeeFinancialMetricsRepository;
         }
 
-        public async Task<EmployeeProfileDto> Handle(GetEmployeePersonalInformationQuery request)
+        public async Task<EmployeeProfileDto> Handle(GetEmployeeProfileInfoQuery request)
         {
-            var employee = await _employeeRepository.GetByIdAsync(request.EmployeeId);
+            var employee = await _employeeProfileInfoRepository.GetByIdAsync(request.EmployeeId);
             var basicSalaryParameters = await _employeeFinancialMetricsRepository.GetByEmployeeId(request.EmployeeId);
 
             return new EmployeeProfileDto(employee.Id,
