@@ -1,6 +1,5 @@
 ﻿using NodaTime;
 using SalaryService.Application.Commands;
-using SalaryService.Application.Services.HelpServices;
 using SalaryService.DataAccess.Repositories;
 using SalaryService.Domain;
 
@@ -46,7 +45,6 @@ namespace SalaryService.Application.Services
     public class EmployeeSalaryService
     {
         private readonly EmployeeFinancialMetricsRepository _employeeFinancialMetricsRepository;
-        private readonly FakeTaxService _fakeTaxService;
         private readonly CreateEmployeeCommandHandler _createEmployeeCommandHandler;
         private readonly CreateBasicSalaryParametersCommandHandler _createBasicSalaryParametersCommandHandler;
         private readonly UpdateBasicSalaryParametersCommandHandler _updateBasicSalaryParametersCommandHandler;
@@ -54,8 +52,7 @@ namespace SalaryService.Application.Services
         private readonly CreateHistoryMetricsCommandHandler _createHistoryMetricsCommandHandler;
         private readonly IClock _clock;
 
-        public EmployeeSalaryService(FakeTaxService fakeTaxService,
-            EmployeeFinancialMetricsRepository employeeFinancialMetricsRepository,
+        public EmployeeSalaryService(EmployeeFinancialMetricsRepository employeeFinancialMetricsRepository,
             CreateBasicSalaryParametersCommandHandler createBasicSalaryParametersCommandHandler, 
             CreateEmployeeCommandHandler createEmployeeCommandHandler, 
             UpdateBasicSalaryParametersCommandHandler updateBasicSalaryParametersCommandHandler,
@@ -63,7 +60,6 @@ namespace SalaryService.Application.Services
             CreateHistoryMetricsCommandHandler createHistoryMetricsCommandHandler,
             IClock clock)
         {
-            _fakeTaxService = fakeTaxService;
             _employeeFinancialMetricsRepository = employeeFinancialMetricsRepository;
             _createBasicSalaryParametersCommandHandler = createBasicSalaryParametersCommandHandler;
             _createEmployeeCommandHandler = createEmployeeCommandHandler;
