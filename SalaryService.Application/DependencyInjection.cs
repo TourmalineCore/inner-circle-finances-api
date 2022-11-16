@@ -23,7 +23,7 @@ namespace SalaryService.Application
             services.AddTransient<UpdateEmployeeFinanceForPayrollCommandHandler>();
             services.AddTransient<UpdateFinancialMetricsCommandHandler>();
             services.AddTransient<CreateHistoryMetricsCommandHandler>();
-            services.AddTransient<EmployeeSalaryService>();
+            services.AddTransient<EmployeeFinanceService>();
             services.AddTransient<IClock, Clock>();
             return services;
         }

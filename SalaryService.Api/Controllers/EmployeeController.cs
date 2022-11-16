@@ -6,23 +6,23 @@ namespace SalaryService.Api.Controllers
     [Route("api/employees")]
     public class EmployeeController : Controller
     {
-        private readonly EmployeeSalaryService _employeeSalaryService;
+        private readonly EmployeeFinanceService _employeeFinanceService;
 
-        public EmployeeController(EmployeeSalaryService employeeService)
+        public EmployeeController(EmployeeFinanceService employeeService)
         {
-            _employeeSalaryService = employeeService;
+            _employeeFinanceService = employeeService;
         }
         
         [HttpPost("create-employee")]
         public Task CreateEmployee([FromBody] SalaryServiceParameters salaryServiceParameters)
         {
-            return _employeeSalaryService.CreateEmployee(salaryServiceParameters);
+            return _employeeFinanceService.CreateEmployee(salaryServiceParameters);
         }
 
         [HttpPost("update-employee")]
         public Task UpdateEmployee([FromBody] SalaryServiceParameters salaryServiceParameters)
         {
-            return _employeeSalaryService.UpdateEmployee(salaryServiceParameters);
+            return _employeeFinanceService.UpdateEmployee(salaryServiceParameters);
         }
     }
 }

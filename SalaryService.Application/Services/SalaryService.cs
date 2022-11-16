@@ -42,7 +42,7 @@ namespace SalaryService.Application.Services
         public bool HasParking { get; set; }
     }
 
-    public class EmployeeSalaryService
+    public class EmployeeFinanceService
     {
         private readonly EmployeeFinancialMetricsRepository _employeeFinancialMetricsRepository;
         private readonly CreateEmployeeProfileInfoCommandHandler _createEmployeeProfileInfoCommandHandler;
@@ -52,7 +52,7 @@ namespace SalaryService.Application.Services
         private readonly CreateHistoryMetricsCommandHandler _createHistoryMetricsCommandHandler;
         private readonly IClock _clock;
 
-        public EmployeeSalaryService(EmployeeFinancialMetricsRepository employeeFinancialMetricsRepository,
+        public EmployeeFinanceService(EmployeeFinancialMetricsRepository employeeFinancialMetricsRepository,
             CreateEmployeeFinanceForPayrollCommandHandler createEmployeeFinanceForPayrollCommandHandler, 
             CreateEmployeeProfileInfoCommandHandler createEmployeeProfileInfoCommandHandler, 
             UpdateEmployeeFinanceForPayrollCommandHandler updateEmployeeFinanceForPayrollCommandHandler,
@@ -72,7 +72,7 @@ namespace SalaryService.Application.Services
 
         public async Task CreateEmployee(SalaryServiceParameters parameters)
         {
-            var employee = await CreateEmployeeProfileInfo(parameters.Name, 
+            var employeeId = await CreateEmployeeProfileInfo(parameters.Name, 
                 parameters.Surname, 
                 parameters.MiddleName, 
                 parameters.WorkEmail, 
@@ -81,13 +81,13 @@ namespace SalaryService.Application.Services
                 parameters.Skype, 
                 parameters.Telegram);
 
-            await CreateEmployeeFinanceForPayroll(employee,
+            await CreateEmployeeFinanceForPayroll(employeeId,
                 parameters.RatePerHour,
                 parameters.Pay,
                 parameters.EmploymentType,
                 parameters.HasParking);
 
-            await CreateMetrics(CalculateMetrics(employee, 
+            await CreateMetrics(CalculateMetrics(employeeId, 
                 parameters.RatePerHour, 
                 parameters.Pay, 
                 parameters.EmploymentTypeValue, 

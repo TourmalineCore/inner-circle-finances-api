@@ -31,19 +31,19 @@ namespace SalaryService.Application.Queries
                     e.Surname,
                     e.MiddleName,
                     e.EmploymentDate.ToString(),
-                    m.Pay,
-                    m.RatePerHour,
-                    m.EmploymentType,
+                    Math.Round(m.Pay, 2),
+                    Math.Round(m.RatePerHour,2),
+                    Math.Round(m.EmploymentType, 2),
                     m.HasParking,
-                    m.HourlyCostFact,
-                    m.HourlyCostHand,
-                    m.Earnings,
-                    m.Expenses,
-                    m.Profit,
-                    m.ProfitAbility,
-                    m.GrossSalary,
-                    m.Retainer,
-                    m.NetSalary);
+                    Math.Round(m.HourlyCostFact, 2),
+                    Math.Round(m.HourlyCostHand, 2),
+                    Math.Round(m.Earnings, 2),
+                    Math.Round(m.Expenses, 2),
+                    Math.Round(m.Profit, 2),
+                    Math.Round(m.ProfitAbility, 2),
+                    Math.Round(m.GrossSalary, 2),
+                    Math.Round(m.Retainer, 2),
+                    Math.Round(m.NetSalary, 2));
 
             return query;
         }
