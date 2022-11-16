@@ -30,7 +30,7 @@ namespace SalaryService.Application.Queries
                     e.Name,
                     e.Surname,
                     e.MiddleName,
-                    e.EmploymentDate,
+                    e.EmploymentDate.ToString(),
                     m.Pay,
                     m.RatePerHour,
                     m.EmploymentType,

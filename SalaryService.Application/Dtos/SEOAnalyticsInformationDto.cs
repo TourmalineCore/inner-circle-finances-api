@@ -13,7 +13,7 @@ namespace SalaryService.Application.Dtos
 
         public string MiddleName { get; private set; }
 
-        public Instant EmploymentDate { get; private set; }
+        public string EmploymentDate { get; private set; }
 
         public double Pay { get; private set; }
 
@@ -45,7 +45,7 @@ namespace SalaryService.Application.Dtos
             string name,
             string surname,
             string middleName,
-            Instant employmentDate,
+            string employmentDate,
             double pay,
             double ratePerHour,
             double employmentType,

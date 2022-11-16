@@ -22,7 +22,7 @@ namespace SalaryService.Application.Dtos
 
         public string Telegram { get; private set; }
 
-        public Instant EmploymentDate { get; private set; }
+        public string EmploymentDate { get; private set; }
 
         public double NetSalary { get; private set; }
 
@@ -35,7 +35,7 @@ namespace SalaryService.Application.Dtos
             string phone, 
             string skype, 
             string telegram,
-            Instant employmentDate,
+            string employmentDate,
             double netSalary)
         {
             Id = id;
