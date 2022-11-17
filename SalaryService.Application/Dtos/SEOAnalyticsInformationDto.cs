@@ -21,7 +21,7 @@ namespace SalaryService.Application.Dtos
 
         public double EmploymentType { get; private set; }
 
-        public bool HasParking { get; private set; }
+        public double ParkingCostPerMonth { get; private set; }
 
         public double HourlyCostFact { get; private set; }
 
@@ -49,7 +49,7 @@ namespace SalaryService.Application.Dtos
             double pay,
             double ratePerHour,
             double employmentType,
-            bool hasParking,
+            double parkingCostPerMonth,
             double hourlyCostFact,
             double hourlyCostHand,
             double earnings,
@@ -68,7 +68,7 @@ namespace SalaryService.Application.Dtos
             Pay = pay;
             RatePerHour = ratePerHour;
             EmploymentType = employmentType;
-            HasParking = hasParking;
+            ParkingCostPerMonth = parkingCostPerMonth;
             HourlyCostFact = hourlyCostFact;
             HourlyCostHand = hourlyCostHand;
             Earnings = earnings;

@@ -34,7 +34,7 @@ namespace SalaryService.Application.Queries
                     Math.Round(m.Pay, 2),
                     Math.Round(m.RatePerHour,2),
                     Math.Round(m.EmploymentType, 2),
-                    m.HasParking,
+                    Math.Round(m.ParkingCostPerMonth, 2),
                     Math.Round(m.HourlyCostFact, 2),
                     Math.Round(m.HourlyCostHand, 2),
                     Math.Round(m.Earnings, 2),
