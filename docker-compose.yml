@@ -11,7 +11,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: Employees
+      POSTGRES_DB: InnerCircleFinanceDb
     ports:
       - 5432:5432
     networks:
@@ -26,11 +26,11 @@ services:
     ports:
       - 5000:80
     environment: 
-      - ASPNETCORE_ENVIRONMENT=Development
-      - LOGS_PATH=/var/log/wb-auth
-      - DefaultConnection="Host=db-debug;port=5432;Database=Employees;Username=postgres;Password=postgres"
+      - ASPNETCORE_ENVIRONMENT=Debug
+      - LOGS_PATH=/var/log/salary-service-api
+      - ConnectionStrings__DefaultConnection=User ID=postgres;Password=postgres;Host=db-debug;port=5432;Database=InnerCircleFinanceDb
     volumes:
-      - ./logs/wb-auth:/var/log/wb-analytics-api
+      - ./logs/wb-auth:/var/log/salary-service-api
     networks:
       - salaryservice-deb
     
