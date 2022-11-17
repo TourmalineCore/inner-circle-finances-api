@@ -1,17 +1,37 @@
 version: "3.8"
+networks:
+  salaryservice-deb:
+    driver: bridge
+
 
 services:
-  employees-db-debug:
+  db-debug:
     image: postgres:13
     restart: always
-    networks:
-      - employees-backend
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: Employees
+      POSTGRES_DB: InnerCircleFinanceDb
     ports:
-      - 10012:5432
+      - 5432:5432
+    networks:
+      - salaryservice-deb
 
-networks:
-  employees-backend: {}
+  salary-service-api:
+    depends_on:
+      - "db-debug"
+    build: 
+      dockerfile: SalaryService.Api/Dockerfile
+      context: .
+    ports:
+      - 5000:80
+    environment: 
+      - ASPNETCORE_ENVIRONMENT=Debug
+      - LOGS_PATH=/var/log/salary-service-api
+      - ConnectionStrings__DefaultConnection=User ID=postgres;Password=postgres;Host=db-debug;port=5432;Database=InnerCircleFinanceDb
+    volumes:
+      - ./logs/wb-auth:/var/log/salary-service-api
+    networks:
+      - salaryservice-deb
+    
+    
