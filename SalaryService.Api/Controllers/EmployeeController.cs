@@ -14,13 +14,13 @@ namespace SalaryService.Api.Controllers
         }
         
         [HttpPost("create-employee")]
-        public Task CreateEmployee([FromBody] SalaryServiceParameters salaryServiceParameters)
+        public Task CreateEmployee([FromBody] EmployeeCreatingParameters salaryServiceParameters)
         {
             return _employeeFinanceService.CreateEmployee(salaryServiceParameters);
         }
 
         [HttpPost("update-employee")]
-        public Task UpdateEmployee([FromBody] SalaryServiceParameters salaryServiceParameters)
+        public Task UpdateEmployee([FromBody] EmployeeUpdatingParameters salaryServiceParameters)
         {
             return _employeeFinanceService.UpdateEmployee(salaryServiceParameters);
         }
