@@ -137,6 +137,12 @@ namespace SalaryService.DataAccess.Migrations
                     b.Property<double>("HourlyCostHand")
                         .HasColumnType("double precision");
 
+                    b.Property<double>("InjuriesContributions")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("MedicalContributions")
+                        .HasColumnType("double precision");
+
                     b.Property<double>("NetSalary")
                         .HasColumnType("double precision");
 
@@ -144,6 +150,9 @@ namespace SalaryService.DataAccess.Migrations
                         .HasColumnType("double precision");
 
                     b.Property<double>("Pay")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("PensionContributions")
                         .HasColumnType("double precision");
 
                     b.Property<double>("Profit")
@@ -159,6 +168,9 @@ namespace SalaryService.DataAccess.Migrations
                         .HasColumnType("double precision");
 
                     b.Property<double>("Salary")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("SocialInsuranceContributions")
                         .HasColumnType("double precision");
 
                     b.HasKey("Id");
@@ -201,6 +213,12 @@ namespace SalaryService.DataAccess.Migrations
                     b.Property<double>("HourlyCostHand")
                         .HasColumnType("double precision");
 
+                    b.Property<double>("InjuriesContributions")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("MedicalContributions")
+                        .HasColumnType("double precision");
+
                     b.Property<double>("NetSalary")
                         .HasColumnType("double precision");
 
@@ -208,6 +226,9 @@ namespace SalaryService.DataAccess.Migrations
                         .HasColumnType("double precision");
 
                     b.Property<double>("Pay")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("PensionContributions")
                         .HasColumnType("double precision");
 
                     b.Property<double>("Profit")
@@ -223,6 +244,9 @@ namespace SalaryService.DataAccess.Migrations
                         .HasColumnType("double precision");
 
                     b.Property<double>("Salary")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("SocialInsuranceContributions")
                         .HasColumnType("double precision");
 
                     b.HasKey("Id");

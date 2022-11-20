@@ -61,6 +61,58 @@ namespace SalaryService.Domain
             }
         }
 
+        private double pensionContributions;
+        public double PensionContributions
+        {
+            get { return pensionContributions; }
+            set
+            {
+                if (value >= 0)
+                    pensionContributions = value;
+                else
+                    throw new ArgumentException();
+            }
+        }
+
+        private double medicalContributions;
+        public double MedicalContributions
+        {
+            get { return medicalContributions; }
+            set
+            {
+                if (value >= 0)
+                    medicalContributions = value;
+                else
+                    throw new ArgumentException();
+            }
+        }
+
+        private double socialInsuranceContributions;
+        public double SocialInsuranceContributions
+        {
+            get { return socialInsuranceContributions; }
+            set
+            {
+                if (value >= 0)
+                    socialInsuranceContributions = value;
+                else
+                    throw new ArgumentException();
+            }
+        }
+
+        private double injuriesContributions;
+        public double InjuriesContributions
+        {
+            get { return injuriesContributions; }
+            set
+            {
+                if (value >= 0)
+                    injuriesContributions = value;
+                else
+                    throw new ArgumentException();
+            }
+        }
+
         private double expenses;
         public double Expenses
         {
@@ -196,7 +248,11 @@ namespace SalaryService.Domain
             GrossSalary = CalculateGrossSalary(districtCoeff);
             NetSalary = CalculateNetSalary(tax);
             Earnings = CalculateEarnings();
-            Expenses = CalculateExpenses(mrot);
+            PensionContributions = GetPensionContributions(mrot);
+            MedicalContributions = GetMedicalContributions(mrot);
+            SocialInsuranceContributions = GetSocialInsuranceContributions(mrot);
+            InjuriesContributions = GetInjuriesContributions();
+            Expenses = CalculateExpenses();
             HourlyCostFact = CalculateHourlyCostFact();
             HourlyCostHand = CalculateHourlyCostHand();
             Retainer = CalculateRetainer();
@@ -204,10 +260,15 @@ namespace SalaryService.Domain
             ProfitAbility = CalculateProfitability();
         }
 
-        public void Update(double salary,
+        public void Update(double mrot,
+            double salary,
             double grossSalary,
             double netSalary,
             double earnings,
+            double pensionContributions,
+            double medicalContributions,
+            double socialInsuranceContributions,
+            double injuriesContributions,
             double expenses,
             double hourlyCostFact,
             double hourlyCostHand,
@@ -228,6 +289,10 @@ namespace SalaryService.Domain
             GrossSalary = grossSalary;
             NetSalary = netSalary;
             Earnings = earnings;
+            PensionContributions = pensionContributions;
+            MedicalContributions = medicalContributions;
+            SocialInsuranceContributions = socialInsuranceContributions;
+            InjuriesContributions = injuriesContributions;
             Expenses = expenses;
             HourlyCostFact = hourlyCostFact;
             HourlyCostHand = hourlyCostHand;
@@ -257,14 +322,14 @@ namespace SalaryService.Domain
             return RatePerHour * WorkingPlanConsts.WorkingHoursInMonth * EmploymentType;
         }
 
-        private double CalculateExpenses(double mrot)
+        private double CalculateExpenses()
         {
             return GetNdflValue() +
                 NetSalary +
-                GetPensionContributions(mrot) +
-                GetMedicalContributions(mrot) +
-                GetSocialInsuranceContributions(mrot) +
-                GetInjuriesContributions() +
+                PensionContributions +
+                MedicalContributions +
+                SocialInsuranceContributions +
+                InjuriesContributions +
                 AccountingPerMonth +
                 ParkingCostPerMonth;
         }

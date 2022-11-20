@@ -29,6 +29,14 @@ namespace SalaryService.Application.Dtos
 
         public double Earnings { get; private set; }
 
+        public double PensionContributions { get; set; }
+
+        public double MedicalContributions { get; set; }
+
+        public double SocialInsuranceContributions { get; set; }
+
+        public double InjuriesContributions { get; set; }
+
         public double Expenses { get; private set; }
 
         public double Profit { get; private set; }
@@ -53,6 +61,10 @@ namespace SalaryService.Application.Dtos
             double hourlyCostFact,
             double hourlyCostHand,
             double earnings,
+            double pensionContributions,
+            double medicalContributions,
+            double socialInsuranceContributions,
+            double injuriesContributions,
             double expenses,
             double profit,
             double profitAbility,
@@ -72,6 +84,10 @@ namespace SalaryService.Application.Dtos
             HourlyCostFact = hourlyCostFact;
             HourlyCostHand = hourlyCostHand;
             Earnings = earnings;
+            PensionContributions = pensionContributions;
+            MedicalContributions = medicalContributions;
+            SocialInsuranceContributions = socialInsuranceContributions;
+            InjuriesContributions = injuriesContributions;
             Expenses = expenses;
             Profit = profit;
             ProfitAbility = profitAbility;
