@@ -13,7 +13,7 @@ using SalaryService.DataAccess;
 namespace SalaryService.DataAccess.Migrations
 {
     [DbContext(typeof(EmployeeDbContext))]
-    [Migration("20221120075114_Init")]
+    [Migration("20221120152546_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -139,6 +139,9 @@ namespace SalaryService.DataAccess.Migrations
                     b.Property<double>("HourlyCostHand")
                         .HasColumnType("double precision");
 
+                    b.Property<double>("IncomeTaxContributions")
+                        .HasColumnType("double precision");
+
                     b.Property<double>("InjuriesContributions")
                         .HasColumnType("double precision");
 
@@ -213,6 +216,9 @@ namespace SalaryService.DataAccess.Migrations
                         .HasColumnType("double precision");
 
                     b.Property<double>("HourlyCostHand")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("IncomeTaxContributions")
                         .HasColumnType("double precision");
 
                     b.Property<double>("InjuriesContributions")

@@ -35,6 +35,7 @@ namespace SalaryService.Application.Commands
                 HourlyCostFact = latestMetrics.HourlyCostFact,
                 HourlyCostHand = latestMetrics.HourlyCostHand,
                 Earnings = latestMetrics.Earnings,
+                IncomeTaxContributions = latestMetrics.IncomeTaxContributions,
                 PensionContributions = latestMetrics.PensionContributions,
                 MedicalContributions = latestMetrics.MedicalContributions,
                 SocialInsuranceContributions = latestMetrics.SocialInsuranceContributions,

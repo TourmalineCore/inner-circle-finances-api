@@ -61,6 +61,19 @@ namespace SalaryService.Domain
             }
         }
 
+        private double incomeTaxContributions;
+        public double IncomeTaxContributions
+        {
+            get { return incomeTaxContributions; }
+            set
+            {
+                if (value >= 0)
+                    incomeTaxContributions = value;
+                else
+                    throw new ArgumentException();
+            }
+        }
+
         private double pensionContributions;
         public double PensionContributions
         {
@@ -248,6 +261,7 @@ namespace SalaryService.Domain
             GrossSalary = CalculateGrossSalary(districtCoeff);
             NetSalary = CalculateNetSalary(tax);
             Earnings = CalculateEarnings();
+            IncomeTaxContributions = GetNdflValue();
             PensionContributions = GetPensionContributions(mrot);
             MedicalContributions = GetMedicalContributions(mrot);
             SocialInsuranceContributions = GetSocialInsuranceContributions(mrot);
@@ -265,6 +279,7 @@ namespace SalaryService.Domain
             double grossSalary,
             double netSalary,
             double earnings,
+            double incomeTaxContributions,
             double pensionContributions,
             double medicalContributions,
             double socialInsuranceContributions,
@@ -289,6 +304,7 @@ namespace SalaryService.Domain
             GrossSalary = grossSalary;
             NetSalary = netSalary;
             Earnings = earnings;
+            IncomeTaxContributions = incomeTaxContributions;
             PensionContributions = pensionContributions;
             MedicalContributions = medicalContributions;
             SocialInsuranceContributions = socialInsuranceContributions;
@@ -324,14 +340,14 @@ namespace SalaryService.Domain
 
         private double CalculateExpenses()
         {
-            return GetNdflValue() +
-                NetSalary +
-                PensionContributions +
-                MedicalContributions +
-                SocialInsuranceContributions +
-                InjuriesContributions +
-                AccountingPerMonth +
-                ParkingCostPerMonth;
+            return IncomeTaxContributions +
+                   NetSalary +
+                   PensionContributions +
+                   MedicalContributions +
+                   SocialInsuranceContributions +
+                   InjuriesContributions +
+                   AccountingPerMonth +
+                   ParkingCostPerMonth;
         }
 
         private double GetNdflValue()

@@ -57,13 +57,25 @@ namespace SalaryService.Application.Commands
         }
 
         private double earnings;
-        
+
         public double Earnings
         {
             get { return earnings; }
             set
             {
                 if (value >= 0) earnings = value;
+                else throw new ArgumentException();
+            }
+        }
+
+        private double incomeTaxContributions;
+
+        public double IncomeTaxContributions
+        {
+            get { return incomeTaxContributions; }
+            set
+            {
+                if (value >= 0) incomeTaxContributions = value;
                 else throw new ArgumentException();
             }
         }
@@ -240,6 +252,7 @@ namespace SalaryService.Application.Commands
                 request.GrossSalary,
                 request.NetSalary,
                 request.Earnings,
+                request.IncomeTaxContributions,
                 request.PensionContributions,
                 request.MedicalContributions,
                 request.SocialInsuranceContributions,

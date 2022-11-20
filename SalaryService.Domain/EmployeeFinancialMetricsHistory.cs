@@ -16,6 +16,8 @@ namespace SalaryService.Domain
 
         public double Earnings { get; set; }
 
+        public double IncomeTaxContributions { get; set; }
+
         public double PensionContributions { get; set; }
 
         public double MedicalContributions { get; set; }

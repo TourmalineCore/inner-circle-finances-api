@@ -37,6 +37,7 @@ namespace SalaryService.Application.Queries
                 Math.Round(metrics.HourlyCostFact, 2),
                 Math.Round(metrics.HourlyCostHand, 2),
                 Math.Round(metrics.Earnings, 2),
+                Math.Round(metrics.IncomeTaxContributions, 2),
                 Math.Round(metrics.PensionContributions, 2),
                 Math.Round(metrics.MedicalContributions, 2),
                 Math.Round(metrics.SocialInsuranceContributions, 2),
