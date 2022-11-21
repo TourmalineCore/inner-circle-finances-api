@@ -15,6 +15,7 @@ namespace SalaryService.DataAccess
 
         public EmployeeDbContext(DbContextOptions<EmployeeDbContext> options) : base(options)
         {
+            
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
