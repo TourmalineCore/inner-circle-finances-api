@@ -19,6 +19,13 @@ namespace SalaryService.DataAccess.Repositories
             return employeeFinanceForPayroll.Id;
         }
 
+        public Task RemoveAsync(EmployeeFinanceForPayroll employeeFinanceForPayroll)
+        {
+            _employeeDbContext.Remove(employeeFinanceForPayroll);
+
+            return _employeeDbContext.SaveChangesAsync();
+        }
+
         public Task UpdateAsync(EmployeeFinanceForPayroll employeeFinanceForPayroll)
         {
             _employeeDbContext.Update(employeeFinanceForPayroll);

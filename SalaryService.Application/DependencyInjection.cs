@@ -26,7 +26,6 @@ namespace SalaryService.Application
             services.AddTransient<DeleteEmployeeProfileInfoCommandHandler>();
             services.AddTransient<DeleteEmployeeFinanceForPayrollCommandHandler>();
             services.AddTransient<DeleteEmployeeFinancialMetricsCommandHandler>();
-            services.AddTransient<DeleteEmployeeFinancialMetricsHistoryCommandHandler>();
             services.AddTransient<EmployeeFinanceService>();
             services.AddTransient<IClock, Clock>();
             return services;

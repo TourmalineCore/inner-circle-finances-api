@@ -1,5 +1,6 @@
 ﻿using NodaTime;
 using SalaryService.Application.Commands;
+using SalaryService.Application.Queries;
 using SalaryService.DataAccess.Repositories;
 using SalaryService.Domain;
 
@@ -45,30 +46,45 @@ namespace SalaryService.Application.Services
     public class EmployeeFinanceService
     {
         private readonly EmployeeFinancialMetricsRepository _employeeFinancialMetricsRepository;
+        private readonly EmployeeFinanceForPayrollRepository _employeeFinanceForPayrollRepository;
         private readonly CreateEmployeeProfileInfoCommandHandler _createEmployeeProfileInfoCommandHandler;
         private readonly CreateEmployeeFinanceForPayrollCommandHandler _createEmployeeFinanceForPayrollCommandHandler;
         private readonly UpdateEmployeeFinanceForPayrollCommandHandler _updateEmployeeFinanceForPayrollCommandHandler;
         private readonly UpdateFinancialMetricsCommandHandler _updateFinancialMetricsCommandHandler;
         private readonly CreateHistoryMetricsCommandHandler _createHistoryMetricsCommandHandler;
+        private readonly DeleteEmployeeProfileInfoCommandHandler _deleteEmployeeProfileInfoCommandHandler;
         private readonly IClock _clock;
 
         public EmployeeFinanceService(EmployeeFinancialMetricsRepository employeeFinancialMetricsRepository,
+            EmployeeFinanceForPayrollRepository employeeFinanceForPayrollRepository,
             CreateEmployeeFinanceForPayrollCommandHandler createEmployeeFinanceForPayrollCommandHandler, 
             CreateEmployeeProfileInfoCommandHandler createEmployeeProfileInfoCommandHandler, 
             UpdateEmployeeFinanceForPayrollCommandHandler updateEmployeeFinanceForPayrollCommandHandler,
             UpdateFinancialMetricsCommandHandler updateFinancialMetricsCommandHandler,
             CreateHistoryMetricsCommandHandler createHistoryMetricsCommandHandler,
+            DeleteEmployeeProfileInfoCommandHandler deleteEmployeeProfileInfoCommandHandler,
             IClock clock)
         {
             _employeeFinancialMetricsRepository = employeeFinancialMetricsRepository;
+            _employeeFinanceForPayrollRepository = employeeFinanceForPayrollRepository;
             _createEmployeeFinanceForPayrollCommandHandler = createEmployeeFinanceForPayrollCommandHandler;
             _createEmployeeProfileInfoCommandHandler = createEmployeeProfileInfoCommandHandler;
             _updateEmployeeFinanceForPayrollCommandHandler = updateEmployeeFinanceForPayrollCommandHandler;
             _updateFinancialMetricsCommandHandler = updateFinancialMetricsCommandHandler;
             _createHistoryMetricsCommandHandler = createHistoryMetricsCommandHandler;
+            _deleteEmployeeProfileInfoCommandHandler = deleteEmployeeProfileInfoCommandHandler;
             _clock = clock;
         }
 
+        public async Task DeleteEmployee(DeleteEmployeeProfileInfoCommand request)
+        {
+            var metrics = await _employeeFinancialMetricsRepository.GetByEmployeeId(request.EmployeeProfileId);
+            var financeForPayroll = await _employeeFinanceForPayrollRepository.GetByEmployeeIdAsync(request.EmployeeProfileId);
+            await CreateHistoryRecord(request.EmployeeProfileId);
+            await _employeeFinancialMetricsRepository.RemoveAsync(metrics);
+            await _employeeFinanceForPayrollRepository.RemoveAsync(financeForPayroll);
+            await _deleteEmployeeProfileInfoCommandHandler.Handle(request);
+        }
 
         public async Task CreateEmployee(SalaryServiceParameters parameters)
         {

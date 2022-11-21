@@ -13,7 +13,7 @@ using SalaryService.DataAccess;
 namespace SalaryService.DataAccess.Migrations
 {
     [DbContext(typeof(EmployeeDbContext))]
-    [Migration("20221115131327_Init")]
+    [Migration("20221121170803_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,6 +32,9 @@ namespace SalaryService.DataAccess.Migrations
                         .HasColumnType("bigint");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<Instant?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Instant>("EmploymentDate")
                         .HasColumnType("timestamp with time zone");

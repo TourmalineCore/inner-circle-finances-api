@@ -8,13 +8,10 @@ namespace SalaryService.Api.Controllers
     public class EmployeeController : Controller
     {
         private readonly EmployeeFinanceService _employeeFinanceService;
-        private readonly DeleteEmployeeProfileInfoCommandHandler _deleteEmployeeProfileInfoCommandHandler;
 
-        public EmployeeController(EmployeeFinanceService employeeService,
-            DeleteEmployeeProfileInfoCommandHandler deleteEmployeeProfileInfoCommandHandler)
+        public EmployeeController(EmployeeFinanceService employeeService)
         {
             _employeeFinanceService = employeeService;
-            _deleteEmployeeProfileInfoCommandHandler = deleteEmployeeProfileInfoCommandHandler;
         }
         
         [HttpPost("create-employee")]
@@ -32,7 +29,7 @@ namespace SalaryService.Api.Controllers
         [HttpDelete("delete-employee/{EmployeeProfileId}")]
         public Task DeleteEmployee([FromRoute] DeleteEmployeeProfileInfoCommand deleteEmployeeProfileInfoCommand)
         {
-            return _deleteEmployeeProfileInfoCommandHandler.Handle(deleteEmployeeProfileInfoCommand);
+            return _employeeFinanceService.DeleteEmployee(deleteEmployeeProfileInfoCommand);
         }
     }
 }

@@ -33,6 +33,13 @@ namespace SalaryService.DataAccess.Repositories
                     .SingleAsync(x => x.EmployeeId == employeeId);
         }
 
+        public Task RemoveAsync(EmployeeFinancialMetrics metrics)
+        {
+            _employeeDbContext.Remove(metrics);
+
+            return _employeeDbContext.SaveChangesAsync();
+        }
+
         public Task<EmployeeFinancialMetrics> GetByIdAsync(long id)
         {
             return _employeeDbContext

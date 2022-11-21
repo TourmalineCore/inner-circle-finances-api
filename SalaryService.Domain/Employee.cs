@@ -1,5 +1,4 @@
-﻿
-using NodaTime;
+﻿using NodaTime;
 
 namespace SalaryService.Domain
 {

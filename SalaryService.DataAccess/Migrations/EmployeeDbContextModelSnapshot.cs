@@ -77,9 +77,6 @@ namespace SalaryService.DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<Instant?>("DeletedAtUtc")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<long>("EmployeeId")
                         .HasColumnType("bigint");
 
@@ -117,9 +114,6 @@ namespace SalaryService.DataAccess.Migrations
                         .HasColumnType("double precision");
 
                     b.Property<Instant>("ActualFromUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Instant?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<double>("Earnings")
@@ -185,9 +179,6 @@ namespace SalaryService.DataAccess.Migrations
 
                     b.Property<double>("AccountingPerMonth")
                         .HasColumnType("double precision");
-
-                    b.Property<Instant?>("DeletedAtUtc")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<double>("Earnings")
                         .HasColumnType("double precision");

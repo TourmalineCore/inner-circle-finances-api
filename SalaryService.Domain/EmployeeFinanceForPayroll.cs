@@ -1,7 +1,4 @@
-﻿
-using NodaTime;
-
-namespace SalaryService.Domain
+﻿namespace SalaryService.Domain
 {
     public enum EmploymentTypes
     {
@@ -25,8 +22,7 @@ namespace SalaryService.Domain
         public bool HasParking { get; private set; }
 
         public long EmployeeId { get; private set; }
-
-        public Instant? DeletedAtUtc { get; private set; } = null;
+        
 
         public EmployeeFinanceForPayroll(long employeeId, double ratePerHour, double pay, EmploymentTypes employmentType, bool hasParking)
         {
@@ -44,11 +40,6 @@ namespace SalaryService.Domain
                     break;
             }
             HasParking = hasParking;
-        }
-
-        public void Delete(Instant deletedAtUtc)
-        {
-            DeletedAtUtc = deletedAtUtc;
         }
 
         public void Update(double ratePerHour, double pay, EmploymentTypes employmentType, bool hasParking)

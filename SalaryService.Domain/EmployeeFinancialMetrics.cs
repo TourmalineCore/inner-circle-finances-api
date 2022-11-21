@@ -175,8 +175,6 @@ namespace SalaryService.Domain
 
         public double AccountingPerMonth { get; set; }
 
-        public Instant? DeletedAtUtc { get; private set; } = null;
-
         public EmployeeFinancialMetrics(long employeeId, double ratePerHour, double pay, double employmentType, bool hasParking)
         {
             EmployeeId = employeeId;
@@ -186,11 +184,6 @@ namespace SalaryService.Domain
             HasParking = hasParking;
             ParkingCostPerMonth = hasParking ? ThirdPartyServicesPriceConsts.ParkingCostPerMonth : 0;
             AccountingPerMonth = ThirdPartyServicesPriceConsts.AccountingPerMonth;
-        }
-
-        public void Delete(Instant deletedAtUtc)
-        {
-            DeletedAtUtc = deletedAtUtc;
         }
 
         public void CalculateMetrics(double districtCoeff,

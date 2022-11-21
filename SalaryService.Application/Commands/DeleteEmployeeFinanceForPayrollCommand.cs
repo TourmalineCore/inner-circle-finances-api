@@ -1,4 +1,4 @@
-﻿using NodaTime;
+﻿
 using SalaryService.DataAccess.Repositories;
 
 namespace SalaryService.Application.Commands
@@ -10,21 +10,17 @@ namespace SalaryService.Application.Commands
     public class DeleteEmployeeFinanceForPayrollCommandHandler
     {
         private readonly EmployeeFinanceForPayrollRepository _employeeFinanceForPayrollRepository;
-        private readonly IClock _clock;
 
-        public DeleteEmployeeFinanceForPayrollCommandHandler(EmployeeFinanceForPayrollRepository employeeFinanceForPayrollRepository, IClock clock)
+        public DeleteEmployeeFinanceForPayrollCommandHandler(EmployeeFinanceForPayrollRepository employeeFinanceForPayrollRepository)
         {
             _employeeFinanceForPayrollRepository = employeeFinanceForPayrollRepository;
-            _clock = clock;
         }
 
         public async Task Handle(DeleteEmployeeFinanceForPayrollCommand request)
         {
             var financeForPayroll = await _employeeFinanceForPayrollRepository.GetByIdAsync(request.Id);
 
-            financeForPayroll.Delete(_clock.GetCurrentInstant());
-
-            await _employeeFinanceForPayrollRepository.UpdateAsync(financeForPayroll);
+            await _employeeFinanceForPayrollRepository.RemoveAsync(financeForPayroll);
         }
     }
 }

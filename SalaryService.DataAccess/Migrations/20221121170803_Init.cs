@@ -85,7 +85,8 @@ namespace SalaryService.DataAccess.Migrations
                     Phone = table.Column<string>(type: "text", nullable: true),
                     Skype = table.Column<string>(type: "text", nullable: true),
                     Telegram = table.Column<string>(type: "text", nullable: true),
-                    EmploymentDate = table.Column<Instant>(type: "timestamp with time zone", nullable: false)
+                    EmploymentDate = table.Column<Instant>(type: "timestamp with time zone", nullable: false),
+                    DeletedAtUtc = table.Column<Instant>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
