@@ -1,5 +1,7 @@
 ﻿
+using NodaTime;
 using SalaryService.Domain.Common;
+using Period = SalaryService.Domain.Common.Period;
 
 namespace SalaryService.Domain
 {
@@ -39,5 +41,12 @@ namespace SalaryService.Domain
         public double ParkingCostPerMonth { get; set; }
 
         public double AccountingPerMonth { get; set; }
+
+        public Instant? DeletedAtUtc { get; private set; } = null;
+
+        public void Delete(Instant deletedAtUtc)
+        {
+            DeletedAtUtc = deletedAtUtc;
+        }
     }
 }

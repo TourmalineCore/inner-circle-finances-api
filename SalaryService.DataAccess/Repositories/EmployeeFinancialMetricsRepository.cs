@@ -33,6 +33,13 @@ namespace SalaryService.DataAccess.Repositories
                     .SingleAsync(x => x.EmployeeId == employeeId);
         }
 
+        public Task<EmployeeFinancialMetrics> GetByIdAsync(long id)
+        {
+            return _employeeDbContext
+                    .Set<EmployeeFinancialMetrics>()
+                    .SingleAsync(x => x.Id == id);
+        }
+
         public async Task<IEnumerable<EmployeeFinancialMetrics>> GetAllAsync()
         {
             return await _employeeDbContext

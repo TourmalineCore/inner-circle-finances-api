@@ -31,5 +31,12 @@ namespace SalaryService.DataAccess.Repositories
                     .Set<EmployeeFinanceForPayroll>()
                     .SingleAsync(x => x.EmployeeId == employeeId);
         }
+
+        public Task<EmployeeFinanceForPayroll> GetByIdAsync(long id)
+        {
+            return _employeeDbContext
+                    .Set<EmployeeFinanceForPayroll>()
+                    .SingleAsync(x => x.Id == id);
+        }
     }
 }

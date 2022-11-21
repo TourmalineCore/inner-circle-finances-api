@@ -1,4 +1,5 @@
-﻿using SalaryService.Domain;
+﻿using Microsoft.EntityFrameworkCore;
+using SalaryService.Domain;
 
 namespace SalaryService.DataAccess.Repositories
 {
@@ -17,6 +18,19 @@ namespace SalaryService.DataAccess.Repositories
             await _employeeDbContext.SaveChangesAsync();
 
             return metrics.Id;
+        }
+
+        public Task<EmployeeFinancialMetricsHistory> GetByIdAsync(long id)
+        {
+            return _employeeDbContext
+                    .Set<EmployeeFinancialMetricsHistory>()
+                    .SingleAsync(x => x.Id == id);
+        }
+
+        public Task UpdateAsync(EmployeeFinancialMetricsHistory metrics)
+        {
+            _employeeDbContext.Update(metrics);
+            return _employeeDbContext.SaveChangesAsync();
         }
     }
 }

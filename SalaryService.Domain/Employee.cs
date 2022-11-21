@@ -25,6 +25,8 @@ namespace SalaryService.Domain
 
         public Instant EmploymentDate { get; private set; }
 
+        public Instant? DeletedAtUtc { get; private set; } = null;
+
         public Employee(string name, string surname, string middleName, string workEmail, string personalEmail, string phone, string skype, string telegram, Instant employmentDate)
         {
             Name = name;
@@ -36,6 +38,11 @@ namespace SalaryService.Domain
             Skype = skype;
             Telegram = telegram;
             EmploymentDate = employmentDate;
+        }
+
+        public void Delete(Instant deletedAtUtc)
+        {
+            DeletedAtUtc = deletedAtUtc;
         }
 
         public void Update(string name, string surname, string middleName, string workEmail, string personalEmail, string phone, string skype, string telegram)

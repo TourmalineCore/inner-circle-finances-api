@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SalaryService.Application.Commands;
 using SalaryService.Application.Services;
 
 namespace SalaryService.Api.Controllers
@@ -7,10 +8,13 @@ namespace SalaryService.Api.Controllers
     public class EmployeeController : Controller
     {
         private readonly EmployeeFinanceService _employeeFinanceService;
+        private readonly DeleteEmployeeProfileInfoCommandHandler _deleteEmployeeProfileInfoCommandHandler;
 
-        public EmployeeController(EmployeeFinanceService employeeService)
+        public EmployeeController(EmployeeFinanceService employeeService,
+            DeleteEmployeeProfileInfoCommandHandler deleteEmployeeProfileInfoCommandHandler)
         {
             _employeeFinanceService = employeeService;
+            _deleteEmployeeProfileInfoCommandHandler = deleteEmployeeProfileInfoCommandHandler;
         }
         
         [HttpPost("create-employee")]
@@ -23,6 +27,12 @@ namespace SalaryService.Api.Controllers
         public Task UpdateEmployee([FromBody] SalaryServiceParameters salaryServiceParameters)
         {
             return _employeeFinanceService.UpdateEmployee(salaryServiceParameters);
+        }
+
+        [HttpDelete("delete-employee/{EmployeeProfileId}")]
+        public Task DeleteEmployee([FromRoute] DeleteEmployeeProfileInfoCommand deleteEmployeeProfileInfoCommand)
+        {
+            return _deleteEmployeeProfileInfoCommandHandler.Handle(deleteEmployeeProfileInfoCommand);
         }
     }
 }
