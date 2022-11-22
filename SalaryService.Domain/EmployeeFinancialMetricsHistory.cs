@@ -5,6 +5,8 @@ namespace SalaryService.Domain
     public class EmployeeFinancialMetricsHistory : IIdentityEntity
     {
         public long Id { get; set; }
+
+        public Employee Employee { get; set; }
         public long EmployeeId { get; set; }
         public Period Period { get; set; }
         public double Salary { get; set; }

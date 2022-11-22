@@ -11,46 +11,39 @@ namespace SalaryService.Application.Queries
     public class GetSEOAnalyticsInfoListQueryHandler
     {
         private readonly EmployeeProfileInfoRepository _employeeProfileInfoRepository;
-        private readonly EmployeeFinancialMetricsRepository _employeeFinancialMetricsRepository;
 
-        public GetSEOAnalyticsInfoListQueryHandler(EmployeeProfileInfoRepository employeeProfileInfoRepository, EmployeeFinancialMetricsRepository employeeFinancialMetricsRepository)
+        public GetSEOAnalyticsInfoListQueryHandler(EmployeeProfileInfoRepository employeeProfileInfoRepository)
         {
             _employeeProfileInfoRepository = employeeProfileInfoRepository;
-            _employeeFinancialMetricsRepository = employeeFinancialMetricsRepository;
         }
 
         public async Task<IEnumerable<SEOAnalyticsInformationDto>> Handle()
         {
             var employee = await _employeeProfileInfoRepository.GetAllAsync();
-            var metrics = await _employeeFinancialMetricsRepository.GetAllAsync();
 
-            var query = from e in employee
-                join m in metrics on e.Id equals m.EmployeeId
-                select new SEOAnalyticsInformationDto(e.Id,
-                    e.Name,
-                    e.Surname,
-                    e.MiddleName,
-                    e.HireDate.ToString(),
-                    Math.Round(m.Pay, 2),
-                    Math.Round(m.RatePerHour,2),
-                    Math.Round(m.EmploymentType, 2),
-                    Math.Round(m.ParkingCostPerMonth, 2),
-                    Math.Round(m.HourlyCostFact, 2),
-                    Math.Round(m.HourlyCostHand, 2),
-                    Math.Round(m.Earnings, 2),
-                    Math.Round(m.IncomeTaxContributions, 2),
-                    Math.Round(m.PensionContributions,2),
-                    Math.Round(m.MedicalContributions, 2),
-                    Math.Round(m.SocialInsuranceContributions, 2),
-                    Math.Round(m.InjuriesContributions, 2),
-                    Math.Round(m.Expenses, 2),
-                    Math.Round(m.Profit, 2),
-                    Math.Round(m.ProfitAbility, 2),
-                    Math.Round(m.GrossSalary, 2),
-                    Math.Round(m.Retainer, 2),
-                    Math.Round(m.NetSalary, 2));
-
-            return query;
+            return employee.Select(x => new SEOAnalyticsInformationDto(x.Id,
+                x.Name,
+                x.Surname,
+                x.MiddleName,
+                x.HireDate.ToString(),
+                Math.Round(x.EmployeeFinancialMetrics.Pay, 2),
+                Math.Round(x.EmployeeFinancialMetrics.RatePerHour, 2),
+                Math.Round(x.EmployeeFinancialMetrics.EmploymentType, 2),
+                Math.Round(x.EmployeeFinancialMetrics.ParkingCostPerMonth, 2),
+                Math.Round(x.EmployeeFinancialMetrics.HourlyCostFact, 2),
+                Math.Round(x.EmployeeFinancialMetrics.HourlyCostHand, 2),
+                Math.Round(x.EmployeeFinancialMetrics.Earnings, 2),
+                Math.Round(x.EmployeeFinancialMetrics.IncomeTaxContributions, 2),
+                Math.Round(x.EmployeeFinancialMetrics.PensionContributions, 2),
+                Math.Round(x.EmployeeFinancialMetrics.MedicalContributions, 2),
+                Math.Round(x.EmployeeFinancialMetrics.SocialInsuranceContributions, 2),
+                Math.Round(x.EmployeeFinancialMetrics.InjuriesContributions, 2),
+                Math.Round(x.EmployeeFinancialMetrics.Expenses, 2),
+                Math.Round(x.EmployeeFinancialMetrics.Profit, 2),
+                Math.Round(x.EmployeeFinancialMetrics.ProfitAbility, 2),
+                Math.Round(x.EmployeeFinancialMetrics.GrossSalary, 2),
+                Math.Round(x.EmployeeFinancialMetrics.Retainer, 2),
+                Math.Round(x.EmployeeFinancialMetrics.NetSalary, 2)));
         }
     }
 }

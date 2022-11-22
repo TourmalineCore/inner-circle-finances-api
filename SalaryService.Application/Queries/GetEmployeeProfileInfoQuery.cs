@@ -11,18 +11,15 @@ namespace SalaryService.Application.Queries
     public class GetEmployeeProfileInfoQueryHandler
     {
         private readonly EmployeeProfileInfoRepository _employeeProfileInfoRepository;
-        private readonly EmployeeFinancialMetricsRepository _employeeFinancialMetricsRepository;
 
-        public GetEmployeeProfileInfoQueryHandler(EmployeeProfileInfoRepository employeeProfileInfoRepository, EmployeeFinancialMetricsRepository employeeFinancialMetricsRepository)
+        public GetEmployeeProfileInfoQueryHandler(EmployeeProfileInfoRepository employeeProfileInfoRepository)
         {
             _employeeProfileInfoRepository = employeeProfileInfoRepository;
-            _employeeFinancialMetricsRepository = employeeFinancialMetricsRepository;
         }
 
         public async Task<EmployeeProfileDto> Handle(GetEmployeeProfileInfoQuery request)
         {
             var employee = await _employeeProfileInfoRepository.GetByIdAsync(request.EmployeeId);
-            var basicSalaryParameters = await _employeeFinancialMetricsRepository.GetByEmployeeId(request.EmployeeId);
 
             return new EmployeeProfileDto(employee.Id,
                 employee.Name,
@@ -34,7 +31,7 @@ namespace SalaryService.Application.Queries
                 employee.Skype,
                 employee.Telegram,
                 employee.HireDate.ToString(),
-                basicSalaryParameters.NetSalary
+                employee.EmployeeFinancialMetrics.NetSalary
                 );
         }
     }

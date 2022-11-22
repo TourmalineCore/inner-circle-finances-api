@@ -6,6 +6,7 @@ namespace SalaryService.Domain
     public class EmployeeFinancialMetrics : IIdentityEntity
     {
         public long Id { get; set; }
+        public Employee Employee { get; set; }
         public long EmployeeId { get; set; }
         public Instant ActualFromUtc { get; set; }
 

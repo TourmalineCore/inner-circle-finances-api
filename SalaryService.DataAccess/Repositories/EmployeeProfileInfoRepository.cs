@@ -13,18 +13,29 @@ namespace SalaryService.DataAccess.Repositories
             _employeeDbContext = employeeDbContext;
         }
 
-        public async Task<long> CreateAsync(Employee employee)
+        public Task AddFinanceForPayrollAndMetrics(Employee employee, 
+            long financeForPayrollId,
+            long financialMetricsId)
+        {
+            employee.AddMetricsAndFinanceForpayroll(financeForPayrollId, financialMetricsId);
+
+            return _employeeDbContext.SaveChangesAsync();
+        }
+
+        public async Task<Employee> CreateAsync(Employee employee)
         {
             await _employeeDbContext.AddAsync(employee);
             await _employeeDbContext.SaveChangesAsync();
 
-            return employee.Id;
+            return employee;
         }
 
         public Task<Employee> GetByIdAsync(long employeeId)
         {
             return _employeeDbContext
                     .Set<Employee>()
+                    .Include(x => x.EmployeeFinanceForPayroll)
+                    .Include(x => x.EmployeeFinancialMetrics)
                     .SingleAsync(x => x.Id == employeeId);
         }
 
@@ -32,6 +43,8 @@ namespace SalaryService.DataAccess.Repositories
         {
             return await _employeeDbContext
                 .QueryableAsNoTracking<Employee>()
+                .Include(x => x.EmployeeFinanceForPayroll)
+                .Include(x => x.EmployeeFinancialMetrics)
                 .ToListAsync();
         }
 

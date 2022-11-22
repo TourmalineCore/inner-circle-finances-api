@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SalaryService.Application.Commands;
 using SalaryService.Application.Services;
 
 namespace SalaryService.Api.Controllers

@@ -26,31 +26,31 @@ namespace SalaryService.Api.Controllers
             _seoAnalyticsInfoListQueryHandler = seoAnalyticsInfoListQueryHandler;
         }
 
-        [HttpGet("get-profile-information/{EmployeeId}")]
+        [HttpGet("get-profile/{EmployeeId}")]
         public Task<EmployeeProfileDto> GetEmployeeProfileInformation([FromRoute] GetEmployeeProfileInfoQuery getEmployeeProfileInfoQuery)
         {
             return _getEmployeeProfileInfoByIdQueryHandler.Handle(getEmployeeProfileInfoQuery);
         }
 
-        [HttpGet("get-contact-information/{EmployeeId}")]
+        [HttpGet("get-contacts/{EmployeeId}")]
         public Task<EmployeeContactInfoDto> GetEmployeeContactInformation([FromRoute] GetEmployeeContactInfoQuery getEmployeeContactInfoQuery)
         {
             return _getEmployeeContactInfoByIdQueryHandler.Handle(getEmployeeContactInfoQuery);
         }
 
-        [HttpGet("get-analytics-data/{EmployeeId}")]
+        [HttpGet("get-analytics/{EmployeeId}")]
         public Task<SEOAnalyticsInformationDto> GetAnalyticsInformation([FromRoute] GetSEOAnalyticsInfoQuery getSeoAnalyticsInfoQuery)
         {
             return _getSeoAnalyticsInfoByIdQueryHandler.Handle(getSeoAnalyticsInfoQuery);
         }
 
-        [HttpGet("get-contact-information")]
+        [HttpGet("get-contacts")]
         public Task<IEnumerable<EmployeeContactInfoDto>> GetEmployeeContactInformation()
         {
             return _getEmployeeContactInfoListQueryHandler.Handle();
         }
 
-        [HttpGet("get-finance-data")]
+        [HttpGet("get-analytics")]
         public Task<IEnumerable<SEOAnalyticsInformationDto>> GetAnalyticsInformationList()
         {
             return _seoAnalyticsInfoListQueryHandler.Handle();

@@ -1,6 +1,5 @@
 ﻿using NodaTime;
 using SalaryService.Application.Commands;
-using SalaryService.Application.Queries;
 using SalaryService.DataAccess.Repositories;
 using SalaryService.Domain;
 
@@ -8,12 +7,6 @@ namespace SalaryService.Application.Services
 {
     public partial class EmployeeCreatingParameters
     {
-        public double DistrictCoefficient { get; set; }
-
-        public double MinimumWage { get; set; }
-
-        public double IncomeTax { get; set; }
-
         public string Name { get; set; }
 
         public string Surname { get; set; }
@@ -44,12 +37,6 @@ namespace SalaryService.Application.Services
     {
         public long EmployeeId { get; set; }
 
-        public double DistrictCoefficient { get; set; }
-
-        public double MinimumWage { get; set; }
-
-        public double IncomeTax { get; set; }
-
         public double RatePerHour { get; set; }
 
         public double Pay { get; set; }
@@ -63,6 +50,7 @@ namespace SalaryService.Application.Services
 
     public class EmployeeFinanceService
     {
+        private readonly EmployeeProfileInfoRepository _employeeProfileInfoRepository;
         private readonly EmployeeFinancialMetricsRepository _employeeFinancialMetricsRepository;
         private readonly EmployeeFinanceForPayrollRepository _employeeFinanceForPayrollRepository;
         private readonly CreateEmployeeProfileInfoCommandHandler _createEmployeeProfileInfoCommandHandler;
@@ -75,7 +63,8 @@ namespace SalaryService.Application.Services
         private readonly DeleteEmployeeFinancialMetricsCommandHandler _deleteEmployeeFinancialMetricsCommandHandler;
         private readonly IClock _clock;
 
-        public EmployeeFinanceService(EmployeeFinancialMetricsRepository employeeFinancialMetricsRepository,
+        public EmployeeFinanceService(EmployeeProfileInfoRepository employeeProfileInfoRepository,
+            EmployeeFinancialMetricsRepository employeeFinancialMetricsRepository,
             EmployeeFinanceForPayrollRepository employeeFinanceForPayrollRepository,
             CreateEmployeeFinanceForPayrollCommandHandler createEmployeeFinanceForPayrollCommandHandler, 
             CreateEmployeeProfileInfoCommandHandler createEmployeeProfileInfoCommandHandler, 
@@ -87,6 +76,7 @@ namespace SalaryService.Application.Services
             DeleteEmployeeFinancialMetricsCommandHandler deleteEmployeeFinancialMetricsCommandHandler,
             IClock clock)
         {
+            _employeeProfileInfoRepository = employeeProfileInfoRepository;
             _employeeFinancialMetricsRepository = employeeFinancialMetricsRepository;
             _employeeFinanceForPayrollRepository = employeeFinanceForPayrollRepository;
             _createEmployeeFinanceForPayrollCommandHandler = createEmployeeFinanceForPayrollCommandHandler;
@@ -110,7 +100,7 @@ namespace SalaryService.Application.Services
 
         public async Task CreateEmployee(EmployeeCreatingParameters parameters)
         {
-            var employeeId = await CreateEmployeeProfileInfo(parameters.Name, 
+            var employee = await CreateEmployeeProfileInfo(parameters.Name, 
                 parameters.Surname, 
                 parameters.MiddleName, 
                 parameters.WorkEmail, 
@@ -119,20 +109,20 @@ namespace SalaryService.Application.Services
                 parameters.Skype, 
                 parameters.Telegram);
 
-            await CreateEmployeeFinanceForPayroll(employeeId,
+           var financeForPayrollId = await CreateEmployeeFinanceForPayroll(employee.Id,
                 parameters.RatePerHour,
                 parameters.Pay,
                 parameters.EmploymentType,
                 parameters.HasParking);
 
-            await CreateMetrics(CalculateMetrics(employeeId, 
+           
+           var metricsId = await CreateMetrics(employee.Id, 
                 parameters.RatePerHour, 
                 parameters.Pay, 
                 parameters.EmploymentTypeValue, 
-                parameters.HasParking, 
-                parameters.DistrictCoefficient, 
-                parameters.MinimumWage, 
-                parameters.IncomeTax));
+                parameters.HasParking, Coefficients.DistrictCoefficient, Coefficients.MinimumWage, Coefficients.IncomeTaxPercent);
+            
+           await _employeeProfileInfoRepository.AddFinanceForPayrollAndMetrics(employee, financeForPayrollId, metricsId);
         }
 
         public async Task UpdateEmployee(EmployeeUpdatingParameters parameters)
@@ -148,10 +138,7 @@ namespace SalaryService.Application.Services
                 parameters.RatePerHour, 
                 parameters.Pay, 
                 parameters.EmploymentTypeValue, 
-                parameters.HasParking, 
-                parameters.DistrictCoefficient, 
-                parameters.MinimumWage, 
-                parameters.IncomeTax);
+                parameters.HasParking, Coefficients.DistrictCoefficient, Coefficients.MinimumWage, Coefficients.IncomeTaxPercent);
         }
 
         private Task<long> CreateHistoryRecord(long employeeId)
@@ -183,12 +170,27 @@ namespace SalaryService.Application.Services
             return calculateMetrics;
         }
 
-        private Task CreateMetrics(EmployeeFinancialMetrics metrics)
+        private Task<long> CreateMetrics(long employeeId,
+            double ratePerHour,
+            double pay,
+            double employmentTypeValue,
+            bool hasParking,
+            double districtCoefficient,
+            double minimumWage,
+            double incomeTax)
         {
-            return _employeeFinancialMetricsRepository.CreateAsync(metrics);
+            var calculateMetrics = new EmployeeFinancialMetrics(employeeId,
+                ratePerHour,
+                pay,
+                employmentTypeValue,
+                hasParking);
+
+            calculateMetrics.CalculateMetrics(districtCoefficient, minimumWage, incomeTax,
+                _clock.GetCurrentInstant());
+            return _employeeFinancialMetricsRepository.CreateAsync(calculateMetrics);
         }
 
-        private Task<long> CreateEmployeeProfileInfo(string name, 
+        private Task<Employee> CreateEmployeeProfileInfo(string name, 
             string surname, 
             string middleName, 
             string workEmail, 

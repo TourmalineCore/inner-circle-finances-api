@@ -12,7 +12,7 @@ namespace SalaryService.Domain
 
         public string MiddleName { get; private set; }
 
-        public string? WorkEmail { get; private set; }
+        public string WorkEmail { get; private set; }
 
         public string? PersonalEmail { get; private set; }
 
@@ -22,11 +22,25 @@ namespace SalaryService.Domain
 
         public string? Telegram { get; private set; }
 
+        public long FinanceForPayrollId { get; private set; }
+        public EmployeeFinanceForPayroll EmployeeFinanceForPayroll { get; private set; }
+
+        public long FinancialMetricsId { get; private set; }
+        public EmployeeFinancialMetrics EmployeeFinancialMetrics { get; private set; }
+
         public Instant HireDate { get; private set; }
 
         public Instant? DeletedAtUtc { get; private set; } = null;
 
-        public Employee(string name, string surname, string middleName, string workEmail, string personalEmail, string phone, string skype, string telegram, Instant hireDate)
+        public Employee(string name, 
+            string surname, 
+            string middleName, 
+            string workEmail, 
+            string personalEmail, 
+            string phone, 
+            string skype, 
+            string telegram, 
+            Instant hireDate)
         {
             Name = name;
             Surname = surname;
@@ -37,6 +51,14 @@ namespace SalaryService.Domain
             Skype = skype;
             Telegram = telegram;
             HireDate = hireDate;
+            
+        }
+
+        public void AddMetricsAndFinanceForpayroll(long financeForPayrollId,
+            long financialMetricsId)
+        {
+            FinanceForPayrollId = financeForPayrollId;
+            FinancialMetricsId = financialMetricsId;
         }
 
         public void Delete(Instant deletedAtUtc)
@@ -44,7 +66,14 @@ namespace SalaryService.Domain
             DeletedAtUtc = deletedAtUtc;
         }
 
-        public void Update(string name, string surname, string middleName, string workEmail, string personalEmail, string phone, string skype, string telegram)
+        public void Update(string name, 
+            string surname, 
+            string middleName, 
+            string workEmail, 
+            string personalEmail, 
+            string phone, 
+            string skype, 
+            string telegram)
         {
             Name = name;
             Surname = surname;
