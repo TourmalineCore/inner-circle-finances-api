@@ -18,7 +18,7 @@ namespace SalaryService.Application.Commands
 
         public async Task Handle(long employeeId)
         {
-            var financeForPayroll = await _employeeFinanceForPayrollRepository.GetByIdAsync(employeeId);
+            var financeForPayroll = await _employeeFinanceForPayrollRepository.GetByEmployeeIdAsync(employeeId);
 
             await _employeeFinanceForPayrollRepository.RemoveAsync(financeForPayroll);
         }
