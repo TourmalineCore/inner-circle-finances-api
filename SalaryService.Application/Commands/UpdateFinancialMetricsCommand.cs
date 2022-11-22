@@ -8,6 +8,18 @@ namespace SalaryService.Application.Commands
     {
         public long EmployeeId { get; set; }
 
+        private double minimumWage;
+
+        public double MinimumWage
+        {
+            get { return minimumWage; }
+            set
+            {
+                if (value >= 0) minimumWage = value;
+                else throw new ArgumentException();
+            }
+        }
+
         private double salary;
         
         public double Salary
@@ -45,7 +57,7 @@ namespace SalaryService.Application.Commands
         }
 
         private double earnings;
-        
+
         public double Earnings
         {
             get { return earnings; }
@@ -53,6 +65,70 @@ namespace SalaryService.Application.Commands
             {
                 if (value >= 0) earnings = value;
                 else throw new ArgumentException();
+            }
+        }
+
+        private double incomeTaxContributions;
+
+        public double IncomeTaxContributions
+        {
+            get { return incomeTaxContributions; }
+            set
+            {
+                if (value >= 0) incomeTaxContributions = value;
+                else throw new ArgumentException();
+            }
+        }
+
+        private double pensionContributions;
+        public double PensionContributions
+        {
+            get { return pensionContributions; }
+            set
+            {
+                if (value >= 0)
+                    pensionContributions = value;
+                else
+                    throw new ArgumentException();
+            }
+        }
+
+        private double medicalContributions;
+        public double MedicalContributions
+        {
+            get { return medicalContributions; }
+            set
+            {
+                if (value >= 0)
+                    medicalContributions = value;
+                else
+                    throw new ArgumentException();
+            }
+        }
+
+        private double socialInsuranceContributions;
+        public double SocialInsuranceContributions
+        {
+            get { return socialInsuranceContributions; }
+            set
+            {
+                if (value >= 0)
+                    socialInsuranceContributions = value;
+                else
+                    throw new ArgumentException();
+            }
+        }
+
+        private double injuriesContributions;
+        public double InjuriesContributions
+        {
+            get { return injuriesContributions; }
+            set
+            {
+                if (value >= 0)
+                    injuriesContributions = value;
+                else
+                    throw new ArgumentException();
             }
         }
 
@@ -171,10 +247,16 @@ namespace SalaryService.Application.Commands
         {
             var salaryMetrics = _employeeFinancialMetricsRepository.GetByEmployeeId(request.EmployeeId).Result;
             
-            salaryMetrics.Update(request.Salary,
+            salaryMetrics.Update(request.MinimumWage, 
+                request.Salary,
                 request.GrossSalary,
                 request.NetSalary,
                 request.Earnings,
+                request.IncomeTaxContributions,
+                request.PensionContributions,
+                request.MedicalContributions,
+                request.SocialInsuranceContributions,
+                request.InjuriesContributions,
                 request.Expenses,
                 request.HourlyCostFact,
                 request.HourlyCostHand,

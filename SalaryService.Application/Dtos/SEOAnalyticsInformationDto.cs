@@ -21,13 +21,23 @@ namespace SalaryService.Application.Dtos
 
         public double EmploymentType { get; private set; }
 
-        public bool HasParking { get; private set; }
+        public double ParkingCostPerMonth { get; private set; }
 
         public double HourlyCostFact { get; private set; }
 
         public double HourlyCostHand { get; private set; }
 
         public double Earnings { get; private set; }
+
+        public double IncomeTaxContributions { get; private set; }
+
+        public double PensionContributions { get; set; }
+
+        public double MedicalContributions { get; set; }
+
+        public double SocialInsuranceContributions { get; set; }
+
+        public double InjuriesContributions { get; set; }
 
         public double Expenses { get; private set; }
 
@@ -49,10 +59,15 @@ namespace SalaryService.Application.Dtos
             double pay,
             double ratePerHour,
             double employmentType,
-            bool hasParking,
+            double parkingCostPerMonth,
             double hourlyCostFact,
             double hourlyCostHand,
             double earnings,
+            double incomeTaxContributions,
+            double pensionContributions,
+            double medicalContributions,
+            double socialInsuranceContributions,
+            double injuriesContributions,
             double expenses,
             double profit,
             double profitAbility,
@@ -68,10 +83,15 @@ namespace SalaryService.Application.Dtos
             Pay = pay;
             RatePerHour = ratePerHour;
             EmploymentType = employmentType;
-            HasParking = hasParking;
+            ParkingCostPerMonth = parkingCostPerMonth;
             HourlyCostFact = hourlyCostFact;
             HourlyCostHand = hourlyCostHand;
             Earnings = earnings;
+            IncomeTaxContributions = incomeTaxContributions;
+            PensionContributions = pensionContributions;
+            MedicalContributions = medicalContributions;
+            SocialInsuranceContributions = socialInsuranceContributions;
+            InjuriesContributions = injuriesContributions;
             Expenses = expenses;
             Profit = profit;
             ProfitAbility = profitAbility;

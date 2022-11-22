@@ -6,10 +6,8 @@ using SalaryService.Domain;
 
 namespace SalaryService.Application.Services
 {
-    public partial class SalaryServiceParameters
+    public partial class EmployeeCreatingParameters
     {
-        public long EmployeeId { get; set; }
-
         public double DistrictCoefficient { get; set; }
 
         public double MinimumWage { get; set; }
@@ -31,6 +29,26 @@ namespace SalaryService.Application.Services
         public string Skype { get; set; }
 
         public string Telegram { get; set; }
+
+        public double RatePerHour { get; set; }
+
+        public double Pay { get; set; }
+
+        public EmploymentTypes EmploymentType { get; set; }
+
+        public double EmploymentTypeValue => EmploymentType == EmploymentTypes.FullTime ? 1.0 : 0.5;
+
+        public bool HasParking { get; set; }
+    }
+    public partial class EmployeeUpdatingParameters
+    {
+        public long EmployeeId { get; set; }
+
+        public double DistrictCoefficient { get; set; }
+
+        public double MinimumWage { get; set; }
+
+        public double IncomeTax { get; set; }
 
         public double RatePerHour { get; set; }
 
@@ -90,7 +108,7 @@ namespace SalaryService.Application.Services
             await _deleteEmployeeProfileInfoCommandHandler.Handle(id);
         }
 
-        public async Task CreateEmployee(SalaryServiceParameters parameters)
+        public async Task CreateEmployee(EmployeeCreatingParameters parameters)
         {
             var employeeId = await CreateEmployeeProfileInfo(parameters.Name, 
                 parameters.Surname, 
@@ -117,7 +135,7 @@ namespace SalaryService.Application.Services
                 parameters.IncomeTax));
         }
 
-        public async Task UpdateEmployee(SalaryServiceParameters parameters)
+        public async Task UpdateEmployee(EmployeeUpdatingParameters parameters)
         {
             await CreateHistoryRecord(parameters.EmployeeId);
             await UpdateEmployeeFinanceForPayroll(parameters.EmployeeId, 
