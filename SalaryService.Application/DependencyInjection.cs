@@ -12,9 +12,8 @@ namespace SalaryService.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
         {
-            Coefficients.DistrictCoefficient = Convert.ToDouble(configuration.GetSection("Coefficients:DistrictCoefficient").Value);
-            Coefficients.MinimumWage = Convert.ToDouble(configuration.GetSection("Coefficients:MinimumWage").Value);
-            Coefficients.IncomeTaxPercent = Convert.ToDouble(configuration.GetSection("Coefficients:IncomeTaxPercent").Value);
+            var coefficientOptions = configuration.GetSection("CoefficientOptions");
+            services.Configure<CoefficientOptions>(c => coefficientOptions.Bind(c));
 
             services.AddTransient<GetEmployeeProfileInfoQueryHandler>();
             services.AddTransient<GetEmployeeContactInfoQueryHandler>();

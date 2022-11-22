@@ -1,4 +1,5 @@
-﻿using NodaTime;
+﻿using Microsoft.Extensions.Options;
+using NodaTime;
 using SalaryService.Application.Commands;
 using SalaryService.DataAccess.Repositories;
 using SalaryService.Domain;
@@ -61,6 +62,7 @@ namespace SalaryService.Application.Services
         private readonly DeleteEmployeeProfileInfoCommandHandler _deleteEmployeeProfileInfoCommandHandler;
         private readonly DeleteEmployeeFinanceForPayrollCommandHandler _deleteEmployeeFinanceForPayrollCommandHandler;
         private readonly DeleteEmployeeFinancialMetricsCommandHandler _deleteEmployeeFinancialMetricsCommandHandler;
+        private readonly CoefficientOptions _coefficientOptions;
         private readonly IClock _clock;
 
         public EmployeeFinanceService(EmployeeProfileInfoRepository employeeProfileInfoRepository,
@@ -74,6 +76,7 @@ namespace SalaryService.Application.Services
             DeleteEmployeeProfileInfoCommandHandler deleteEmployeeProfileInfoCommandHandler,
             DeleteEmployeeFinanceForPayrollCommandHandler deleteEmployeeFinanceForPayrollCommandHandler,
             DeleteEmployeeFinancialMetricsCommandHandler deleteEmployeeFinancialMetricsCommandHandler,
+            IOptions<CoefficientOptions> coefficientOptions,
             IClock clock)
         {
             _employeeProfileInfoRepository = employeeProfileInfoRepository;
@@ -87,6 +90,7 @@ namespace SalaryService.Application.Services
             _deleteEmployeeProfileInfoCommandHandler = deleteEmployeeProfileInfoCommandHandler;
             _deleteEmployeeFinanceForPayrollCommandHandler = deleteEmployeeFinanceForPayrollCommandHandler;
             _deleteEmployeeFinancialMetricsCommandHandler = deleteEmployeeFinancialMetricsCommandHandler;
+            _coefficientOptions = coefficientOptions.Value;
             _clock = clock;
         }
 
@@ -120,7 +124,7 @@ namespace SalaryService.Application.Services
                 parameters.RatePerHour, 
                 parameters.Pay, 
                 parameters.EmploymentTypeValue, 
-                parameters.HasParking, Coefficients.DistrictCoefficient, Coefficients.MinimumWage, Coefficients.IncomeTaxPercent);
+                parameters.HasParking, _coefficientOptions.DistrictCoefficient, _coefficientOptions.MinimumWage, _coefficientOptions.IncomeTaxPercent);
             
            await _employeeProfileInfoRepository.AddFinanceForPayrollAndMetrics(employee, financeForPayrollId, metricsId);
         }
@@ -134,11 +138,12 @@ namespace SalaryService.Application.Services
                 parameters.EmploymentType, 
                 parameters.HasParking);
 
-            await UpdateMetrics(parameters.EmployeeId, 
-                parameters.RatePerHour, 
-                parameters.Pay, 
-                parameters.EmploymentTypeValue, 
-                parameters.HasParking, Coefficients.DistrictCoefficient, Coefficients.MinimumWage, Coefficients.IncomeTaxPercent);
+            await UpdateMetrics(parameters.EmployeeId,
+                parameters.RatePerHour,
+                parameters.Pay,
+                parameters.EmploymentTypeValue,
+                parameters.HasParking, _coefficientOptions.DistrictCoefficient, _coefficientOptions.MinimumWage,
+                _coefficientOptions.IncomeTaxPercent);
         }
 
         private Task<long> CreateHistoryRecord(long employeeId)
