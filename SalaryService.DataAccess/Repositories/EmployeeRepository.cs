@@ -36,13 +36,14 @@ namespace SalaryService.DataAccess.Repositories
                     .Set<Employee>()
                     .Include(x => x.EmployeeFinanceForPayroll)
                     .Include(x => x.EmployeeFinancialMetrics)
-                    .SingleAsync(x => x.Id == employeeId);
+                    .SingleAsync(x => x.Id == employeeId && x.DeletedAtUtc == null);
         }
 
         public async Task<IEnumerable<Employee>> GetAllAsync()
         {
             return await _employeeDbContext
                 .QueryableAsNoTracking<Employee>()
+                .Where(x => x.DeletedAtUtc == null)
                 .Include(x => x.EmployeeFinanceForPayroll)
                 .Include(x => x.EmployeeFinancialMetrics)
                 .ToListAsync();
