@@ -1,7 +1,7 @@
 ﻿
 namespace SalaryService.Application.Dtos
 {
-    public class EmployeeContactInfoDto
+    public class EmployeeContactDetailsDto
     {
         public long Id { get; private set; }
 
@@ -21,7 +21,7 @@ namespace SalaryService.Application.Dtos
 
         public string Telegram { get; private set; }
 
-        public EmployeeContactInfoDto(long id, 
+        public EmployeeContactDetailsDto(long id, 
             string name, 
             string surname,
             string middleName, 

@@ -3,23 +3,23 @@ using SalaryService.Application.Dtos;
 
 namespace SalaryService.Application.Queries
 {
-    public partial class GetEmployeeProfileInfoQuery
+    public partial class GetEmployeeQuery
     {
         public long EmployeeId { get; set; }
     }
 
-    public class GetEmployeeProfileInfoQueryHandler
+    public class GetEmployeeQueryHandler
     {
-        private readonly EmployeeProfileInfoRepository _employeeProfileInfoRepository;
+        private readonly EmployeeRepository _employeeRepository;
 
-        public GetEmployeeProfileInfoQueryHandler(EmployeeProfileInfoRepository employeeProfileInfoRepository)
+        public GetEmployeeQueryHandler(EmployeeRepository employeeRepository)
         {
-            _employeeProfileInfoRepository = employeeProfileInfoRepository;
+            _employeeRepository = employeeRepository;
         }
 
-        public async Task<EmployeeProfileDto> Handle(GetEmployeeProfileInfoQuery request)
+        public async Task<EmployeeProfileDto> Handle(GetEmployeeQuery request)
         {
-            var employee = await _employeeProfileInfoRepository.GetByIdAsync(request.EmployeeId);
+            var employee = await _employeeRepository.GetByIdAsync(request.EmployeeId);
 
             return new EmployeeProfileDto(employee.Id,
                 employee.Name,

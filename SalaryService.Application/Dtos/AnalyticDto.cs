@@ -1,9 +1,6 @@
-﻿
-using NodaTime;
-
-namespace SalaryService.Application.Dtos
+﻿namespace SalaryService.Application.Dtos
 {
-    public class SEOAnalyticsInformationDto
+    public class AnalyticDto
     {
         public long Id { get; private set; }
 
@@ -51,7 +48,7 @@ namespace SalaryService.Application.Dtos
 
         public double NetSalary { get; private set; }
 
-        public SEOAnalyticsInformationDto(long id,
+        public AnalyticDto(long id,
             string name,
             string surname,
             string middleName,

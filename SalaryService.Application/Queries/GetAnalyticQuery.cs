@@ -4,25 +4,25 @@ using SalaryService.DataAccess.Repositories;
 
 namespace SalaryService.Application.Queries
 {
-    public partial class GetSEOAnalyticsInfoQuery
+    public partial class GetAnalyticQuery
     {
         public long EmployeeId { get; set; }
     }
 
-    public class GetSEOAnalyticsInfoQueryHandler
+    public class GetAnalyticByIdQueryHandler
     {
-        private readonly EmployeeProfileInfoRepository _employeeProfileInfoRepository;
+        private readonly EmployeeRepository _employeeRepository;
 
-        public GetSEOAnalyticsInfoQueryHandler(EmployeeProfileInfoRepository employeeProfileInfoRepository)
+        public GetAnalyticByIdQueryHandler(EmployeeRepository employeeRepository)
         {
-            _employeeProfileInfoRepository = employeeProfileInfoRepository;
+            _employeeRepository = employeeRepository;
         }
 
-        public async Task<SEOAnalyticsInformationDto> Handle(GetSEOAnalyticsInfoQuery request)
+        public async Task<AnalyticDto> Handle(GetAnalyticQuery request)
         {
-            var employee = await _employeeProfileInfoRepository.GetByIdAsync(request.EmployeeId);
+            var employee = await _employeeRepository.GetByIdAsync(request.EmployeeId);
 
-            return new SEOAnalyticsInformationDto(employee.Id,
+            return new AnalyticDto(employee.Id,
                 employee.Name,
                 employee.Surname,
                 employee.MiddleName,

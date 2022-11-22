@@ -2,7 +2,7 @@
 
 namespace SalaryService.Application.Commands
 {
-    public partial class UpdateEmployeeProfileInfoCommand
+    public partial class UpdateEmployeeCommand
     {
         public long Id { get; set; }
 
@@ -22,21 +22,21 @@ namespace SalaryService.Application.Commands
 
         public string Telegram { get; set; }
     }
-    public class UpdateEmployeeProfileInfoCommandHandler
+    public class UpdateEmployeeCommandHandler
     {
-        private readonly EmployeeProfileInfoRepository _employeeProfileInfoRepository;
+        private readonly EmployeeRepository _employeeRepository;
 
-        public UpdateEmployeeProfileInfoCommandHandler(EmployeeProfileInfoRepository employeeProfileInfoRepository)
+        public UpdateEmployeeCommandHandler(EmployeeRepository employeeRepository)
         {
-            _employeeProfileInfoRepository = employeeProfileInfoRepository;
+            _employeeRepository = employeeRepository;
         }
-        public async Task Handle(UpdateEmployeeProfileInfoCommand request)
+        public async Task Handle(UpdateEmployeeCommand request)
         {
-            var employee = await _employeeProfileInfoRepository.GetByIdAsync(request.Id);
+            var employee = await _employeeRepository.GetByIdAsync(request.Id);
 
             employee.Update(request.Name, request.Surname, request.MiddleName, request.WorkEmail, request.PersonalEmail, request.Phone, request.Skype, request.Telegram);
 
-            await _employeeProfileInfoRepository.UpdateAsync(employee);
+            await _employeeRepository.UpdateAsync(employee);
         }
     }
 }

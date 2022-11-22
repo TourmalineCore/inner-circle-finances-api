@@ -3,25 +3,25 @@ using SalaryService.Application.Dtos;
 
 namespace SalaryService.Application.Queries
 {
-    public partial class GetSEOAnalyticsInfoListQuery
+    public partial class GetAnalyticListQuery
     {
 
     }
 
-    public class GetSEOAnalyticsInfoListQueryHandler
+    public class GetAnalyticListQueryHandler
     {
-        private readonly EmployeeProfileInfoRepository _employeeProfileInfoRepository;
+        private readonly EmployeeRepository _employeeRepository;
 
-        public GetSEOAnalyticsInfoListQueryHandler(EmployeeProfileInfoRepository employeeProfileInfoRepository)
+        public GetAnalyticListQueryHandler(EmployeeRepository employeeRepository)
         {
-            _employeeProfileInfoRepository = employeeProfileInfoRepository;
+            _employeeRepository = employeeRepository;
         }
 
-        public async Task<IEnumerable<SEOAnalyticsInformationDto>> Handle()
+        public async Task<IEnumerable<AnalyticDto>> Handle()
         {
-            var employee = await _employeeProfileInfoRepository.GetAllAsync();
+            var employee = await _employeeRepository.GetAllAsync();
 
-            return employee.Select(x => new SEOAnalyticsInformationDto(x.Id,
+            return employee.Select(x => new AnalyticDto(x.Id,
                 x.Name,
                 x.Surname,
                 x.MiddleName,

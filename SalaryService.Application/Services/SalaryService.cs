@@ -51,43 +51,43 @@ namespace SalaryService.Application.Services
 
     public class EmployeeFinanceService
     {
-        private readonly EmployeeProfileInfoRepository _employeeProfileInfoRepository;
+        private readonly EmployeeRepository _employeeRepository;
         private readonly EmployeeFinancialMetricsRepository _employeeFinancialMetricsRepository;
         private readonly EmployeeFinanceForPayrollRepository _employeeFinanceForPayrollRepository;
-        private readonly CreateEmployeeProfileInfoCommandHandler _createEmployeeProfileInfoCommandHandler;
+        private readonly CreateEmployeeCommandHandler _createEmployeeCommandHandler;
         private readonly CreateEmployeeFinanceForPayrollCommandHandler _createEmployeeFinanceForPayrollCommandHandler;
         private readonly UpdateEmployeeFinanceForPayrollCommandHandler _updateEmployeeFinanceForPayrollCommandHandler;
         private readonly UpdateFinancialMetricsCommandHandler _updateFinancialMetricsCommandHandler;
         private readonly CreateHistoryMetricsCommandHandler _createHistoryMetricsCommandHandler;
-        private readonly DeleteEmployeeProfileInfoCommandHandler _deleteEmployeeProfileInfoCommandHandler;
+        private readonly DeleteEmployeeCommandHandler _deleteEmployeeCommandHandler;
         private readonly DeleteEmployeeFinanceForPayrollCommandHandler _deleteEmployeeFinanceForPayrollCommandHandler;
         private readonly DeleteEmployeeFinancialMetricsCommandHandler _deleteEmployeeFinancialMetricsCommandHandler;
         private readonly CoefficientOptions _coefficientOptions;
         private readonly IClock _clock;
 
-        public EmployeeFinanceService(EmployeeProfileInfoRepository employeeProfileInfoRepository,
+        public EmployeeFinanceService(EmployeeRepository employeeRepository,
             EmployeeFinancialMetricsRepository employeeFinancialMetricsRepository,
             EmployeeFinanceForPayrollRepository employeeFinanceForPayrollRepository,
             CreateEmployeeFinanceForPayrollCommandHandler createEmployeeFinanceForPayrollCommandHandler, 
-            CreateEmployeeProfileInfoCommandHandler createEmployeeProfileInfoCommandHandler, 
+            CreateEmployeeCommandHandler createEmployeeCommandHandler, 
             UpdateEmployeeFinanceForPayrollCommandHandler updateEmployeeFinanceForPayrollCommandHandler,
             UpdateFinancialMetricsCommandHandler updateFinancialMetricsCommandHandler,
             CreateHistoryMetricsCommandHandler createHistoryMetricsCommandHandler,
-            DeleteEmployeeProfileInfoCommandHandler deleteEmployeeProfileInfoCommandHandler,
+            DeleteEmployeeCommandHandler deleteEmployeeCommandHandler,
             DeleteEmployeeFinanceForPayrollCommandHandler deleteEmployeeFinanceForPayrollCommandHandler,
             DeleteEmployeeFinancialMetricsCommandHandler deleteEmployeeFinancialMetricsCommandHandler,
             IOptions<CoefficientOptions> coefficientOptions,
             IClock clock)
         {
-            _employeeProfileInfoRepository = employeeProfileInfoRepository;
+            _employeeRepository = employeeRepository;
             _employeeFinancialMetricsRepository = employeeFinancialMetricsRepository;
             _employeeFinanceForPayrollRepository = employeeFinanceForPayrollRepository;
             _createEmployeeFinanceForPayrollCommandHandler = createEmployeeFinanceForPayrollCommandHandler;
-            _createEmployeeProfileInfoCommandHandler = createEmployeeProfileInfoCommandHandler;
+            _createEmployeeCommandHandler = createEmployeeCommandHandler;
             _updateEmployeeFinanceForPayrollCommandHandler = updateEmployeeFinanceForPayrollCommandHandler;
             _updateFinancialMetricsCommandHandler = updateFinancialMetricsCommandHandler;
             _createHistoryMetricsCommandHandler = createHistoryMetricsCommandHandler;
-            _deleteEmployeeProfileInfoCommandHandler = deleteEmployeeProfileInfoCommandHandler;
+            _deleteEmployeeCommandHandler = deleteEmployeeCommandHandler;
             _deleteEmployeeFinanceForPayrollCommandHandler = deleteEmployeeFinanceForPayrollCommandHandler;
             _deleteEmployeeFinancialMetricsCommandHandler = deleteEmployeeFinancialMetricsCommandHandler;
             _coefficientOptions = coefficientOptions.Value;
@@ -99,12 +99,12 @@ namespace SalaryService.Application.Services
             await CreateHistoryRecord(id);
             await _deleteEmployeeFinancialMetricsCommandHandler.Handle(id);
             await _deleteEmployeeFinanceForPayrollCommandHandler.Handle(id);
-            await _deleteEmployeeProfileInfoCommandHandler.Handle(id);
+            await _deleteEmployeeCommandHandler.Handle(id);
         }
 
         public async Task CreateEmployee(EmployeeCreatingParameters parameters)
         {
-            var employee = await CreateEmployeeProfileInfo(parameters.Name, 
+            var employee = await CreateEmployeeProfile(parameters.Name, 
                 parameters.Surname, 
                 parameters.MiddleName, 
                 parameters.WorkEmail, 
@@ -124,9 +124,12 @@ namespace SalaryService.Application.Services
                 parameters.RatePerHour, 
                 parameters.Pay, 
                 parameters.EmploymentTypeValue, 
-                parameters.HasParking, _coefficientOptions.DistrictCoefficient, _coefficientOptions.MinimumWage, _coefficientOptions.IncomeTaxPercent);
+                parameters.HasParking, 
+                _coefficientOptions.DistrictCoefficient, 
+                _coefficientOptions.MinimumWage, 
+                _coefficientOptions.IncomeTaxPercent);
             
-           await _employeeProfileInfoRepository.AddFinanceForPayrollAndMetrics(employee, financeForPayrollId, metricsId);
+           await _employeeRepository.AddFinanceForPayrollAndMetrics(employee, financeForPayrollId, metricsId);
         }
 
         public async Task UpdateEmployee(EmployeeUpdatingParameters parameters)
@@ -195,7 +198,7 @@ namespace SalaryService.Application.Services
             return _employeeFinancialMetricsRepository.CreateAsync(calculateMetrics);
         }
 
-        private Task<Employee> CreateEmployeeProfileInfo(string name, 
+        private Task<Employee> CreateEmployeeProfile(string name, 
             string surname, 
             string middleName, 
             string workEmail, 
@@ -204,8 +207,8 @@ namespace SalaryService.Application.Services
             string skype, 
             string telegram)
         {
-            return _createEmployeeProfileInfoCommandHandler.Handle(
-                new CreateEmployeeProfileInfoCommand
+            return _createEmployeeCommandHandler.Handle(
+                new CreateEmployeeCommand
                 {
                     Name = name,
                     Surname = surname,

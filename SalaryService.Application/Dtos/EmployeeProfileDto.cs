@@ -1,6 +1,4 @@
-﻿using NodaTime;
-
-namespace SalaryService.Application.Dtos
+﻿namespace SalaryService.Application.Dtos
 {
     public class EmployeeProfileDto
     {

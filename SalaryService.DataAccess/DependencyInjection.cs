@@ -18,7 +18,7 @@ namespace SalaryService.DataAccess
                                 o => o.UseNodaTime());
             });
             services.AddScoped<EmployeeDbContext>();
-            services.AddTransient<EmployeeProfileInfoRepository>();
+            services.AddTransient<EmployeeRepository>();
             services.AddTransient<EmployeeFinanceForPayrollRepository>();
             services.AddTransient<EmployeeFinancialMetricsRepository>();
             services.AddTransient<MetricsHistoryRepository>();

@@ -15,18 +15,18 @@ namespace SalaryService.Application
             var coefficientOptions = configuration.GetSection("CoefficientOptions");
             services.Configure<CoefficientOptions>(c => coefficientOptions.Bind(c));
 
-            services.AddTransient<GetEmployeeProfileInfoQueryHandler>();
-            services.AddTransient<GetEmployeeContactInfoQueryHandler>();
-            services.AddTransient<GetSEOAnalyticsInfoQueryHandler>();
-            services.AddTransient<GetEmployeeContactInfoListQueryHandler>();
-            services.AddTransient<GetSEOAnalyticsInfoListQueryHandler>();
-            services.AddTransient<CreateEmployeeProfileInfoCommandHandler>();
-            services.AddTransient<UpdateEmployeeProfileInfoCommandHandler>();
+            services.AddTransient<GetEmployeeQueryHandler>();
+            services.AddTransient<GetEmployeesByIdQueryHandler>();
+            services.AddTransient<GetAnalyticByIdQueryHandler>();
+            services.AddTransient<GetEmployeesListQueryHandler>();
+            services.AddTransient<GetAnalyticListQueryHandler>();
+            services.AddTransient<CreateEmployeeCommandHandler>();
+            services.AddTransient<UpdateEmployeeCommandHandler>();
             services.AddTransient<CreateEmployeeFinanceForPayrollCommandHandler>();
             services.AddTransient<UpdateEmployeeFinanceForPayrollCommandHandler>();
             services.AddTransient<UpdateFinancialMetricsCommandHandler>();
             services.AddTransient<CreateHistoryMetricsCommandHandler>();
-            services.AddTransient<DeleteEmployeeProfileInfoCommandHandler>();
+            services.AddTransient<DeleteEmployeeCommandHandler>();
             services.AddTransient<DeleteEmployeeFinanceForPayrollCommandHandler>();
             services.AddTransient<DeleteEmployeeFinancialMetricsCommandHandler>();
             services.AddTransient<EmployeeFinanceService>();
