@@ -29,7 +29,7 @@ namespace SalaryService.Application.Queries
                 employee.Name,
                 employee.Surname,
                 employee.MiddleName,
-                employee.EmploymentDate.ToString(),
+                employee.HireDate.ToString(),
                 Math.Round(metrics.Pay, 2),
                 Math.Round(metrics.RatePerHour, 2),
                 metrics.EmploymentType,

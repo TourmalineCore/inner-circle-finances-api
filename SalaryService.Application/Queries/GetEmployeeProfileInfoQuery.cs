@@ -33,7 +33,7 @@ namespace SalaryService.Application.Queries
                 employee.Phone,
                 employee.Skype,
                 employee.Telegram,
-                employee.EmploymentDate.ToString(),
+                employee.HireDate.ToString(),
                 basicSalaryParameters.NetSalary
                 );
         }

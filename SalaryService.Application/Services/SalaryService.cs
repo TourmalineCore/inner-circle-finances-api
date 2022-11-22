@@ -53,6 +53,8 @@ namespace SalaryService.Application.Services
         private readonly UpdateFinancialMetricsCommandHandler _updateFinancialMetricsCommandHandler;
         private readonly CreateHistoryMetricsCommandHandler _createHistoryMetricsCommandHandler;
         private readonly DeleteEmployeeProfileInfoCommandHandler _deleteEmployeeProfileInfoCommandHandler;
+        private readonly DeleteEmployeeFinanceForPayrollCommandHandler _deleteEmployeeFinanceForPayrollCommandHandler;
+        private readonly DeleteEmployeeFinancialMetricsCommandHandler _deleteEmployeeFinancialMetricsCommandHandler;
         private readonly IClock _clock;
 
         public EmployeeFinanceService(EmployeeFinancialMetricsRepository employeeFinancialMetricsRepository,
@@ -63,6 +65,8 @@ namespace SalaryService.Application.Services
             UpdateFinancialMetricsCommandHandler updateFinancialMetricsCommandHandler,
             CreateHistoryMetricsCommandHandler createHistoryMetricsCommandHandler,
             DeleteEmployeeProfileInfoCommandHandler deleteEmployeeProfileInfoCommandHandler,
+            DeleteEmployeeFinanceForPayrollCommandHandler deleteEmployeeFinanceForPayrollCommandHandler,
+            DeleteEmployeeFinancialMetricsCommandHandler deleteEmployeeFinancialMetricsCommandHandler,
             IClock clock)
         {
             _employeeFinancialMetricsRepository = employeeFinancialMetricsRepository;
@@ -73,17 +77,17 @@ namespace SalaryService.Application.Services
             _updateFinancialMetricsCommandHandler = updateFinancialMetricsCommandHandler;
             _createHistoryMetricsCommandHandler = createHistoryMetricsCommandHandler;
             _deleteEmployeeProfileInfoCommandHandler = deleteEmployeeProfileInfoCommandHandler;
+            _deleteEmployeeFinanceForPayrollCommandHandler = deleteEmployeeFinanceForPayrollCommandHandler;
+            _deleteEmployeeFinancialMetricsCommandHandler = deleteEmployeeFinancialMetricsCommandHandler;
             _clock = clock;
         }
 
-        public async Task DeleteEmployee(DeleteEmployeeProfileInfoCommand request)
+        public async Task DeleteEmployee(long id)
         {
-            var metrics = await _employeeFinancialMetricsRepository.GetByEmployeeId(request.EmployeeProfileId);
-            var financeForPayroll = await _employeeFinanceForPayrollRepository.GetByEmployeeIdAsync(request.EmployeeProfileId);
-            await CreateHistoryRecord(request.EmployeeProfileId);
-            await _employeeFinancialMetricsRepository.RemoveAsync(metrics);
-            await _employeeFinanceForPayrollRepository.RemoveAsync(financeForPayroll);
-            await _deleteEmployeeProfileInfoCommandHandler.Handle(request);
+            await CreateHistoryRecord(id);
+            await _deleteEmployeeFinancialMetricsCommandHandler.Handle(id);
+            await _deleteEmployeeFinanceForPayrollCommandHandler.Handle(id);
+            await _deleteEmployeeProfileInfoCommandHandler.Handle(id);
         }
 
         public async Task CreateEmployee(SalaryServiceParameters parameters)

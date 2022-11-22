@@ -5,7 +5,7 @@ namespace SalaryService.Application.Commands
 {
     public partial class DeleteEmployeeFinanceForPayrollCommand
     {
-        public long Id { get; set; }
+        
     }
     public class DeleteEmployeeFinanceForPayrollCommandHandler
     {
@@ -16,9 +16,9 @@ namespace SalaryService.Application.Commands
             _employeeFinanceForPayrollRepository = employeeFinanceForPayrollRepository;
         }
 
-        public async Task Handle(DeleteEmployeeFinanceForPayrollCommand request)
+        public async Task Handle(long employeeId)
         {
-            var financeForPayroll = await _employeeFinanceForPayrollRepository.GetByIdAsync(request.Id);
+            var financeForPayroll = await _employeeFinanceForPayrollRepository.GetByIdAsync(employeeId);
 
             await _employeeFinanceForPayrollRepository.RemoveAsync(financeForPayroll);
         }

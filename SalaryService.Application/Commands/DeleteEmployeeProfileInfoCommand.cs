@@ -7,7 +7,7 @@ namespace SalaryService.Application.Commands
 {
     public partial class DeleteEmployeeProfileInfoCommand
     {
-        public long EmployeeProfileId { get; set; }
+        
     }
 
     public class DeleteEmployeeProfileInfoCommandHandler
@@ -21,9 +21,9 @@ namespace SalaryService.Application.Commands
             _clock = clock;
         }
 
-        public async Task Handle(DeleteEmployeeProfileInfoCommand request)
+        public async Task Handle(long employeeId)
         {
-            var employee = await _employeeProfileInfoRepository.GetByIdAsync(request.EmployeeProfileId);
+            var employee = await _employeeProfileInfoRepository.GetByIdAsync(employeeId);
 
             employee.Delete(_clock.GetCurrentInstant());
 

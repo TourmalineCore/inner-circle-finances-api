@@ -26,10 +26,10 @@ namespace SalaryService.Api.Controllers
             return _employeeFinanceService.UpdateEmployee(salaryServiceParameters);
         }
 
-        [HttpDelete("delete-employee/{EmployeeProfileId}")]
-        public Task DeleteEmployee([FromRoute] DeleteEmployeeProfileInfoCommand deleteEmployeeProfileInfoCommand)
+        [HttpDelete("delete-employee/{id}")]
+        public Task DeleteEmployee([FromRoute] long id)
         {
-            return _employeeFinanceService.DeleteEmployee(deleteEmployeeProfileInfoCommand);
+            return _employeeFinanceService.DeleteEmployee(id);
         }
     }
 }

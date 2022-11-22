@@ -22,11 +22,11 @@ namespace SalaryService.Domain
 
         public string? Telegram { get; private set; }
 
-        public Instant EmploymentDate { get; private set; }
+        public Instant HireDate { get; private set; }
 
         public Instant? DeletedAtUtc { get; private set; } = null;
 
-        public Employee(string name, string surname, string middleName, string workEmail, string personalEmail, string phone, string skype, string telegram, Instant employmentDate)
+        public Employee(string name, string surname, string middleName, string workEmail, string personalEmail, string phone, string skype, string telegram, Instant hireDate)
         {
             Name = name;
             Surname = surname;
@@ -36,7 +36,7 @@ namespace SalaryService.Domain
             Phone = phone;
             Skype = skype;
             Telegram = telegram;
-            EmploymentDate = employmentDate;
+            HireDate = hireDate;
         }
 
         public void Delete(Instant deletedAtUtc)

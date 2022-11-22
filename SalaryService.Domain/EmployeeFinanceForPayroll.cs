@@ -17,8 +17,6 @@
 
         public EmploymentTypes EmploymentType { get; private set; }
 
-        public double EmploymentTypeValue { get; private set; }
-
         public bool HasParking { get; private set; }
 
         public long EmployeeId { get; private set; }
@@ -30,15 +28,6 @@
             RatePerHour = ratePerHour;
             Pay = pay;
             EmploymentType = employmentType;
-            switch (employmentType)
-            {
-                case EmploymentTypes.FullTime:
-                    EmploymentTypeValue = 1.0;
-                    break;
-                case EmploymentTypes.PartTime:
-                    EmploymentTypeValue = 0.5;
-                    break;
-            }
             HasParking = hasParking;
         }
 

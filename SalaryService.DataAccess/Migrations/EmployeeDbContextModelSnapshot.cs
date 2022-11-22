@@ -34,7 +34,7 @@ namespace SalaryService.DataAccess.Migrations
                     b.Property<Instant?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Instant>("EmploymentDate")
+                    b.Property<Instant>("HireDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("MiddleName")
@@ -82,9 +82,6 @@ namespace SalaryService.DataAccess.Migrations
 
                     b.Property<int>("EmploymentType")
                         .HasColumnType("integer");
-
-                    b.Property<double>("EmploymentTypeValue")
-                        .HasColumnType("double precision");
 
                     b.Property<bool>("HasParking")
                         .HasColumnType("boolean");

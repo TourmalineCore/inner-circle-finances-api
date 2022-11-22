@@ -5,7 +5,7 @@ namespace SalaryService.Application.Commands
 {
     public partial class DeleteEmployeeFinancialMetricsCommand
     {
-        public long Id { get; set; }
+        
     }
 
     public class DeleteEmployeeFinancialMetricsCommandHandler
@@ -17,9 +17,9 @@ namespace SalaryService.Application.Commands
             _employeeFinancialMetricsRepository = employeeFinancialMetricsRepository;
         }
 
-        public async Task Handle(DeleteEmployeeFinancialMetricsCommand request)
+        public async Task Handle(long employeeId)
         {
-            var metrics = await _employeeFinancialMetricsRepository.GetByIdAsync(request.Id);
+            var metrics = await _employeeFinancialMetricsRepository.GetByEmployeeId(employeeId);
 
             await _employeeFinancialMetricsRepository.RemoveAsync(metrics);
         }

@@ -13,7 +13,7 @@ using SalaryService.DataAccess;
 namespace SalaryService.DataAccess.Migrations
 {
     [DbContext(typeof(EmployeeDbContext))]
-    [Migration("20221121170803_Init")]
+    [Migration("20221122052156_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,7 +36,7 @@ namespace SalaryService.DataAccess.Migrations
                     b.Property<Instant?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Instant>("EmploymentDate")
+                    b.Property<Instant>("HireDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("MiddleName")
@@ -84,9 +84,6 @@ namespace SalaryService.DataAccess.Migrations
 
                     b.Property<int>("EmploymentType")
                         .HasColumnType("integer");
-
-                    b.Property<double>("EmploymentTypeValue")
-                        .HasColumnType("double precision");
 
                     b.Property<bool>("HasParking")
                         .HasColumnType("boolean");
