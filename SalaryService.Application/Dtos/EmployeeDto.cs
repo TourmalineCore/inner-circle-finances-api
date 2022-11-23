@@ -16,9 +16,9 @@
 
         public string Phone { get; private set; }
 
-        public string Skype { get; private set; }
+        public string GitHub { get; private set; }
 
-        public string Telegram { get; private set; }
+        public string GitLab { get; private set; }
 
         public string HireDate { get; private set; }
 
@@ -30,9 +30,9 @@
             string middleName, 
             string corporateEmail, 
             string personalEmail, 
-            string phone, 
-            string skype, 
-            string telegram,
+            string phone,
+            string gitHub,
+            string gitLab,
             string hireDate,
             double netSalary)
         {
@@ -43,8 +43,8 @@
             CorporateEmail = corporateEmail;
             PersonalEmail = personalEmail;
             Phone = phone;
-            Skype = skype;
-            Telegram = telegram;
+            GitHub = gitHub;
+            GitLab = gitLab;
             HireDate = hireDate;
             NetSalary = netSalary;
         }

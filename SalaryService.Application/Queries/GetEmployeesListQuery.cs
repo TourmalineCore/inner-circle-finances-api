@@ -29,8 +29,8 @@ namespace SalaryService.Application.Queries
                 x.CorporateEmail,
                 x.PersonalEmail,
                 x.Phone,
-                x.Skype,
-                x.Telegram
+                x.GitHub,
+                x.GitLab
                 )
             );
         }

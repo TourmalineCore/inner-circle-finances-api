@@ -18,11 +18,11 @@ namespace SalaryService.Domain
 
         public string? PersonalEmail { get; private set; }
 
-        public string? Phone { get; private set; }
+        public string Phone { get; private set; }
 
-        public string? Skype { get; private set; }
+        public string? GitHub { get; private set; }
 
-        public string? Telegram { get; private set; }
+        public string? GitLab { get; private set; }
 
         public long FinanceForPayrollId { get; private set; }
         public EmployeeFinanceForPayroll EmployeeFinanceForPayroll { get; private set; }
@@ -38,10 +38,10 @@ namespace SalaryService.Domain
             string surname, 
             string middleName, 
             string corporateEmail, 
-            string personalEmail, 
-            string phone, 
-            string skype, 
-            string telegram, 
+            string personalEmail,
+            string phone,
+            string gitHub, 
+            string gitLab,
             Instant hireDate)
         {
             Name = name;
@@ -50,8 +50,8 @@ namespace SalaryService.Domain
             CorporateEmail = corporateEmail;
             PersonalEmail = personalEmail;
             Phone = phone;
-            Skype = skype;
-            Telegram = telegram;
+            GitHub = gitHub;
+            GitLab = gitLab;
             HireDate = hireDate;
             
         }
@@ -72,10 +72,10 @@ namespace SalaryService.Domain
             string surname, 
             string middleName, 
             string workEmail, 
-            string personalEmail, 
-            string phone, 
-            string skype, 
-            string telegram)
+            string personalEmail,
+            string phone,
+            string gitHub,
+            string gitLab)
         {
             Name = name;
             Surname = surname;
@@ -83,8 +83,8 @@ namespace SalaryService.Domain
             CorporateEmail = workEmail;
             PersonalEmail = personalEmail;
             Phone = phone;
-            Skype = skype;
-            Telegram = telegram;
+            GitHub = gitHub;
+            GitLab = gitLab;
         }
     }
 }

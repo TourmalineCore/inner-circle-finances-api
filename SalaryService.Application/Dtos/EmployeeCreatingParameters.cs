@@ -16,9 +16,9 @@ namespace SalaryService.Application.Dtos
 
         public string Phone { get; set; }
 
-        public string Skype { get; set; }
+        public string GitHub { get; set; }
 
-        public string Telegram { get; set; }
+        public string GitLab { get; set; }
 
         public double RatePerHour { get; set; }
 

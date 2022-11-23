@@ -17,9 +17,9 @@ namespace SalaryService.Application.Dtos
 
         public string Phone { get; private set; }
 
-        public string Skype { get; private set; }
+        public string GitHub { get; private set; }
 
-        public string Telegram { get; private set; }
+        public string GitLab { get; private set; }
 
         public EmployeeContactDetailsDto(long id, 
             string name, 
@@ -28,8 +28,8 @@ namespace SalaryService.Application.Dtos
             string corporateEmail, 
             string personalEmail, 
             string phone, 
-            string skype, 
-            string telegram)
+            string gitHub, 
+            string gitLab)
         {
             Id = id;
             Name = name;
@@ -38,8 +38,8 @@ namespace SalaryService.Application.Dtos
             CorporateEmail = corporateEmail;
             PersonalEmail = personalEmail;
             Phone = phone;
-            Skype = skype;
-            Telegram = telegram;
+            GitHub = gitHub;
+            GitLab = gitLab;
         }
     }
 }

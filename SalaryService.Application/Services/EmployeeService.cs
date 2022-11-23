@@ -33,12 +33,12 @@ namespace SalaryService.Application.Services
                     Name = parameters.Name,
                     Surname = parameters.Surname,
                     MiddleName = parameters.MiddleName,
-                    WorkEmail = parameters.CorporateEmail,
+                    CorporateEmail = parameters.CorporateEmail,
                     PersonalEmail = parameters.PersonalEmail,
                     Phone = parameters.Phone,
-                    Skype = parameters.Skype,
-                    Telegram = parameters.Telegram
-                }
+                    GitHub = parameters.GitHub,
+                    GitLab = parameters.GitLab
+            }
             );
 
             var financeForPayrollId = await _financeService.CreateEmployeeFinanceForPayroll(employee.Id,

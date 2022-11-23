@@ -13,8 +13,8 @@ namespace SalaryService.DataAccess.Mapping
             builder.Property(x => x.CorporateEmail).IsRequired();
             builder.HasIndex(x => x.CorporateEmail).IsUnique();
             builder.HasIndex(x => x.Phone).IsUnique();
-            builder.HasIndex(x => x.Telegram).IsUnique();
-            builder.HasIndex(x => x.Skype).IsUnique();
+            builder.HasIndex(x => x.GitHub).IsUnique();
+            builder.HasIndex(x => x.GitLab).IsUnique();
             builder.HasIndex(x => x.PersonalEmail).IsUnique();
         }
     }

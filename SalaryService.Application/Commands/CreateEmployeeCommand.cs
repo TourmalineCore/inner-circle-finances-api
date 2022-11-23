@@ -13,15 +13,15 @@ namespace SalaryService.Application.Commands
 
         public string MiddleName { get; set; }
 
-        public string WorkEmail { get; set; }
+        public string CorporateEmail { get; set; }
 
         public string PersonalEmail { get; set; }
 
         public string Phone { get; set; }
 
-        public string Skype { get; set; }
+        public string GitHub { get; set; }
 
-        public string Telegram { get; set; }
+        public string GitLab { get; set; }
 
     }
     public class CreateEmployeeCommandHandler
@@ -41,11 +41,11 @@ namespace SalaryService.Application.Commands
                 request.Name,
                 request.Surname,
                 request.MiddleName,
-                request.WorkEmail,
+                request.CorporateEmail,
                 request.PersonalEmail,
                 request.Phone,
-                request.Skype,
-                request.Telegram,
+                request.GitHub,
+                request.GitLab,
                 _clock.GetCurrentInstant()));
         }
     }

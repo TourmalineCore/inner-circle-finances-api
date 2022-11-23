@@ -19,7 +19,7 @@ namespace SalaryService.Application.Commands
         {
             var employee = await _employeeRepository.GetByIdAsync(request.EmployeeId);
 
-            employee.Update(request.Name, request.Surname, request.MiddleName, request.WorkEmail, request.PersonalEmail, request.Phone, request.Skype, request.Telegram);
+            employee.Update(request.Name, request.Surname, request.MiddleName, request.WorkEmail, request.PersonalEmail, request.Phone, request.GitHub, request.GitLab);
 
             await _employeeRepository.UpdateAsync(employee);
         }

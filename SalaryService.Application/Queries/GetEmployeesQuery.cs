@@ -28,8 +28,8 @@ namespace SalaryService.Application.Queries
                 employee.CorporateEmail,
                 employee.PersonalEmail,
                 employee.Phone,
-                employee.Skype,
-                employee.Telegram);
+                employee.GitHub,
+                employee.GitLab);
         }
     }
 }
