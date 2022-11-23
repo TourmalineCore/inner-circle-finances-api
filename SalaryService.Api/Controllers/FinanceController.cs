@@ -27,31 +27,31 @@ namespace SalaryService.Api.Controllers
         }
 
         [HttpGet("get-employee/{EmployeeId}")]
-        public Task<EmployeeProfileDto> GetEmployeeProfileInformation([FromRoute] GetEmployeeQuery getEmployeeQuery)
+        public Task<EmployeeProfileDto> GetEmployee([FromRoute] GetEmployeeQuery getEmployeeQuery)
         {
             return _getEmployeeQueryHandler.Handle(getEmployeeQuery);
         }
 
         [HttpGet("get-employees/{EmployeeId}")]
-        public Task<EmployeeContactDetailsDto> GetEmployeeContactInformation([FromRoute] GetEmployeesQuery getEmployeesQuery)
+        public Task<EmployeeContactDetailsDto> GetEmployees([FromRoute] GetEmployeesQuery getEmployeesQuery)
         {
             return _getEmployeesByIdByIdQueryHandler.Handle(getEmployeesQuery);
         }
 
         [HttpGet("get-analytic/{EmployeeId}")]
-        public Task<AnalyticDto> GetAnalyticsInformation([FromRoute] GetAnalyticQuery getAnalyticQuery)
+        public Task<AnalyticDto> GetAnalytic([FromRoute] GetAnalyticQuery getAnalyticQuery)
         {
             return _getAnalyticByIdByIdQueryHandler.Handle(getAnalyticQuery);
         }
 
         [HttpGet("get-employees")]
-        public Task<IEnumerable<EmployeeContactDetailsDto>> GetEmployeeContactInformation()
+        public Task<IEnumerable<EmployeeContactDetailsDto>> GetEmployeesList()
         {
             return _getEmployeesListQueryHandler.Handle();
         }
 
         [HttpGet("get-analytic")]
-        public Task<IEnumerable<AnalyticDto>> GetAnalyticsInformationList()
+        public Task<IEnumerable<AnalyticDto>> GetAnalyticList()
         {
             return _getAnalyticListQueryHandler.Handle();
         }
