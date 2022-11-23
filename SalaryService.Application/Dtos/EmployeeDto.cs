@@ -1,6 +1,6 @@
 ﻿namespace SalaryService.Application.Dtos
 {
-    public class EmployeeProfileDto
+    public class EmployeeDto
     {
         public long Id { get; private set; }
 
@@ -10,7 +10,7 @@
 
         public string MiddleName { get; private set; }
 
-        public string WorkEmail { get; private set; }
+        public string CorporateEmail { get; private set; }
 
         public string PersonalEmail { get; private set; }
 
@@ -24,11 +24,11 @@
 
         public double NetSalary { get; private set; }
 
-        public EmployeeProfileDto(long id, 
+        public EmployeeDto(long id, 
             string name, 
             string surname, 
             string middleName, 
-            string workEmail, 
+            string corporateEmail, 
             string personalEmail, 
             string phone, 
             string skype, 
@@ -40,7 +40,7 @@
             Name = name;
             Surname = surname;
             MiddleName = middleName;
-            WorkEmail = workEmail;
+            CorporateEmail = corporateEmail;
             PersonalEmail = personalEmail;
             Phone = phone;
             Skype = skype;

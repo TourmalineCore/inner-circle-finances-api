@@ -53,12 +53,11 @@ namespace SalaryService.Application.Services
     {
         private readonly EmployeeRepository _employeeRepository;
         private readonly EmployeeFinancialMetricsRepository _employeeFinancialMetricsRepository;
-        private readonly EmployeeFinanceForPayrollRepository _employeeFinanceForPayrollRepository;
         private readonly CreateEmployeeCommandHandler _createEmployeeCommandHandler;
         private readonly CreateEmployeeFinanceForPayrollCommandHandler _createEmployeeFinanceForPayrollCommandHandler;
+        private readonly CreateHistoryMetricsCommandHandler _createHistoryMetricsCommandHandler;
         private readonly UpdateEmployeeFinanceForPayrollCommandHandler _updateEmployeeFinanceForPayrollCommandHandler;
         private readonly UpdateFinancialMetricsCommandHandler _updateFinancialMetricsCommandHandler;
-        private readonly CreateHistoryMetricsCommandHandler _createHistoryMetricsCommandHandler;
         private readonly DeleteEmployeeCommandHandler _deleteEmployeeCommandHandler;
         private readonly DeleteEmployeeFinanceForPayrollCommandHandler _deleteEmployeeFinanceForPayrollCommandHandler;
         private readonly DeleteEmployeeFinancialMetricsCommandHandler _deleteEmployeeFinancialMetricsCommandHandler;
@@ -67,7 +66,6 @@ namespace SalaryService.Application.Services
 
         public EmployeeFinanceService(EmployeeRepository employeeRepository,
             EmployeeFinancialMetricsRepository employeeFinancialMetricsRepository,
-            EmployeeFinanceForPayrollRepository employeeFinanceForPayrollRepository,
             CreateEmployeeFinanceForPayrollCommandHandler createEmployeeFinanceForPayrollCommandHandler, 
             CreateEmployeeCommandHandler createEmployeeCommandHandler, 
             UpdateEmployeeFinanceForPayrollCommandHandler updateEmployeeFinanceForPayrollCommandHandler,
@@ -81,7 +79,6 @@ namespace SalaryService.Application.Services
         {
             _employeeRepository = employeeRepository;
             _employeeFinancialMetricsRepository = employeeFinancialMetricsRepository;
-            _employeeFinanceForPayrollRepository = employeeFinanceForPayrollRepository;
             _createEmployeeFinanceForPayrollCommandHandler = createEmployeeFinanceForPayrollCommandHandler;
             _createEmployeeCommandHandler = createEmployeeCommandHandler;
             _updateEmployeeFinanceForPayrollCommandHandler = updateEmployeeFinanceForPayrollCommandHandler;
@@ -119,7 +116,6 @@ namespace SalaryService.Application.Services
                 parameters.EmploymentType,
                 parameters.HasParking);
 
-           
            var metricsId = await CreateMetrics(employee.Id, 
                 parameters.RatePerHour, 
                 parameters.Pay, 
@@ -135,6 +131,7 @@ namespace SalaryService.Application.Services
         public async Task UpdateEmployee(EmployeeUpdatingParameters parameters)
         {
             await CreateHistoryRecord(parameters.EmployeeId);
+
             await UpdateEmployeeFinanceForPayroll(parameters.EmployeeId, 
                 parameters.RatePerHour, 
                 parameters.Pay, 

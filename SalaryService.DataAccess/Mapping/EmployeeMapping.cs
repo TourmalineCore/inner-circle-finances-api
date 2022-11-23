@@ -10,8 +10,8 @@ namespace SalaryService.DataAccess.Mapping
         {
             builder.HasOne(e => e.EmployeeFinanceForPayroll);
             builder.HasOne(e => e.EmployeeFinancialMetrics);
-            builder.Property(x => x.WorkEmail).IsRequired();
-            builder.HasIndex(x => x.WorkEmail).IsUnique();
+            builder.Property(x => x.CorporateEmail).IsRequired();
+            builder.HasIndex(x => x.CorporateEmail).IsUnique();
             builder.HasIndex(x => x.Phone).IsUnique();
             builder.HasIndex(x => x.Telegram).IsUnique();
             builder.HasIndex(x => x.Skype).IsUnique();

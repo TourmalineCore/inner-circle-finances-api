@@ -27,7 +27,7 @@ namespace SalaryService.Api.Controllers
         }
 
         [HttpGet("get-employee/{EmployeeId}")]
-        public Task<EmployeeProfileDto> GetEmployee([FromRoute] GetEmployeeQuery getEmployeeQuery)
+        public Task<EmployeeDto> GetEmployee([FromRoute] GetEmployeeQuery getEmployeeQuery)
         {
             return _getEmployeeQueryHandler.Handle(getEmployeeQuery);
         }

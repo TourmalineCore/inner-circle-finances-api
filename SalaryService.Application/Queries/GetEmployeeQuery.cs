@@ -17,15 +17,15 @@ namespace SalaryService.Application.Queries
             _employeeRepository = employeeRepository;
         }
 
-        public async Task<EmployeeProfileDto> Handle(GetEmployeeQuery request)
+        public async Task<EmployeeDto> Handle(GetEmployeeQuery request)
         {
             var employee = await _employeeRepository.GetByIdAsync(request.EmployeeId);
 
-            return new EmployeeProfileDto(employee.Id,
+            return new EmployeeDto(employee.Id,
                 employee.Name,
                 employee.Surname,
                 employee.MiddleName,
-                employee.WorkEmail,
+                employee.CorporateEmail,
                 employee.PersonalEmail,
                 employee.Phone,
                 employee.Skype,
