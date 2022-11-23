@@ -1,6 +1,6 @@
 ﻿using NodaTime;
 
-namespace SalaryService.Domain
+namespace SalaryService.Application.Services
 {
     public class Clock : IClock
     {

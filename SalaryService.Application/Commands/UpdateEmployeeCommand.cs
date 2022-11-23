@@ -1,4 +1,4 @@
-﻿using SalaryService.Application.Services;
+﻿using SalaryService.Application.Dtos;
 using SalaryService.DataAccess.Repositories;
 
 namespace SalaryService.Application.Commands

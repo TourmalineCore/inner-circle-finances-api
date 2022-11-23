@@ -83,43 +83,28 @@ namespace SalaryService.Application.Services
                 _coefficientOptions.MinimumWage,
                 _coefficientOptions.IncomeTaxPercent,
                 _clock.GetCurrentInstant());
+
             return _employeeFinancialMetricsRepository.CreateAsync(calculateMetrics);
         }
 
         public async Task UpdateFinances(FinanceUpdatingParameters parameters)
         {
-            await CreateHistoryRecord(parameters.EmployeeId);
+            await _createHistoryMetricsCommandHandler.Handle(parameters.EmployeeId);
 
-            await UpdateEmployeeFinanceForPayroll(parameters.EmployeeId,
-                parameters.RatePerHour,
-                parameters.Pay,
-                parameters.EmploymentType,
-                parameters.HasParking);
+            await _updateEmployeeFinanceForPayrollCommandHandler.Handle(new UpdateEmployeeFinanceForPayrollCommand
+            {
+                EmployeeId = parameters.EmployeeId,
+                RatePerHour = parameters.RatePerHour,
+                Pay = parameters.Pay,
+                EmploymentType = parameters.EmploymentType,
+                HasParking = parameters.HasParking
+            });
 
             await UpdateMetrics(parameters.EmployeeId,
                 parameters.RatePerHour,
                 parameters.Pay,
                 parameters.EmploymentTypeValue,
                 parameters.HasParking);
-        }
-
-        public async Task DeleteFinances(long id)
-        {
-            await _createHistoryMetricsCommandHandler.Handle(id);
-            await _deleteEmployeeFinancialMetricsCommandHandler.Handle(id);
-            await _deleteEmployeeFinanceForPayrollCommandHandler.Handle(id);
-        }
-
-        private async Task UpdateEmployeeFinanceForPayroll(long employeeId, double ratePerHour, double pay, EmploymentTypes employmentType, bool hasParking)
-        {
-            await _updateEmployeeFinanceForPayrollCommandHandler.Handle(new UpdateEmployeeFinanceForPayrollCommand
-            {
-                EmployeeId = employeeId,
-                RatePerHour = ratePerHour,
-                Pay = pay,
-                EmploymentType = employmentType,
-                HasParking = hasParking
-            });
         }
 
         private async Task UpdateMetrics(long employeeId,
@@ -157,11 +142,6 @@ namespace SalaryService.Application.Services
                 Profit = newMetrics.Profit,
                 ProfitAbility = newMetrics.ProfitAbility
             });
-        }
-
-        private Task<long> CreateHistoryRecord(long employeeId)
-        {
-            return _createHistoryMetricsCommandHandler.Handle(employeeId);
         }
 
         private EmployeeFinancialMetrics CalculateMetrics(long employeeId,

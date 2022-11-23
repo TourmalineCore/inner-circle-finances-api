@@ -4,7 +4,6 @@ using NodaTime;
 using SalaryService.Application.Commands;
 using SalaryService.Application.Queries;
 using SalaryService.Application.Services;
-using SalaryService.Domain;
 
 namespace SalaryService.Application
 {

@@ -1,5 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SalaryService.Domain;
 
 namespace SalaryService.DataAccess.Repositories
@@ -18,7 +17,6 @@ namespace SalaryService.DataAccess.Repositories
             long financialMetricsId)
         {
             employee.AddMetricsAndFinanceForpayroll(financeForPayrollId, financialMetricsId);
-
             return _employeeDbContext.SaveChangesAsync();
         }
 
@@ -51,6 +49,18 @@ namespace SalaryService.DataAccess.Repositories
 
         public Task UpdateAsync(Employee employee)
         {
+            _employeeDbContext.Update(employee);
+            return _employeeDbContext.SaveChangesAsync();
+        }
+
+        public Task DeleteEmployeeAsync(Employee employee, 
+            EmployeeFinanceForPayroll employeeFinanceForPayroll, 
+            EmployeeFinancialMetrics employeeFinancialMetrics,
+            EmployeeFinancialMetricsHistory employeeFinancialMetricsHistory)
+        {
+            _employeeDbContext.Add(employeeFinancialMetricsHistory);
+            _employeeDbContext.Remove(employeeFinancialMetrics);
+            _employeeDbContext.Remove(employeeFinanceForPayroll);
             _employeeDbContext.Update(employee);
             return _employeeDbContext.SaveChangesAsync();
         }
