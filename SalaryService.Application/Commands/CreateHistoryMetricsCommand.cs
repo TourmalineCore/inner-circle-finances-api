@@ -8,7 +8,6 @@ namespace SalaryService.Application.Commands
 {
     public partial class CreateHistoryMetricsCommand
     {
-        public long EmployeeId { get; set; }
     }
     public class CreateHistoryMetricsCommandHandler
     {
@@ -24,9 +23,9 @@ namespace SalaryService.Application.Commands
             _metricsHistoryRepository = metricsHistoryRepository;
             _clock = clock;
         }
-        public async Task<long> Handle(CreateHistoryMetricsCommand request)
+        public async Task<long> Handle(long employeeId)
         {
-            var latestMetrics = await _employeeFinancialMetricsRepository.GetByEmployeeId(request.EmployeeId);
+            var latestMetrics = await _employeeFinancialMetricsRepository.GetByEmployeeId(employeeId);
             var history = new EmployeeFinancialMetricsHistory
             {
                 EmployeeId = latestMetrics.EmployeeId,

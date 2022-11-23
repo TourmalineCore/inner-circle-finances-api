@@ -1,41 +1,34 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SalaryService.Application.Dtos;
 using SalaryService.Application.Queries;
+using SalaryService.Application.Services;
 
 namespace SalaryService.Api.Controllers
 {
-    [Route("api/finances")]
+    [Route("api/finance")]
     public class FinanceController : Controller
     {
-        private readonly GetEmployeeQueryHandler _getEmployeeQueryHandler;
-        private readonly GetEmployeesByIdQueryHandler _getEmployeesByIdByIdQueryHandler;
+        private readonly FinanceService _financeService;
         private readonly GetAnalyticByIdQueryHandler _getAnalyticByIdByIdQueryHandler;
-        private readonly GetEmployeesListQueryHandler _getEmployeesListQueryHandler;
         private readonly GetAnalyticListQueryHandler _getAnalyticListQueryHandler;
 
-        public FinanceController(GetEmployeeQueryHandler getEmployeeQueryHandler, 
-            GetEmployeesByIdQueryHandler getEmployeesByIdByIdQueryHandler, 
+        public FinanceController(FinanceService financeService,
+            
             GetAnalyticByIdQueryHandler getAnalyticByIdByIdQueryHandler, 
-            GetEmployeesListQueryHandler getEmployeesListQueryHandler, 
+            
             GetAnalyticListQueryHandler getAnalyticListQueryHandler)
         {
-            _getEmployeeQueryHandler = getEmployeeQueryHandler;
-            _getEmployeesByIdByIdQueryHandler = getEmployeesByIdByIdQueryHandler;
+            _financeService = financeService;
+           
             _getAnalyticByIdByIdQueryHandler = getAnalyticByIdByIdQueryHandler;
-            _getEmployeesListQueryHandler = getEmployeesListQueryHandler;
+            
             _getAnalyticListQueryHandler = getAnalyticListQueryHandler;
         }
 
-        [HttpGet("get-employee/{EmployeeId}")]
-        public Task<EmployeeDto> GetEmployee([FromRoute] GetEmployeeQuery getEmployeeQuery)
+        [HttpPost("update-finance")]
+        public Task UpdateFinance([FromBody] FinanceUpdatingParameters financeUpdatingParameters)
         {
-            return _getEmployeeQueryHandler.Handle(getEmployeeQuery);
-        }
-
-        [HttpGet("get-employees/{EmployeeId}")]
-        public Task<EmployeeContactDetailsDto> GetEmployees([FromRoute] GetEmployeesQuery getEmployeesQuery)
-        {
-            return _getEmployeesByIdByIdQueryHandler.Handle(getEmployeesQuery);
+            return _financeService.UpdateFinances(financeUpdatingParameters);
         }
 
         [HttpGet("get-analytic/{EmployeeId}")]
@@ -43,13 +36,7 @@ namespace SalaryService.Api.Controllers
         {
             return _getAnalyticByIdByIdQueryHandler.Handle(getAnalyticQuery);
         }
-
-        [HttpGet("get-employees")]
-        public Task<IEnumerable<EmployeeContactDetailsDto>> GetEmployeesList()
-        {
-            return _getEmployeesListQueryHandler.Handle();
-        }
-
+        
         [HttpGet("get-analytic")]
         public Task<IEnumerable<AnalyticDto>> GetAnalyticList()
         {

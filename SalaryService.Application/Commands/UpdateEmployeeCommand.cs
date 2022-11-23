@@ -1,26 +1,11 @@
-﻿using SalaryService.DataAccess.Repositories;
+﻿using SalaryService.Application.Services;
+using SalaryService.DataAccess.Repositories;
 
 namespace SalaryService.Application.Commands
 {
     public partial class UpdateEmployeeCommand
     {
-        public long Id { get; set; }
-
-        public string Name { get; set; }
-
-        public string Surname { get; set; }
-
-        public string MiddleName { get; set; }
-
-        public string WorkEmail { get; set; }
-
-        public string PersonalEmail { get; set; }
-
-        public string Phone { get; set; }
-
-        public string Skype { get; set; }
-
-        public string Telegram { get; set; }
+        
     }
     public class UpdateEmployeeCommandHandler
     {
@@ -30,9 +15,9 @@ namespace SalaryService.Application.Commands
         {
             _employeeRepository = employeeRepository;
         }
-        public async Task Handle(UpdateEmployeeCommand request)
+        public async Task Handle(EmployeeUpdatingParameters request)
         {
-            var employee = await _employeeRepository.GetByIdAsync(request.Id);
+            var employee = await _employeeRepository.GetByIdAsync(request.EmployeeId);
 
             employee.Update(request.Name, request.Surname, request.MiddleName, request.WorkEmail, request.PersonalEmail, request.Phone, request.Skype, request.Telegram);
 

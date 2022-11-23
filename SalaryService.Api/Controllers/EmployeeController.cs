@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SalaryService.Application.Dtos;
+using SalaryService.Application.Queries;
 using SalaryService.Application.Services;
 
 namespace SalaryService.Api.Controllers
@@ -6,13 +8,40 @@ namespace SalaryService.Api.Controllers
     [Route("api/employees")]
     public class EmployeeController : Controller
     {
-        private readonly EmployeeFinanceService _employeeFinanceService;
+        private readonly EmployeeService _employeeFinanceService;
+        private readonly GetEmployeesByIdQueryHandler _getEmployeesByIdByIdQueryHandler;
+        private readonly GetEmployeeQueryHandler _getEmployeeQueryHandler;
+        private readonly GetEmployeesListQueryHandler _getEmployeesListQueryHandler;
 
-        public EmployeeController(EmployeeFinanceService employeeService)
+        public EmployeeController(EmployeeService employeeService,
+        GetEmployeesByIdQueryHandler getEmployeesByIdByIdQueryHandler, 
+        GetEmployeeQueryHandler getEmployeeQueryHandler,
+        GetEmployeesListQueryHandler getEmployeesListQueryHandler)
         {
             _employeeFinanceService = employeeService;
+            _getEmployeesByIdByIdQueryHandler = getEmployeesByIdByIdQueryHandler;
+            _getEmployeeQueryHandler = getEmployeeQueryHandler;
+            _getEmployeesListQueryHandler = getEmployeesListQueryHandler;
         }
-        
+
+        [HttpGet("get-employee/{EmployeeId}")]
+        public Task<EmployeeDto> GetEmployee([FromRoute] GetEmployeeQuery getEmployeeQuery)
+        {
+            return _getEmployeeQueryHandler.Handle(getEmployeeQuery);
+        }
+
+        [HttpGet("get-employees")]
+        public Task<IEnumerable<EmployeeContactDetailsDto>> GetEmployeesContactDetailsList()
+        {
+            return _getEmployeesListQueryHandler.Handle();
+        }
+
+        [HttpGet("get-contact-details/{EmployeeId}")]
+        public Task<EmployeeContactDetailsDto> GetEmployeesContactDetails([FromRoute] GetEmployeesQuery getEmployeesQuery)
+        {
+            return _getEmployeesByIdByIdQueryHandler.Handle(getEmployeesQuery);
+        }
+
         [HttpPost("create-employee")]
         public Task CreateEmployee([FromBody] EmployeeCreatingParameters salaryServiceParameters)
         {
