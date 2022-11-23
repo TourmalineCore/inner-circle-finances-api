@@ -8,7 +8,7 @@ namespace SalaryService.Api.Controllers
     [Route("api/employees")]
     public class EmployeeController : Controller
     {
-        private readonly EmployeeService _employeeFinanceService;
+        private readonly EmployeeService _employeeService;
         private readonly GetEmployeesByIdQueryHandler _getEmployeesByIdByIdQueryHandler;
         private readonly GetEmployeeQueryHandler _getEmployeeQueryHandler;
         private readonly GetEmployeesListQueryHandler _getEmployeesListQueryHandler;
@@ -18,7 +18,7 @@ namespace SalaryService.Api.Controllers
         GetEmployeeQueryHandler getEmployeeQueryHandler,
         GetEmployeesListQueryHandler getEmployeesListQueryHandler)
         {
-            _employeeFinanceService = employeeService;
+            _employeeService = employeeService;
             _getEmployeesByIdByIdQueryHandler = getEmployeesByIdByIdQueryHandler;
             _getEmployeeQueryHandler = getEmployeeQueryHandler;
             _getEmployeesListQueryHandler = getEmployeesListQueryHandler;
@@ -43,21 +43,21 @@ namespace SalaryService.Api.Controllers
         }
 
         [HttpPost("create-employee")]
-        public Task CreateEmployee([FromBody] EmployeeCreatingParameters salaryServiceParameters)
+        public Task CreateEmployee([FromBody] EmployeeCreatingParameters employeeCreatingParameters)
         {
-            return _employeeFinanceService.CreateEmployee(salaryServiceParameters);
+            return _employeeService.CreateEmployee(employeeCreatingParameters);
         }
 
         [HttpPost("update-employee")]
-        public Task UpdateEmployee([FromBody] EmployeeUpdatingParameters salaryServiceParameters)
+        public Task UpdateEmployee([FromBody] EmployeeUpdatingParameters employeeUpdatingParameters)
         {
-            return _employeeFinanceService.UpdateEmployee(salaryServiceParameters);
+            return _employeeService.UpdateEmployee(employeeUpdatingParameters);
         }
 
         [HttpDelete("delete-employee/{id}")]
         public Task DeleteEmployee([FromRoute] long id)
         {
-            return _employeeFinanceService.DeleteEmployee(id);
+            return _employeeService.DeleteEmployee(id);
         }
     }
 }
