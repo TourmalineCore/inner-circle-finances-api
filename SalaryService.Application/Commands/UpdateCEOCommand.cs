@@ -16,7 +16,7 @@ namespace SalaryService.Application.Commands
         }
         public async Task Handle(CEOUpdatingParameters request)
         {
-            var employee = await _employeeRepository.GetByIdAsync(request.EmployeeId);
+            var employee = await _employeeRepository.GetCEOAsync();
 
             employee.Update(request.PersonalEmail, request.Phone, request.GitHub, request.GitLab);
 

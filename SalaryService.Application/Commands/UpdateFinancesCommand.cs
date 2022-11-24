@@ -13,20 +13,23 @@ namespace SalaryService.Application.Commands
 
     public class UpdateFinancesCommandHandler
     {
+        private readonly FinanceRepository _financeRepository;
         private readonly EmployeeFinanceForPayrollRepository _employeeFinanceForPayrollRepository;
         private readonly EmployeeFinancialMetricsRepository _employeeFinancialMetricsRepository;
         private readonly IClock _clock;
         private readonly CoefficientOptions _coefficientOptions;
 
-        public UpdateFinancesCommandHandler(EmployeeFinanceForPayrollRepository employeeFinanceForPayrollRepository, 
+        public UpdateFinancesCommandHandler(FinanceRepository financeRepository, 
             EmployeeFinancialMetricsRepository employeeFinancialMetricsRepository,
             IClock clock,
-            IOptions<CoefficientOptions> coefficientOptions)
+            IOptions<CoefficientOptions> coefficientOptions,
+            EmployeeFinanceForPayrollRepository employeeFinanceForPayrollRepository)
         {
-            _employeeFinanceForPayrollRepository = employeeFinanceForPayrollRepository;
+            _financeRepository = financeRepository;
             _employeeFinancialMetricsRepository = employeeFinancialMetricsRepository;
             _clock = clock;
             _coefficientOptions = coefficientOptions.Value;
+            _employeeFinanceForPayrollRepository = employeeFinanceForPayrollRepository;
         }
 
         public async Task Handle(long employeeId,
@@ -89,9 +92,8 @@ namespace SalaryService.Application.Commands
                 employeeFinancialMetrics.EmploymentType, 
                 employeeFinancialMetrics.HasParking, 
                 _clock.GetCurrentInstant());
-            
              
-            await _employeeFinanceForPayrollRepository.UpdateAsync(currentFinanceForPayroll, currentFinancialMetrics, history);
+            await _financeRepository.UpdateAsync(currentFinanceForPayroll, currentFinancialMetrics, history);
         }
     }
 }

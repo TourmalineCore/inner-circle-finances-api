@@ -14,13 +14,26 @@ namespace SalaryService.DataAccess.Repositories
         
         public Task CreateAsync(Employee employee, EmployeeFinanceForPayroll financeForPayroll, EmployeeFinancialMetrics metrics)
         {
-            employee.EmployeeFinanceForPayroll = financeForPayroll;
-            employee.EmployeeFinancialMetrics = metrics;
-            financeForPayroll.Employee = employee;
-            metrics.Employee = employee;
-            _employeeDbContext.Add(employee);
-            _employeeDbContext.Add(financeForPayroll);
-            _employeeDbContext.Add(metrics);
+            using(var transaction = _employeeDbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    employee.EmployeeFinanceForPayroll = financeForPayroll;
+                    employee.EmployeeFinancialMetrics = metrics;
+                    financeForPayroll.Employee = employee;
+                    metrics.Employee = employee;
+                    _employeeDbContext.Add(employee);
+                    _employeeDbContext.Add(financeForPayroll);
+                    _employeeDbContext.Add(metrics);
+                    _employeeDbContext.SaveChanges();
+                    transaction.Commit();
+
+                } catch(Exception exception)
+                {
+                    transaction.Rollback();
+                }
+                
+            }
             return _employeeDbContext.SaveChangesAsync();
         }
 
@@ -33,11 +46,20 @@ namespace SalaryService.DataAccess.Repositories
                     .SingleAsync(x => x.Id == employeeId && x.DeletedAtUtc == null);
         }
 
+        public Task<Employee> GetCEOAsync()
+        {
+            return _employeeDbContext
+                    .Set<Employee>()
+                    .Include(x => x.EmployeeFinanceForPayroll)
+                    .Include(x => x.EmployeeFinancialMetrics)
+                    .SingleAsync(x => x.DeletedAtUtc == null && x.AccountId == 1);
+        }
+
         public async Task<IEnumerable<Employee>> GetAllAsync()
         {
             return await _employeeDbContext
                 .QueryableAsNoTracking<Employee>()
-                .Where(x => x.DeletedAtUtc == null)
+                .Where(x => x.DeletedAtUtc == null && x.AccountId != 1)
                 .Include(x => x.EmployeeFinanceForPayroll)
                 .Include(x => x.EmployeeFinancialMetrics)
                 .ToListAsync();
@@ -54,10 +76,22 @@ namespace SalaryService.DataAccess.Repositories
             EmployeeFinancialMetrics employeeFinancialMetrics,
             EmployeeFinancialMetricsHistory employeeFinancialMetricsHistory)
         {
-            _employeeDbContext.Add(employeeFinancialMetricsHistory);
-            _employeeDbContext.Remove(employeeFinancialMetrics);
-            _employeeDbContext.Remove(employeeFinanceForPayroll);
-            _employeeDbContext.Update(employee);
+            using(var transaction = _employeeDbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    _employeeDbContext.Add(employeeFinancialMetricsHistory);
+                    _employeeDbContext.Remove(employeeFinancialMetrics);
+                    _employeeDbContext.Remove(employeeFinanceForPayroll);
+                    _employeeDbContext.Update(employee);
+                    transaction.Commit();
+
+                } catch(Exception exception)
+                {
+                    transaction.Rollback();
+                }
+            }
+           
             return _employeeDbContext.SaveChangesAsync();
         }
     }

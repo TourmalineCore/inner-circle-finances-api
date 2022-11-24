@@ -17,9 +17,9 @@ namespace SalaryService.Application.Queries
             _employeeRepository = employeeRepository;
         }
 
-        public async Task<CEODto> Handle(GetCEOQuery request)
+        public async Task<CEODto> Handle()
         {
-            var employee = await _employeeRepository.GetByIdAsync(request.EmployeeId);
+            var employee = await _employeeRepository.GetCEOAsync();
 
             return new CEODto(employee.Id,
                 employee.Name,

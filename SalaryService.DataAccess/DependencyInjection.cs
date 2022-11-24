@@ -21,6 +21,7 @@ namespace SalaryService.DataAccess
             services.AddTransient<EmployeeRepository>();
             services.AddTransient<EmployeeFinanceForPayrollRepository>();
             services.AddTransient<EmployeeFinancialMetricsRepository>();
+            services.AddTransient<FinanceRepository>();
             return services;
         }
     }
