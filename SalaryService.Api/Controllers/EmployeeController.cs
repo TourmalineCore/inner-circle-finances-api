@@ -24,6 +24,12 @@ namespace SalaryService.Api.Controllers
             _getEmployeesQueryHandler = getEmployeesQueryHandler;
         }
 
+        [HttpPost("get-preview")]
+        public Task<MetricsPreviewDto> GetPreview([FromBody] FinanceUpdatingParameters financeUpdatingParameters)
+        {
+            return _employeeService.GetPreviewMetrics(financeUpdatingParameters);
+        }
+
         [HttpGet("get-ceo")]
         public Task<CEODto> GetCEO()
         {

@@ -2,6 +2,7 @@
 using NodaTime;
 using SalaryService.Application.Commands;
 using SalaryService.Application.Dtos;
+using SalaryService.DataAccess.Repositories;
 using SalaryService.Domain;
 
 namespace SalaryService.Application.Services
@@ -9,25 +10,84 @@ namespace SalaryService.Application.Services
     public class EmployeeService
     {
         private readonly FinanceService _financeService;
+        private readonly EmployeeRepository _employeeRepository;
         private readonly CreateEmployeeCommandHandler _createEmployeeCommandHandler;
         private readonly UpdateEmployeeCommandHandler _updateEmployeeCommandHandler;
         private readonly UpdateCEOCommandHandler _updateCEOCommandHandler;
         private readonly DeleteEmployeeCommandHandler _deleteEmployeeCommandHandler;
         private readonly IClock _clock;
+        private readonly CoefficientOptions _coefficientOptions;
 
         public EmployeeService(FinanceService financeService,
+            EmployeeRepository employeeRepository,
             CreateEmployeeCommandHandler createEmployeeCommandHandler,
             UpdateEmployeeCommandHandler updateEmployeeCommandHandler,
             UpdateCEOCommandHandler updateCEOCommandHandler,
             DeleteEmployeeCommandHandler deleteEmployeeCommandHandler,
-            IClock clock)
+            IClock clock,
+            IOptions<CoefficientOptions> coefficientOptions)
         {
             _financeService = financeService;
+            _employeeRepository = employeeRepository;
             _createEmployeeCommandHandler = createEmployeeCommandHandler;
             _updateEmployeeCommandHandler = updateEmployeeCommandHandler;
             _updateCEOCommandHandler = updateCEOCommandHandler;
             _deleteEmployeeCommandHandler = deleteEmployeeCommandHandler;
             _clock = clock;
+            _coefficientOptions = coefficientOptions.Value;
+        }
+
+        public async Task<MetricsPreviewDto> GetPreviewMetrics(FinanceUpdatingParameters parameters)
+        {
+            var employee = await _employeeRepository.GetByIdAsync(parameters.EmployeeId);
+
+            var calculatedMetrics = new EmployeeFinancialMetrics(parameters.RatePerHour, 
+                parameters.Pay, parameters.EmploymentTypeValue, parameters.HasParking);
+
+            calculatedMetrics.CalculateMetrics(_coefficientOptions.DistrictCoefficient,
+                _coefficientOptions.MinimumWage,
+                _coefficientOptions.IncomeTaxPercent,
+                _clock.GetCurrentInstant());
+
+            var preview = new MetricsPreviewDto(employee.Id,
+                employee.Name + " " + employee.Surname + " " + employee.MiddleName,
+                calculatedMetrics.Pay,
+                calculatedMetrics.RatePerHour,
+                calculatedMetrics.EmploymentType,
+                calculatedMetrics.ParkingCostPerMonth,
+                calculatedMetrics.HourlyCostFact,
+                calculatedMetrics.HourlyCostHand,
+                calculatedMetrics.Earnings,
+                calculatedMetrics.IncomeTaxContributions,
+                calculatedMetrics.PensionContributions,
+                calculatedMetrics.MedicalContributions,
+                calculatedMetrics.SocialInsuranceContributions,
+                calculatedMetrics.InjuriesContributions,
+                calculatedMetrics.Expenses,
+                calculatedMetrics.Profit,
+                calculatedMetrics.ProfitAbility,
+                calculatedMetrics.Retainer,
+                calculatedMetrics.GrossSalary,
+                calculatedMetrics.NetSalary);
+
+            preview.CalculateDelta(
+                employee.EmployeeFinancialMetrics.Pay,
+                employee.EmployeeFinancialMetrics.RatePerHour,
+                employee.EmployeeFinancialMetrics.HourlyCostFact,
+                employee.EmployeeFinancialMetrics.HourlyCostHand,
+                employee.EmployeeFinancialMetrics.Earnings,
+                employee.EmployeeFinancialMetrics.IncomeTaxContributions,
+                employee.EmployeeFinancialMetrics.PensionContributions,
+                employee.EmployeeFinancialMetrics.MedicalContributions,
+                employee.EmployeeFinancialMetrics.InjuriesContributions,
+                employee.EmployeeFinancialMetrics.Expenses,
+                employee.EmployeeFinancialMetrics.Profit,
+                employee.EmployeeFinancialMetrics.ProfitAbility,
+                employee.EmployeeFinancialMetrics.GrossSalary,
+                employee.EmployeeFinancialMetrics.Retainer,
+                employee.EmployeeFinancialMetrics.NetSalary
+                );
+            return preview;
         }
 
         public async Task CreateEmployee(EmployeeCreatingParameters parameters)
