@@ -41,6 +41,7 @@ namespace SalaryService.Application.Services
         {
             var employee = await _employeeRepository.GetByIdAsync(parameters.EmployeeId);
 
+
             var calculatedMetrics = new EmployeeFinancialMetrics(parameters.RatePerHour, 
                 parameters.Pay, parameters.EmploymentTypeValue, parameters.HasParking);
 
@@ -66,8 +67,8 @@ namespace SalaryService.Application.Services
                 calculatedMetrics.Expenses,
                 calculatedMetrics.Profit,
                 calculatedMetrics.ProfitAbility,
-                calculatedMetrics.Retainer,
                 calculatedMetrics.GrossSalary,
+                calculatedMetrics.Retainer,
                 calculatedMetrics.NetSalary);
 
             preview.CalculateDelta(
@@ -81,10 +82,10 @@ namespace SalaryService.Application.Services
                 employee.EmployeeFinancialMetrics.MedicalContributions,
                 employee.EmployeeFinancialMetrics.InjuriesContributions,
                 employee.EmployeeFinancialMetrics.Expenses,
+                employee.EmployeeFinancialMetrics.Retainer,
                 employee.EmployeeFinancialMetrics.Profit,
                 employee.EmployeeFinancialMetrics.ProfitAbility,
                 employee.EmployeeFinancialMetrics.GrossSalary,
-                employee.EmployeeFinancialMetrics.Retainer,
                 employee.EmployeeFinancialMetrics.NetSalary
                 );
             return preview;
