@@ -30,8 +30,7 @@ namespace SalaryService.Application.Queries
                 employee.Phone,
                 employee.GitHub,
                 employee.GitLab,
-                employee.HireDate.ToString(),
-                employee.EmployeeFinancialMetrics.NetSalary
+                employee.HireDate.ToString()
                 );
         }
     }

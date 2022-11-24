@@ -38,7 +38,7 @@ namespace SalaryService.Application.Services
                     Phone = parameters.Phone,
                     GitHub = parameters.GitHub,
                     GitLab = parameters.GitLab
-            }
+                }
             );
 
             var financeForPayrollId = await _financeService.CreateEmployeeFinanceForPayroll(employee.Id,
@@ -53,7 +53,8 @@ namespace SalaryService.Application.Services
                 parameters.EmploymentTypeValue,
                 parameters.HasParking);
 
-            await _employeeRepository.AddFinanceForPayrollAndMetrics(employee, financeForPayrollId, metricsId);
+            employee.AddMetricsAndFinanceForpayroll( financeForPayrollId, metricsId);
+            await _employeeRepository.UpdateAsync(employee);
         }
 
         public async Task DeleteEmployee(long id)

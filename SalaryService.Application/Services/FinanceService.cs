@@ -1,25 +1,12 @@
 ﻿using Microsoft.Extensions.Options;
 using NodaTime;
 using SalaryService.Application.Commands;
+using SalaryService.Application.Dtos;
 using SalaryService.DataAccess.Repositories;
 using SalaryService.Domain;
 
 namespace SalaryService.Application.Services
 {
-    public partial class FinanceUpdatingParameters
-    {
-        public long EmployeeId { get; set; }
-
-        public double RatePerHour { get; set; }
-
-        public double Pay { get; set; }
-
-        public EmploymentTypes EmploymentType { get; set; }
-
-        public double EmploymentTypeValue => EmploymentType == EmploymentTypes.FullTime ? 1.0 : 0.5;
-
-        public bool HasParking { get; set; }
-    }
     public class FinanceService
     {
         private readonly EmployeeFinancialMetricsRepository _employeeFinancialMetricsRepository;
@@ -27,8 +14,6 @@ namespace SalaryService.Application.Services
         private readonly CreateHistoryMetricsCommandHandler _createHistoryMetricsCommandHandler;
         private readonly UpdateEmployeeFinanceForPayrollCommandHandler _updateEmployeeFinanceForPayrollCommandHandler;
         private readonly UpdateFinancialMetricsCommandHandler _updateFinancialMetricsCommandHandler;
-        private readonly DeleteEmployeeFinanceForPayrollCommandHandler _deleteEmployeeFinanceForPayrollCommandHandler;
-        private readonly DeleteEmployeeFinancialMetricsCommandHandler _deleteEmployeeFinancialMetricsCommandHandler;
         private readonly CoefficientOptions _coefficientOptions;
         private readonly IClock _clock;
 
@@ -37,8 +22,6 @@ namespace SalaryService.Application.Services
             CreateHistoryMetricsCommandHandler createHistoryMetricsCommandHandler, 
             UpdateEmployeeFinanceForPayrollCommandHandler updateEmployeeFinanceForPayrollCommandHandler, 
             UpdateFinancialMetricsCommandHandler updateFinancialMetricsCommandHandler, 
-            DeleteEmployeeFinanceForPayrollCommandHandler deleteEmployeeFinanceForPayrollCommandHandler, 
-            DeleteEmployeeFinancialMetricsCommandHandler deleteEmployeeFinancialMetricsCommandHandler, 
             IOptions<CoefficientOptions> coefficientOptions, 
             IClock clock)
         {
@@ -47,8 +30,6 @@ namespace SalaryService.Application.Services
             _createHistoryMetricsCommandHandler = createHistoryMetricsCommandHandler;
             _updateEmployeeFinanceForPayrollCommandHandler = updateEmployeeFinanceForPayrollCommandHandler;
             _updateFinancialMetricsCommandHandler = updateFinancialMetricsCommandHandler;
-            _deleteEmployeeFinanceForPayrollCommandHandler = deleteEmployeeFinanceForPayrollCommandHandler;
-            _deleteEmployeeFinancialMetricsCommandHandler = deleteEmployeeFinancialMetricsCommandHandler;
             _coefficientOptions = coefficientOptions.Value;
             _clock = clock;
         }

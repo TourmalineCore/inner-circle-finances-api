@@ -22,8 +22,6 @@
 
         public string HireDate { get; private set; }
 
-        public double NetSalary { get; private set; }
-
         public EmployeeDto(long id, 
             string name, 
             string surname, 
@@ -33,8 +31,7 @@
             string phone,
             string gitHub,
             string gitLab,
-            string hireDate,
-            double netSalary)
+            string hireDate)
         {
             Id = id;
             Name = name;
@@ -46,7 +43,6 @@
             GitHub = gitHub;
             GitLab = gitLab;
             HireDate = hireDate;
-            NetSalary = netSalary;
         }
     }
 }

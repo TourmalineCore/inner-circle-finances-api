@@ -16,9 +16,9 @@ namespace SalaryService.Domain
 
         public string CorporateEmail { get; private set; }
 
-        public string? PersonalEmail { get; private set; }
+        public string PersonalEmail { get; private set; }
 
-        public string Phone { get; private set; }
+        public string? Phone { get; private set; }
 
         public string? GitHub { get; private set; }
 

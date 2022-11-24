@@ -11,15 +11,7 @@ namespace SalaryService.DataAccess.Repositories
         {
             _employeeDbContext = employeeDbContext;
         }
-
-        public Task AddFinanceForPayrollAndMetrics(Employee employee, 
-            long financeForPayrollId,
-            long financialMetricsId)
-        {
-            employee.AddMetricsAndFinanceForpayroll(financeForPayrollId, financialMetricsId);
-            return _employeeDbContext.SaveChangesAsync();
-        }
-
+        
         public async Task<Employee> CreateAsync(Employee employee)
         {
             await _employeeDbContext.AddAsync(employee);
