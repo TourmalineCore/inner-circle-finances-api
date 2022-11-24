@@ -1,14 +1,8 @@
 ﻿namespace SalaryService.Application.Dtos
 {
-    public class EmployeeUpdatingParameters
+    public partial class CEOUpdatingParameters
     {
         public long EmployeeId { get; set; }
-
-        public string Name { get; set; }
-
-        public string Surname { get; set; }
-
-        public string MiddleName { get; set; }
 
         public string PersonalEmail { get; set; }
 

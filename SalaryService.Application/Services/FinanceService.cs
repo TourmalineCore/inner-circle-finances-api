@@ -2,136 +2,46 @@
 using NodaTime;
 using SalaryService.Application.Commands;
 using SalaryService.Application.Dtos;
-using SalaryService.DataAccess.Repositories;
 using SalaryService.Domain;
 
 namespace SalaryService.Application.Services
 {
     public class FinanceService
     {
-        private readonly EmployeeFinancialMetricsRepository _employeeFinancialMetricsRepository;
-        private readonly CreateEmployeeFinanceForPayrollCommandHandler _createEmployeeFinanceForPayrollCommandHandler;
-        private readonly CreateHistoryMetricsCommandHandler _createHistoryMetricsCommandHandler;
-        private readonly UpdateEmployeeFinanceForPayrollCommandHandler _updateEmployeeFinanceForPayrollCommandHandler;
-        private readonly UpdateFinancialMetricsCommandHandler _updateFinancialMetricsCommandHandler;
+        private readonly UpdateFinancesCommandHandler _updateFinancesCommandHandler;
         private readonly CoefficientOptions _coefficientOptions;
         private readonly IClock _clock;
 
-        public FinanceService(EmployeeFinancialMetricsRepository employeeFinancialMetricsRepository, 
-            CreateEmployeeFinanceForPayrollCommandHandler createEmployeeFinanceForPayrollCommandHandler, 
-            CreateHistoryMetricsCommandHandler createHistoryMetricsCommandHandler, 
-            UpdateEmployeeFinanceForPayrollCommandHandler updateEmployeeFinanceForPayrollCommandHandler, 
-            UpdateFinancialMetricsCommandHandler updateFinancialMetricsCommandHandler, 
+        public FinanceService(UpdateFinancesCommandHandler updateFinancesCommandHandler,
             IOptions<CoefficientOptions> coefficientOptions, 
             IClock clock)
         {
-            _employeeFinancialMetricsRepository = employeeFinancialMetricsRepository;
-            _createEmployeeFinanceForPayrollCommandHandler = createEmployeeFinanceForPayrollCommandHandler;
-            _createHistoryMetricsCommandHandler = createHistoryMetricsCommandHandler;
-            _updateEmployeeFinanceForPayrollCommandHandler = updateEmployeeFinanceForPayrollCommandHandler;
-            _updateFinancialMetricsCommandHandler = updateFinancialMetricsCommandHandler;
+            _updateFinancesCommandHandler = updateFinancesCommandHandler;
             _coefficientOptions = coefficientOptions.Value;
             _clock = clock;
         }
 
-        public Task<long> CreateEmployeeFinanceForPayroll(long employeeId, double ratePerHour, double pay, EmploymentTypes employmentType, bool hasParking)
-        {
-            return _createEmployeeFinanceForPayrollCommandHandler.Handle(
-                new CreateEmployeeFinanceForPayrollCommand
-                {
-                    EmployeeId = employeeId,
-                    RatePerHour = ratePerHour,
-                    Pay = pay,
-                    EmploymentType = employmentType,
-                    HasParking = hasParking
-                }
-            );
-        }
-
-        public Task<long> CreateMetrics(long employeeId,
-            double ratePerHour,
-            double pay,
-            double employmentTypeValue,
-            bool hasParking)
-        {
-            var calculateMetrics = new EmployeeFinancialMetrics(employeeId,
-                ratePerHour,
-                pay,
-                employmentTypeValue,
-                hasParking);
-
-            calculateMetrics.CalculateMetrics(_coefficientOptions.DistrictCoefficient,
-                _coefficientOptions.MinimumWage,
-                _coefficientOptions.IncomeTaxPercent,
-                _clock.GetCurrentInstant());
-
-            return _employeeFinancialMetricsRepository.CreateAsync(calculateMetrics);
-        }
-
         public async Task UpdateFinances(FinanceUpdatingParameters parameters)
         {
-            await _createHistoryMetricsCommandHandler.Handle(parameters.EmployeeId);
+            var financeForPayroll = new EmployeeFinanceForPayroll(parameters.RatePerHour, 
+                parameters.Pay,
+                parameters.EmploymentType, 
+                parameters.HasParking);
 
-            await _updateEmployeeFinanceForPayrollCommandHandler.Handle(new UpdateEmployeeFinanceForPayrollCommand
-            {
-                EmployeeId = parameters.EmployeeId,
-                RatePerHour = parameters.RatePerHour,
-                Pay = parameters.Pay,
-                EmploymentType = parameters.EmploymentType,
-                HasParking = parameters.HasParking
-            });
-
-            await UpdateMetrics(parameters.EmployeeId,
-                parameters.RatePerHour,
+            var metrics = CalculateMetrics(parameters.RatePerHour,
                 parameters.Pay,
                 parameters.EmploymentTypeValue,
                 parameters.HasParking);
+
+            await _updateFinancesCommandHandler.Handle(parameters.EmployeeId, financeForPayroll, metrics);
         }
 
-        private async Task UpdateMetrics(long employeeId,
-            double ratePerHour,
+        public EmployeeFinancialMetrics CalculateMetrics(double ratePerHour,
             double pay,
             double employmentTypeValue,
             bool hasParking)
         {
-            var newMetrics = CalculateMetrics(employeeId,
-                ratePerHour,
-                pay,
-                employmentTypeValue,
-                hasParking);
-
-            await _updateFinancialMetricsCommandHandler.Handle(new UpdateFinancialMetricsCommand
-            {
-                EmployeeId = newMetrics.EmployeeId,
-                RatePerHour = newMetrics.RatePerHour,
-                Pay = newMetrics.Pay,
-                EmploymentType = newMetrics.EmploymentType,
-                HasParking = newMetrics.HasParking,
-                Salary = newMetrics.Salary,
-                GrossSalary = newMetrics.GrossSalary,
-                NetSalary = newMetrics.NetSalary,
-                Earnings = newMetrics.Earnings,
-                IncomeTaxContributions = newMetrics.IncomeTaxContributions,
-                PensionContributions = newMetrics.PensionContributions,
-                MedicalContributions = newMetrics.MedicalContributions,
-                SocialInsuranceContributions = newMetrics.SocialInsuranceContributions,
-                InjuriesContributions = newMetrics.InjuriesContributions,
-                Expenses = newMetrics.Expenses,
-                HourlyCostFact = newMetrics.HourlyCostFact,
-                HourlyCostHand = newMetrics.HourlyCostHand,
-                Retainer = newMetrics.Retainer,
-                Profit = newMetrics.Profit,
-                ProfitAbility = newMetrics.ProfitAbility
-            });
-        }
-
-        private EmployeeFinancialMetrics CalculateMetrics(long employeeId,
-            double ratePerHour,
-            double pay,
-            double employmentTypeValue,
-            bool hasParking)
-        {
-            var calculateMetrics = new EmployeeFinancialMetrics(employeeId,
+            var calculateMetrics = new EmployeeFinancialMetrics(
                 ratePerHour,
                 pay,
                 employmentTypeValue,

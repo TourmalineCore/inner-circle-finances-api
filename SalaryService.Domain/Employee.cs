@@ -1,4 +1,5 @@
-﻿using NodaTime;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using NodaTime;
 
 namespace SalaryService.Domain
 {
@@ -24,11 +25,9 @@ namespace SalaryService.Domain
 
         public string? GitLab { get; private set; }
 
-        public long FinanceForPayrollId { get; private set; }
-        public EmployeeFinanceForPayroll EmployeeFinanceForPayroll { get; private set; }
+        public EmployeeFinanceForPayroll EmployeeFinanceForPayroll { get; set; }
 
-        public long FinancialMetricsId { get; private set; }
-        public EmployeeFinancialMetrics EmployeeFinancialMetrics { get; private set; }
+        public EmployeeFinancialMetrics EmployeeFinancialMetrics { get; set; }
 
         public Instant HireDate { get; private set; }
 
@@ -56,13 +55,6 @@ namespace SalaryService.Domain
             
         }
 
-        public void AddMetricsAndFinanceForpayroll(long financeForPayrollId,
-            long financialMetricsId)
-        {
-            FinanceForPayrollId = financeForPayrollId;
-            FinancialMetricsId = financialMetricsId;
-        }
-
         public void Delete(Instant deletedAtUtc)
         {
             DeletedAtUtc = deletedAtUtc;
@@ -70,8 +62,7 @@ namespace SalaryService.Domain
 
         public void Update(string name, 
             string surname, 
-            string middleName, 
-            string workEmail, 
+            string middleName,
             string personalEmail,
             string phone,
             string gitHub,
@@ -80,7 +71,18 @@ namespace SalaryService.Domain
             Name = name;
             Surname = surname;
             MiddleName = middleName;
-            CorporateEmail = workEmail;
+            PersonalEmail = personalEmail;
+            Phone = phone;
+            GitHub = gitHub;
+            GitLab = gitLab;
+        }
+
+        public void Update(
+            string personalEmail,
+            string phone,
+            string gitHub,
+            string gitLab)
+        {
             PersonalEmail = personalEmail;
             Phone = phone;
             GitHub = gitHub;

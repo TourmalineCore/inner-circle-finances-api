@@ -3,23 +3,22 @@ using SalaryService.DataAccess.Repositories;
 
 namespace SalaryService.Application.Commands
 {
-    public partial class UpdateEmployeeCommand
+    public partial class UpdateCEOCommand
     {
-        
     }
-    public class UpdateEmployeeCommandHandler
+    public class UpdateCEOCommandHandler
     {
         private readonly EmployeeRepository _employeeRepository;
 
-        public UpdateEmployeeCommandHandler(EmployeeRepository employeeRepository)
+        public UpdateCEOCommandHandler(EmployeeRepository employeeRepository)
         {
             _employeeRepository = employeeRepository;
         }
-        public async Task Handle(EmployeeUpdatingParameters request)
+        public async Task Handle(CEOUpdatingParameters request)
         {
             var employee = await _employeeRepository.GetByIdAsync(request.EmployeeId);
 
-            employee.Update(request.Name, request.Surname, request.MiddleName, request.PersonalEmail, request.Phone, request.GitHub, request.GitLab);
+            employee.Update(request.PersonalEmail, request.Phone, request.GitHub, request.GitLab);
 
             await _employeeRepository.UpdateAsync(employee);
         }

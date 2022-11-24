@@ -9,38 +9,25 @@ namespace SalaryService.Api.Controllers
     public class FinanceController : Controller
     {
         private readonly FinanceService _financeService;
-        private readonly GetAnalyticByIdQueryHandler _getAnalyticByIdByIdQueryHandler;
-        private readonly GetAnalyticListQueryHandler _getAnalyticListQueryHandler;
+        private readonly GetAnalyticQueryHandler _getAnalyticQueryHandler;
 
         public FinanceController(FinanceService financeService,
-            
-            GetAnalyticByIdQueryHandler getAnalyticByIdByIdQueryHandler, 
-            
-            GetAnalyticListQueryHandler getAnalyticListQueryHandler)
+            GetAnalyticQueryHandler getAnalyticQueryHandler)
         {
             _financeService = financeService;
-           
-            _getAnalyticByIdByIdQueryHandler = getAnalyticByIdByIdQueryHandler;
-            
-            _getAnalyticListQueryHandler = getAnalyticListQueryHandler;
+            _getAnalyticQueryHandler = getAnalyticQueryHandler;
         }
 
-        [HttpPost("update-finance")]
+        [HttpPut("update-finance")]
         public Task UpdateFinance([FromBody] FinanceUpdatingParameters financeUpdatingParameters)
         {
             return _financeService.UpdateFinances(financeUpdatingParameters);
         }
-
-        [HttpGet("get-analytic/{EmployeeId}")]
-        public Task<AnalyticDto> GetAnalytic([FromRoute] GetAnalyticQuery getAnalyticQuery)
-        {
-            return _getAnalyticByIdByIdQueryHandler.Handle(getAnalyticQuery);
-        }
         
         [HttpGet("get-analytic")]
-        public Task<IEnumerable<AnalyticDto>> GetAnalyticList()
+        public Task<IEnumerable<AnalyticDto>> GetAnalytic()
         {
-            return _getAnalyticListQueryHandler.Handle();
+            return _getAnalyticQueryHandler.Handle();
         }
     }
 }

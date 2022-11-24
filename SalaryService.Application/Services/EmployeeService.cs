@@ -1,65 +1,69 @@
-﻿using SalaryService.Application.Commands;
+﻿using Microsoft.Extensions.Options;
+using NodaTime;
+using SalaryService.Application.Commands;
 using SalaryService.Application.Dtos;
-using SalaryService.DataAccess.Repositories;
+using SalaryService.Domain;
 
 namespace SalaryService.Application.Services
 {
     public class EmployeeService
     {
         private readonly FinanceService _financeService;
-        private readonly EmployeeRepository _employeeRepository;
         private readonly CreateEmployeeCommandHandler _createEmployeeCommandHandler;
         private readonly UpdateEmployeeCommandHandler _updateEmployeeCommandHandler;
+        private readonly UpdateCEOCommandHandler _updateCEOCommandHandler;
         private readonly DeleteEmployeeCommandHandler _deleteEmployeeCommandHandler;
+        private readonly IClock _clock;
 
         public EmployeeService(FinanceService financeService,
-            EmployeeRepository employeeRepository,
             CreateEmployeeCommandHandler createEmployeeCommandHandler,
             UpdateEmployeeCommandHandler updateEmployeeCommandHandler,
-            DeleteEmployeeCommandHandler deleteEmployeeCommandHandler)
+            UpdateCEOCommandHandler updateCEOCommandHandler,
+            DeleteEmployeeCommandHandler deleteEmployeeCommandHandler,
+            IClock clock)
         {
             _financeService = financeService;
-            _employeeRepository = employeeRepository;
             _createEmployeeCommandHandler = createEmployeeCommandHandler;
             _updateEmployeeCommandHandler = updateEmployeeCommandHandler;
+            _updateCEOCommandHandler = updateCEOCommandHandler;
             _deleteEmployeeCommandHandler = deleteEmployeeCommandHandler;
+            _clock = clock;
         }
 
         public async Task CreateEmployee(EmployeeCreatingParameters parameters)
         {
-            var employee = await _createEmployeeCommandHandler.Handle(
-            new CreateEmployeeCommand
-                {
-                    Name = parameters.Name,
-                    Surname = parameters.Surname,
-                    MiddleName = parameters.MiddleName,
-                    CorporateEmail = parameters.CorporateEmail,
-                    PersonalEmail = parameters.PersonalEmail,
-                    Phone = parameters.Phone,
-                    GitHub = parameters.GitHub,
-                    GitLab = parameters.GitLab
-                }
-            );
+            var employee = new Employee(parameters.Name, 
+                parameters.Surname, 
+                parameters.MiddleName,
+                parameters.CorporateEmail, 
+                parameters.PersonalEmail, 
+                parameters.Phone, 
+                parameters.GitHub,
+                parameters.GitLab, 
+                _clock.GetCurrentInstant());;
 
-            var financeForPayrollId = await _financeService.CreateEmployeeFinanceForPayroll(employee.Id,
-                parameters.RatePerHour,
+            var financeForPayroll = new EmployeeFinanceForPayroll(parameters.RatePerHour,
                 parameters.Pay,
                 parameters.EmploymentType,
                 parameters.HasParking);
 
-            var metricsId = await _financeService.CreateMetrics(employee.Id,
+            var metrics = _financeService.CalculateMetrics(
                 parameters.RatePerHour,
                 parameters.Pay,
                 parameters.EmploymentTypeValue,
                 parameters.HasParking);
 
-            employee.AddMetricsAndFinanceForpayroll( financeForPayrollId, metricsId);
-            await _employeeRepository.UpdateAsync(employee);
+            await _createEmployeeCommandHandler.Handle(employee, financeForPayroll, metrics);
         }
 
         public async Task DeleteEmployee(long id)
         {
             await _deleteEmployeeCommandHandler.Handle(id);
+        }
+
+        public async Task UpdateCEO(CEOUpdatingParameters request)
+        {
+            await _updateCEOCommandHandler.Handle(request);
         }
 
         public async Task UpdateEmployee(EmployeeUpdatingParameters request)

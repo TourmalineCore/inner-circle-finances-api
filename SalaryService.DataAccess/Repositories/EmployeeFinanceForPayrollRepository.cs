@@ -12,23 +12,13 @@ namespace SalaryService.DataAccess.Repositories
             _employeeDbContext = employeeDbContext;
         }
 
-        public async Task<long> CreateAsync(EmployeeFinanceForPayroll employeeFinanceForPayroll)
-        {
-            await _employeeDbContext.AddAsync(employeeFinanceForPayroll);
-            await _employeeDbContext.SaveChangesAsync();
-            return employeeFinanceForPayroll.Id;
-        }
-
-        public Task RemoveAsync(EmployeeFinanceForPayroll employeeFinanceForPayroll)
-        {
-            _employeeDbContext.Remove(employeeFinanceForPayroll);
-
-            return _employeeDbContext.SaveChangesAsync();
-        }
-
-        public Task UpdateAsync(EmployeeFinanceForPayroll employeeFinanceForPayroll)
+        public Task UpdateAsync(EmployeeFinanceForPayroll employeeFinanceForPayroll, 
+            EmployeeFinancialMetrics metrics, 
+            EmployeeFinancialMetricsHistory employeeFinancialMetricsHistory)
         {
             _employeeDbContext.Update(employeeFinanceForPayroll);
+            _employeeDbContext.Update(metrics);
+            _employeeDbContext.Add(employeeFinancialMetricsHistory);
             return _employeeDbContext.SaveChangesAsync();
         }
 
@@ -37,13 +27,6 @@ namespace SalaryService.DataAccess.Repositories
             return _employeeDbContext
                     .Set<EmployeeFinanceForPayroll>()
                     .SingleAsync(x => x.EmployeeId == employeeId);
-        }
-
-        public Task<EmployeeFinanceForPayroll> GetByIdAsync(long id)
-        {
-            return _employeeDbContext
-                    .Set<EmployeeFinanceForPayroll>()
-                    .SingleAsync(x => x.Id == id);
         }
     }
 }

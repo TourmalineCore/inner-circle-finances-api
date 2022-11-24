@@ -1,27 +1,27 @@
-﻿
+﻿using SalaryService.DataAccess.Repositories;
 using SalaryService.Application.Dtos;
-using SalaryService.DataAccess.Repositories;
 
 namespace SalaryService.Application.Queries
 {
-    public partial class GetEmployeesQuery
+    public partial class GetCEOQuery
     {
         public long EmployeeId { get; set; }
     }
 
-    public class GetEmployeesByIdQueryHandler
+    public class GetCEOQueryHandler
     {
         private readonly EmployeeRepository _employeeRepository;
 
-        public GetEmployeesByIdQueryHandler(EmployeeRepository employeeRepository)
+        public GetCEOQueryHandler(EmployeeRepository employeeRepository)
         {
             _employeeRepository = employeeRepository;
         }
-        public async Task<EmployeeContactDetailsDto> Handle(GetEmployeesQuery request)
+
+        public async Task<CEODto> Handle(GetCEOQuery request)
         {
             var employee = await _employeeRepository.GetByIdAsync(request.EmployeeId);
 
-            return new EmployeeContactDetailsDto(employee.Id,
+            return new CEODto(employee.Id,
                 employee.Name,
                 employee.Surname,
                 employee.MiddleName,
@@ -29,7 +29,8 @@ namespace SalaryService.Application.Queries
                 employee.PersonalEmail,
                 employee.Phone,
                 employee.GitHub,
-                employee.GitLab);
+                employee.GitLab
+                );
         }
     }
 }

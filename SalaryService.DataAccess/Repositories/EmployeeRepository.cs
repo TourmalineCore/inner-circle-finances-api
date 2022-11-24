@@ -12,12 +12,16 @@ namespace SalaryService.DataAccess.Repositories
             _employeeDbContext = employeeDbContext;
         }
         
-        public async Task<Employee> CreateAsync(Employee employee)
+        public Task CreateAsync(Employee employee, EmployeeFinanceForPayroll financeForPayroll, EmployeeFinancialMetrics metrics)
         {
-            await _employeeDbContext.AddAsync(employee);
-            await _employeeDbContext.SaveChangesAsync();
-
-            return employee;
+            employee.EmployeeFinanceForPayroll = financeForPayroll;
+            employee.EmployeeFinancialMetrics = metrics;
+            financeForPayroll.Employee = employee;
+            metrics.Employee = employee;
+            _employeeDbContext.Add(employee);
+            _employeeDbContext.Add(financeForPayroll);
+            _employeeDbContext.Add(metrics);
+            return _employeeDbContext.SaveChangesAsync();
         }
 
         public Task<Employee> GetByIdAsync(long employeeId)

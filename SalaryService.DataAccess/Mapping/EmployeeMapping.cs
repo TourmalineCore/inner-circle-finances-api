@@ -8,9 +8,6 @@ namespace SalaryService.DataAccess.Mapping
     {
         public void Configure(EntityTypeBuilder<Employee> builder)
         {
-            builder.HasOne(e => e.EmployeeFinanceForPayroll);
-            builder.HasOne(e => e.EmployeeFinancialMetrics);
-
             builder.Property(x => x.CorporateEmail).IsRequired();
             builder.Property(x => x.PersonalEmail).IsRequired();
 

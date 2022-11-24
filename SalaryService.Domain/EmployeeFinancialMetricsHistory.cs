@@ -6,9 +6,12 @@ namespace SalaryService.Domain
     {
         public long Id { get; set; }
 
-        public Employee Employee { get; set; }
         public long EmployeeId { get; set; }
+
+        public Employee Employee { get; set; }
+        
         public Period Period { get; set; }
+
         public double Salary { get; set; }
 
         public double HourlyCostFact { get; set; }

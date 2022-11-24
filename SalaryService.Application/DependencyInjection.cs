@@ -14,20 +14,14 @@ namespace SalaryService.Application
             var coefficientOptions = configuration.GetSection("CoefficientOptions");
             services.Configure<CoefficientOptions>(c => coefficientOptions.Bind(c));
 
-            services.AddTransient<GetEmployeeQueryHandler>();
-            services.AddTransient<GetEmployeesByIdQueryHandler>();
-            services.AddTransient<GetAnalyticByIdQueryHandler>();
-            services.AddTransient<GetEmployeesListQueryHandler>();
-            services.AddTransient<GetAnalyticListQueryHandler>();
+            services.AddTransient<GetCEOQueryHandler>();
+            services.AddTransient<GetEmployeesQueryHandler>();
+            services.AddTransient<GetAnalyticQueryHandler>();
             services.AddTransient<CreateEmployeeCommandHandler>();
             services.AddTransient<UpdateEmployeeCommandHandler>();
-            services.AddTransient<CreateEmployeeFinanceForPayrollCommandHandler>();
-            services.AddTransient<UpdateEmployeeFinanceForPayrollCommandHandler>();
-            services.AddTransient<UpdateFinancialMetricsCommandHandler>();
-            services.AddTransient<CreateHistoryMetricsCommandHandler>();
+            services.AddTransient<UpdateFinancesCommandHandler>();
+            services.AddTransient<UpdateCEOCommandHandler>();
             services.AddTransient<DeleteEmployeeCommandHandler>();
-            services.AddTransient<DeleteEmployeeFinanceForPayrollCommandHandler>();
-            services.AddTransient<DeleteEmployeeFinancialMetricsCommandHandler>();
             services.AddTransient<EmployeeService>();
             services.AddTransient<FinanceService>();
             services.AddTransient<IClock, Clock>();

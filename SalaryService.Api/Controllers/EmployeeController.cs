@@ -9,37 +9,28 @@ namespace SalaryService.Api.Controllers
     public class EmployeeController : Controller
     {
         private readonly EmployeeService _employeeService;
-        private readonly GetEmployeesByIdQueryHandler _getEmployeesByIdByIdQueryHandler;
-        private readonly GetEmployeeQueryHandler _getEmployeeQueryHandler;
-        private readonly GetEmployeesListQueryHandler _getEmployeesListQueryHandler;
+        private readonly GetCEOQueryHandler _getCeoQueryHandler;
+        private readonly GetEmployeesQueryHandler _getEmployeesQueryHandler;
 
         public EmployeeController(EmployeeService employeeService,
-        GetEmployeesByIdQueryHandler getEmployeesByIdByIdQueryHandler, 
-        GetEmployeeQueryHandler getEmployeeQueryHandler,
-        GetEmployeesListQueryHandler getEmployeesListQueryHandler)
+        GetCEOQueryHandler getCeoQueryHandler,
+        GetEmployeesQueryHandler getEmployeesQueryHandler)
         {
             _employeeService = employeeService;
-            _getEmployeesByIdByIdQueryHandler = getEmployeesByIdByIdQueryHandler;
-            _getEmployeeQueryHandler = getEmployeeQueryHandler;
-            _getEmployeesListQueryHandler = getEmployeesListQueryHandler;
+            _getCeoQueryHandler = getCeoQueryHandler;
+            _getEmployeesQueryHandler = getEmployeesQueryHandler;
         }
 
-        [HttpGet("get-employee/{EmployeeId}")]
-        public Task<EmployeeDto> GetEmployee([FromRoute] GetEmployeeQuery getEmployeeQuery)
+        [HttpGet("get-ceo/{EmployeeId}")]
+        public Task<CEODto> GetCEO([FromRoute] GetCEOQuery getCeoQuery)
         {
-            return _getEmployeeQueryHandler.Handle(getEmployeeQuery);
+            return _getCeoQueryHandler.Handle(getCeoQuery);
         }
 
         [HttpGet("get-employees")]
-        public Task<IEnumerable<EmployeeContactDetailsDto>> GetEmployeesContactDetailsList()
+        public Task<IEnumerable<EmployeeDto>> GetEmployees()
         {
-            return _getEmployeesListQueryHandler.Handle();
-        }
-
-        [HttpGet("get-contact-details/{EmployeeId}")]
-        public Task<EmployeeContactDetailsDto> GetEmployeesContactDetails([FromRoute] GetEmployeesQuery getEmployeesQuery)
-        {
-            return _getEmployeesByIdByIdQueryHandler.Handle(getEmployeesQuery);
+            return _getEmployeesQueryHandler.Handle();
         }
 
         [HttpPost("create-employee")]
@@ -48,7 +39,13 @@ namespace SalaryService.Api.Controllers
             return _employeeService.CreateEmployee(employeeCreatingParameters);
         }
 
-        [HttpPost("update-employee")]
+        [HttpPut("update-ceo")]
+        public Task UpdateCEO([FromBody] CEOUpdatingParameters employeeUpdatingParameters)
+        {
+            return _employeeService.UpdateCEO(employeeUpdatingParameters);
+        }
+
+        [HttpPut("update-employee")]
         public Task UpdateEmployee([FromBody] EmployeeUpdatingParameters employeeUpdatingParameters)
         {
             return _employeeService.UpdateEmployee(employeeUpdatingParameters);

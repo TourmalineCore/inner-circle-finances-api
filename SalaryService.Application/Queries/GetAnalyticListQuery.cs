@@ -8,11 +8,11 @@ namespace SalaryService.Application.Queries
 
     }
 
-    public class GetAnalyticListQueryHandler
+    public class GetAnalyticQueryHandler
     {
         private readonly EmployeeRepository _employeeRepository;
 
-        public GetAnalyticListQueryHandler(EmployeeRepository employeeRepository)
+        public GetAnalyticQueryHandler(EmployeeRepository employeeRepository)
         {
             _employeeRepository = employeeRepository;
         }
@@ -25,7 +25,6 @@ namespace SalaryService.Application.Queries
                 x.Name,
                 x.Surname,
                 x.MiddleName,
-                x.HireDate.ToString(),
                 Math.Round(x.EmployeeFinancialMetrics.Pay, 2),
                 Math.Round(x.EmployeeFinancialMetrics.RatePerHour, 2),
                 Math.Round(x.EmployeeFinancialMetrics.EmploymentType, 2),

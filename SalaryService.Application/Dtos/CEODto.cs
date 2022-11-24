@@ -1,15 +1,10 @@
-﻿
-namespace SalaryService.Application.Dtos
+﻿namespace SalaryService.Application.Dtos
 {
-    public class EmployeeContactDetailsDto
+    public class CEODto
     {
         public long Id { get; private set; }
 
-        public string Name { get; private set; }
-
-        public string Surname { get; private set; }
-
-        public string MiddleName { get; private set; }
+        public string FullName { get; private set; }
 
         public string CorporateEmail { get; private set; }
 
@@ -21,20 +16,18 @@ namespace SalaryService.Application.Dtos
 
         public string GitLab { get; private set; }
 
-        public EmployeeContactDetailsDto(long id, 
+        public CEODto(long id, 
             string name, 
-            string surname,
+            string surname, 
             string middleName, 
             string corporateEmail, 
             string personalEmail, 
-            string phone, 
-            string gitHub, 
+            string phone,
+            string gitHub,
             string gitLab)
         {
             Id = id;
-            Name = name;
-            Surname = surname;
-            MiddleName = middleName;
+            FullName = name + " " + surname + " " + middleName;
             CorporateEmail = corporateEmail;
             PersonalEmail = personalEmail;
             Phone = phone;

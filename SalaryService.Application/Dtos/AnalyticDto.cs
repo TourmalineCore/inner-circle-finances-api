@@ -4,13 +4,7 @@
     {
         public long Id { get; private set; }
 
-        public string Name { get; private set; }
-
-        public string Surname { get; private set; }
-
-        public string MiddleName { get; private set; }
-
-        public string EmploymentDate { get; private set; }
+        public string FullName { get; private set; }
 
         public double Pay { get; private set; }
 
@@ -52,7 +46,6 @@
             string name,
             string surname,
             string middleName,
-            string employmentDate,
             double pay,
             double ratePerHour,
             double employmentType,
@@ -73,10 +66,7 @@
             double netSalary)
         {
             Id = id;
-            Name = name;
-            Surname = surname;
-            MiddleName = middleName;
-            EmploymentDate = employmentDate;
+            FullName = name + " " + surname + " " + middleName;
             Pay = pay;
             RatePerHour = ratePerHour;
             EmploymentType = employmentType;
