@@ -277,8 +277,7 @@ namespace SalaryService.Domain
             ProfitAbility = CalculateProfitability();
         }
 
-        public void Update(double mrot,
-            double salary,
+        public void Update(double salary,
             double grossSalary,
             double netSalary,
             double earnings,

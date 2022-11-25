@@ -17,15 +17,12 @@ namespace SalaryService.Application.Commands
     {
         private readonly EmployeeDbContext _employeeDbContext;
         private readonly IClock _clock;
-        private readonly CoefficientOptions _coefficientOptions;
 
         public UpdateFinancesCommandHandler(EmployeeDbContext employeeDbContext, 
-            IClock clock,
-            IOptions<CoefficientOptions> coefficientOptions)
+            IClock clock)
         {
             _employeeDbContext = employeeDbContext;
             _clock = clock;
-            _coefficientOptions = coefficientOptions.Value;
         }
 
         public async Task Handle(FinanceUpdatingParameters request, EmployeeFinancialMetrics metrics)
@@ -85,8 +82,7 @@ namespace SalaryService.Application.Commands
                 .Include(x => x.EmployeeFinancialMetrics)
                 .SingleAsync(x => x.Id == request.EmployeeId && x.DeletedAtUtc == null)).EmployeeFinancialMetrics;
 
-            currentFinancialMetrics.Update(_coefficientOptions.DistrictCoefficient,
-                metrics.Salary,
+            currentFinancialMetrics.Update(metrics.Salary,
                 metrics.GrossSalary,
                 metrics.NetSalary,
                 metrics.Earnings,
