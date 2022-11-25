@@ -56,13 +56,13 @@ namespace SalaryService.Application.Dtos
     }
     public class ColleagueDto
     {
-        public IEnumerable<ColleagueContactsDto> EmployeeContacts { get; private set; }
-        public IEnumerable<ColleagueFinancesDto> EmployeeFinances { get; private set; }
+        public IEnumerable<ColleagueContactsDto> ColleagueContacts { get; private set; }
+        public IEnumerable<ColleagueFinancesDto> ColleagueFinancesDto { get; private set; }
 
-        public ColleagueDto(IEnumerable<ColleagueContactsDto> employeeContacts, IEnumerable<ColleagueFinancesDto> employeeFinances)
+        public ColleagueDto(IEnumerable<ColleagueContactsDto> colleagueContacts, IEnumerable<ColleagueFinancesDto> colleagueFinancesDto)
         {
-            EmployeeContacts = employeeContacts;
-            EmployeeFinances = employeeFinances;
+            ColleagueContacts = colleagueContacts;
+            ColleagueFinancesDto = colleagueFinancesDto;
         }
     }
 }
