@@ -1,4 +1,4 @@
-﻿
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using NodaTime;
 
 namespace SalaryService.Domain
@@ -7,47 +7,86 @@ namespace SalaryService.Domain
     {
         public long Id { get; private set; }
 
+        public long AccountId { get; private set; }
+
         public string Name { get; private set; }
 
         public string Surname { get; private set; }
 
         public string MiddleName { get; private set; }
 
-        public string? WorkEmail { get; private set; }
+        public string CorporateEmail { get; private set; }
 
-        public string? PersonalEmail { get; private set; }
+        public string PersonalEmail { get; private set; }
 
         public string? Phone { get; private set; }
 
-        public string? Skype { get; private set; }
+        public string? GitHub { get; private set; }
 
-        public string? Telegram { get; private set; }
+        public string? GitLab { get; private set; }
 
-        public Instant EmploymentDate { get; private set; }
+        public EmployeeFinanceForPayroll EmployeeFinanceForPayroll { get; set; }
 
-        public Employee(string name, string surname, string middleName, string workEmail, string personalEmail, string phone, string skype, string telegram, Instant employmentDate)
+        public EmployeeFinancialMetrics EmployeeFinancialMetrics { get; set; }
+
+        public Instant HireDate { get; private set; }
+
+        public Instant? DeletedAtUtc { get; private set; } = null;
+
+        public Employee(string name, 
+            string surname, 
+            string middleName, 
+            string corporateEmail, 
+            string personalEmail,
+            string phone,
+            string gitHub, 
+            string gitLab,
+            Instant hireDate)
         {
             Name = name;
             Surname = surname;
             MiddleName = middleName;
-            WorkEmail = workEmail;
+            CorporateEmail = corporateEmail;
             PersonalEmail = personalEmail;
             Phone = phone;
-            Skype = skype;
-            Telegram = telegram;
-            EmploymentDate = employmentDate;
+            GitHub = gitHub;
+            GitLab = gitLab;
+            HireDate = hireDate;
+            
         }
 
-        public void Update(string name, string surname, string middleName, string workEmail, string personalEmail, string phone, string skype, string telegram)
+        public void Delete(Instant deletedAtUtc)
+        {
+            DeletedAtUtc = deletedAtUtc;
+        }
+
+        public void Update(string name, 
+            string surname, 
+            string middleName,
+            string personalEmail,
+            string phone,
+            string gitHub,
+            string gitLab)
         {
             Name = name;
             Surname = surname;
             MiddleName = middleName;
-            WorkEmail = workEmail;
             PersonalEmail = personalEmail;
             Phone = phone;
-            Skype = skype;
-            Telegram = telegram;
+            GitHub = gitHub;
+            GitLab = gitLab;
+        }
+
+        public void Update(
+            string personalEmail,
+            string phone,
+            string gitHub,
+            string gitLab)
+        {
+            PersonalEmail = personalEmail;
+            Phone = phone;
+            GitHub = gitHub;
+            GitLab = gitLab;
         }
     }
 }

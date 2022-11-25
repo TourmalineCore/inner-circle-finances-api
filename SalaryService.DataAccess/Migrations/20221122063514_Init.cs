@@ -95,7 +95,8 @@ namespace SalaryService.DataAccess.Migrations
                     Phone = table.Column<string>(type: "text", nullable: true),
                     Skype = table.Column<string>(type: "text", nullable: true),
                     Telegram = table.Column<string>(type: "text", nullable: true),
-                    EmploymentDate = table.Column<Instant>(type: "timestamp with time zone", nullable: false)
+                    HireDate = table.Column<Instant>(type: "timestamp with time zone", nullable: false),
+                    DeletedAtUtc = table.Column<Instant>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -111,7 +112,6 @@ namespace SalaryService.DataAccess.Migrations
                     RatePerHour = table.Column<double>(type: "double precision", nullable: false),
                     Pay = table.Column<double>(type: "double precision", nullable: false),
                     EmploymentType = table.Column<int>(type: "integer", nullable: false),
-                    EmploymentTypeValue = table.Column<double>(type: "double precision", nullable: false),
                     HasParking = table.Column<bool>(type: "boolean", nullable: false),
                     EmployeeId = table.Column<long>(type: "bigint", nullable: false)
                 },

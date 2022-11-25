@@ -13,8 +13,8 @@ using SalaryService.DataAccess;
 namespace SalaryService.DataAccess.Migrations
 {
     [DbContext(typeof(EmployeeDbContext))]
-    [Migration("20221120152546_Init")]
-    partial class Init
+    [Migration("20221122070603_AddedMetricsAndFinanceForPayroll")]
+    partial class AddedMetricsAndFinanceForPayroll
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -33,7 +33,16 @@ namespace SalaryService.DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<Instant>("EmploymentDate")
+                    b.Property<Instant?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long>("FinanceForPayrollId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("FinancialMetricsId")
+                        .HasColumnType("bigint");
+
+                    b.Property<Instant>("HireDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("MiddleName")
@@ -82,9 +91,6 @@ namespace SalaryService.DataAccess.Migrations
                     b.Property<int>("EmploymentType")
                         .HasColumnType("integer");
 
-                    b.Property<double>("EmploymentTypeValue")
-                        .HasColumnType("double precision");
-
                     b.Property<bool>("HasParking")
                         .HasColumnType("boolean");
 
@@ -96,7 +102,8 @@ namespace SalaryService.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasIndex("EmployeeId")
+                        .IsUnique();
 
                     b.ToTable("EmployeeFinanceForPayroll");
                 });
@@ -180,6 +187,9 @@ namespace SalaryService.DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EmployeeId")
+                        .IsUnique();
+
                     b.ToTable("EmployeeFinancialMetrics");
                 });
 
@@ -259,14 +269,27 @@ namespace SalaryService.DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EmployeeId");
+
                     b.ToTable("EmployeeFinancialMetricsHistory");
                 });
 
             modelBuilder.Entity("SalaryService.Domain.EmployeeFinanceForPayroll", b =>
                 {
                     b.HasOne("SalaryService.Domain.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
+                        .WithOne("EmployeeFinanceForPayroll")
+                        .HasForeignKey("SalaryService.Domain.EmployeeFinanceForPayroll", "EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("SalaryService.Domain.EmployeeFinancialMetrics", b =>
+                {
+                    b.HasOne("SalaryService.Domain.Employee", "Employee")
+                        .WithOne("EmployeeFinancialMetrics")
+                        .HasForeignKey("SalaryService.Domain.EmployeeFinancialMetrics", "EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -275,6 +298,12 @@ namespace SalaryService.DataAccess.Migrations
 
             modelBuilder.Entity("SalaryService.Domain.EmployeeFinancialMetricsHistory", b =>
                 {
+                    b.HasOne("SalaryService.Domain.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.OwnsOne("SalaryService.Domain.Common.Period", "Period", b1 =>
                         {
                             b1.Property<long>("EmployeeFinancialMetricsHistoryId")
@@ -296,7 +325,18 @@ namespace SalaryService.DataAccess.Migrations
                                 .HasForeignKey("EmployeeFinancialMetricsHistoryId");
                         });
 
+                    b.Navigation("Employee");
+
                     b.Navigation("Period")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SalaryService.Domain.Employee", b =>
+                {
+                    b.Navigation("EmployeeFinanceForPayroll")
+                        .IsRequired();
+
+                    b.Navigation("EmployeeFinancialMetrics")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

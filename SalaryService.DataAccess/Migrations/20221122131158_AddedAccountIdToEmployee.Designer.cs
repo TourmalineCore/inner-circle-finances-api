@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,10 @@ using SalaryService.DataAccess;
 namespace SalaryService.DataAccess.Migrations
 {
     [DbContext(typeof(EmployeeDbContext))]
-    partial class EmployeeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221122131158_AddedAccountIdToEmployee")]
+    partial class AddedAccountIdToEmployee
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,18 +36,14 @@ namespace SalaryService.DataAccess.Migrations
                     b.Property<long>("AccountId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("CorporateEmail")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<Instant?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("GitHub")
-                        .HasColumnType("text");
+                    b.Property<long>("FinanceForPayrollId")
+                        .HasColumnType("bigint");
 
-                    b.Property<string>("GitLab")
-                        .HasColumnType("text");
+                    b.Property<long>("FinancialMetricsId")
+                        .HasColumnType("bigint");
 
                     b.Property<Instant>("HireDate")
                         .HasColumnType("timestamp with time zone");
@@ -59,31 +57,40 @@ namespace SalaryService.DataAccess.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("PersonalEmail")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Phone")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Skype")
                         .HasColumnType("text");
 
                     b.Property<string>("Surname")
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Telegram")
+                        .HasColumnType("text");
+
+                    b.Property<string>("WorkEmail")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
-
-                    b.HasIndex("CorporateEmail")
-                        .IsUnique();
-
-                    b.HasIndex("GitHub")
-                        .IsUnique();
-
-                    b.HasIndex("GitLab")
-                        .IsUnique();
 
                     b.HasIndex("PersonalEmail")
                         .IsUnique();
 
                     b.HasIndex("Phone")
+                        .IsUnique();
+
+                    b.HasIndex("Skype")
+                        .IsUnique();
+
+                    b.HasIndex("Telegram")
+                        .IsUnique();
+
+                    b.HasIndex("WorkEmail")
                         .IsUnique();
 
                     b.ToTable("Employees");

@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SalaryService.DataAccess.Repositories;
 
 namespace SalaryService.DataAccess
 {
@@ -18,10 +17,6 @@ namespace SalaryService.DataAccess
                                 o => o.UseNodaTime());
             });
             services.AddScoped<EmployeeDbContext>();
-            services.AddTransient<EmployeeProfileInfoRepository>();
-            services.AddTransient<EmployeeFinanceForPayrollRepository>();
-            services.AddTransient<EmployeeFinancialMetricsRepository>();
-            services.AddTransient<MetricsHistoryRepository>();
             return services;
         }
     }

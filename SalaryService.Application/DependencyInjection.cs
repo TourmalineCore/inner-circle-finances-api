@@ -1,29 +1,30 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using NodaTime;
 using SalaryService.Application.Commands;
 using SalaryService.Application.Queries;
 using SalaryService.Application.Services;
-using SalaryService.Domain;
 
 namespace SalaryService.Application
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddApplication(this IServiceCollection services)
+        public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
         {
+            var coefficientOptions = configuration.GetSection("CoefficientOptions");
+            services.Configure<CoefficientOptions>(c => coefficientOptions.Bind(c));
 
-            services.AddTransient<GetEmployeeProfileInfoQueryHandler>();
-            services.AddTransient<GetEmployeeContactInfoQueryHandler>();
-            services.AddTransient<GetSEOAnalyticsInfoQueryHandler>();
-            services.AddTransient<GetEmployeeContactInfoListQueryHandler>();
-            services.AddTransient<GetSEOAnalyticsInfoListQueryHandler>();
-            services.AddTransient<CreateEmployeeProfileInfoCommandHandler>();
-            services.AddTransient<UpdateEmployeeProfileInfoCommandHandler>();
-            services.AddTransient<CreateEmployeeFinanceForPayrollCommandHandler>();
-            services.AddTransient<UpdateEmployeeFinanceForPayrollCommandHandler>();
-            services.AddTransient<UpdateFinancialMetricsCommandHandler>();
-            services.AddTransient<CreateHistoryMetricsCommandHandler>();
-            services.AddTransient<EmployeeFinanceService>();
+            
+            services.AddTransient<GetColleaguesQueryHandler>();
+            services.AddTransient<GetEmployeeQueryHandler>();
+            services.AddTransient<GetAnalyticQueryHandler>();
+            services.AddTransient<CreateEmployeeCommandHandler>();
+            services.AddTransient<UpdateEmployeeCommandHandler>();
+            services.AddTransient<UpdateFinancesCommandHandler>();
+            services.AddTransient<DeleteEmployeeCommandHandler>();
+            services.AddTransient<CalculatePreviewMetricsCommandHandler>();
+            services.AddTransient<EmployeeService>();
+            services.AddTransient<FinanceAnalyticService>();
             services.AddTransient<IClock, Clock>();
             return services;
         }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,10 @@ using SalaryService.DataAccess;
 namespace SalaryService.DataAccess.Migrations
 {
     [DbContext(typeof(EmployeeDbContext))]
-    partial class EmployeeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221122065300_AddedForeignKeys")]
+    partial class AddedForeignKeys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,21 +33,8 @@ namespace SalaryService.DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<long>("AccountId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("CorporateEmail")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<Instant?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("GitHub")
-                        .HasColumnType("text");
-
-                    b.Property<string>("GitLab")
-                        .HasColumnType("text");
 
                     b.Property<Instant>("HireDate")
                         .HasColumnType("timestamp with time zone");
@@ -59,32 +48,25 @@ namespace SalaryService.DataAccess.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("PersonalEmail")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Phone")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Skype")
                         .HasColumnType("text");
 
                     b.Property<string>("Surname")
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Telegram")
+                        .HasColumnType("text");
+
+                    b.Property<string>("WorkEmail")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
-
-                    b.HasIndex("CorporateEmail")
-                        .IsUnique();
-
-                    b.HasIndex("GitHub")
-                        .IsUnique();
-
-                    b.HasIndex("GitLab")
-                        .IsUnique();
-
-                    b.HasIndex("PersonalEmail")
-                        .IsUnique();
-
-                    b.HasIndex("Phone")
-                        .IsUnique();
 
                     b.ToTable("Employees");
                 });
@@ -114,8 +96,7 @@ namespace SalaryService.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeeId")
-                        .IsUnique();
+                    b.HasIndex("EmployeeId");
 
                     b.ToTable("EmployeeFinanceForPayroll");
                 });
@@ -199,8 +180,7 @@ namespace SalaryService.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeeId")
-                        .IsUnique();
+                    b.HasIndex("EmployeeId");
 
                     b.ToTable("EmployeeFinancialMetrics");
                 });
@@ -289,8 +269,8 @@ namespace SalaryService.DataAccess.Migrations
             modelBuilder.Entity("SalaryService.Domain.EmployeeFinanceForPayroll", b =>
                 {
                     b.HasOne("SalaryService.Domain.Employee", "Employee")
-                        .WithOne("EmployeeFinanceForPayroll")
-                        .HasForeignKey("SalaryService.Domain.EmployeeFinanceForPayroll", "EmployeeId")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -300,8 +280,8 @@ namespace SalaryService.DataAccess.Migrations
             modelBuilder.Entity("SalaryService.Domain.EmployeeFinancialMetrics", b =>
                 {
                     b.HasOne("SalaryService.Domain.Employee", "Employee")
-                        .WithOne("EmployeeFinancialMetrics")
-                        .HasForeignKey("SalaryService.Domain.EmployeeFinancialMetrics", "EmployeeId")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -340,15 +320,6 @@ namespace SalaryService.DataAccess.Migrations
                     b.Navigation("Employee");
 
                     b.Navigation("Period")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("SalaryService.Domain.Employee", b =>
-                {
-                    b.Navigation("EmployeeFinanceForPayroll")
-                        .IsRequired();
-
-                    b.Navigation("EmployeeFinancialMetrics")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

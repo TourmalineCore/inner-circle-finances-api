@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,10 @@ using SalaryService.DataAccess;
 namespace SalaryService.DataAccess.Migrations
 {
     [DbContext(typeof(EmployeeDbContext))]
-    partial class EmployeeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221123182846_ChangeFieldsToPofile")]
+    partial class ChangeFieldsToPofile
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,6 +43,12 @@ namespace SalaryService.DataAccess.Migrations
                     b.Property<Instant?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<long>("FinanceForPayrollId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("FinancialMetricsId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("GitHub")
                         .HasColumnType("text");
 
@@ -59,10 +67,10 @@ namespace SalaryService.DataAccess.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("PersonalEmail")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Phone")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Surname")

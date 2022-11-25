@@ -1,19 +1,10 @@
-﻿
-using NodaTime;
-
-namespace SalaryService.Application.Dtos
+﻿namespace SalaryService.Application.Dtos
 {
-    public class SEOAnalyticsInformationDto
+    public class AnalyticDto
     {
         public long Id { get; private set; }
 
-        public string Name { get; private set; }
-
-        public string Surname { get; private set; }
-
-        public string MiddleName { get; private set; }
-
-        public string EmploymentDate { get; private set; }
+        public string FullName { get; private set; }
 
         public double Pay { get; private set; }
 
@@ -51,11 +42,10 @@ namespace SalaryService.Application.Dtos
 
         public double NetSalary { get; private set; }
 
-        public SEOAnalyticsInformationDto(long id,
+        public AnalyticDto(long id,
             string name,
             string surname,
             string middleName,
-            string employmentDate,
             double pay,
             double ratePerHour,
             double employmentType,
@@ -76,10 +66,7 @@ namespace SalaryService.Application.Dtos
             double netSalary)
         {
             Id = id;
-            Name = name;
-            Surname = surname;
-            MiddleName = middleName;
-            EmploymentDate = employmentDate;
+            FullName = name + " " + surname + " " + middleName;
             Pay = pay;
             RatePerHour = ratePerHour;
             EmploymentType = employmentType;

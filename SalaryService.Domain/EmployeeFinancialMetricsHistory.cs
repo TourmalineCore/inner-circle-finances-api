@@ -1,13 +1,17 @@
-﻿
-using SalaryService.Domain.Common;
+﻿using Period = SalaryService.Domain.Common.Period;
 
 namespace SalaryService.Domain
 {
     public class EmployeeFinancialMetricsHistory : IIdentityEntity
     {
         public long Id { get; set; }
+
         public long EmployeeId { get; set; }
+
+        public Employee Employee { get; set; }
+        
         public Period Period { get; set; }
+
         public double Salary { get; set; }
 
         public double HourlyCostFact { get; set; }

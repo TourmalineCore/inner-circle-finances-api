@@ -6,7 +6,11 @@ namespace SalaryService.Domain
     public class EmployeeFinancialMetrics : IIdentityEntity
     {
         public long Id { get; set; }
+
         public long EmployeeId { get; set; }
+
+        public Employee Employee { get; set; }
+
         public Instant ActualFromUtc { get; set; }
 
         private double salary;
@@ -240,9 +244,8 @@ namespace SalaryService.Domain
 
         public double AccountingPerMonth { get; set; }
 
-        public EmployeeFinancialMetrics(long employeeId, double ratePerHour, double pay, double employmentType, bool hasParking)
+        public EmployeeFinancialMetrics(double ratePerHour, double pay, double employmentType, bool hasParking)
         {
-            EmployeeId = employeeId;
             RatePerHour = ratePerHour;
             Pay = pay;
             EmploymentType = employmentType;
@@ -274,8 +277,7 @@ namespace SalaryService.Domain
             ProfitAbility = CalculateProfitability();
         }
 
-        public void Update(double mrot,
-            double salary,
+        public void Update(double salary,
             double grossSalary,
             double netSalary,
             double earnings,
