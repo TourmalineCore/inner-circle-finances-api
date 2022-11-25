@@ -5,20 +5,20 @@ using SalaryService.Domain;
 
 namespace SalaryService.Application.Queries
 {
-    public partial class GetEmployeeListQuery
+    public partial class GetColleaguesQuery
     {
     }
 
-    public class GetEmployeesQueryHandler
+    public class GetColleaguesQueryHandler
     {
         private readonly EmployeeDbContext _employeeDbContext;
 
-        public GetEmployeesQueryHandler(EmployeeDbContext employeeDbContext)
+        public GetColleaguesQueryHandler(EmployeeDbContext employeeDbContext)
         {
             _employeeDbContext = employeeDbContext;
         }
 
-        public async Task<EmployeeDto> Handle()
+        public async Task<ColleagueDto> Handle()
         {
             var employees = await _employeeDbContext
                 .QueryableAsNoTracking<Employee>()
@@ -27,7 +27,7 @@ namespace SalaryService.Application.Queries
                 .Include(x => x.EmployeeFinancialMetrics)
                 .ToListAsync();
 
-            var employeesContacts = employees.Select(x => new EmployeeContactsDto(x.Id,
+            var employeesContacts = employees.Select(x => new ColleagueContactsDto(x.Id,
                 x.Name + " " + x.Surname + " " + x.MiddleName,
                 x.CorporateEmail,
                 x.PersonalEmail,
@@ -35,14 +35,14 @@ namespace SalaryService.Application.Queries
                 x.GitHub,
                 x.GitLab));
 
-            var employeesFinances = employees.Select(x => new EmployeeFinancesDto(x.Id,
+            var employeesFinances = employees.Select(x => new ColleagueFinancesDto(x.Id,
                 x.EmployeeFinanceForPayroll.RatePerHour,
                 x.EmployeeFinanceForPayroll.Pay,
                 x.EmployeeFinanceForPayroll.EmploymentType,
                 x.EmployeeFinancialMetrics.NetSalary,
                 x.EmployeeFinancialMetrics.ParkingCostPerMonth));
 
-            return new EmployeeDto(employeesContacts, employeesFinances);
+            return new ColleagueDto(employeesContacts, employeesFinances);
         }
     }
 }

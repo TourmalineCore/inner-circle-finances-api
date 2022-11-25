@@ -9,55 +9,49 @@ namespace SalaryService.Api.Controllers
     public class EmployeeController : Controller
     {
         private readonly EmployeeService _employeeService;
-        private readonly GetEmployeeQueryHandler _getCeoQueryHandler;
-        private readonly GetEmployeesQueryHandler _getEmployeesQueryHandler;
+        private readonly GetEmployeeQueryHandler _getEmployeeQueryHandler;
+        private readonly GetColleaguesQueryHandler _getColleaguesQueryHandler;
 
         public EmployeeController(EmployeeService employeeService,
-        GetEmployeeQueryHandler getCeoQueryHandler,
-        GetEmployeesQueryHandler getEmployeesQueryHandler)
+        GetEmployeeQueryHandler getEmployeeQueryHandler,
+        GetColleaguesQueryHandler getColleaguesQueryHandler)
         {
             _employeeService = employeeService;
-            _getCeoQueryHandler = getCeoQueryHandler;
-            _getEmployeesQueryHandler = getEmployeesQueryHandler;
-        }
-
-        [HttpPost("get-preview")]
-        public Task<MetricsPreviewDto> GetPreview([FromBody] FinanceUpdatingParameters financeUpdatingParameters)
-        {
-            return _employeeService.GetPreviewMetrics(financeUpdatingParameters);
+            _getEmployeeQueryHandler = getEmployeeQueryHandler;
+            _getColleaguesQueryHandler = getColleaguesQueryHandler;
         }
 
         [HttpGet("get-profile")]
         public Task<EmployeeProfileDto> GetProfile()
         {
-            return _getCeoQueryHandler.Handle();
+            return _getEmployeeQueryHandler.Handle();
         }
 
-        [HttpGet("get-employees")]
-        public Task<EmployeeDto> GetEmployees()
+        [HttpGet("get-colleagues")]
+        public Task<ColleagueDto> GetColleagues()
         {
-            return _getEmployeesQueryHandler.Handle();
+            return _getColleaguesQueryHandler.Handle();
         }
 
-        [HttpPost("create-employee")]
+        [HttpPost("create")]
         public Task CreateEmployee([FromBody] EmployeeCreatingParameters employeeCreatingParameters)
         {
             return _employeeService.CreateEmployee(employeeCreatingParameters);
         }
 
-        [HttpPut("update-employee")]
-        public Task UpdateEmployee([FromBody] EmployeeUpdatingParameters employeeUpdatingParameters)
+        [HttpPut("update-employee-contacts")]
+        public Task UpdateEmployeeContacts([FromBody] EmployeeUpdatingParameters employeeUpdatingParameters)
         {
             return _employeeService.UpdateEmployee(employeeUpdatingParameters);
         }
 
-        [HttpPut("update-finance")]
-        public Task UpdateFinance([FromBody] FinanceUpdatingParameters financeUpdatingParameters)
+        [HttpPut("update-employee-finances")]
+        public Task UpdateEmployeeFinances([FromBody] FinanceUpdatingParameters financeUpdatingParameters)
         {
             return _employeeService.UpdateFinances(financeUpdatingParameters);
         }
 
-        [HttpDelete("delete-employee/{id}")]
+        [HttpDelete("delete/{id}")]
         public Task DeleteEmployee([FromRoute] long id)
         {
             return _employeeService.DeleteEmployee(id);

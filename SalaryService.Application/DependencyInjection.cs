@@ -15,7 +15,7 @@ namespace SalaryService.Application
             services.Configure<CoefficientOptions>(c => coefficientOptions.Bind(c));
 
             
-            services.AddTransient<GetEmployeesQueryHandler>();
+            services.AddTransient<GetColleaguesQueryHandler>();
             services.AddTransient<GetEmployeeQueryHandler>();
             services.AddTransient<GetAnalyticQueryHandler>();
             services.AddTransient<CreateEmployeeCommandHandler>();

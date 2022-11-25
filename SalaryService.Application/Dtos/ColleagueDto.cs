@@ -2,7 +2,7 @@
 
 namespace SalaryService.Application.Dtos
 {
-    public class EmployeeContactsDto
+    public class ColleagueContactsDto
     {
         public long Id { get; private set; }
 
@@ -18,7 +18,7 @@ namespace SalaryService.Application.Dtos
 
         public string GitLab { get; private set; }
 
-        public EmployeeContactsDto(long id, string fullName, string corporateEmail, string personalEmail, string phone, string gitHub, string gitLab)
+        public ColleagueContactsDto(long id, string fullName, string corporateEmail, string personalEmail, string phone, string gitHub, string gitLab)
         {
             Id = id;
             FullName = fullName;
@@ -30,7 +30,7 @@ namespace SalaryService.Application.Dtos
         }
     }
 
-    public class EmployeeFinancesDto
+    public class ColleagueFinancesDto
     {
         public long Id { get; private set; }
 
@@ -44,7 +44,7 @@ namespace SalaryService.Application.Dtos
 
         public double Parking { get; private set; }
 
-        public EmployeeFinancesDto(long id, double ratePerHour, double pay, EmploymentTypes employmentType, double netSalary, double parking)
+        public ColleagueFinancesDto(long id, double ratePerHour, double pay, EmploymentTypes employmentType, double netSalary, double parking)
         {
             Id = id;
             RatePerHour = ratePerHour;
@@ -54,12 +54,12 @@ namespace SalaryService.Application.Dtos
             Parking = parking;
         }
     }
-    public class EmployeeDto
+    public class ColleagueDto
     {
-        public IEnumerable<EmployeeContactsDto> EmployeeContacts { get; private set; }
-        public IEnumerable<EmployeeFinancesDto> EmployeeFinances { get; private set; }
+        public IEnumerable<ColleagueContactsDto> EmployeeContacts { get; private set; }
+        public IEnumerable<ColleagueFinancesDto> EmployeeFinances { get; private set; }
 
-        public EmployeeDto(IEnumerable<EmployeeContactsDto> employeeContacts, IEnumerable<EmployeeFinancesDto> employeeFinances)
+        public ColleagueDto(IEnumerable<ColleagueContactsDto> employeeContacts, IEnumerable<ColleagueFinancesDto> employeeFinances)
         {
             EmployeeContacts = employeeContacts;
             EmployeeFinances = employeeFinances;
