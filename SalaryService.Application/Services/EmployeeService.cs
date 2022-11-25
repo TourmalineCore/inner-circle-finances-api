@@ -16,7 +16,6 @@ namespace SalaryService.Application.Services
         private readonly UpdateCEOCommandHandler _updateCEOCommandHandler;
         private readonly DeleteEmployeeCommandHandler _deleteEmployeeCommandHandler;
         private readonly IClock _clock;
-        private readonly CoefficientOptions _coefficientOptions;
 
         public EmployeeService(FinanceService financeService,
             EmployeeRepository employeeRepository,
@@ -24,8 +23,7 @@ namespace SalaryService.Application.Services
             UpdateEmployeeCommandHandler updateEmployeeCommandHandler,
             UpdateCEOCommandHandler updateCEOCommandHandler,
             DeleteEmployeeCommandHandler deleteEmployeeCommandHandler,
-            IClock clock,
-            IOptions<CoefficientOptions> coefficientOptions)
+            IClock clock)
         {
             _financeService = financeService;
             _employeeRepository = employeeRepository;
@@ -34,7 +32,6 @@ namespace SalaryService.Application.Services
             _updateCEOCommandHandler = updateCEOCommandHandler;
             _deleteEmployeeCommandHandler = deleteEmployeeCommandHandler;
             _clock = clock;
-            _coefficientOptions = coefficientOptions.Value;
         }
 
         public async Task<MetricsPreviewDto> GetPreviewMetrics(FinanceUpdatingParameters parameters)
@@ -66,7 +63,27 @@ namespace SalaryService.Application.Services
                 calculatedMetrics.Retainer,
                 calculatedMetrics.NetSalary);
 
-            preview.CalculateDelta(employee);
+            return CalculateDelta(preview, employee);
+        }
+
+        private MetricsPreviewDto CalculateDelta(MetricsPreviewDto preview, Employee employee)
+        {
+            preview.PayDelta = Math.Round(preview.Pay - employee.EmployeeFinancialMetrics.Pay, 2);
+            preview.RatePerHourDelta = Math.Round(preview.RatePerHour - employee.EmployeeFinancialMetrics.RatePerHour, 2);
+            preview.HourlyCostFactDelta = Math.Round(preview.HourlyCostFact - employee.EmployeeFinancialMetrics.HourlyCostFact, 2);
+            preview.HourlyCostHandDelta = Math.Round(preview.HourlyCostHand - employee.EmployeeFinancialMetrics.HourlyCostHand, 2);
+            preview.EarningsDelta = Math.Round(preview.Earnings - employee.EmployeeFinancialMetrics.Earnings, 2);
+            preview.IncomeTaxContributionsDelta = Math.Round(preview.IncomeTaxContributions - employee.EmployeeFinancialMetrics.IncomeTaxContributions, 2);
+            preview.PensionContributionsDelta = Math.Round(preview.PensionContributions - employee.EmployeeFinancialMetrics.PensionContributions, 2);
+            preview.MedicalContributionsDelta = Math.Round(preview.MedicalContributions - employee.EmployeeFinancialMetrics.MedicalContributions, 2);
+            preview.InjuriesContributionsDelta = Math.Round(preview.InjuriesContributions - employee.EmployeeFinancialMetrics.InjuriesContributions, 2);
+            preview.ExpensesDelta = Math.Round(preview.Expenses - employee.EmployeeFinancialMetrics.Expenses, 2);
+            preview.ProfitDelta = Math.Round(preview.Profit - employee.EmployeeFinancialMetrics.Profit, 2);
+            preview.ProfitAbilityDelta = Math.Round(preview.ProfitAbility - employee.EmployeeFinancialMetrics.ProfitAbility, 2);
+            preview.GrossSalaryDelta = Math.Round(preview.GrossSalary - employee.EmployeeFinancialMetrics.GrossSalary, 2);
+            preview.RetainerDelta = Math.Round(preview.Retainer - employee.EmployeeFinancialMetrics.Retainer, 2);
+            preview.NetSalaryDelta = Math.Round(preview.NetSalary - employee.EmployeeFinancialMetrics.NetSalary, 2);
+
             return preview;
         }
 
