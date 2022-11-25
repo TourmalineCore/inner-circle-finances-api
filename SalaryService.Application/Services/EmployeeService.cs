@@ -34,7 +34,10 @@ namespace SalaryService.Application.Services
 
         public async Task<MetricsPreviewDto> GetPreviewMetrics(FinanceUpdatingParameters parameters)
         {
-            return await _calculatePreviewMetricsCommandHandler.Handle(parameters);
+            var newMetrics = _financeAnalyticService.CalculateMetrics(parameters.RatePerHour,
+                parameters.Pay, parameters.EmploymentTypeValue, parameters.HasParking);
+
+            return await _calculatePreviewMetricsCommandHandler.Handle(parameters, newMetrics);
         }
 
         public async Task CreateEmployee(EmployeeCreatingParameters parameters)

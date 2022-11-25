@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SalaryService.Application.Dtos;
-using SalaryService.Application.Services;
 using SalaryService.DataAccess;
 using SalaryService.Domain;
 
@@ -8,31 +7,24 @@ namespace SalaryService.Application.Commands
 {
     public partial class CalculatePreviewMetricsCommand
     {
-        public long EmployeeId { get; set; }
     }
 
     public partial class CalculatePreviewMetricsCommandHandler
     {
         private readonly EmployeeDbContext _employeeDbContext;
-        private readonly FinanceAnalyticService _financeAnalyticService;
 
-        public CalculatePreviewMetricsCommandHandler(EmployeeDbContext employeeDbContext,
-            FinanceAnalyticService financeAnalyticService)
+        public CalculatePreviewMetricsCommandHandler(EmployeeDbContext employeeDbContext)
         {
             _employeeDbContext = employeeDbContext;
-            _financeAnalyticService = financeAnalyticService;
         }
 
-        public async Task<MetricsPreviewDto> Handle(FinanceUpdatingParameters request)
+        public async Task<MetricsPreviewDto> Handle(FinanceUpdatingParameters request, EmployeeFinancialMetrics newMetrics)
         {
             var employee = await _employeeDbContext
                 .Set<Employee>()
                 .Include(x => x.EmployeeFinanceForPayroll)
                 .Include(x => x.EmployeeFinancialMetrics)
                 .SingleAsync(x => x.Id == request.EmployeeId && x.DeletedAtUtc == null);
-            
-            var newMetrics = _financeAnalyticService.CalculateMetrics(request.RatePerHour,
-                request.Pay, request.EmploymentTypeValue, request.HasParking);
 
             var preview = CalculateDelta(new MetricsPreviewDto(employee.Id,
                 employee.Name + " " + employee.Surname + " " + employee.MiddleName,
