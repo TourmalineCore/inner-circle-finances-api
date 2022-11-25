@@ -82,7 +82,7 @@ namespace SalaryService.Application.Dtos
         {
             Id = id;
             FullName = fullName;
-            Pay = pay;
+            Pay = Math.Round(pay, 2);
             RatePerHour = Math.Round(ratePerHour, 2);
             EmploymentType = Math.Round(employmentType, 2);
             ParkingCostPerMonth = Math.Round(parkingCostPerMonth, 2);
