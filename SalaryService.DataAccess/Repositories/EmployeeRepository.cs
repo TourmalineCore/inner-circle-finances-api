@@ -25,7 +25,6 @@ namespace SalaryService.DataAccess.Repositories
                     _employeeDbContext.Add(employee);
                     _employeeDbContext.Add(financeForPayroll);
                     _employeeDbContext.Add(metrics);
-                    _employeeDbContext.SaveChanges();
                     transaction.Commit();
 
                 } catch(Exception exception)

@@ -15,9 +15,21 @@ namespace SalaryService.DataAccess.Repositories
             EmployeeFinancialMetrics metrics,
             EmployeeFinancialMetricsHistory employeeFinancialMetricsHistory)
         {
-            _employeeDbContext.Update(employeeFinanceForPayroll);
-            _employeeDbContext.Update(metrics);
-            _employeeDbContext.Add(employeeFinancialMetricsHistory);
+            using (var transaction = _employeeDbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    _employeeDbContext.Update(employeeFinanceForPayroll);
+                    _employeeDbContext.Update(metrics);
+                    _employeeDbContext.Add(employeeFinancialMetricsHistory);
+                    transaction.Commit();
+                }
+                catch (Exception exception)
+                {
+                    transaction.Rollback();
+                }
+            }
+           
             return _employeeDbContext.SaveChangesAsync();
         }
     }
