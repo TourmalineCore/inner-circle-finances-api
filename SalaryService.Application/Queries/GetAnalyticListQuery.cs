@@ -1,5 +1,7 @@
-﻿using SalaryService.DataAccess.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
 using SalaryService.Application.Dtos;
+using SalaryService.Domain;
+using SalaryService.DataAccess;
 
 namespace SalaryService.Application.Queries
 {
@@ -10,16 +12,21 @@ namespace SalaryService.Application.Queries
 
     public class GetAnalyticQueryHandler
     {
-        private readonly EmployeeRepository _employeeRepository;
+        private readonly EmployeeDbContext _employeeDbContext;
 
-        public GetAnalyticQueryHandler(EmployeeRepository employeeRepository)
+        public GetAnalyticQueryHandler(EmployeeDbContext employeeDbContext)
         {
-            _employeeRepository = employeeRepository;
+            _employeeDbContext = employeeDbContext;
         }
 
         public async Task<IEnumerable<AnalyticDto>> Handle()
         {
-            var employee = await _employeeRepository.GetAllAsync();
+            var employee = await _employeeDbContext
+                .QueryableAsNoTracking<Employee>()
+                .Where(x => x.DeletedAtUtc == null && x.AccountId != 1)
+                .Include(x => x.EmployeeFinanceForPayroll)
+                .Include(x => x.EmployeeFinancialMetrics)
+                .ToListAsync();
 
             return employee.Select(x => new AnalyticDto(x.Id,
                 x.Name,

@@ -2,8 +2,10 @@
 using NodaTime;
 using SalaryService.Application.Services;
 using Period = SalaryService.Domain.Common.Period;
-using SalaryService.DataAccess.Repositories;
 using SalaryService.Domain;
+using SalaryService.DataAccess;
+using Microsoft.EntityFrameworkCore;
+using SalaryService.Application.Dtos;
 
 namespace SalaryService.Application.Commands
 {
@@ -13,30 +15,32 @@ namespace SalaryService.Application.Commands
 
     public class UpdateFinancesCommandHandler
     {
-        private readonly FinanceRepository _financeRepository;
-        private readonly EmployeeFinanceForPayrollRepository _employeeFinanceForPayrollRepository;
-        private readonly EmployeeFinancialMetricsRepository _employeeFinancialMetricsRepository;
+        private readonly EmployeeDbContext _employeeDbContext;
         private readonly IClock _clock;
         private readonly CoefficientOptions _coefficientOptions;
 
-        public UpdateFinancesCommandHandler(FinanceRepository financeRepository, 
-            EmployeeFinancialMetricsRepository employeeFinancialMetricsRepository,
+        public UpdateFinancesCommandHandler(EmployeeDbContext employeeDbContext, 
             IClock clock,
-            IOptions<CoefficientOptions> coefficientOptions,
-            EmployeeFinanceForPayrollRepository employeeFinanceForPayrollRepository)
+            IOptions<CoefficientOptions> coefficientOptions)
         {
-            _financeRepository = financeRepository;
-            _employeeFinancialMetricsRepository = employeeFinancialMetricsRepository;
+            _employeeDbContext = employeeDbContext;
             _clock = clock;
             _coefficientOptions = coefficientOptions.Value;
-            _employeeFinanceForPayrollRepository = employeeFinanceForPayrollRepository;
         }
 
-        public async Task Handle(long employeeId,
-            EmployeeFinanceForPayroll employeeFinanceForPayroll, 
-            EmployeeFinancialMetrics employeeFinancialMetrics)
+        public async Task Handle(FinanceUpdatingParameters request, EmployeeFinancialMetrics metrics)
         {
-            var latestMetrics = await _employeeFinancialMetricsRepository.GetByEmployeeId(employeeId);
+            var financeForPayroll = new EmployeeFinanceForPayroll(request.RatePerHour,
+                request.Pay,
+                request.EmploymentType,
+                request.HasParking);
+
+            var latestMetrics = (await _employeeDbContext
+                .Set<Employee>()
+                .Include(x => x.EmployeeFinanceForPayroll)
+                .Include(x => x.EmployeeFinancialMetrics)
+                .SingleAsync(x => x.Id == request.EmployeeId && x.DeletedAtUtc == null)).EmployeeFinancialMetrics;
+
             var history = new EmployeeFinancialMetricsHistory
             {
                 EmployeeId = latestMetrics.EmployeeId,
@@ -64,36 +68,61 @@ namespace SalaryService.Application.Commands
                 AccountingPerMonth = latestMetrics.AccountingPerMonth
             };
 
-            var currentFinanceForPayroll = await _employeeFinanceForPayrollRepository.GetByEmployeeIdAsync(employeeId);
-            currentFinanceForPayroll.Update(employeeFinanceForPayroll.RatePerHour, 
-                employeeFinanceForPayroll.Pay, 
-                employeeFinanceForPayroll.EmploymentType, 
-                employeeFinanceForPayroll.HasParking);
+            var currentFinanceForPayroll = (await _employeeDbContext
+                .Set<Employee>()
+                .Include(x => x.EmployeeFinanceForPayroll)
+                .Include(x => x.EmployeeFinancialMetrics)
+                .SingleAsync(x => x.Id == request.EmployeeId && x.DeletedAtUtc == null)).EmployeeFinanceForPayroll;
 
-            var currentFinancialMetrics = await _employeeFinancialMetricsRepository.GetByEmployeeId(employeeId);
+            currentFinanceForPayroll.Update(financeForPayroll.RatePerHour,
+                financeForPayroll.Pay,
+                financeForPayroll.EmploymentType,
+                financeForPayroll.HasParking);
+
+            var currentFinancialMetrics = (await _employeeDbContext
+                .Set<Employee>()
+                .Include(x => x.EmployeeFinanceForPayroll)
+                .Include(x => x.EmployeeFinancialMetrics)
+                .SingleAsync(x => x.Id == request.EmployeeId && x.DeletedAtUtc == null)).EmployeeFinancialMetrics;
+
             currentFinancialMetrics.Update(_coefficientOptions.DistrictCoefficient,
-                employeeFinancialMetrics.Salary,
-                employeeFinancialMetrics.GrossSalary,
-                employeeFinancialMetrics.NetSalary,
-                employeeFinancialMetrics.Earnings,
-                employeeFinancialMetrics.IncomeTaxContributions,
-                employeeFinancialMetrics.PensionContributions,
-                employeeFinancialMetrics.MedicalContributions,
-                employeeFinancialMetrics.SocialInsuranceContributions,
-                employeeFinancialMetrics.InjuriesContributions,
-                employeeFinancialMetrics.Expenses,
-                employeeFinancialMetrics.HourlyCostFact,
-                employeeFinancialMetrics.HourlyCostHand,
-                employeeFinancialMetrics.Retainer,
-                employeeFinancialMetrics.Profit,
-                employeeFinancialMetrics.ProfitAbility,
-                employeeFinancialMetrics.RatePerHour,
-                employeeFinancialMetrics.Pay,
-                employeeFinancialMetrics.EmploymentType, 
-                employeeFinancialMetrics.HasParking, 
-                _clock.GetCurrentInstant());
-             
-            await _financeRepository.UpdateAsync(currentFinanceForPayroll, currentFinancialMetrics, history);
+                metrics.Salary,
+                metrics.GrossSalary,
+                metrics.NetSalary,
+                metrics.Earnings,
+                metrics.IncomeTaxContributions,
+                metrics.PensionContributions,
+                metrics.MedicalContributions,
+                metrics.SocialInsuranceContributions,
+                metrics.InjuriesContributions,
+                metrics.Expenses,
+                metrics.HourlyCostFact,
+                metrics.HourlyCostHand,
+                metrics.Retainer,
+                metrics.Profit,
+                metrics.ProfitAbility,
+                metrics.RatePerHour,
+                metrics.Pay,
+                metrics.EmploymentType,
+                metrics.HasParking,
+            _clock.GetCurrentInstant());
+
+            using (var transaction = _employeeDbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    _employeeDbContext.Update(currentFinanceForPayroll);
+                    _employeeDbContext.Update(currentFinancialMetrics);
+                    _employeeDbContext.Add(history);
+                    transaction.Commit();
+                }
+                catch (Exception exception)
+                {
+                    transaction.Rollback();
+                }
+            }
+
+            await _employeeDbContext.SaveChangesAsync();
         }
     }
 }

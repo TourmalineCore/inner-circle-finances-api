@@ -1,5 +1,7 @@
-﻿using SalaryService.Application.Dtos;
-using SalaryService.DataAccess.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using SalaryService.Application.Dtos;
+using SalaryService.DataAccess;
+using SalaryService.Domain;
 
 namespace SalaryService.Application.Commands
 {
@@ -9,19 +11,24 @@ namespace SalaryService.Application.Commands
     }
     public class UpdateEmployeeCommandHandler
     {
-        private readonly EmployeeRepository _employeeRepository;
+        private readonly EmployeeDbContext _employeeDbContext;
 
-        public UpdateEmployeeCommandHandler(EmployeeRepository employeeRepository)
+        public UpdateEmployeeCommandHandler(EmployeeDbContext employeeDbContext)
         {
-            _employeeRepository = employeeRepository;
+            _employeeDbContext = employeeDbContext;
         }
         public async Task Handle(EmployeeUpdatingParameters request)
         {
-            var employee = await _employeeRepository.GetByIdAsync(request.EmployeeId);
+            var employee = await _employeeDbContext
+                .Set<Employee>()
+                .Include(x => x.EmployeeFinanceForPayroll)
+                .Include(x => x.EmployeeFinancialMetrics)
+                .SingleAsync(x => x.Id == request.EmployeeId && x.DeletedAtUtc == null);
 
             employee.Update(request.Name, request.Surname, request.MiddleName, request.PersonalEmail, request.Phone, request.GitHub, request.GitLab);
 
-            await _employeeRepository.UpdateAsync(employee);
+            _employeeDbContext.Update(employee);
+            await _employeeDbContext.SaveChangesAsync();
         }
     }
 }

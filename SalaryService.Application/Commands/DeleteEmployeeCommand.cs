@@ -1,5 +1,6 @@
-﻿using NodaTime;
-using SalaryService.DataAccess.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using NodaTime;
+using SalaryService.DataAccess;
 using SalaryService.Domain;
 using Period = SalaryService.Domain.Common.Period;
 
@@ -12,21 +13,23 @@ namespace SalaryService.Application.Commands
 
     public class DeleteEmployeeCommandHandler
     {
-        private readonly EmployeeRepository _employeeRepository;
+        private readonly EmployeeDbContext _employeeDbContext;
         private readonly IClock _clock;
 
-        public DeleteEmployeeCommandHandler(EmployeeRepository employeeRepository, 
+        public DeleteEmployeeCommandHandler(EmployeeDbContext employeeDbContext,
             IClock clock)
         {
-            _employeeRepository = employeeRepository;
+            _employeeDbContext = employeeDbContext;
             _clock = clock;
         }
 
         public async Task Handle(long employeeId)
         {
-            var employee = await _employeeRepository.GetByIdAsync(employeeId);
-
-            employee.Delete(_clock.GetCurrentInstant());
+            var employee = await _employeeDbContext
+                .Set<Employee>()
+                .Include(x => x.EmployeeFinanceForPayroll)
+                .Include(x => x.EmployeeFinancialMetrics)
+                .SingleAsync(x => x.Id == employeeId && x.DeletedAtUtc == null);
 
             var history = new EmployeeFinancialMetricsHistory
             {
@@ -55,10 +58,26 @@ namespace SalaryService.Application.Commands
                 AccountingPerMonth = employee.EmployeeFinancialMetrics.AccountingPerMonth
             };
 
-            await _employeeRepository.DeleteEmployeeAsync(employee, 
-                employee.EmployeeFinanceForPayroll, 
-                employee.EmployeeFinancialMetrics, 
-                history);
+            employee.Delete(_clock.GetCurrentInstant());
+
+            using (var transaction = _employeeDbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    _employeeDbContext.Add(history);
+                    _employeeDbContext.Remove(employee.EmployeeFinancialMetrics);
+                    _employeeDbContext.Remove(employee.EmployeeFinanceForPayroll);
+                    _employeeDbContext.Update(employee);
+                    transaction.Commit();
+
+                }
+                catch (Exception exception)
+                {
+                    transaction.Rollback();
+                }
+            }
+
+            await _employeeDbContext.SaveChangesAsync();
         }
     }
 }

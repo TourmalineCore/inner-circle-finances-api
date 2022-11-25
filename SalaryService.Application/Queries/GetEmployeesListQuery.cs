@@ -1,6 +1,7 @@
-﻿
+﻿using Microsoft.EntityFrameworkCore;
 using SalaryService.Application.Dtos;
-using SalaryService.DataAccess.Repositories;
+using SalaryService.DataAccess;
+using SalaryService.Domain;
 
 namespace SalaryService.Application.Queries
 {
@@ -10,34 +11,38 @@ namespace SalaryService.Application.Queries
 
     public class GetEmployeesQueryHandler
     {
-        private readonly EmployeeRepository _employeeRepository;
+        private readonly EmployeeDbContext _employeeDbContext;
 
-        public GetEmployeesQueryHandler(EmployeeRepository employeeRepository)
+        public GetEmployeesQueryHandler(EmployeeDbContext employeeDbContext)
         {
-            _employeeRepository = employeeRepository;
+            _employeeDbContext = employeeDbContext;
         }
 
-        public async Task<IEnumerable<EmployeeDto>> Handle()
+        public async Task<EmployeeDto> Handle()
         {
-            var employeesGeneralInformation = await _employeeRepository.GetAllAsync();
+            var employees = await _employeeDbContext
+                .QueryableAsNoTracking<Employee>()
+                .Where(x => x.DeletedAtUtc == null && x.AccountId != 1)
+                .Include(x => x.EmployeeFinanceForPayroll)
+                .Include(x => x.EmployeeFinancialMetrics)
+                .ToListAsync();
 
-            return employeesGeneralInformation.Select(x => new EmployeeDto(
-                    x.Id,
-                    x.Name,
-                    x.Surname,
-                    x.MiddleName,
-                    x.CorporateEmail,
-                    x.PersonalEmail,
-                    x.Phone,
-                    x.GitHub,
-                    x.GitLab,
-                    x.EmployeeFinanceForPayroll.RatePerHour,
-                    x.EmployeeFinanceForPayroll.Pay,
-                    x.EmployeeFinanceForPayroll.EmploymentType,
-                    x.EmployeeFinancialMetrics.NetSalary,
-                    x.EmployeeFinancialMetrics.ParkingCostPerMonth
-                )
-            );
+            var employeesContacts = employees.Select(x => new EmployeeContactsDto(x.Id,
+                x.Name + " " + x.Surname + " " + x.MiddleName,
+                x.CorporateEmail,
+                x.PersonalEmail,
+                x.Phone,
+                x.GitHub,
+                x.GitLab));
+
+            var employeesFinances = employees.Select(x => new EmployeeFinancesDto(x.Id,
+                x.EmployeeFinanceForPayroll.RatePerHour,
+                x.EmployeeFinanceForPayroll.Pay,
+                x.EmployeeFinanceForPayroll.EmploymentType,
+                x.EmployeeFinancialMetrics.NetSalary,
+                x.EmployeeFinancialMetrics.ParkingCostPerMonth));
+
+            return new EmployeeDto(employeesContacts, employeesFinances);
         }
     }
 }

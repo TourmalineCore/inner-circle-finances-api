@@ -1,4 +1,6 @@
-﻿using SalaryService.DataAccess.Repositories;
+﻿using NodaTime;
+using SalaryService.Application.Dtos;
+using SalaryService.DataAccess;
 using SalaryService.Domain;
 
 namespace SalaryService.Application.Commands
@@ -9,15 +11,54 @@ namespace SalaryService.Application.Commands
     }
     public class CreateEmployeeCommandHandler
     {
-        private readonly EmployeeRepository _employeeRepository;
+        private readonly EmployeeDbContext _employeeDbContext;
+        private readonly IClock _clock;
 
-        public CreateEmployeeCommandHandler(EmployeeRepository employeeRepository)
+        public CreateEmployeeCommandHandler(EmployeeDbContext employeeDbContext,
+            IClock clock)
         {
-            _employeeRepository = employeeRepository;
+            _employeeDbContext = employeeDbContext;
+            _clock = clock;
         }
-        public async Task Handle(Employee employee, EmployeeFinanceForPayroll financeForPayroll, EmployeeFinancialMetrics metrics)
+
+        public Task Handle(EmployeeCreatingParameters request, EmployeeFinancialMetrics metrics)
         {
-            await _employeeRepository.CreateAsync(employee, financeForPayroll, metrics);
+            var employee = new Employee(request.Name,
+                request.Surname,
+                request.MiddleName,
+                request.CorporateEmail,
+                request.PersonalEmail,
+                request.Phone,
+                request.GitHub,
+                request.GitLab,
+                _clock.GetCurrentInstant()); ;
+
+            var financeForPayroll = new EmployeeFinanceForPayroll(request.RatePerHour,
+                request.Pay,
+                request.EmploymentType,
+                request.HasParking);
+
+            using (var transaction = _employeeDbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    employee.EmployeeFinanceForPayroll = financeForPayroll;
+                    employee.EmployeeFinancialMetrics = metrics;
+                    financeForPayroll.Employee = employee;
+                    metrics.Employee = employee;
+                    _employeeDbContext.Add(employee);
+                    _employeeDbContext.Add(financeForPayroll);
+                    _employeeDbContext.Add(metrics);
+                    transaction.Commit();
+
+                }
+                catch (Exception exception)
+                {
+                    transaction.Rollback();
+                }
+
+            }
+            return _employeeDbContext.SaveChangesAsync();
         }
     }
 }

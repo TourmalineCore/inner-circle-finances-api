@@ -14,16 +14,17 @@ namespace SalaryService.Application
             var coefficientOptions = configuration.GetSection("CoefficientOptions");
             services.Configure<CoefficientOptions>(c => coefficientOptions.Bind(c));
 
-            services.AddTransient<GetCEOQueryHandler>();
+            
             services.AddTransient<GetEmployeesQueryHandler>();
+            services.AddTransient<GetEmployeeQueryHandler>();
             services.AddTransient<GetAnalyticQueryHandler>();
             services.AddTransient<CreateEmployeeCommandHandler>();
             services.AddTransient<UpdateEmployeeCommandHandler>();
             services.AddTransient<UpdateFinancesCommandHandler>();
-            services.AddTransient<UpdateCEOCommandHandler>();
             services.AddTransient<DeleteEmployeeCommandHandler>();
+            services.AddTransient<CalculatePreviewMetricsCommandHandler>();
             services.AddTransient<EmployeeService>();
-            services.AddTransient<FinanceService>();
+            services.AddTransient<FinanceAnalyticService>();
             services.AddTransient<IClock, Clock>();
             return services;
         }

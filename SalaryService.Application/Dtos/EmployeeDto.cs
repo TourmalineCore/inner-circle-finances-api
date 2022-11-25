@@ -1,10 +1,8 @@
-﻿
-using System.Xml.Linq;
-using SalaryService.Domain;
+﻿using SalaryService.Domain;
 
 namespace SalaryService.Application.Dtos
 {
-    public class EmployeeDto
+    public class EmployeeContactsDto
     {
         public long Id { get; private set; }
 
@@ -20,6 +18,22 @@ namespace SalaryService.Application.Dtos
 
         public string GitLab { get; private set; }
 
+        public EmployeeContactsDto(long id, string fullName, string corporateEmail, string personalEmail, string phone, string gitHub, string gitLab)
+        {
+            Id = id;
+            FullName = fullName;
+            CorporateEmail = corporateEmail;
+            PersonalEmail = personalEmail;
+            Phone = phone;
+            GitHub = gitHub;
+            GitLab = gitLab;
+        }
+    }
+
+    public class EmployeeFinancesDto
+    {
+        public long Id { get; private set; }
+
         public double RatePerHour { get; private set; }
 
         public double Pay { get; private set; }
@@ -30,33 +44,25 @@ namespace SalaryService.Application.Dtos
 
         public double Parking { get; private set; }
 
-        public EmployeeDto(long id, 
-            string name,
-            string surname, 
-            string middleName, 
-            string corporateEmail, 
-            string personalEmail, 
-            string phone, 
-            string gitHub, 
-            string gitLab, 
-            double ratePerHour, 
-            double pay,
-            EmploymentTypes employmentType, 
-            double netSalary, 
-            double parking)
+        public EmployeeFinancesDto(long id, double ratePerHour, double pay, EmploymentTypes employmentType, double netSalary, double parking)
         {
             Id = id;
-            FullName = name + " " + surname + " " + middleName;
-            CorporateEmail = corporateEmail;
-            PersonalEmail = personalEmail;
-            Phone = phone;
-            GitHub = gitHub;
-            GitLab = gitLab;
             RatePerHour = ratePerHour;
             Pay = pay;
             EmploymentType = employmentType;
             NetSalary = netSalary;
             Parking = parking;
+        }
+    }
+    public class EmployeeDto
+    {
+        public IEnumerable<EmployeeContactsDto> EmployeeContacts { get; private set; }
+        public IEnumerable<EmployeeFinancesDto> EmployeeFinances { get; private set; }
+
+        public EmployeeDto(IEnumerable<EmployeeContactsDto> employeeContacts, IEnumerable<EmployeeFinancesDto> employeeFinances)
+        {
+            EmployeeContacts = employeeContacts;
+            EmployeeFinances = employeeFinances;
         }
     }
 }

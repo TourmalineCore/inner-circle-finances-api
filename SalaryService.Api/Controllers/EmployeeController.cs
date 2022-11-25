@@ -9,17 +9,14 @@ namespace SalaryService.Api.Controllers
     public class EmployeeController : Controller
     {
         private readonly EmployeeService _employeeService;
-        private readonly FinanceService _financeService;
-        private readonly GetCEOQueryHandler _getCeoQueryHandler;
+        private readonly GetEmployeeQueryHandler _getCeoQueryHandler;
         private readonly GetEmployeesQueryHandler _getEmployeesQueryHandler;
 
         public EmployeeController(EmployeeService employeeService,
-        FinanceService financeService,
-        GetCEOQueryHandler getCeoQueryHandler,
+        GetEmployeeQueryHandler getCeoQueryHandler,
         GetEmployeesQueryHandler getEmployeesQueryHandler)
         {
             _employeeService = employeeService;
-            _financeService = financeService;
             _getCeoQueryHandler = getCeoQueryHandler;
             _getEmployeesQueryHandler = getEmployeesQueryHandler;
         }
@@ -30,20 +27,14 @@ namespace SalaryService.Api.Controllers
             return _employeeService.GetPreviewMetrics(financeUpdatingParameters);
         }
 
-        [HttpGet("get-ceo")]
-        public Task<CEODto> GetCEO()
+        [HttpGet("get-profile")]
+        public Task<EmployeeProfileDto> GetProfile()
         {
             return _getCeoQueryHandler.Handle();
         }
 
-        [HttpPut("update-ceo")]
-        public Task UpdateCEO([FromBody] CEOUpdatingParameters employeeUpdatingParameters)
-        {
-            return _employeeService.UpdateCEO(employeeUpdatingParameters);
-        }
-
         [HttpGet("get-employees")]
-        public Task<IEnumerable<EmployeeDto>> GetEmployees()
+        public Task<EmployeeDto> GetEmployees()
         {
             return _getEmployeesQueryHandler.Handle();
         }
@@ -63,7 +54,7 @@ namespace SalaryService.Api.Controllers
         [HttpPut("update-finance")]
         public Task UpdateFinance([FromBody] FinanceUpdatingParameters financeUpdatingParameters)
         {
-            return _financeService.UpdateFinances(financeUpdatingParameters);
+            return _employeeService.UpdateFinances(financeUpdatingParameters);
         }
 
         [HttpDelete("delete-employee/{id}")]

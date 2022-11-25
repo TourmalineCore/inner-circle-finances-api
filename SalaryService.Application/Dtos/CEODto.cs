@@ -1,6 +1,6 @@
 ﻿namespace SalaryService.Application.Dtos
 {
-    public class CEODto
+    public class EmployeeProfileDto
     {
         public long Id { get; private set; }
 
@@ -16,7 +16,7 @@
 
         public string GitLab { get; private set; }
 
-        public CEODto(long id, 
+        public EmployeeProfileDto(long id, 
             string name, 
             string surname, 
             string middleName, 
