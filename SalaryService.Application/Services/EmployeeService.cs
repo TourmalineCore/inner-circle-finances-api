@@ -42,13 +42,8 @@ namespace SalaryService.Application.Services
             var employee = await _employeeRepository.GetByIdAsync(parameters.EmployeeId);
 
 
-            var calculatedMetrics = new EmployeeFinancialMetrics(parameters.RatePerHour, 
+            var calculatedMetrics = _financeService.CalculateMetrics(parameters.RatePerHour, 
                 parameters.Pay, parameters.EmploymentTypeValue, parameters.HasParking);
-
-            calculatedMetrics.CalculateMetrics(_coefficientOptions.DistrictCoefficient,
-                _coefficientOptions.MinimumWage,
-                _coefficientOptions.IncomeTaxPercent,
-                _clock.GetCurrentInstant());
 
             var preview = new MetricsPreviewDto(employee.Id,
                 employee.Name + " " + employee.Surname + " " + employee.MiddleName,
@@ -71,23 +66,7 @@ namespace SalaryService.Application.Services
                 calculatedMetrics.Retainer,
                 calculatedMetrics.NetSalary);
 
-            preview.CalculateDelta(
-                employee.EmployeeFinancialMetrics.Pay,
-                employee.EmployeeFinancialMetrics.RatePerHour,
-                employee.EmployeeFinancialMetrics.HourlyCostFact,
-                employee.EmployeeFinancialMetrics.HourlyCostHand,
-                employee.EmployeeFinancialMetrics.Earnings,
-                employee.EmployeeFinancialMetrics.IncomeTaxContributions,
-                employee.EmployeeFinancialMetrics.PensionContributions,
-                employee.EmployeeFinancialMetrics.MedicalContributions,
-                employee.EmployeeFinancialMetrics.InjuriesContributions,
-                employee.EmployeeFinancialMetrics.Expenses,
-                employee.EmployeeFinancialMetrics.Retainer,
-                employee.EmployeeFinancialMetrics.Profit,
-                employee.EmployeeFinancialMetrics.ProfitAbility,
-                employee.EmployeeFinancialMetrics.GrossSalary,
-                employee.EmployeeFinancialMetrics.NetSalary
-                );
+            preview.CalculateDelta(employee);
             return preview;
         }
 

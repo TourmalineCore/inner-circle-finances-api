@@ -1,4 +1,6 @@
-﻿namespace SalaryService.Application.Dtos
+﻿using SalaryService.Domain;
+
+namespace SalaryService.Application.Dtos
 {
     public class MetricsPreviewDto
     {
@@ -100,37 +102,23 @@
             NetSalary = Math.Round(netSalary, 2);
         }
 
-        public void CalculateDelta(double pay, 
-            double ratePerHour,
-            double hourlyCostFact,
-            double hourlyCostHand,
-            double earnings,
-            double incomeTaxContributions,
-            double pensionContributions,
-            double medicalContributions,
-            double injuriesContributions,
-            double expenses,
-            double retainer,
-            double profit,
-            double profitability,
-            double grossSalary,
-            double netSalary)
+        public void CalculateDelta(Employee employee)
         {
-            PayDelta = Math.Round(Pay - pay, 2);
-            RatePerHourDelta = Math.Round(RatePerHour - ratePerHour, 2);
-            HourlyCostFactDelta = Math.Round(HourlyCostFact - hourlyCostFact, 2);
-            HourlyCostHandDelta = Math.Round(HourlyCostHand - hourlyCostHand, 2);
-            EarningsDelta = Math.Round(Earnings - earnings, 2);
-            IncomeTaxContributionsDelta = Math.Round(IncomeTaxContributions - incomeTaxContributions, 2);
-            PensionContributionsDelta = Math.Round(PensionContributions - pensionContributions, 2);
-            MedicalContributionsDelta = Math.Round(MedicalContributions - medicalContributions, 2);
-            InjuriesContributionsDelta = Math.Round(InjuriesContributions - injuriesContributions, 2);
-            ExpensesDelta = Math.Round(Expenses - expenses, 2);
-            ProfitDelta = Math.Round(Profit - profit, 2);
-            ProfitAbilityDelta = Math.Round(ProfitAbility - profitability, 2);
-            GrossSalaryDelta = Math.Round(GrossSalary - grossSalary, 2);
-            RetainerDelta = Math.Round(Retainer - retainer, 2);
-            NetSalaryDelta = Math.Round(NetSalary - netSalary, 2);
+            PayDelta = Math.Round(Pay - employee.EmployeeFinancialMetrics.Pay, 2);
+            RatePerHourDelta = Math.Round(RatePerHour - employee.EmployeeFinancialMetrics.RatePerHour, 2);
+            HourlyCostFactDelta = Math.Round(HourlyCostFact - employee.EmployeeFinancialMetrics.HourlyCostFact, 2);
+            HourlyCostHandDelta = Math.Round(HourlyCostHand - employee.EmployeeFinancialMetrics.HourlyCostHand, 2);
+            EarningsDelta = Math.Round(Earnings - employee.EmployeeFinancialMetrics.Earnings, 2);
+            IncomeTaxContributionsDelta = Math.Round(IncomeTaxContributions - employee.EmployeeFinancialMetrics.IncomeTaxContributions, 2);
+            PensionContributionsDelta = Math.Round(PensionContributions - employee.EmployeeFinancialMetrics.PensionContributions, 2);
+            MedicalContributionsDelta = Math.Round(MedicalContributions - employee.EmployeeFinancialMetrics.MedicalContributions, 2);
+            InjuriesContributionsDelta = Math.Round(InjuriesContributions - employee.EmployeeFinancialMetrics.InjuriesContributions, 2);
+            ExpensesDelta = Math.Round(Expenses - employee.EmployeeFinancialMetrics.Expenses, 2);
+            ProfitDelta = Math.Round(Profit - employee.EmployeeFinancialMetrics.Profit, 2);
+            ProfitAbilityDelta = Math.Round(ProfitAbility - employee.EmployeeFinancialMetrics.ProfitAbility, 2);
+            GrossSalaryDelta = Math.Round(GrossSalary - employee.EmployeeFinancialMetrics.GrossSalary, 2);
+            RetainerDelta = Math.Round(Retainer - employee.EmployeeFinancialMetrics.Retainer, 2);
+            NetSalaryDelta = Math.Round(NetSalary - employee.EmployeeFinancialMetrics.NetSalary, 2);
         }
     }
 }
