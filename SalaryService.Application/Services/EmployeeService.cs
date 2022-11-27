@@ -1,8 +1,6 @@
 ﻿using NodaTime;
 using SalaryService.Application.Commands;
 using SalaryService.Application.Dtos;
-using SalaryService.Domain;
-
 namespace SalaryService.Application.Services
 {
     public class EmployeeService
@@ -13,15 +11,13 @@ namespace SalaryService.Application.Services
         private readonly UpdateFinancesCommandHandler _updateFinancesCommandHandler;
         private readonly DeleteEmployeeCommandHandler _deleteEmployeeCommandHandler;
         private readonly CalculatePreviewMetricsCommandHandler _calculatePreviewMetricsCommandHandler;
-        private readonly IClock _clock;
 
         public EmployeeService(FinanceAnalyticService financeAnalyticService,
             CreateEmployeeCommandHandler createEmployeeCommandHandler,
             UpdateEmployeeCommandHandler updateEmployeeCommandHandler,
             UpdateFinancesCommandHandler updateFinancesCommandHandler,
             DeleteEmployeeCommandHandler deleteEmployeeCommandHandler,
-            CalculatePreviewMetricsCommandHandler calculatePreviewMetricsCommandHandler,
-            IClock clock)
+            CalculatePreviewMetricsCommandHandler calculatePreviewMetricsCommandHandler)
         {
             _financeAnalyticService = financeAnalyticService;
             _createEmployeeCommandHandler = createEmployeeCommandHandler;
@@ -29,7 +25,6 @@ namespace SalaryService.Application.Services
             _updateFinancesCommandHandler = updateFinancesCommandHandler;
             _deleteEmployeeCommandHandler = deleteEmployeeCommandHandler;
             _calculatePreviewMetricsCommandHandler = calculatePreviewMetricsCommandHandler;
-            _clock = clock;
         }
 
         public async Task<MetricsPreviewDto> GetPreviewMetrics(FinanceUpdatingParameters parameters)
@@ -49,11 +44,13 @@ namespace SalaryService.Application.Services
                 parameters.HasParking);
 
             await _createEmployeeCommandHandler.Handle(parameters, metrics);
+            await _financeAnalyticService.CalculateTotalFinances();
         }
 
         public async Task DeleteEmployee(long id)
         {
             await _deleteEmployeeCommandHandler.Handle(id);
+            await _financeAnalyticService.CalculateTotalFinances();
         }
 
         public async Task UpdateEmployee(EmployeeUpdatingParameters request)
@@ -70,6 +67,7 @@ namespace SalaryService.Application.Services
                 parameters.HasParking);
 
             await _updateFinancesCommandHandler.Handle(parameters, metrics);
+            await _financeAnalyticService.CalculateTotalFinances();
         }
     }
 }

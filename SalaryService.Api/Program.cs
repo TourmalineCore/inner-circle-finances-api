@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SalaryService.Application;
+using SalaryService.Application.Services;
 using SalaryService.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,7 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+await app.Services.GetRequiredService<FinanceAnalyticService>().CalculateTotalFinances();
 
 app.UseSwaggerUI(options =>
 {

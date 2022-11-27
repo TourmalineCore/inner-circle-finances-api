@@ -7,11 +7,11 @@ namespace SalaryService.Application.Dtos
         public double OfficeExpense { get; private set; }
         public double TotalExpense { get; private set; } 
 
-        public ExpensesDto(double payrollExpense, double officeExpenses)
+        public ExpensesDto(double payrollExpense, double officeExpense, double totalExpense)
         {
             PayrollExpense = payrollExpense;
-            OfficeExpense = officeExpenses;
-            TotalExpense = PayrollExpense + OfficeExpense;
+            OfficeExpense = officeExpense;
+            TotalExpense = totalExpense;
         }
     }
 }

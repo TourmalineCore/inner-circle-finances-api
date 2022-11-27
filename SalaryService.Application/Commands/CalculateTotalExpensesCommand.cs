@@ -23,28 +23,37 @@ namespace SalaryService.Application.Commands
             _coefficientOptions = coefficientOptions.Value;
         }
 
-        public async Task<TotalFinancesDto> Handle()
+        public async Task Handle()
         {
-            var expenses = await CalculateTotalExpenses();
-
-            var desiredFinances = await CalculateDesiredFinance();
-            return new TotalFinancesDto(expenses, desiredFinances);
+            await CalculateTotalExpenses();
+            await CalculateDesiredFinance();
+            await CalculateReserveFinance();
         }
 
-        private async Task<ExpensesDto> CalculateTotalExpenses()
+        private async Task CalculateTotalExpenses()
         {
             var metrics = await _employeeDbContext.QueryableAsNoTracking<EmployeeFinancialMetrics>()
                 .ToListAsync();
-            return new ExpensesDto(Math.Round(metrics.Select(x => x.Expenses).Sum(), 2), _coefficientOptions.OfficeExpenses);
+            TotalFinances.PayrollExpense = metrics.Select(x => x.Expenses).Sum();
+            TotalFinances.OfficeExpense = _coefficientOptions.OfficeExpenses;
+            TotalFinances.TotalExpense = TotalFinances.PayrollExpense + TotalFinances.OfficeExpense;
         }
 
-        private async Task<DesiredFinancialMetricsDto> CalculateDesiredFinance()
+        private async Task CalculateDesiredFinance()
         {
             var metrics = await _employeeDbContext.QueryableAsNoTracking<EmployeeFinancialMetrics>()
                 .ToListAsync();
             var desiredIncome = metrics.Select(x => x.Earnings).Sum();
             var desiredProfit = desiredIncome - _coefficientOptions.OfficeExpenses;
-            return new DesiredFinancialMetricsDto(Math.Round(desiredIncome, 2), Math.Round(desiredProfit, 2), Math.Round((desiredProfit / desiredIncome) * 100, 2));
+            TotalFinances.DesiredIncome = Math.Round(desiredIncome, 2);
+            TotalFinances.DesiredProfit = Math.Round(desiredProfit, 2);
+            TotalFinances.DesiredProfitability = Math.Round((desiredProfit / desiredIncome) * 100, 2);
+        }
+        private async Task CalculateReserveFinance()
+        {
+            TotalFinances.ReserveForQuarter = Math.Round(TotalFinances.TotalExpense * 3, 2);
+            TotalFinances.ReserveForHalfYear = Math.Round(TotalFinances.ReserveForQuarter * 2, 2);
+            TotalFinances.ReserveForYear = Math.Round(TotalFinances.ReserveForHalfYear * 2, 2);
         }
     }
 }

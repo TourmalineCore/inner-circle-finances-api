@@ -13,11 +13,11 @@ namespace SalaryService.Application
         {
             var coefficientOptions = configuration.GetSection("CoefficientOptions");
             services.Configure<CoefficientOptions>(c => coefficientOptions.Bind(c));
-
             
             services.AddTransient<GetColleaguesQueryHandler>();
             services.AddTransient<GetEmployeeQueryHandler>();
             services.AddTransient<GetAnalyticQueryHandler>();
+            services.AddTransient<GetTotalFinancesQueryHandler>();
             services.AddTransient<CreateEmployeeCommandHandler>();
             services.AddTransient<UpdateEmployeeCommandHandler>();
             services.AddTransient<UpdateFinancesCommandHandler>();
