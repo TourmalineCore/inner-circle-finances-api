@@ -36,7 +36,7 @@ namespace SalaryService.Application.Commands
             var financeForPayroll = new EmployeeFinanceForPayroll(request.RatePerHour,
                 request.Pay,
                 request.EmploymentType,
-                request.HasParking);
+                request.ParkingCostPerMonth);
 
             using (var transaction = _employeeDbContext.Database.BeginTransaction())
             {

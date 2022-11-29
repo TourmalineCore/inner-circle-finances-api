@@ -29,13 +29,13 @@ namespace SalaryService.Application.Services
         public EmployeeFinancialMetrics CalculateMetrics(double ratePerHour,
             double pay,
             double employmentTypeValue,
-            bool hasParking)
+            double parkingCostPerMonth)
         {
             var calculateMetrics = new EmployeeFinancialMetrics(
                 ratePerHour,
                 pay,
                 employmentTypeValue,
-                hasParking);
+                parkingCostPerMonth);
 
             calculateMetrics.CalculateMetrics(_coefficientOptions.DistrictCoefficient,
                 _coefficientOptions.MinimumWage,

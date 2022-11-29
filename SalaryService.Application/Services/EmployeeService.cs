@@ -1,5 +1,4 @@
-﻿using NodaTime;
-using SalaryService.Application.Commands;
+﻿using SalaryService.Application.Commands;
 using SalaryService.Application.Dtos;
 namespace SalaryService.Application.Services
 {
@@ -30,7 +29,7 @@ namespace SalaryService.Application.Services
         public async Task<MetricsPreviewDto> GetPreviewMetrics(FinanceUpdatingParameters parameters)
         {
             var newMetrics = _financeAnalyticService.CalculateMetrics(parameters.RatePerHour,
-                parameters.Pay, parameters.EmploymentTypeValue, parameters.HasParking);
+                parameters.Pay, parameters.EmploymentTypeValue, parameters.ParkingCostPerMonth);
 
             return await _calculatePreviewMetricsCommandHandler.Handle(parameters, newMetrics);
         }
@@ -41,7 +40,7 @@ namespace SalaryService.Application.Services
                 parameters.RatePerHour,
                 parameters.Pay,
                 parameters.EmploymentTypeValue,
-                parameters.HasParking);
+                parameters.ParkingCostPerMonth);
 
             await _createEmployeeCommandHandler.Handle(parameters, metrics);
             await _financeAnalyticService.CalculateTotalFinances();
@@ -64,7 +63,7 @@ namespace SalaryService.Application.Services
             var metrics = _financeAnalyticService.CalculateMetrics(parameters.RatePerHour,
                 parameters.Pay,
                 parameters.EmploymentTypeValue,
-                parameters.HasParking);
+                parameters.ParkingCostPerMonth);
 
             await _updateFinancesCommandHandler.Handle(parameters, metrics);
             await _financeAnalyticService.CalculateTotalFinances();

@@ -51,9 +51,8 @@ namespace SalaryService.Application.Commands
                 NetSalary = employee.EmployeeFinancialMetrics.NetSalary,
                 RatePerHour = employee.EmployeeFinancialMetrics.RatePerHour,
                 Pay = employee.EmployeeFinancialMetrics.Pay,
-                Retainer = employee.EmployeeFinancialMetrics.Retainer,
+                Prepayment = employee.EmployeeFinancialMetrics.Prepayment,
                 EmploymentType = employee.EmployeeFinancialMetrics.EmploymentType,
-                HasParking = employee.EmployeeFinancialMetrics.HasParking,
                 ParkingCostPerMonth = employee.EmployeeFinancialMetrics.ParkingCostPerMonth,
                 AccountingPerMonth = employee.EmployeeFinancialMetrics.AccountingPerMonth
             };

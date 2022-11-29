@@ -223,14 +223,14 @@ namespace SalaryService.Domain
             }
         }
 
-        private double retainer;
-        public double Retainer
+        private double prepayment;
+        public double Prepayment
         {
-            get { return retainer; }
+            get { return prepayment; }
             set
             {
                 if (value >= 0)
-                    retainer = value;
+                    prepayment = value;
                 else
                     throw new ArgumentException();
             }
@@ -238,19 +238,16 @@ namespace SalaryService.Domain
 
         public double EmploymentType { get; set; }
 
-        public bool HasParking { get; set; }
-
         public double ParkingCostPerMonth { get; set; }
 
         public double AccountingPerMonth { get; set; }
 
-        public EmployeeFinancialMetrics(double ratePerHour, double pay, double employmentType, bool hasParking)
+        public EmployeeFinancialMetrics(double ratePerHour, double pay, double employmentType, double parkingCostPerMonth)
         {
             RatePerHour = ratePerHour;
             Pay = pay;
             EmploymentType = employmentType;
-            HasParking = hasParking;
-            ParkingCostPerMonth = hasParking ? ThirdPartyServicesPriceConsts.ParkingCostPerMonth : 0;
+            ParkingCostPerMonth = parkingCostPerMonth;
             AccountingPerMonth = ThirdPartyServicesPriceConsts.AccountingPerMonth;
         }
 
@@ -272,7 +269,7 @@ namespace SalaryService.Domain
             Expenses = CalculateExpenses();
             HourlyCostFact = CalculateHourlyCostFact();
             HourlyCostHand = CalculateHourlyCostHand();
-            Retainer = CalculateRetainer();
+            Prepayment = CalculatePrepayment();
             Profit = CalculateProfit();
             ProfitAbility = CalculateProfitability();
         }
@@ -289,19 +286,19 @@ namespace SalaryService.Domain
             double expenses,
             double hourlyCostFact,
             double hourlyCostHand,
-            double retainer,
+            double prepayment,
             double profit,
             double profitability,
             double ratePerHour,
             double pay,
             double employmentType,
-            bool hasParking,
+            double parkingCostPerMonth,
             Instant actualFromUtc)
         {
             RatePerHour = ratePerHour;
             Pay = pay;
             EmploymentType = employmentType;
-            HasParking = hasParking;
+            ParkingCostPerMonth = parkingCostPerMonth;
             Salary = salary;
             GrossSalary = grossSalary;
             NetSalary = netSalary;
@@ -314,7 +311,7 @@ namespace SalaryService.Domain
             Expenses = expenses;
             HourlyCostFact = hourlyCostFact;
             HourlyCostHand = hourlyCostHand;
-            Retainer = retainer;
+            Prepayment = prepayment;
             Profit = profit;
             ProfitAbility = profitability;
             ActualFromUtc = actualFromUtc;
@@ -325,7 +322,7 @@ namespace SalaryService.Domain
             return Expenses / WorkingPlanConsts.WorkingHoursInMonth;
         }
 
-        private double CalculateRetainer()
+        private double CalculatePrepayment()
         {
             return NetSalary / 2;
         }

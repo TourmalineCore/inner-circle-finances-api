@@ -38,7 +38,7 @@
 
         public double GrossSalary { get; private set; }
 
-        public double Retainer { get; private set; }
+        public double Prepayment { get; private set; }
 
         public double NetSalary { get; private set; }
 
@@ -62,7 +62,7 @@
             double profit,
             double profitAbility,
             double grossSalary,
-            double retainer,
+            double prepayment,
             double netSalary)
         {
             Id = id;
@@ -83,7 +83,7 @@
             Profit = profit;
             ProfitAbility = profitAbility;
             GrossSalary = grossSalary;
-            Retainer = retainer;
+            Prepayment = prepayment;
             NetSalary = netSalary;
         }
     }

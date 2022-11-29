@@ -44,7 +44,7 @@ namespace SalaryService.Application.Commands
                 newMetrics.Profit,
                 newMetrics.ProfitAbility,
                 newMetrics.GrossSalary,
-                newMetrics.Retainer,
+                newMetrics.Prepayment,
                 newMetrics.NetSalary), 
                 employee);
 
@@ -66,7 +66,7 @@ namespace SalaryService.Application.Commands
             preview.ProfitDelta = Math.Round(preview.Profit - employee.EmployeeFinancialMetrics.Profit, 2);
             preview.ProfitAbilityDelta = Math.Round(preview.ProfitAbility - employee.EmployeeFinancialMetrics.ProfitAbility, 2);
             preview.GrossSalaryDelta = Math.Round(preview.GrossSalary - employee.EmployeeFinancialMetrics.GrossSalary, 2);
-            preview.RetainerDelta = Math.Round(preview.Retainer - employee.EmployeeFinancialMetrics.Retainer, 2);
+            preview.PrepaymentDelta = Math.Round(preview.Prepayment - employee.EmployeeFinancialMetrics.Prepayment, 2);
             preview.NetSalaryDelta = Math.Round(preview.NetSalary - employee.EmployeeFinancialMetrics.NetSalary, 2);
 
             return preview;

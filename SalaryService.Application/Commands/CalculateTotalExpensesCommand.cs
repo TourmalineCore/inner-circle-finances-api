@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using SalaryService.Application.Dtos;
 using SalaryService.Application.Services;
 using SalaryService.DataAccess;
 using SalaryService.Domain;

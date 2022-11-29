@@ -14,6 +14,6 @@ namespace SalaryService.Application.Dtos
 
         public double EmploymentTypeValue => EmploymentType == EmploymentTypes.FullTime ? 1.0 : 0.5;
 
-        public bool HasParking { get; set; }
+        public double ParkingCostPerMonth { get; set; }
     }
 }

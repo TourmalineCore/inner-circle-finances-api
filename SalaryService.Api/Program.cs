@@ -19,7 +19,7 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
-await app.Services.GetRequiredService<FinanceAnalyticService>().CalculateTotalFinances();
+
 
 app.UseSwaggerUI(options =>
 {
@@ -32,6 +32,7 @@ using (var serviceScope = app.Services.CreateScope())
     var context = serviceScope.ServiceProvider.GetRequiredService<EmployeeDbContext>();
     await context.Database.MigrateAsync();
 }
+await app.Services.GetRequiredService<FinanceAnalyticService>().CalculateTotalFinances();
 
 app.UseRouting();
 

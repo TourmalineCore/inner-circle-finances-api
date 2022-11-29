@@ -53,8 +53,8 @@ namespace SalaryService.Application.Dtos
         public double GrossSalary { get; set; }
         public double GrossSalaryDelta { get; set; }
 
-        public double Retainer { get; set; }
-        public double RetainerDelta { get; set; }
+        public double Prepayment { get; set; }
+        public double PrepaymentDelta { get; set; }
 
         public double NetSalary { get; set; }
         public double NetSalaryDelta { get; set; }
@@ -77,7 +77,7 @@ namespace SalaryService.Application.Dtos
             double profit, 
             double profitAbility,
             double grossSalary,
-            double retainer,
+            double prepayment,
             double netSalary)
         {
             Id = id;
@@ -98,7 +98,7 @@ namespace SalaryService.Application.Dtos
             Profit = Math.Round(profit, 2);
             ProfitAbility = Math.Round(profitAbility, 2);
             GrossSalary = Math.Round(grossSalary, 2);
-            Retainer = Math.Round(retainer, 2);
+            Prepayment = Math.Round(prepayment, 2);
             NetSalary = Math.Round(netSalary, 2);
         }
     }

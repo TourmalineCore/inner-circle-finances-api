@@ -30,7 +30,7 @@ namespace SalaryService.Application.Commands
             var financeForPayroll = new EmployeeFinanceForPayroll(request.RatePerHour,
                 request.Pay,
                 request.EmploymentType,
-                request.HasParking);
+                request.ParkingCostPerMonth);
 
             var latestMetrics = (await _employeeDbContext
                 .Set<Employee>()
@@ -58,9 +58,8 @@ namespace SalaryService.Application.Commands
                 NetSalary = latestMetrics.NetSalary,
                 RatePerHour = latestMetrics.RatePerHour,
                 Pay = latestMetrics.Pay,
-                Retainer = latestMetrics.Retainer,
+                Prepayment = latestMetrics.Prepayment,
                 EmploymentType = latestMetrics.EmploymentType,
-                HasParking = latestMetrics.HasParking,
                 ParkingCostPerMonth = latestMetrics.ParkingCostPerMonth,
                 AccountingPerMonth = latestMetrics.AccountingPerMonth
             };
@@ -74,7 +73,7 @@ namespace SalaryService.Application.Commands
             currentFinanceForPayroll.Update(financeForPayroll.RatePerHour,
                 financeForPayroll.Pay,
                 financeForPayroll.EmploymentType,
-                financeForPayroll.HasParking);
+                financeForPayroll.ParkingCostPerMonth);
 
             var currentFinancialMetrics = (await _employeeDbContext
                 .Set<Employee>()
@@ -94,13 +93,13 @@ namespace SalaryService.Application.Commands
                 metrics.Expenses,
                 metrics.HourlyCostFact,
                 metrics.HourlyCostHand,
-                metrics.Retainer,
+                metrics.Prepayment,
                 metrics.Profit,
                 metrics.ProfitAbility,
                 metrics.RatePerHour,
                 metrics.Pay,
                 metrics.EmploymentType,
-                metrics.HasParking,
+                metrics.ParkingCostPerMonth,
             _clock.GetCurrentInstant());
 
             using (var transaction = _employeeDbContext.Database.BeginTransaction())

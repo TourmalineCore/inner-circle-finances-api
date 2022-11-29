@@ -48,7 +48,7 @@ namespace SalaryService.Application.Queries
                 Math.Round(x.EmployeeFinancialMetrics.Profit, 2),
                 Math.Round(x.EmployeeFinancialMetrics.ProfitAbility, 2),
                 Math.Round(x.EmployeeFinancialMetrics.GrossSalary, 2),
-                Math.Round(x.EmployeeFinancialMetrics.Retainer, 2),
+                Math.Round(x.EmployeeFinancialMetrics.Prepayment, 2),
                 Math.Round(x.EmployeeFinancialMetrics.NetSalary, 2)));
         }
     }
