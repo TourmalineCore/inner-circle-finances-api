@@ -8,7 +8,7 @@ deployment:
 replicaCount: 1
 
 image:
-  repository: ghcr.io/tourmalinecore/inner-circle/salary-service
+  repository: ghcr.io/tourmalinecore/inner-circle/dev-salary-service
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag:

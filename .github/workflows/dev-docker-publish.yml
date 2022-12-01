@@ -39,5 +39,5 @@
                     --set "imageCredentials.password=${{ secrets.GH_REGISTRY_TOKEN }}" 
                     --set "image.tag=${{ github.sha }}"
                     --set "image.pullPolicy=Always"
-                    ./InnerCircle.SalaryService/ci/chart
+                    ./SalaryService.Api/ci/chart
             kubeconfig: '${{ secrets.DEV_KUBECONFIG }}'
