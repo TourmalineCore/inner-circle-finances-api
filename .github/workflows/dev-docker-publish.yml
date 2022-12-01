@@ -33,11 +33,11 @@
           with:
             exec: helm upgrade --namespace dev-inner-circle --create-namespace --install dev-salary-service-api 
                     --set "aspnetcoreEnvironment=Development"
-                    --set "ingress.host"=${{ secrets.HOST }}
-                    --set "deployment.appsettings.ConnectionStrings.DefaultConnection=${{ secrets.POSTGRESQLCONNECTIONSTRING }}"
+                    --set "ingress.host"=${{ secrets.DEV_HOST }}
+                    --set "deployment.appsettings.ConnectionStrings.DefaultConnection=${{ secrets.DEV_POSTGRESQLCONNECTIONSTRING }}"
                     --set "imageCredentials.username=${{ github.actor }}" 
                     --set "imageCredentials.password=${{ secrets.GH_REGISTRY_TOKEN }}" 
                     --set "image.tag=${{ github.sha }}"
                     --set "image.pullPolicy=Always"
                     ./InnerCircle.SalaryService/ci/chart
-            kubeconfig: '${{ secrets.KUBECONFIG }}'
+            kubeconfig: '${{ secrets.DEV_KUBECONFIG }}'
