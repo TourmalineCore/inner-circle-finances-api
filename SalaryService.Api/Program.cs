@@ -1,9 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.EventLog;
+using SalaryService.Api;
 using SalaryService.Application;
 using SalaryService.DataAccess;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using TourmalineCore.AspNetCore.JwtAuthentication.Core;
+using TourmalineCore.AspNetCore.JwtAuthentication.Core.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +15,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var configuration = builder.Configuration;
+
+var authenticationOptions = (configuration.GetSection(nameof(AuthenticationOptions)).Get<AuthenticationOptions>());
+builder.Services.AddJwtAuthentication(authenticationOptions).AddUserCredentialValidator<UserCredentialsValidator>()
+    .WithUserClaimsProvider<UserClaimsProvider>(UserClaimsProvider.PermissionClaimType);
 
 builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
 {
@@ -80,6 +87,7 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
+
 app.UseSwaggerUI(options =>
 {
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
@@ -93,6 +101,13 @@ using (var serviceScope = app.Services.CreateScope())
 }
 
 app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app
+    .UseDefaultLoginMiddleware()
+    .UseJwtAuthentication();
 
 app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
