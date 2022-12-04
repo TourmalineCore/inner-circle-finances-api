@@ -5,10 +5,9 @@ using SalaryService.Domain;
 
 namespace SalaryService.Application.Queries
 {
-    public partial class GetTotalFinancesQuery
+    public class GetTotalFinancesQuery
     {
     }
-
     public class GetTotalFinancesQueryHandler
     {
         private readonly EmployeeDbContext _employeeDbContext;
@@ -17,12 +16,24 @@ namespace SalaryService.Application.Queries
         {
             _employeeDbContext = employeeDbContext;
         }
-
         public async Task<TotalFinancesDto> Handle()
         {
             var totals = await _employeeDbContext.Set<TotalFinances>().SingleAsync();
             var coefficients = await _employeeDbContext.Set<CoefficientOptions>().SingleAsync();
-            return new TotalFinancesDto(new ExpensesDto(totals.PayrollExpense, coefficients.OfficeExpenses, totals.TotalExpense));
+            var desiredFinances = await _employeeDbContext.Set<DesiredFinancesAndReserve>().SingleAsync();
+
+            return new TotalFinancesDto(new ExpensesDto(
+                    Math.Round(totals.PayrollExpense, 2),
+                    Math.Round(coefficients.OfficeExpenses, 2),
+                    Math.Round(totals.TotalExpense, 2)),
+                new DesiredFinancialMetricsDto(
+                    Math.Round(desiredFinances.DesiredIncome, 2),
+                    Math.Round(desiredFinances.DesiredProfit, 2),
+                    Math.Round(desiredFinances.DesiredProfitability, 2)),
+                new ReserveFinanceDto(
+                    Math.Round(desiredFinances.ReserveForQuarter, 2),
+                    Math.Round(desiredFinances.ReserveForHalfYear, 2),
+                    Math.Round(desiredFinances.ReserveForYear, 2)));
         }
     }
 }

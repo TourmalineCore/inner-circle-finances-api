@@ -17,6 +17,8 @@ namespace SalaryService.DataAccess
 
         public DbSet<TotalFinances> TotalFinances { get; set; }
 
+        public DbSet<DesiredFinancesAndReserve> DesiredFinancesAndReserve { get; set; }
+
         public DbSet<TotalFinancesHistory> TotalFinancesHistory { get; set; }
 
         public EmployeeDbContext(DbContextOptions<EmployeeDbContext> options) : base(options)
