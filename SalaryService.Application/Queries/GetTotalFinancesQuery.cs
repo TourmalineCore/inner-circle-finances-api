@@ -1,5 +1,7 @@
-﻿using SalaryService.Application.Dtos;
-using SalaryService.Application.Services;
+﻿using Microsoft.EntityFrameworkCore;
+using SalaryService.Application.Dtos;
+using SalaryService.DataAccess;
+using SalaryService.Domain;
 
 namespace SalaryService.Application.Queries
 {
@@ -9,11 +11,18 @@ namespace SalaryService.Application.Queries
 
     public class GetTotalFinancesQueryHandler
     {
+        private readonly EmployeeDbContext _employeeDbContext;
+
+        public GetTotalFinancesQueryHandler(EmployeeDbContext employeeDbContext)
+        {
+            _employeeDbContext = employeeDbContext;
+        }
+
         public async Task<TotalFinancesDto> Handle()
         {
-            return new TotalFinancesDto(new ExpensesDto(TotalFinances.PayrollExpense, TotalFinances.OfficeExpense, TotalFinances.TotalExpense), 
-                new DesiredFinancialMetricsDto(TotalFinances.DesiredIncome, TotalFinances.DesiredProfit, TotalFinances.DesiredProfitability),
-                new ReserveFinanceDto(TotalFinances.ReserveForQuarter, TotalFinances.ReserveForHalfYear, TotalFinances.ReserveForYear));
+            var totals = await _employeeDbContext.Set<TotalFinances>().SingleAsync();
+            var coefficients = await _employeeDbContext.Set<CoefficientOptions>().SingleAsync();
+            return new TotalFinancesDto(new ExpensesDto(totals.PayrollExpense, coefficients.OfficeExpenses, totals.TotalExpense));
         }
     }
 }

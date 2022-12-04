@@ -2,6 +2,7 @@
 using NodaTime;
 using SalaryService.Application.Commands;
 using SalaryService.Application.Dtos;
+using SalaryService.Application.Queries;
 using SalaryService.Domain;
 
 namespace SalaryService.Application.Services
@@ -9,15 +10,15 @@ namespace SalaryService.Application.Services
     public class FinanceAnalyticService
     {
         private readonly CalculateTotalExpensesCommandHandler _calculateTotalExpensesCommandHandler;
-        private readonly CoefficientOptions _coefficientOptions;
+        private readonly GetCoefficientsQueryHandler _getCoefficientsQueryHandler;
         private readonly IClock _clock;
 
         public FinanceAnalyticService(CalculateTotalExpensesCommandHandler calculateTotalExpensesCommandHandler,
-            IOptions<CoefficientOptions> coefficientOptions, 
+            GetCoefficientsQueryHandler getCoefficientsQueryHandler,
             IClock clock)
         {
             _calculateTotalExpensesCommandHandler = calculateTotalExpensesCommandHandler;
-            _coefficientOptions = coefficientOptions.Value;
+            _getCoefficientsQueryHandler = getCoefficientsQueryHandler;
             _clock = clock;
         }
 
@@ -26,7 +27,7 @@ namespace SalaryService.Application.Services
             return _calculateTotalExpensesCommandHandler.Handle();
         }
 
-        public EmployeeFinancialMetrics CalculateMetrics(double ratePerHour,
+        public async Task<EmployeeFinancialMetrics> CalculateMetrics(double ratePerHour,
             double pay,
             double employmentTypeValue,
             double parkingCostPerMonth)
@@ -36,10 +37,11 @@ namespace SalaryService.Application.Services
                 pay,
                 employmentTypeValue,
                 parkingCostPerMonth);
+            var coefficients = await _getCoefficientsQueryHandler.Handle();
 
-            calculateMetrics.CalculateMetrics(_coefficientOptions.DistrictCoefficient,
-                _coefficientOptions.MinimumWage,
-                _coefficientOptions.IncomeTaxPercent,
+            calculateMetrics.CalculateMetrics(coefficients.DistrictCoefficient,
+                coefficients.MinimumWage,
+                coefficients.IncomeTaxPercent,
                 _clock.GetCurrentInstant());
 
             return calculateMetrics;

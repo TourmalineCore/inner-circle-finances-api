@@ -13,6 +13,12 @@ namespace SalaryService.DataAccess
 
         public DbSet<EmployeeFinancialMetricsHistory> EmployeeFinancialMetricsHistory { get; set; }
 
+        public DbSet<CoefficientOptions> CoefficientOptions { get; set; }
+
+        public DbSet<TotalFinances> TotalFinances { get; set; }
+
+        public DbSet<TotalFinancesHistory> TotalFinancesHistory { get; set; }
+
         public EmployeeDbContext(DbContextOptions<EmployeeDbContext> options) : base(options)
         {
             
@@ -24,10 +30,20 @@ namespace SalaryService.DataAccess
                 navigationBuilder =>
                 {
                     navigationBuilder.Property(history => history.FromUtc)
-                        .HasColumnName("StartedAtUtc");
+                        .HasColumnName("FromUtc");
                     navigationBuilder.Property(history => history.ToUtc)
-                        .HasColumnName("UpdatedAtUtc");
+                        .HasColumnName("ToUtc");
                 });
+
+            modelBuilder.Entity<TotalFinancesHistory>().OwnsOne(history => history.Period,
+                navigationBuilder =>
+                {
+                    navigationBuilder.Property(history => history.FromUtc)
+                        .HasColumnName("FromUtc");
+                    navigationBuilder.Property(history => history.ToUtc)
+                        .HasColumnName("ToUtc");
+                });
+
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
             base.OnModelCreating(modelBuilder);
         }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+
 using Microsoft.Extensions.Options;
+using NodaTime;
 using SalaryService.Application.Services;
 using SalaryService.DataAccess;
 using SalaryService.Domain;
@@ -13,46 +15,36 @@ namespace SalaryService.Application.Commands
     public class CalculateTotalExpensesCommandHandler
     {
         private readonly EmployeeDbContext _employeeDbContext;
-        private readonly CoefficientOptions _coefficientOptions;
+        private readonly IClock _clock;
 
-        public CalculateTotalExpensesCommandHandler(EmployeeDbContext employeeDbContext, 
-            IOptions<CoefficientOptions> coefficientOptions)
+        public CalculateTotalExpensesCommandHandler(EmployeeDbContext employeeDbContext, IClock clock)
         {
             _employeeDbContext = employeeDbContext;
-            _coefficientOptions = coefficientOptions.Value;
+            _clock = clock;
         }
 
         public async Task Handle()
         {
-            await CalculateTotalExpenses();
-            await CalculateDesiredFinance();
-            await CalculateReserveFinance();
-        }
-
-        private async Task CalculateTotalExpenses()
-        {
             var metrics = await _employeeDbContext.QueryableAsNoTracking<EmployeeFinancialMetrics>()
                 .ToListAsync();
-            TotalFinances.PayrollExpense = metrics.Select(x => x.Expenses).Sum();
-            TotalFinances.OfficeExpense = _coefficientOptions.OfficeExpenses;
-            TotalFinances.TotalExpense = TotalFinances.PayrollExpense + TotalFinances.OfficeExpense;
-        }
+            var coefficients = await _employeeDbContext.Set<CoefficientOptions>().SingleAsync();
 
-        private async Task CalculateDesiredFinance()
-        {
-            var metrics = await _employeeDbContext.QueryableAsNoTracking<EmployeeFinancialMetrics>()
-                .ToListAsync();
-            var desiredIncome = metrics.Select(x => x.Earnings).Sum();
-            var desiredProfit = desiredIncome - _coefficientOptions.OfficeExpenses;
-            TotalFinances.DesiredIncome = Math.Round(desiredIncome, 2);
-            TotalFinances.DesiredProfit = Math.Round(desiredProfit, 2);
-            TotalFinances.DesiredProfitability = Math.Round((desiredProfit / desiredIncome) * 100, 2);
-        }
-        private async Task CalculateReserveFinance()
-        {
-            TotalFinances.ReserveForQuarter = Math.Round(TotalFinances.TotalExpense * 3, 2);
-            TotalFinances.ReserveForHalfYear = Math.Round(TotalFinances.ReserveForQuarter * 2, 2);
-            TotalFinances.ReserveForYear = Math.Round(TotalFinances.ReserveForHalfYear * 2, 2);
+            var payrollExpense = metrics.Select(x => x.Expenses).Sum();
+            var totalExpense = payrollExpense + coefficients.OfficeExpenses;
+
+            var totals = await _employeeDbContext.Set<TotalFinances>().SingleOrDefaultAsync();
+            if (totals == null)
+            {
+                var actualTotals = new TotalFinances(_clock.GetCurrentInstant(), payrollExpense, totalExpense);
+                _employeeDbContext.Add(actualTotals);
+            }
+            else
+            {
+                totals.Update(_clock.GetCurrentInstant(), payrollExpense, totalExpense);
+                _employeeDbContext.Update(totals);
+            }
+            
+            await _employeeDbContext.SaveChangesAsync();
         }
     }
 }

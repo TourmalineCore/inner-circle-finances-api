@@ -1,11 +1,7 @@
 ﻿namespace SalaryService.Application.Services;
 
-public static class TotalFinances
+public static class DesiredFinancesAndReserve
 {
-    public static double PayrollExpense { get; set; }
-    public static double OfficeExpense { get; set; }
-    public static double TotalExpense { get; set; }
-
     public static double DesiredIncome { get; set; }
     public static double DesiredProfit { get; set; }
     public static double DesiredProfitability { get; set; }
