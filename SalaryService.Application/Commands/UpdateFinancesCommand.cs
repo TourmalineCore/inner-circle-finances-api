@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-using NodaTime;
-using SalaryService.Application.Services;
+﻿using NodaTime;
 using Period = SalaryService.Domain.Common.Period;
 using SalaryService.Domain;
 using SalaryService.DataAccess;

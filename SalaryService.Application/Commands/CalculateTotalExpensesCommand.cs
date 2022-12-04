@@ -1,10 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
-using Microsoft.Extensions.Options;
 using NodaTime;
-using SalaryService.Application.Services;
 using SalaryService.DataAccess;
 using SalaryService.Domain;
+using Period = SalaryService.Domain.Common.Period;
 
 namespace SalaryService.Application.Commands
 {
@@ -32,18 +30,18 @@ namespace SalaryService.Application.Commands
             var payrollExpense = metrics.Select(x => x.Expenses).Sum();
             var totalExpense = payrollExpense + coefficients.OfficeExpenses;
 
-            var totals = await _employeeDbContext.Set<TotalFinances>().SingleOrDefaultAsync();
-            if (totals == null)
+            var totals = await _employeeDbContext.Set<TotalFinances>().SingleAsync();
+
+            var historyTotals = new TotalFinancesHistory
             {
-                var actualTotals = new TotalFinances(_clock.GetCurrentInstant(), payrollExpense, totalExpense);
-                _employeeDbContext.Add(actualTotals);
-            }
-            else
-            {
-                totals.Update(_clock.GetCurrentInstant(), payrollExpense, totalExpense);
-                _employeeDbContext.Update(totals);
-            }
-            
+                Period = new Period(totals.ActualFromUtc, _clock.GetCurrentInstant()),
+                PayrollExpense = payrollExpense,
+                TotalExpense = totalExpense
+            };
+            _employeeDbContext.Add(historyTotals);
+            totals.Update(_clock.GetCurrentInstant(), payrollExpense, totalExpense);
+            _employeeDbContext.Update(totals);
+
             await _employeeDbContext.SaveChangesAsync();
         }
     }

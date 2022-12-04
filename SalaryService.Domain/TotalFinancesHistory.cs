@@ -10,8 +10,6 @@ namespace SalaryService.Domain
 
         public double PayrollExpense { get; set; }
 
-        public double OfficeExpense { get; set; }
-
         public double TotalExpense { get; set; }
         
     }

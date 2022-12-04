@@ -32,7 +32,6 @@ using (var serviceScope = app.Services.CreateScope())
     var context = serviceScope.ServiceProvider.GetRequiredService<EmployeeDbContext>();
     await context.Database.MigrateAsync();
 }
-await app.Services.GetRequiredService<FinanceAnalyticService>().CalculateTotalFinances();
 
 app.UseRouting();
 
