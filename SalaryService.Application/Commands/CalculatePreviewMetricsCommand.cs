@@ -31,11 +31,14 @@ namespace SalaryService.Application.Commands
                 newMetrics.Pay,
                 newMetrics.RatePerHour,
                 newMetrics.EmploymentType,
+                newMetrics.Salary,
                 newMetrics.ParkingCostPerMonth,
+                newMetrics.AccountingPerMonth,
                 newMetrics.HourlyCostFact,
                 newMetrics.HourlyCostHand,
                 newMetrics.Earnings,
                 newMetrics.IncomeTaxContributions,
+                newMetrics.DistrictCoefficient,
                 newMetrics.PensionContributions,
                 newMetrics.MedicalContributions,
                 newMetrics.SocialInsuranceContributions,
@@ -54,13 +57,17 @@ namespace SalaryService.Application.Commands
         private MetricsPreviewDto CalculateDelta(MetricsPreviewDto preview, Employee employee)
         {
             preview.PayDelta = Math.Round(preview.Pay - employee.EmployeeFinancialMetrics.Pay, 2);
+            preview.SalaryDelta = Math.Round(preview.Salary - employee.EmployeeFinancialMetrics.Salary, 2);
             preview.RatePerHourDelta = Math.Round(preview.RatePerHour - employee.EmployeeFinancialMetrics.RatePerHour, 2);
             preview.HourlyCostFactDelta = Math.Round(preview.HourlyCostFact - employee.EmployeeFinancialMetrics.HourlyCostFact, 2);
             preview.HourlyCostHandDelta = Math.Round(preview.HourlyCostHand - employee.EmployeeFinancialMetrics.HourlyCostHand, 2);
+            preview.ParkingCostPerMonth = Math.Round(preview.ParkingCostPerMonth - employee.EmployeeFinancialMetrics.ParkingCostPerMonth, 2);
             preview.EarningsDelta = Math.Round(preview.Earnings - employee.EmployeeFinancialMetrics.Earnings, 2);
             preview.IncomeTaxContributionsDelta = Math.Round(preview.IncomeTaxContributions - employee.EmployeeFinancialMetrics.IncomeTaxContributions, 2);
+            preview.DistrictCoefficientDelta = Math.Round(preview.DistrictCoefficient - employee.EmployeeFinancialMetrics.DistrictCoefficient, 2);
             preview.PensionContributionsDelta = Math.Round(preview.PensionContributions - employee.EmployeeFinancialMetrics.PensionContributions, 2);
             preview.MedicalContributionsDelta = Math.Round(preview.MedicalContributions - employee.EmployeeFinancialMetrics.MedicalContributions, 2);
+            preview.SocialInsuranceContributionsDelta = Math.Round(preview.SocialInsuranceContributions - employee.EmployeeFinancialMetrics.SocialInsuranceContributions, 2);
             preview.InjuriesContributionsDelta = Math.Round(preview.InjuriesContributions - employee.EmployeeFinancialMetrics.InjuriesContributions, 2);
             preview.ExpensesDelta = Math.Round(preview.Expenses - employee.EmployeeFinancialMetrics.Expenses, 2);
             preview.ProfitDelta = Math.Round(preview.Profit - employee.EmployeeFinancialMetrics.Profit, 2);

@@ -82,6 +82,7 @@ namespace SalaryService.Application.Commands
             currentFinancialMetrics.Update(metrics.Salary,
                 metrics.GrossSalary,
                 metrics.NetSalary,
+                metrics.DistrictCoefficient,
                 metrics.Earnings,
                 metrics.IncomeTaxContributions,
                 metrics.PensionContributions,

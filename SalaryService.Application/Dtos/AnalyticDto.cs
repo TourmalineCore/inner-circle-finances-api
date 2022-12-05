@@ -12,7 +12,11 @@
 
         public double EmploymentType { get; private set; }
 
+        public double Salary { get; private set; }
+
         public double ParkingCostPerMonth { get; private set; }
+
+        public double AccountingCostPerMonth { get; private set; }
 
         public double HourlyCostFact { get; private set; }
 
@@ -21,6 +25,8 @@
         public double Earnings { get; private set; }
 
         public double IncomeTaxContributions { get; private set; }
+
+        public double DistrictCoefficient { get; private set; }
 
         public double PensionContributions { get; set; }
 
@@ -49,11 +55,14 @@
             double pay,
             double ratePerHour,
             double employmentType,
+            double salary,
             double parkingCostPerMonth,
+            double accountingCostPerMonth,
             double hourlyCostFact,
             double hourlyCostHand,
             double earnings,
             double incomeTaxContributions,
+            double districtCoefficient,
             double pensionContributions,
             double medicalContributions,
             double socialInsuranceContributions,
@@ -70,11 +79,14 @@
             Pay = pay;
             RatePerHour = ratePerHour;
             EmploymentType = employmentType;
+            Salary = salary;
             ParkingCostPerMonth = parkingCostPerMonth;
+            AccountingCostPerMonth = accountingCostPerMonth;
             HourlyCostFact = hourlyCostFact;
             HourlyCostHand = hourlyCostHand;
             Earnings = earnings;
             IncomeTaxContributions = incomeTaxContributions;
+            DistrictCoefficient = districtCoefficient;
             PensionContributions = pensionContributions;
             MedicalContributions = medicalContributions;
             SocialInsuranceContributions = socialInsuranceContributions;

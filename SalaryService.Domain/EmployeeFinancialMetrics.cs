@@ -65,6 +65,19 @@ namespace SalaryService.Domain
             }
         }
 
+        private double districtCoefficient;
+        public double DistrictCoefficient
+        {
+            get { return districtCoefficient; }
+            set
+            {
+                if (value >= 0)
+                    districtCoefficient = value;
+                else
+                    throw new ArgumentException();
+            }
+        }
+
         private double incomeTaxContributions;
         public double IncomeTaxContributions
         {
@@ -260,6 +273,7 @@ namespace SalaryService.Domain
             Salary = CalculateSalary();
             GrossSalary = CalculateGrossSalary(districtCoeff);
             NetSalary = CalculateNetSalary(tax);
+            DistrictCoefficient = CalculateDistrictCoefficient(districtCoeff);
             Earnings = CalculateEarnings();
             IncomeTaxContributions = GetNdflValue();
             PensionContributions = GetPensionContributions(mrot);
@@ -277,6 +291,7 @@ namespace SalaryService.Domain
         public void Update(double salary,
             double grossSalary,
             double netSalary,
+            double districtCoefficient,
             double earnings,
             double incomeTaxContributions,
             double pensionContributions,
@@ -302,6 +317,7 @@ namespace SalaryService.Domain
             Salary = salary;
             GrossSalary = grossSalary;
             NetSalary = netSalary;
+            DistrictCoefficient = districtCoefficient;
             Earnings = earnings;
             IncomeTaxContributions = incomeTaxContributions;
             PensionContributions = pensionContributions;
@@ -315,6 +331,11 @@ namespace SalaryService.Domain
             Profit = profit;
             ProfitAbility = profitability;
             ActualFromUtc = actualFromUtc;
+        }
+
+        private double CalculateDistrictCoefficient(double districtCoeff)
+        {
+            return Salary * districtCoeff;
         }
 
         private double CalculateHourlyCostFact()
