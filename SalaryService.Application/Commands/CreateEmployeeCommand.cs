@@ -1,5 +1,6 @@
 ﻿using NodaTime;
 using SalaryService.Application.Dtos;
+using SalaryService.Application.Services;
 using SalaryService.DataAccess;
 using SalaryService.Domain;
 
@@ -11,12 +12,15 @@ namespace SalaryService.Application.Commands
     }
     public class CreateEmployeeCommandHandler
     {
+        private readonly MailService _mailService;
         private readonly EmployeeDbContext _employeeDbContext;
         private readonly IClock _clock;
 
-        public CreateEmployeeCommandHandler(EmployeeDbContext employeeDbContext,
+        public CreateEmployeeCommandHandler(MailService mailService,
+            EmployeeDbContext employeeDbContext,
             IClock clock)
         {
+            _mailService = mailService;
             _employeeDbContext = employeeDbContext;
             _clock = clock;
         }
@@ -58,6 +62,7 @@ namespace SalaryService.Application.Commands
                 }
 
             }
+            _mailService.SendCredentials(request.PersonalEmail, request.CorporateEmail);
             return _employeeDbContext.SaveChangesAsync();
         }
     }

@@ -13,8 +13,9 @@ namespace SalaryService.Application
         {
             var coefficientOptions = configuration.GetSection("CoefficientOptions");
             services.Configure<CoefficientOptions>(c => coefficientOptions.Bind(c));
+            var mailServiceOptions = configuration.GetSection("MailOptions");
+            services.Configure<MailOptions>(c => mailServiceOptions.Bind(c));
 
-            
             services.AddTransient<GetColleaguesQueryHandler>();
             services.AddTransient<GetEmployeeQueryHandler>();
             services.AddTransient<GetAnalyticQueryHandler>();
@@ -25,6 +26,7 @@ namespace SalaryService.Application
             services.AddTransient<CalculatePreviewMetricsCommandHandler>();
             services.AddTransient<EmployeeService>();
             services.AddTransient<FinanceAnalyticService>();
+            services.AddTransient<MailService>();
             services.AddTransient<IClock, Clock>();
             return services;
         }
