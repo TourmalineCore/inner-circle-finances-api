@@ -36,6 +36,7 @@ namespace SalaryService.Application.Queries
                 x.GitLab));
 
             var employeesFinances = employees.Select(x => new ColleagueFinancesDto(x.Id,
+                x.Name + " " + x.Surname + " " + x.MiddleName,
                 x.EmployeeFinanceForPayroll.RatePerHour,
                 x.EmployeeFinanceForPayroll.Pay,
                 x.EmployeeFinanceForPayroll.EmploymentType,
