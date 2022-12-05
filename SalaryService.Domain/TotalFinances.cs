@@ -12,9 +12,8 @@ public class TotalFinances : IIdentityEntity
     public double TotalExpense { get; set; }
 
 
-    public TotalFinances(long id, Instant actualFromUtc, double payrollExpense, double totalExpense)
+    public TotalFinances(Instant actualFromUtc, double payrollExpense, double totalExpense)
     {
-        Id = id;
         ActualFromUtc = actualFromUtc;
         PayrollExpense = payrollExpense;
         TotalExpense = totalExpense;

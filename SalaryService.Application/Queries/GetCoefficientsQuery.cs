@@ -19,7 +19,7 @@ namespace SalaryService.Application.Queries
 
         public async Task<CoefficientOptions> Handle()
         {
-            return await _employeeDbContext.Set<CoefficientOptions>().SingleAsync();
+            return await _employeeDbContext.Queryable<CoefficientOptions>().SingleAsync();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NodaTime;
+using SalaryService.Application.Services;
 using SalaryService.DataAccess;
 using SalaryService.Domain;
 using Period = SalaryService.Domain.Common.Period;
@@ -13,11 +14,13 @@ namespace SalaryService.Application.Commands
     public class CalculateTotalExpensesCommandHandler
     {
         private readonly EmployeeDbContext _employeeDbContext;
+        private readonly FinanceAnalyticService _financeAnalyticService;
         private readonly IClock _clock;
 
-        public CalculateTotalExpensesCommandHandler(EmployeeDbContext employeeDbContext, IClock clock)
+        public CalculateTotalExpensesCommandHandler(EmployeeDbContext employeeDbContext, FinanceAnalyticService financeAnalyticService, IClock clock)
         {
             _employeeDbContext = employeeDbContext;
+            _financeAnalyticService = financeAnalyticService;
             _clock = clock;
         }
 
@@ -26,48 +29,43 @@ namespace SalaryService.Application.Commands
             var metrics = await _employeeDbContext.QueryableAsNoTracking<EmployeeFinancialMetrics>()
                 .ToListAsync();
 
-            var coefficients = await _employeeDbContext.Set<CoefficientOptions>().SingleAsync();
+            var coefficients = await _employeeDbContext.Queryable<CoefficientOptions>().SingleAsync();
 
-            var totals = await CalculateTotals(metrics, coefficients);
+            var actualTotals = _financeAnalyticService.CalculateTotals(metrics, coefficients);
 
-            await CalculateDesiredAndReserve(metrics, coefficients, totals.TotalExpense);
+            var actualDesiredAndReserveFinances =
+                _financeAnalyticService.CalculateDesiredAndReserve(metrics, coefficients, actualTotals.TotalExpense);
+
+            var lastTotals = await _employeeDbContext.Queryable<TotalFinances>().SingleOrDefaultAsync();
+
+            var lastDesiredAndReserveFinances = await _employeeDbContext.Queryable<DesiredFinancesAndReserve>().SingleOrDefaultAsync();
+
+            if (lastTotals == null && lastDesiredAndReserveFinances == null)
+            {
+                _employeeDbContext.Add(actualTotals);
+                _employeeDbContext.Add(actualDesiredAndReserveFinances);
+            }
+            else
+            {
+                var historyTotals = new TotalFinancesHistory
+                {
+                    Period = new Period(lastTotals.ActualFromUtc, _clock.GetCurrentInstant()),
+                    PayrollExpense = lastTotals.PayrollExpense,
+                    TotalExpense = lastTotals.TotalExpense
+                };
+                _employeeDbContext.Add(historyTotals);
+                lastTotals.Update(actualTotals.ActualFromUtc, actualTotals.PayrollExpense, actualTotals.TotalExpense);
+                lastDesiredAndReserveFinances.Update(actualDesiredAndReserveFinances.DesiredEarnings,
+                    actualDesiredAndReserveFinances.DesiredProfit,
+                    actualDesiredAndReserveFinances.DesiredProfitability,
+                    actualDesiredAndReserveFinances.ReserveForQuarter,
+                    actualDesiredAndReserveFinances.ReserveForHalfYear,
+                    actualDesiredAndReserveFinances.ReserveForYear);
+                _employeeDbContext.Update(lastTotals);
+                _employeeDbContext.Update(lastDesiredAndReserveFinances);
+            }
 
             await _employeeDbContext.SaveChangesAsync();
-        }
-
-        private async Task<TotalFinances> CalculateTotals(IEnumerable<EmployeeFinancialMetrics> metrics, CoefficientOptions coefficients)
-        {
-            var payrollExpense = metrics.Select(x => x.Expenses).Sum();
-            var totalExpense = payrollExpense + coefficients.OfficeExpenses;
-            var totals = await _employeeDbContext.Set<TotalFinances>().SingleAsync();
-            var historyTotals = new TotalFinancesHistory
-            {
-                Period = new Period(totals.ActualFromUtc, _clock.GetCurrentInstant()),
-                PayrollExpense = payrollExpense,
-                TotalExpense = totalExpense
-            };
-            _employeeDbContext.Add(historyTotals);
-            totals.Update(_clock.GetCurrentInstant(), payrollExpense, totalExpense);
-            _employeeDbContext.Update(totals);
-            return totals;
-        }
-
-        private async Task CalculateDesiredAndReserve(IEnumerable<EmployeeFinancialMetrics> metrics, CoefficientOptions coefficients, double totalExpense)
-        {
-            var desiredFinancesAndReserve = await _employeeDbContext.Set<DesiredFinancesAndReserve>().SingleAsync();
-            var desiredEarnings = metrics.Select(x => x.Earnings).Sum();
-            var desiredProfit = metrics.Select(x => x.Profit).Sum() - coefficients.OfficeExpenses;
-            var reserveForQuarter = totalExpense * 3;
-            var reserveForHalfYear = reserveForQuarter * 2;
-            var reserveForYear = reserveForHalfYear * 2;
-            desiredFinancesAndReserve.Update(desiredEarnings,
-                desiredProfit,
-                (desiredProfit / desiredEarnings) * 100,
-                reserveForQuarter,
-                reserveForHalfYear,
-                reserveForYear
-            );
-            _employeeDbContext.Update(desiredFinancesAndReserve);
         }
     }
 }

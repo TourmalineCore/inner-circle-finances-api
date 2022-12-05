@@ -66,7 +66,7 @@ namespace SalaryService.DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<double>("DesiredIncome")
+                    b.Property<double>("DesiredEarnings")
                         .HasColumnType("double precision");
 
                     b.Property<double>("DesiredProfit")
@@ -87,18 +87,6 @@ namespace SalaryService.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("DesiredFinancesAndReserve");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            DesiredIncome = 0.0,
-                            DesiredProfit = 0.0,
-                            DesiredProfitability = 0.0,
-                            ReserveForHalfYear = 0.0,
-                            ReserveForQuarter = 0.0,
-                            ReserveForYear = 0.0
-                        });
                 });
 
             modelBuilder.Entity("SalaryService.Domain.Employee", b =>
@@ -400,15 +388,6 @@ namespace SalaryService.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TotalFinances");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            ActualFromUtc = NodaTime.Instant.FromUnixTimeTicks(0L),
-                            PayrollExpense = 0.0,
-                            TotalExpense = 0.0
-                        });
                 });
 
             modelBuilder.Entity("SalaryService.Domain.EmployeeFinanceForPayroll", b =>
