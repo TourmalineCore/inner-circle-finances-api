@@ -23,7 +23,7 @@ namespace SalaryService.Application.Services
             return new TotalFinances(_clock.GetCurrentInstant(), payrollExpense, totalExpense);
         }
 
-        public DesiredFinancesAndReserve CalculateDesiredAndReserve(IEnumerable<EmployeeFinancialMetrics> metrics, CoefficientOptions coefficients, double totalExpense)
+        public EstimatedFinancialEfficiency CalculateDesiredAndReserve(IEnumerable<EmployeeFinancialMetrics> metrics, CoefficientOptions coefficients, double totalExpense)
         {
             var desiredEarnings = metrics.Select(x => x.Earnings).Sum();
             var desiredProfit = metrics.Select(x => x.Profit).Sum() - coefficients.OfficeExpenses;
@@ -32,7 +32,7 @@ namespace SalaryService.Application.Services
             var reserveForHalfYear = reserveForQuarter * 2;
             var reserveForYear = reserveForHalfYear * 2;
 
-            return new DesiredFinancesAndReserve(desiredEarnings, desiredProfit, desiredProfitability,
+            return new EstimatedFinancialEfficiency(desiredEarnings, desiredProfit, desiredProfitability,
                 reserveForQuarter, reserveForHalfYear, reserveForYear);
         }
 

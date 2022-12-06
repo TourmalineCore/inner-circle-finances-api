@@ -20,7 +20,7 @@ namespace SalaryService.Application.Queries
         {
             var totals = await _employeeDbContext.Queryable<TotalFinances>().SingleAsync();
             var coefficients = await _employeeDbContext.Queryable<CoefficientOptions>().SingleAsync();
-            var desiredFinances = await _employeeDbContext.Queryable<DesiredFinancesAndReserve>().SingleAsync();
+            var desiredFinances = await _employeeDbContext.Queryable<EstimatedFinancialEfficiency>().SingleAsync();
 
             return new TotalFinancesDto(new ExpensesDto(
                     Math.Round(totals.PayrollExpense, 2),

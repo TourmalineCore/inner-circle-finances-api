@@ -17,7 +17,7 @@ namespace SalaryService.DataAccess
 
         public DbSet<TotalFinances> TotalFinances { get; set; }
 
-        public DbSet<DesiredFinancesAndReserve> DesiredFinancesAndReserve { get; set; }
+        public DbSet<EstimatedFinancialEfficiency> EstimatedFinancialEfficiency { get; set; }
 
         public DbSet<TotalFinancesHistory> TotalFinancesHistory { get; set; }
 

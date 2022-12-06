@@ -38,7 +38,7 @@ namespace SalaryService.Application.Commands
 
             var lastTotals = await _employeeDbContext.Queryable<TotalFinances>().SingleOrDefaultAsync();
 
-            var lastDesiredAndReserveFinances = await _employeeDbContext.Queryable<DesiredFinancesAndReserve>().SingleOrDefaultAsync();
+            var lastDesiredAndReserveFinances = await _employeeDbContext.Queryable<EstimatedFinancialEfficiency>().SingleOrDefaultAsync();
 
             if (lastTotals == null && lastDesiredAndReserveFinances == null)
             {

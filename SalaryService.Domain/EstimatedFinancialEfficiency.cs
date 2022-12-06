@@ -1,6 +1,6 @@
 ﻿namespace SalaryService.Domain
 {
-    public class DesiredFinancesAndReserve : IIdentityEntity
+    public class EstimatedFinancialEfficiency : IIdentityEntity
     {
         public long Id { get; set; }
 
@@ -16,7 +16,7 @@
 
         public double ReserveForYear { get; set; }
 
-        public DesiredFinancesAndReserve(double desiredEarnings, double desiredProfit, double desiredProfitability, double reserveForQuarter, double reserveForHalfYear, double reserveForYear)
+        public EstimatedFinancialEfficiency(double desiredEarnings, double desiredProfit, double desiredProfitability, double reserveForQuarter, double reserveForHalfYear, double reserveForYear)
         {
             DesiredEarnings = desiredEarnings;
             DesiredProfit = desiredProfit;
