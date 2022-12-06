@@ -16,7 +16,14 @@ namespace SalaryService.Application.Dtos
 
         public double EmploymentType { get; set; }
 
+        public double Salary { get; set; }
+        public double SalaryDelta { get; set; }
+
         public double ParkingCostPerMonth { get; set; }
+        public double ParkingCostPerMonthDelta { get; set; }
+
+        public double AccountingPerMonth { get; set; }
+        public double AccountingPerMonthDelta { get; set; }
 
         public double HourlyCostFact { get; set; }
         public double HourlyCostFactDelta { get; set; }
@@ -30,6 +37,9 @@ namespace SalaryService.Application.Dtos
         public double IncomeTaxContributions { get; set; }
         public double IncomeTaxContributionsDelta { get; set; }
 
+        public double DistrictCoefficient { get; set; }
+        public double DistrictCoefficientDelta { get; set; }
+
         public double PensionContributions { get; set; }
         public double PensionContributionsDelta { get; set; }
 
@@ -37,6 +47,7 @@ namespace SalaryService.Application.Dtos
         public double MedicalContributionsDelta { get; set; }
 
         public double SocialInsuranceContributions { get; set; }
+        public double SocialInsuranceContributionsDelta { get; set; }
 
         public double InjuriesContributions { get; set; }
         public double InjuriesContributionsDelta { get; set; }
@@ -64,11 +75,14 @@ namespace SalaryService.Application.Dtos
             double pay, 
             double ratePerHour, 
             double employmentType, 
-            double parkingCostPerMonth, 
+            double salary,
+            double parkingCostPerMonth,
+            double accountingPerMonth,
             double hourlyCostFact, 
             double hourlyCostHand, 
             double earnings, 
             double incomeTaxContributions, 
+            double districtCoefficient, 
             double pensionContributions, 
             double medicalContributions, 
             double socialInsuranceContributions, 
@@ -85,11 +99,14 @@ namespace SalaryService.Application.Dtos
             Pay = Math.Round(pay, 2);
             RatePerHour = Math.Round(ratePerHour, 2);
             EmploymentType = Math.Round(employmentType, 2);
+            Salary = Math.Round(salary, 2);
             ParkingCostPerMonth = Math.Round(parkingCostPerMonth, 2);
+            AccountingPerMonth = Math.Round(accountingPerMonth, 2);
             HourlyCostFact = Math.Round(hourlyCostFact, 2);
             HourlyCostHand = Math.Round(hourlyCostHand, 2);
             Earnings = Math.Round(earnings, 2);
             IncomeTaxContributions = Math.Round(incomeTaxContributions, 2);
+            DistrictCoefficient = Math.Round(districtCoefficient, 2);
             PensionContributions = Math.Round(pensionContributions, 2);
             MedicalContributions = Math.Round(medicalContributions, 2);
             SocialInsuranceContributions = Math.Round(socialInsuranceContributions, 2);

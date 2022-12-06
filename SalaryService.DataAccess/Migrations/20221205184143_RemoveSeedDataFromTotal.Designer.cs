@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,10 @@ using SalaryService.DataAccess;
 namespace SalaryService.DataAccess.Migrations
 {
     [DbContext(typeof(EmployeeDbContext))]
-    partial class EmployeeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221205184143_RemoveSeedDataFromTotal")]
+    partial class RemoveSeedDataFromTotal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,6 +58,37 @@ namespace SalaryService.DataAccess.Migrations
                             MinimumWage = 15279.0,
                             OfficeExpenses = 49000.0
                         });
+                });
+
+            modelBuilder.Entity("SalaryService.Domain.DesiredFinancesAndReserve", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<double>("DesiredEarnings")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("DesiredProfit")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("DesiredProfitability")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("ReserveForHalfYear")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("ReserveForQuarter")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("ReserveForYear")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DesiredFinancesAndReserve");
                 });
 
             modelBuilder.Entity("SalaryService.Domain.Employee", b =>
@@ -316,37 +349,6 @@ namespace SalaryService.DataAccess.Migrations
                     b.HasIndex("EmployeeId");
 
                     b.ToTable("EmployeeFinancialMetricsHistory");
-                });
-
-            modelBuilder.Entity("SalaryService.Domain.EstimatedFinancialEfficiency", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<double>("DesiredEarnings")
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("DesiredProfit")
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("DesiredProfitability")
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("ReserveForHalfYear")
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("ReserveForQuarter")
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("ReserveForYear")
-                        .HasColumnType("double precision");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("EstimatedFinancialEfficiency");
                 });
 
             modelBuilder.Entity("SalaryService.Domain.TotalFinancesHistory", b =>

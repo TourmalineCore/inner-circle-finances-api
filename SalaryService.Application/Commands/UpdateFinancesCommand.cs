@@ -31,7 +31,7 @@ namespace SalaryService.Application.Commands
                 request.ParkingCostPerMonth);
 
             var latestMetrics = (await _employeeDbContext
-                .Set<Employee>()
+                .Queryable<Employee>()
                 .Include(x => x.EmployeeFinanceForPayroll)
                 .Include(x => x.EmployeeFinancialMetrics)
                 .SingleAsync(x => x.Id == request.EmployeeId && x.DeletedAtUtc == null)).EmployeeFinancialMetrics;
@@ -63,7 +63,7 @@ namespace SalaryService.Application.Commands
             };
 
             var currentFinanceForPayroll = (await _employeeDbContext
-                .Set<Employee>()
+                .Queryable<Employee>()
                 .Include(x => x.EmployeeFinanceForPayroll)
                 .Include(x => x.EmployeeFinancialMetrics)
                 .SingleAsync(x => x.Id == request.EmployeeId && x.DeletedAtUtc == null)).EmployeeFinanceForPayroll;
@@ -74,7 +74,7 @@ namespace SalaryService.Application.Commands
                 financeForPayroll.ParkingCostPerMonth);
 
             var currentFinancialMetrics = (await _employeeDbContext
-                .Set<Employee>()
+                .Queryable<Employee>()
                 .Include(x => x.EmployeeFinanceForPayroll)
                 .Include(x => x.EmployeeFinancialMetrics)
                 .SingleAsync(x => x.Id == request.EmployeeId && x.DeletedAtUtc == null)).EmployeeFinancialMetrics;
@@ -82,6 +82,7 @@ namespace SalaryService.Application.Commands
             currentFinancialMetrics.Update(metrics.Salary,
                 metrics.GrossSalary,
                 metrics.NetSalary,
+                metrics.DistrictCoefficient,
                 metrics.Earnings,
                 metrics.IncomeTaxContributions,
                 metrics.PensionContributions,

@@ -18,16 +18,16 @@ namespace SalaryService.Application.Queries
         }
         public async Task<TotalFinancesDto> Handle()
         {
-            var totals = await _employeeDbContext.Set<TotalFinances>().SingleAsync();
-            var coefficients = await _employeeDbContext.Set<CoefficientOptions>().SingleAsync();
-            var desiredFinances = await _employeeDbContext.Set<DesiredFinancesAndReserve>().SingleAsync();
+            var totals = await _employeeDbContext.Queryable<TotalFinances>().SingleAsync();
+            var coefficients = await _employeeDbContext.Queryable<CoefficientOptions>().SingleAsync();
+            var desiredFinances = await _employeeDbContext.Queryable<EstimatedFinancialEfficiency>().SingleAsync();
 
             return new TotalFinancesDto(new ExpensesDto(
                     Math.Round(totals.PayrollExpense, 2),
                     Math.Round(coefficients.OfficeExpenses, 2),
                     Math.Round(totals.TotalExpense, 2)),
                 new DesiredFinancialMetricsDto(
-                    Math.Round(desiredFinances.DesiredIncome, 2),
+                    Math.Round(desiredFinances.DesiredEarnings, 2),
                     Math.Round(desiredFinances.DesiredProfit, 2),
                     Math.Round(desiredFinances.DesiredProfitability, 2)),
                 new ReserveFinanceDto(

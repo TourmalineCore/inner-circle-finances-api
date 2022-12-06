@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-using NodaTime;
-using SalaryService.Application.Commands;
-using SalaryService.Application.Dtos;
+﻿using NodaTime;
 using SalaryService.Application.Queries;
 using SalaryService.Domain;
 
@@ -9,22 +6,34 @@ namespace SalaryService.Application.Services
 {
     public class FinanceAnalyticService
     {
-        private readonly CalculateTotalExpensesCommandHandler _calculateTotalExpensesCommandHandler;
         private readonly GetCoefficientsQueryHandler _getCoefficientsQueryHandler;
         private readonly IClock _clock;
 
-        public FinanceAnalyticService(CalculateTotalExpensesCommandHandler calculateTotalExpensesCommandHandler,
-            GetCoefficientsQueryHandler getCoefficientsQueryHandler,
+        public FinanceAnalyticService(GetCoefficientsQueryHandler getCoefficientsQueryHandler,
             IClock clock)
         {
-            _calculateTotalExpensesCommandHandler = calculateTotalExpensesCommandHandler;
             _getCoefficientsQueryHandler = getCoefficientsQueryHandler;
             _clock = clock;
         }
 
-        public Task CalculateTotalFinances()
+        public TotalFinances CalculateTotals(IEnumerable<EmployeeFinancialMetrics> metrics, CoefficientOptions coefficients)
         {
-            return _calculateTotalExpensesCommandHandler.Handle();
+            var payrollExpense = metrics.Select(x => x.Expenses).Sum();
+            var totalExpense = payrollExpense + coefficients.OfficeExpenses;
+            return new TotalFinances(_clock.GetCurrentInstant(), payrollExpense, totalExpense);
+        }
+
+        public EstimatedFinancialEfficiency CalculateDesiredAndReserve(IEnumerable<EmployeeFinancialMetrics> metrics, CoefficientOptions coefficients, double totalExpense)
+        {
+            var desiredEarnings = metrics.Select(x => x.Earnings).Sum();
+            var desiredProfit = metrics.Select(x => x.Profit).Sum() - coefficients.OfficeExpenses;
+            var desiredProfitability = desiredProfit / desiredEarnings * 100;
+            var reserveForQuarter = totalExpense * 3;
+            var reserveForHalfYear = reserveForQuarter * 2;
+            var reserveForYear = reserveForHalfYear * 2;
+
+            return new EstimatedFinancialEfficiency(desiredEarnings, desiredProfit, desiredProfitability,
+                reserveForQuarter, reserveForHalfYear, reserveForYear);
         }
 
         public async Task<EmployeeFinancialMetrics> CalculateMetrics(double ratePerHour,

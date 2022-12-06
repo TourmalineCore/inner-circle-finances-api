@@ -21,7 +21,7 @@ namespace SalaryService.Application.Queries
         public async Task<EmployeeProfileDto> Handle()
         {
             var employee = await _employeeDbContext
-                .Set<Employee>()
+                .Queryable<Employee>()
                 .Include(x => x.EmployeeFinanceForPayroll)
                 .Include(x => x.EmployeeFinancialMetrics)
                 .SingleAsync(x => x.AccountId == 1 && x.DeletedAtUtc == null);

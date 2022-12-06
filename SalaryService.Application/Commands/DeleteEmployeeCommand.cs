@@ -26,7 +26,7 @@ namespace SalaryService.Application.Commands
         public async Task Handle(long employeeId)
         {
             var employee = await _employeeDbContext
-                .Set<Employee>()
+                .Queryable<Employee>()
                 .Include(x => x.EmployeeFinanceForPayroll)
                 .Include(x => x.EmployeeFinancialMetrics)
                 .SingleAsync(x => x.Id == employeeId && x.DeletedAtUtc == null);

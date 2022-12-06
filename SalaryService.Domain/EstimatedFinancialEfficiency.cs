@@ -1,10 +1,10 @@
 ﻿namespace SalaryService.Domain
 {
-    public class DesiredFinancesAndReserve : IIdentityEntity
+    public class EstimatedFinancialEfficiency : IIdentityEntity
     {
         public long Id { get; set; }
 
-        public double DesiredIncome { get; set; }
+        public double DesiredEarnings { get; set; }
 
         public double DesiredProfit { get; set; }
 
@@ -16,10 +16,9 @@
 
         public double ReserveForYear { get; set; }
 
-        public DesiredFinancesAndReserve(long id, double desiredIncome, double desiredProfit, double desiredProfitability, double reserveForQuarter, double reserveForHalfYear, double reserveForYear)
+        public EstimatedFinancialEfficiency(double desiredEarnings, double desiredProfit, double desiredProfitability, double reserveForQuarter, double reserveForHalfYear, double reserveForYear)
         {
-            Id = id;
-            DesiredIncome = desiredIncome;
+            DesiredEarnings = desiredEarnings;
             DesiredProfit = desiredProfit;
             DesiredProfitability = desiredProfitability;
             ReserveForQuarter = reserveForQuarter;
@@ -27,9 +26,9 @@
             ReserveForYear = reserveForYear;
         }
 
-        public void Update(double desiredIncome, double desiredProfit, double desiredProfitability, double reserveForQuarter, double reserveForHalfYear, double reserveForYear)
+        public void Update(double desiredEarnings, double desiredProfit, double desiredProfitability, double reserveForQuarter, double reserveForHalfYear, double reserveForYear)
         {
-            DesiredIncome = desiredIncome;
+            DesiredEarnings = desiredEarnings;
             DesiredProfit = desiredProfit;
             DesiredProfitability = desiredProfitability;
             ReserveForQuarter = reserveForQuarter;
