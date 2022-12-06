@@ -7,19 +7,19 @@ namespace SalaryService.Api
     {
         public const string PermissionClaimType = "Permissions";
 
-        public const string CanViewFinanceForPayrollClaim = "CanViewFinanceForPayroll";
+        public const string CanViewFinanceForPayrollPermission = "CanViewFinanceForPayroll";
 
-        public const string CanViewAnalyticClaim = "CanViewAnalytic";
+        public const string CanViewAnalyticPermission = "CanViewAnalytic";
 
-        public const string CanManageEmployeesClaim = "CanManageEmployees";
+        public const string CanManageEmployeesPermission = "CanManageEmployees";
 
         public Task<List<Claim>> GetUserClaimsAsync(string login)
         {
             return Task.FromResult(new List<Claim>
                 {
-                    new Claim(PermissionClaimType, CanViewFinanceForPayrollClaim),
-                    new Claim(PermissionClaimType, CanViewAnalyticClaim),
-                    new Claim(PermissionClaimType, CanManageEmployeesClaim)
+                    new Claim(PermissionClaimType, CanViewFinanceForPayrollPermission),
+                    new Claim(PermissionClaimType, CanViewAnalyticPermission),
+                    new Claim(PermissionClaimType, CanManageEmployeesPermission)
                 }
             );
         }
