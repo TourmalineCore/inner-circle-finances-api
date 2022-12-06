@@ -12,20 +12,17 @@ namespace SalaryService.Application.Commands
     }
     public class CreateEmployeeCommandHandler
     {
-        private readonly MailService _mailService;
         private readonly EmployeeDbContext _employeeDbContext;
         private readonly IClock _clock;
 
-        public CreateEmployeeCommandHandler(MailService mailService,
-            EmployeeDbContext employeeDbContext,
+        public CreateEmployeeCommandHandler(EmployeeDbContext employeeDbContext,
             IClock clock)
         {
-            _mailService = mailService;
             _employeeDbContext = employeeDbContext;
             _clock = clock;
         }
 
-        public Task Handle(EmployeeCreatingParameters request, EmployeeFinancialMetrics metrics)
+        public Employee Handle(EmployeeCreatingParameters request, EmployeeFinancialMetrics metrics)
         {
             var employee = new Employee(request.Name,
                 request.Surname,
@@ -35,7 +32,7 @@ namespace SalaryService.Application.Commands
                 request.Phone,
                 request.GitHub,
                 request.GitLab,
-                _clock.GetCurrentInstant()); ;
+                _clock.GetCurrentInstant());
 
             var financeForPayroll = new EmployeeFinanceForPayroll(request.RatePerHour,
                 request.Pay,
@@ -62,8 +59,9 @@ namespace SalaryService.Application.Commands
                 }
 
             }
-            _mailService.SendCredentials(request.PersonalEmail, request.CorporateEmail);
-            return _employeeDbContext.SaveChangesAsync();
+
+            _employeeDbContext.SaveChangesAsync();
+            return employee;
         }
     }
 }
