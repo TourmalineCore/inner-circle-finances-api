@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SalaryService.Application.Dtos;
 using SalaryService.Application.Queries;
 using SalaryService.Application.Services;
+using TourmalineCore.AspNetCore.JwtAuthentication.Core.Filters;
 
 namespace SalaryService.Api.Controllers
 {
+    [Authorize]
     [Route("api/finance")]
     public class FinanceController : Controller
     {
@@ -16,13 +19,15 @@ namespace SalaryService.Api.Controllers
             _getAnalyticQueryHandler = getAnalyticQueryHandler;
             _employeeService = employeeService;
         }
-
+        
+        [RequiresPermission(UserClaimsProvider.CanViewAnalyticPermission)]
         [HttpGet("get-analytic")]
         public Task<IEnumerable<AnalyticDto>> GetAnalytic()
         {
             return _getAnalyticQueryHandler.Handle();
         }
-
+        
+        [RequiresPermission(UserClaimsProvider.CanViewAnalyticPermission)]
         [HttpPost("get-preview")]
         public Task<MetricsPreviewDto> GetPreview([FromBody] FinanceUpdatingParameters financeUpdatingParameters)
         {
