@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NodaTime;
-using SalaryService.Application.Services;
 using SalaryService.DataAccess;
 using SalaryService.Domain;
 using Period = SalaryService.Domain.Common.Period;
@@ -14,36 +13,25 @@ namespace SalaryService.Application.Commands
     public class CalculateTotalExpensesCommandHandler
     {
         private readonly EmployeeDbContext _employeeDbContext;
-        private readonly FinanceAnalyticService _financeAnalyticService;
         private readonly IClock _clock;
 
-        public CalculateTotalExpensesCommandHandler(EmployeeDbContext employeeDbContext, FinanceAnalyticService financeAnalyticService, IClock clock)
+        public CalculateTotalExpensesCommandHandler(EmployeeDbContext employeeDbContext, 
+            IClock clock)
         {
             _employeeDbContext = employeeDbContext;
-            _financeAnalyticService = financeAnalyticService;
             _clock = clock;
         }
 
-        public async Task Handle()
+        public async Task Handle(TotalFinances totalFinances, EstimatedFinancialEfficiency estimatedFinancialEfficiency)
         {
-            var metrics = await _employeeDbContext.QueryableAsNoTracking<EmployeeFinancialMetrics>()
-                .ToListAsync();
-
-            var coefficients = await _employeeDbContext.Queryable<CoefficientOptions>().SingleAsync();
-
-            var actualTotals = _financeAnalyticService.CalculateTotals(metrics, coefficients);
-
-            var actualDesiredAndReserveFinances =
-                _financeAnalyticService.CalculateDesiredAndReserve(metrics, coefficients, actualTotals.TotalExpense);
-
             var lastTotals = await _employeeDbContext.Queryable<TotalFinances>().SingleOrDefaultAsync();
 
-            var lastDesiredAndReserveFinances = await _employeeDbContext.Queryable<EstimatedFinancialEfficiency>().SingleOrDefaultAsync();
+            var lastEstimatedFinancialEfficiency = await _employeeDbContext.Queryable<EstimatedFinancialEfficiency>().SingleOrDefaultAsync();
 
-            if (lastTotals == null && lastDesiredAndReserveFinances == null)
+            if (lastTotals == null && lastEstimatedFinancialEfficiency == null)
             {
-                _employeeDbContext.Add(actualTotals);
-                _employeeDbContext.Add(actualDesiredAndReserveFinances);
+                _employeeDbContext.Add(totalFinances);
+                _employeeDbContext.Add(estimatedFinancialEfficiency);
             }
             else
             {
@@ -54,15 +42,15 @@ namespace SalaryService.Application.Commands
                     TotalExpense = lastTotals.TotalExpense
                 };
                 _employeeDbContext.Add(historyTotals);
-                lastTotals.Update(actualTotals.ActualFromUtc, actualTotals.PayrollExpense, actualTotals.TotalExpense);
-                lastDesiredAndReserveFinances.Update(actualDesiredAndReserveFinances.DesiredEarnings,
-                    actualDesiredAndReserveFinances.DesiredProfit,
-                    actualDesiredAndReserveFinances.DesiredProfitability,
-                    actualDesiredAndReserveFinances.ReserveForQuarter,
-                    actualDesiredAndReserveFinances.ReserveForHalfYear,
-                    actualDesiredAndReserveFinances.ReserveForYear);
+                lastTotals.Update(totalFinances.ActualFromUtc, totalFinances.PayrollExpense, totalFinances.TotalExpense);
+                lastEstimatedFinancialEfficiency.Update(estimatedFinancialEfficiency.DesiredEarnings,
+                    estimatedFinancialEfficiency.DesiredProfit,
+                    estimatedFinancialEfficiency.DesiredProfitability,
+                    estimatedFinancialEfficiency.ReserveForQuarter,
+                    estimatedFinancialEfficiency.ReserveForHalfYear,
+                    estimatedFinancialEfficiency.ReserveForYear);
                 _employeeDbContext.Update(lastTotals);
-                _employeeDbContext.Update(lastDesiredAndReserveFinances);
+                _employeeDbContext.Update(lastEstimatedFinancialEfficiency);
             }
 
             await _employeeDbContext.SaveChangesAsync();
