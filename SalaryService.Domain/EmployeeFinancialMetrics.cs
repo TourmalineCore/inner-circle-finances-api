@@ -13,241 +13,41 @@ namespace SalaryService.Domain
 
         public Instant ActualFromUtc { get; set; }
 
-        private double salary;
-        public double Salary
-        {
-            get { return salary; }
-            set
-            {
-                if (value >= 0)
-                    salary = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double Salary { get; set; }
+        
+        public double HourlyCostFact { get; set; }
 
-        private double hourlyCostFact;
-        public double HourlyCostFact
-        {
-            get { return hourlyCostFact; }
-            set
-            {
-                if (value >= 0)
-                    hourlyCostFact = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double HourlyCostHand { get; set; }
 
-        private double hourlyCostHand;
-        public double HourlyCostHand
-        {
-            get { return hourlyCostHand; }
-            set
-            {
-                if (value >= 0)
-                    hourlyCostHand = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double Earnings { get; set; }
+        
+        public double DistrictCoefficient { get; set; }
 
-        private double earnings;
-        public double Earnings
-        {
-            get { return earnings; }
-            set
-            {
-                if (value >= 0)
-                    earnings = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double IncomeTaxContributions { get; set; }
 
-        private double districtCoefficient;
-        public double DistrictCoefficient
-        {
-            get { return districtCoefficient; }
-            set
-            {
-                if (value >= 0)
-                    districtCoefficient = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double PensionContributions { get; set; }
 
-        private double incomeTaxContributions;
-        public double IncomeTaxContributions
-        {
-            get { return incomeTaxContributions; }
-            set
-            {
-                if (value >= 0)
-                    incomeTaxContributions = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double MedicalContributions { get; set; }
 
-        private double pensionContributions;
-        public double PensionContributions
-        {
-            get { return pensionContributions; }
-            set
-            {
-                if (value >= 0)
-                    pensionContributions = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double SocialInsuranceContributions { get; set; }
 
-        private double medicalContributions;
-        public double MedicalContributions
-        {
-            get { return medicalContributions; }
-            set
-            {
-                if (value >= 0)
-                    medicalContributions = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double InjuriesContributions { get; set; }
 
-        private double socialInsuranceContributions;
-        public double SocialInsuranceContributions
-        {
-            get { return socialInsuranceContributions; }
-            set
-            {
-                if (value >= 0)
-                    socialInsuranceContributions = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double Expenses { get; set; }
 
-        private double injuriesContributions;
-        public double InjuriesContributions
-        {
-            get { return injuriesContributions; }
-            set
-            {
-                if (value >= 0)
-                    injuriesContributions = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double Profit { get; set; }
 
-        private double expenses;
-        public double Expenses
-        {
-            get { return expenses; }
-            set
-            {
-                if (value >= 0)
-                    expenses = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double ProfitAbility { get; set; }
 
-        private double profit;
-        public double Profit
-        {
-            get { return profit; }
-            set
-            {
-                if (value >= 0)
-                    profit = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double GrossSalary { get; set; }
 
-        private double profitability;
-        public double ProfitAbility
-        {
-            get { return profitability; }
-            set
-            {
-                if (value >= 0)
-                    profitability = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double NetSalary { get; set; }
 
-        private double grossSalary;
-        public double GrossSalary
-        {
-            get { return grossSalary; }
-            set
-            {
-                if (value >= 0)
-                    grossSalary = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double RatePerHour { get; set; }
 
-        private double netSalary;
-        public double NetSalary
-        {
-            get { return netSalary; }
-            set
-            {
-                if (value >= 0)
-                    netSalary = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double Pay { get; set; }
 
-        private double ratePerHour;
-
-        public double RatePerHour
-        {
-            get { return ratePerHour; }
-            set
-            {
-                if (value >= 0)
-                    ratePerHour = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
-
-        private double pay;
-
-        public double Pay
-        {
-            get { return pay; }
-            set
-            {
-                if (value >= 0)
-                    pay = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
-
-        private double prepayment;
-        public double Prepayment
-        {
-            get { return prepayment; }
-            set
-            {
-                if (value >= 0)
-                    prepayment = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double Prepayment { get; set; }
 
         public double EmploymentType { get; set; }
 
