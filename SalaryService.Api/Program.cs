@@ -8,6 +8,15 @@ using System.Runtime.InteropServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("SalarySpecificOrigins",
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:3000")
+                          .AllowAnyHeader().AllowAnyMethod();
+                      });
+});
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -76,6 +85,8 @@ builder.Host.ConfigureLogging((hostingContext, logging) =>
 builder.Services.AddApplication(configuration);
 builder.Services.AddPersistence(configuration);
 
+
+
 var app = builder.Build();
 
 app.UseSwagger();
@@ -96,6 +107,9 @@ using (var serviceScope = app.Services.CreateScope())
 
 app.UseRouting();
 
-app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+app.UseCors("SalarySpecificOrigins");
+app.UseAuthorization();
+
+app.UseEndpoints(endpoints => { endpoints.MapControllers().RequireCors("SalarySpecificOrigins"); });
 
 app.Run();
