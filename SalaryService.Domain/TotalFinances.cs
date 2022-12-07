@@ -12,11 +12,15 @@ public class TotalFinances : IIdentityEntity
     public double TotalExpense { get; set; }
 
 
-    public TotalFinances(Instant actualFromUtc, double payrollExpense, double totalExpense)
+    public TotalFinances(Instant actualFromUtc)
     {
         ActualFromUtc = actualFromUtc;
-        PayrollExpense = payrollExpense;
-        TotalExpense = totalExpense;
+    }
+
+    public void CalculateTotals(IEnumerable<EmployeeFinancialMetrics> metrics, CoefficientOptions coefficients)
+    {
+        PayrollExpense = metrics.Select(x => x.Expenses).Sum();
+        TotalExpense = PayrollExpense + coefficients.OfficeExpenses;
     }
 
     public void Update(Instant actualFromUtc, double payrollExpense, double totalExpense)

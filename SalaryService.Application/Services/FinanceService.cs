@@ -1,7 +1,6 @@
 ﻿using NodaTime;
 using SalaryService.Application.Commands;
 using SalaryService.Application.Queries;
-using SalaryService.DataAccess;
 using SalaryService.Domain;
 
 namespace SalaryService.Application.Services
@@ -30,10 +29,11 @@ namespace SalaryService.Application.Services
 
             var coefficients = await _getCoefficientsQueryHandler.Handle();
 
-            var totals = CalculateTotals(metrics, coefficients);
+            var totals = new TotalFinances(_clock.GetCurrentInstant());
+            totals.CalculateTotals(metrics, coefficients);
 
-            var estimatedFinancialEfficiency =
-                CalculateEstimatedFinancialEfficiency(metrics, coefficients, totals.TotalExpense);
+            var estimatedFinancialEfficiency = new EstimatedFinancialEfficiency();
+            estimatedFinancialEfficiency.CalculateEstimatedFinancialEfficiency(metrics, coefficients, totals.TotalExpense);
 
             await _calculateTotalExpensesCommandHandler.Handle(totals, estimatedFinancialEfficiency);
         }
@@ -56,26 +56,6 @@ namespace SalaryService.Application.Services
                 _clock.GetCurrentInstant());
 
             return calculateMetrics;
-        }
-
-        private TotalFinances CalculateTotals(IEnumerable<EmployeeFinancialMetrics> metrics, CoefficientOptions coefficients)
-        {
-            var payrollExpense = metrics.Select(x => x.Expenses).Sum();
-            var totalExpense = payrollExpense + coefficients.OfficeExpenses;
-            return new TotalFinances(_clock.GetCurrentInstant(), payrollExpense, totalExpense);
-        }
-
-        private EstimatedFinancialEfficiency CalculateEstimatedFinancialEfficiency(IEnumerable<EmployeeFinancialMetrics> metrics, CoefficientOptions coefficients, double totalExpense)
-        {
-            var desiredEarnings = metrics.Select(x => x.Earnings).Sum();
-            var desiredProfit = metrics.Select(x => x.Profit).Sum() - coefficients.OfficeExpenses;
-            var desiredProfitability = desiredProfit / desiredEarnings * 100;
-            var reserveForQuarter = totalExpense * 3;
-            var reserveForHalfYear = reserveForQuarter * 2;
-            var reserveForYear = reserveForHalfYear * 2;
-
-            return new EstimatedFinancialEfficiency(desiredEarnings, desiredProfit, desiredProfitability,
-                reserveForQuarter, reserveForHalfYear, reserveForYear);
         }
     }
 }
