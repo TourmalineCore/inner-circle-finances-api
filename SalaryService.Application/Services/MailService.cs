@@ -26,8 +26,8 @@ namespace SalaryService.Application.Services
             client.Host = "smtp.mail.ru";
             client.Port = 587;
             client.EnableSsl = true;
-            client.Credentials = new NetworkCredential(_mailOptions.MailAddress, _mailOptions.MailPassword);
-            client.Send(_mailOptions.MailAddress, personalEmail, null, $"Your credentials: \nEmail: {corporateEmail} \nPassword: {GeneratePassword(15)}");
+            client.Credentials = new NetworkCredential(_mailOptions.SenderMailAddress, _mailOptions.SenderMailPassword);
+            client.Send(_mailOptions.SenderMailAddress, personalEmail, null, $"Your credentials: \nEmail: {corporateEmail} \nPassword: {GeneratePassword(15)}");
         }
     }
 }

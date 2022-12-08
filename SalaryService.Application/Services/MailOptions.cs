@@ -2,7 +2,7 @@
 {
     public class MailOptions
     {
-        public string MailAddress { get; set; }
-        public string MailPassword { get; set; }
+        public string SenderMailAddress { get; set; }
+        public string SenderMailPassword { get; set; }
     }
 }
