@@ -11,20 +11,27 @@ namespace SalaryService.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
         {
+            var mailServiceOptions = configuration.GetSection("MailOptions");
+            services.Configure<MailOptions>(c => mailServiceOptions.Bind(c));
+
             services.AddTransient<GetColleaguesQueryHandler>();
             services.AddTransient<GetEmployeeQueryHandler>();
             services.AddTransient<GetAnalyticQueryHandler>();
             services.AddTransient<GetTotalFinancesQueryHandler>();
             services.AddTransient<GetCoefficientsQueryHandler>();
             services.AddTransient<GetFinancialMetricsQueryHandler>();
+            services.AddTransient<GetEmployeeContactDetailsQueryHandler>();
+            services.AddTransient<GetEmployeeFinanceForPayrollQueryHandler>();
             services.AddTransient<CreateEmployeeCommandHandler>();
             services.AddTransient<UpdateEmployeeCommandHandler>();
             services.AddTransient<UpdateFinancesCommandHandler>();
             services.AddTransient<DeleteEmployeeCommandHandler>();
             services.AddTransient<CalculatePreviewMetricsCommandHandler>();
-            services.AddTransient<CalculateTotalExpensesCommandHandler>();
+            services.AddTransient<CreateTotalExpensesCommandHandler>();
+            services.AddTransient<CreateEstimatedFinancialEfficiencyCommandHandler>();
             services.AddTransient<EmployeeService>();
             services.AddTransient<FinanceAnalyticService>();
+            services.AddTransient<MailService>();
             services.AddTransient<IClock, Clock>();
             return services;
         }

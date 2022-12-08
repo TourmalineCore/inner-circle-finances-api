@@ -18,7 +18,7 @@ namespace SalaryService.Application.Queries
             _employeeDbContext = employeeDbContext;
         }
 
-        public async Task<ColleagueDto> Handle()
+        public async Task<ColleagueDto> HandleAsync()
         {
             var employees = await _employeeDbContext
                 .QueryableAsNoTracking<Employee>()

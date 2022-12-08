@@ -6,32 +6,29 @@ using Period = SalaryService.Domain.Common.Period;
 
 namespace SalaryService.Application.Commands
 {
-    public partial class CalculateTotalExpensesCommand
+    public partial class CreateTotalExpensesCommand
     {
     }
 
-    public class CalculateTotalExpensesCommandHandler
+    public class CreateTotalExpensesCommandHandler
     {
         private readonly EmployeeDbContext _employeeDbContext;
         private readonly IClock _clock;
 
-        public CalculateTotalExpensesCommandHandler(EmployeeDbContext employeeDbContext, 
+        public CreateTotalExpensesCommandHandler(EmployeeDbContext employeeDbContext, 
             IClock clock)
         {
             _employeeDbContext = employeeDbContext;
             _clock = clock;
         }
 
-        public async Task Handle(TotalFinances totalFinances, EstimatedFinancialEfficiency estimatedFinancialEfficiency)
+        public async Task HandleAsync(TotalFinances totalFinances)
         {
             var lastTotals = await _employeeDbContext.Queryable<TotalFinances>().SingleOrDefaultAsync();
 
-            var lastEstimatedFinancialEfficiency = await _employeeDbContext.Queryable<EstimatedFinancialEfficiency>().SingleOrDefaultAsync();
-
-            if (lastTotals == null && lastEstimatedFinancialEfficiency == null)
+            if (lastTotals == null)
             {
                 _employeeDbContext.Add(totalFinances);
-                _employeeDbContext.Add(estimatedFinancialEfficiency);
             }
             else
             {
@@ -42,17 +39,11 @@ namespace SalaryService.Application.Commands
                     TotalExpense = lastTotals.TotalExpense
                 };
                 _employeeDbContext.Add(historyTotals);
-                lastTotals.Update(totalFinances.ActualFromUtc, totalFinances.PayrollExpense, totalFinances.TotalExpense);
-                lastEstimatedFinancialEfficiency.Update(estimatedFinancialEfficiency.DesiredEarnings,
-                    estimatedFinancialEfficiency.DesiredProfit,
-                    estimatedFinancialEfficiency.DesiredProfitability,
-                    estimatedFinancialEfficiency.ReserveForQuarter,
-                    estimatedFinancialEfficiency.ReserveForHalfYear,
-                    estimatedFinancialEfficiency.ReserveForYear);
-                _employeeDbContext.Update(lastTotals);
-                _employeeDbContext.Update(lastEstimatedFinancialEfficiency);
-            }
 
+                lastTotals.Update(totalFinances.ActualFromUtc, totalFinances.PayrollExpense, totalFinances.TotalExpense);
+                _employeeDbContext.Update(lastTotals);
+            }
+            
             await _employeeDbContext.SaveChangesAsync();
         }
     }

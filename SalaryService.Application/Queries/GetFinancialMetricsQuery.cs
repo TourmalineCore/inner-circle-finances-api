@@ -17,13 +17,11 @@ namespace SalaryService.Application.Queries
             _employeeDbContext = employeeDbContext;
         }
 
-        public async Task<IEnumerable<EmployeeFinancialMetrics>> Handle()
+        public async Task<IEnumerable<EmployeeFinancialMetrics>> HandleAsync()
         {
-            var metrics = await _employeeDbContext
+            return await _employeeDbContext
                 .QueryableAsNoTracking<EmployeeFinancialMetrics>()
                 .ToListAsync();
-
-            return metrics;
         }
     }
 }

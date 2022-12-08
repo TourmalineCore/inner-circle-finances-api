@@ -19,7 +19,7 @@ namespace SalaryService.Application.Queries
             _employeeDbContext = employeeDbContext;
         }
 
-        public async Task<IEnumerable<AnalyticDto>> Handle()
+        public async Task<IEnumerable<AnalyticDto>> HandleAsync()
         {
             var employee = await _employeeDbContext
                 .QueryableAsNoTracking<Employee>()
