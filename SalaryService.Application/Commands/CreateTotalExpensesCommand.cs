@@ -22,9 +22,9 @@ namespace SalaryService.Application.Commands
             _clock = clock;
         }
 
-        public TotalFinances Handle(TotalFinances totalFinances)
+        public async Task HandleAsync(TotalFinances totalFinances)
         {
-            var lastTotals = _employeeDbContext.Queryable<TotalFinances>().SingleOrDefaultAsync().Result;
+            var lastTotals = await _employeeDbContext.Queryable<TotalFinances>().SingleOrDefaultAsync();
 
             if (lastTotals == null)
             {
@@ -44,8 +44,7 @@ namespace SalaryService.Application.Commands
                 _employeeDbContext.Update(lastTotals);
             }
             
-            _employeeDbContext.SaveChangesAsync();
-            return lastTotals;
+            await _employeeDbContext.SaveChangesAsync();
         }
     }
 }

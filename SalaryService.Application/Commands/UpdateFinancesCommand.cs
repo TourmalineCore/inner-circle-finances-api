@@ -23,7 +23,7 @@ namespace SalaryService.Application.Commands
             _clock = clock;
         }
 
-        public async Task Handle(FinanceUpdatingParameters request, EmployeeFinancialMetrics metrics)
+        public async Task HandleAsync(FinanceUpdatingParameters request, EmployeeFinancialMetrics metrics)
         {
             var financeForPayroll = new EmployeeFinanceForPayroll(request.RatePerHour,
                 request.Pay,

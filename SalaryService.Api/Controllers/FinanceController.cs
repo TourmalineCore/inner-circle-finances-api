@@ -28,7 +28,7 @@ namespace SalaryService.Api.Controllers
         [HttpGet("get-analytic")]
         public Task<IEnumerable<AnalyticDto>> GetAnalytic()
         {
-            return _getAnalyticQueryHandler.Handle();
+            return _getAnalyticQueryHandler.HandleAsync();
         }
         
         [RequiresPermission(UserClaimsProvider.CanViewAnalyticPermission)]
@@ -41,7 +41,7 @@ namespace SalaryService.Api.Controllers
         [HttpGet("get-total-finance")]
         public Task<TotalFinancesDto> GetTotalFinance()
         {
-            return _getTotalFinancesQueryHandler.Handle();
+            return _getTotalFinancesQueryHandler.HandleAsync();
         }
     }
 }

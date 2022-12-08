@@ -21,8 +21,8 @@ namespace SalaryService.Application.Services
 
         public async Task<TotalFinances> CalculateTotalFinances()
         {
-            var metrics = await _getFinancialMetricsQueryHandler.Handle();
-            var coefficients = await _getCoefficientsQueryHandler.Handle();
+            var metrics = await _getFinancialMetricsQueryHandler.HandleAsync();
+            var coefficients = await _getCoefficientsQueryHandler.HandleAsync();
 
             var totals = new TotalFinances(_clock.GetCurrentInstant());
             totals.CalculateTotals(metrics, coefficients);
@@ -31,8 +31,8 @@ namespace SalaryService.Application.Services
 
         public async Task<EstimatedFinancialEfficiency> CalculateEstimatedFinancialEfficiency(double totalExpenses)
         {
-            var metrics = await _getFinancialMetricsQueryHandler.Handle();
-            var coefficients = await _getCoefficientsQueryHandler.Handle();
+            var metrics = await _getFinancialMetricsQueryHandler.HandleAsync();
+            var coefficients = await _getCoefficientsQueryHandler.HandleAsync();
 
             var estimatedFinancialEfficiency = new EstimatedFinancialEfficiency();
             estimatedFinancialEfficiency.CalculateEstimatedFinancialEfficiency(metrics, coefficients, totalExpenses);
@@ -49,7 +49,7 @@ namespace SalaryService.Application.Services
                 pay,
                 employmentTypeValue,
                 parkingCostPerMonth);
-            var coefficients = await _getCoefficientsQueryHandler.Handle();
+            var coefficients = await _getCoefficientsQueryHandler.HandleAsync();
 
             calculateMetrics.CalculateMetrics(coefficients.DistrictCoefficient,
                 coefficients.MinimumWage,

@@ -18,7 +18,7 @@ namespace SalaryService.Application.Commands
             _employeeDbContext = employeeDbContext;
         }
 
-        public async Task<MetricsPreviewDto> Handle(FinanceUpdatingParameters request, EmployeeFinancialMetrics newMetrics)
+        public async Task<MetricsPreviewDto> HandleAsync(FinanceUpdatingParameters request, EmployeeFinancialMetrics newMetrics)
         {
             var employee = await _employeeDbContext
                 .Queryable<Employee>()
