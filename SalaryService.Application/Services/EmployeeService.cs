@@ -64,8 +64,8 @@ namespace SalaryService.Application.Services
             await _deleteEmployeeCommandHandler.HandleAsync(id);
             var totals = await _financeAnalyticService.CalculateTotalFinances();
             var estimatedFinancialEfficiency = await _financeAnalyticService.CalculateEstimatedFinancialEfficiency(totals.TotalExpense);
-            _createTotalExpensesCommandHandler.HandleAsync(totals);
-            _createEstimatedFinancialEfficiencyCommandHandler.HandleAsync(estimatedFinancialEfficiency);
+            await _createTotalExpensesCommandHandler.HandleAsync(totals);
+            await _createEstimatedFinancialEfficiencyCommandHandler.HandleAsync(estimatedFinancialEfficiency);
         }
 
         public async Task UpdateEmployee(EmployeeUpdatingParameters request)
@@ -83,8 +83,8 @@ namespace SalaryService.Application.Services
             await _updateFinancesCommandHandler.HandleAsync(parameters, metrics);
             var totals = await _financeAnalyticService.CalculateTotalFinances();
             var estimatedFinancialEfficiency = await _financeAnalyticService.CalculateEstimatedFinancialEfficiency(totals.TotalExpense);
-            _createTotalExpensesCommandHandler.HandleAsync(totals);
-            _createEstimatedFinancialEfficiencyCommandHandler.HandleAsync(estimatedFinancialEfficiency);
+            await _createTotalExpensesCommandHandler.HandleAsync(totals);
+            await _createEstimatedFinancialEfficiencyCommandHandler.HandleAsync(estimatedFinancialEfficiency);
         }
     }
 }
