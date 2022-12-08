@@ -21,6 +21,7 @@ namespace SalaryService.Application
             services.AddTransient<GetCoefficientsQueryHandler>();
             services.AddTransient<GetFinancialMetricsQueryHandler>();
             services.AddTransient<GetEmployeeContactDetailsQueryHandler>();
+            services.AddTransient<GetEmployeeFinanceForPayrollQueryHandler>();
             services.AddTransient<CreateEmployeeCommandHandler>();
             services.AddTransient<UpdateEmployeeCommandHandler>();
             services.AddTransient<UpdateFinancesCommandHandler>();

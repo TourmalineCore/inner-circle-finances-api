@@ -15,16 +15,19 @@ namespace SalaryService.Api.Controllers
         private readonly GetEmployeeQueryHandler _getEmployeeQueryHandler;
         private readonly GetColleaguesQueryHandler _getColleaguesQueryHandler;
         private readonly GetEmployeeContactDetailsQueryHandler _getEmployeeContactDetailsQueryHandler;
+        private readonly GetEmployeeFinanceForPayrollQueryHandler _getEmployeeFinanceForPayrollQueryHandler;
 
         public EmployeeController(EmployeeService employeeService,
         GetEmployeeQueryHandler getEmployeeQueryHandler,
         GetColleaguesQueryHandler getColleaguesQueryHandler, 
-        GetEmployeeContactDetailsQueryHandler getEmployeeContactDetailsQueryHandler)
+        GetEmployeeContactDetailsQueryHandler getEmployeeContactDetailsQueryHandler,
+        GetEmployeeFinanceForPayrollQueryHandler getEmployeeFinanceForPayrollQueryHandler)
         {
             _employeeService = employeeService;
             _getEmployeeQueryHandler = getEmployeeQueryHandler;
             _getColleaguesQueryHandler = getColleaguesQueryHandler;
             _getEmployeeContactDetailsQueryHandler = getEmployeeContactDetailsQueryHandler;
+            _getEmployeeFinanceForPayrollQueryHandler = getEmployeeFinanceForPayrollQueryHandler;
         }
         
         [HttpGet("get-profile")]
@@ -32,10 +35,17 @@ namespace SalaryService.Api.Controllers
         {
             return _getEmployeeQueryHandler.HandleAsync();
         }
-
+        
+        [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
+        [HttpGet("get-finance-for-payroll/{employeeId}")]
+        public Task<ColleagueFinancesDto> GetFinanceForPayroll([FromRoute] long employeeId)
+        {
+            return _getEmployeeFinanceForPayrollQueryHandler.HandleAsync(employeeId);
+        }
+        
         [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
         [HttpGet("get-contact-details/{employeeId}")]
-        public Task<EmployeeProfileDto> GetProfile([FromRoute] long employeeId)
+        public Task<ColleagueContactsDto> GetContactDetails([FromRoute] long employeeId)
         {
             return _getEmployeeContactDetailsQueryHandler.HandleAsync(employeeId);
         }
