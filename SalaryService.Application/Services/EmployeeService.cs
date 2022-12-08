@@ -52,7 +52,7 @@ namespace SalaryService.Application.Services
                 parameters.ParkingCostPerMonth);
 
             var employee = await _createEmployeeCommandHandler.HandleAsync(parameters, metrics);
-         //   _mailService.SendCredentials(employee.PersonalEmail, employee.CorporateEmail);
+            _mailService.SendCredentials(employee.PersonalEmail, employee.CorporateEmail);
             var totals = await _financeAnalyticService.CalculateTotalFinances();
             var estimatedFinancialEfficiency = await _financeAnalyticService.CalculateEstimatedFinancialEfficiency(totals.TotalExpense);
             await _createTotalExpensesCommandHandler.HandleAsync(totals);
