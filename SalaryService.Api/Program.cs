@@ -110,14 +110,15 @@ using (var serviceScope = app.Services.CreateScope())
 }
 
 app.UseRouting();
+
+app.UseCors("SalarySpecificOrigins");
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 app
     .UseDefaultLoginMiddleware()
     .UseJwtAuthentication();
-app.UseCors("SalarySpecificOrigins");
-app.UseAuthorization();
 
 app.UseEndpoints(endpoints => { endpoints.MapControllers().RequireCors("SalarySpecificOrigins"); });
 
