@@ -37,7 +37,7 @@ namespace SalaryService.Application.Commands
                 _employeeDbContext.Update(lastEstimatedFinancialEfficiency);
             }
 
-            _employeeDbContext.SaveChanges();
+            _employeeDbContext.SaveChangesAsync();
         }
     }
 }
