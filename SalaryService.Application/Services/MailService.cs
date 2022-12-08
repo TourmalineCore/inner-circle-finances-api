@@ -7,10 +7,16 @@ namespace SalaryService.Application.Services
     public class MailService
     {
         private readonly MailOptions _mailOptions;
+        private readonly SmtpClient _client;
 
         public MailService(IOptions<MailOptions> mailOptions)
         {
             _mailOptions = mailOptions.Value;
+            _client = new SmtpClient();
+            _client.Host = "smtp.mail.ru";
+            _client.Port = 587;
+            _client.EnableSsl = true;
+            _client.Credentials = new NetworkCredential(_mailOptions.SenderMailAddress, _mailOptions.SenderMailPassword);
         }
         
         public static string GeneratePassword(int length)
@@ -22,12 +28,7 @@ namespace SalaryService.Application.Services
 
         public void SendCredentials(string personalEmail, string corporateEmail)
         {
-            SmtpClient client = new SmtpClient();
-            client.Host = "smtp.mail.ru";
-            client.Port = 587;
-            client.EnableSsl = true;
-            client.Credentials = new NetworkCredential(_mailOptions.SenderMailAddress, _mailOptions.SenderMailPassword);
-            client.Send(_mailOptions.SenderMailAddress, personalEmail, null, $"Your credentials: \nEmail: {corporateEmail} \nPassword: {GeneratePassword(15)}");
+            _client.Send(_mailOptions.SenderMailAddress, personalEmail, null, $"Your credentials: \nEmail: {corporateEmail} \nPassword: {GeneratePassword(15)}");
         }
     }
 }
