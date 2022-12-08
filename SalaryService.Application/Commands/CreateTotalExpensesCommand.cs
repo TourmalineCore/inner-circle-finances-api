@@ -6,16 +6,16 @@ using Period = SalaryService.Domain.Common.Period;
 
 namespace SalaryService.Application.Commands
 {
-    public partial class CalculateTotalExpensesCommand
+    public partial class CreateTotalExpensesCommand
     {
     }
 
-    public class CalculateTotalExpensesCommandHandler
+    public class CreateTotalExpensesCommandHandler
     {
         private readonly EmployeeDbContext _employeeDbContext;
         private readonly IClock _clock;
 
-        public CalculateTotalExpensesCommandHandler(EmployeeDbContext employeeDbContext, 
+        public CreateTotalExpensesCommandHandler(EmployeeDbContext employeeDbContext, 
             IClock clock)
         {
             _employeeDbContext = employeeDbContext;

@@ -1,19 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NodaTime;
 using SalaryService.DataAccess;
 using SalaryService.Domain;
 
 namespace SalaryService.Application.Commands
 {
-    public partial class CalculateEstimatedFinancialEfficiencyCommand
+    public partial class CreateEstimatedFinancialEfficiencyCommand
     {
     }
     
-    public class CalculateEstimatedFinancialEfficiencyCommandHandler
+    public class CreateEstimatedFinancialEfficiencyCommandHandler
     {
         private readonly EmployeeDbContext _employeeDbContext;
 
-        public CalculateEstimatedFinancialEfficiencyCommandHandler(EmployeeDbContext employeeDbContext)
+        public CreateEstimatedFinancialEfficiencyCommandHandler(EmployeeDbContext employeeDbContext)
         {
             _employeeDbContext = employeeDbContext;
         }
