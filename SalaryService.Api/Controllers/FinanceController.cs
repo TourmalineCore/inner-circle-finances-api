@@ -7,6 +7,7 @@ using TourmalineCore.AspNetCore.JwtAuthentication.Core.Filters;
 
 namespace SalaryService.Api.Controllers
 {
+    [Authorize]
     [Route("api/finance")]
     public class FinanceController : Controller
     {
@@ -18,17 +19,15 @@ namespace SalaryService.Api.Controllers
             _getAnalyticQueryHandler = getAnalyticQueryHandler;
             _employeeService = employeeService;
         }
-
-        [Authorize]
-        [RequiresPermission(UserClaimsProvider.CanViewAnalyticClaim)]
+        
+        [RequiresPermission(UserClaimsProvider.CanViewAnalyticPermission)]
         [HttpGet("get-analytic")]
         public Task<IEnumerable<AnalyticDto>> GetAnalytic()
         {
             return _getAnalyticQueryHandler.Handle();
         }
-
-        [Authorize]
-        [RequiresPermission(UserClaimsProvider.CanViewAnalyticClaim)]
+        
+        [RequiresPermission(UserClaimsProvider.CanViewAnalyticPermission)]
         [HttpPost("get-preview")]
         public Task<MetricsPreviewDto> GetPreview([FromBody] FinanceUpdatingParameters financeUpdatingParameters)
         {
