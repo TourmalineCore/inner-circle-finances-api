@@ -13,7 +13,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("SalarySpecificOrigins",
                       policy =>
                       {
-                          policy.AllowAnyOrigin()
+                          policy.WithOrigins("*")
                           .AllowAnyHeader().AllowAnyMethod();
                       });
 });
