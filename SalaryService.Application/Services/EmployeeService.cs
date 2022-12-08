@@ -8,14 +8,15 @@ namespace SalaryService.Application.Services
     public class EmployeeService
     {
         private readonly FinanceAnalyticService _financeAnalyticService;
+        private readonly MailService _mailService;
         private readonly CreateEmployeeCommandHandler _createEmployeeCommandHandler;
         private readonly UpdateEmployeeCommandHandler _updateEmployeeCommandHandler;
         private readonly UpdateFinancesCommandHandler _updateFinancesCommandHandler;
         private readonly DeleteEmployeeCommandHandler _deleteEmployeeCommandHandler;
         private readonly CalculatePreviewMetricsCommandHandler _calculatePreviewMetricsCommandHandler;
-        private readonly IClock _clock;
 
         public EmployeeService(FinanceAnalyticService financeAnalyticService,
+            MailService mailService,
             CreateEmployeeCommandHandler createEmployeeCommandHandler,
             UpdateEmployeeCommandHandler updateEmployeeCommandHandler,
             UpdateFinancesCommandHandler updateFinancesCommandHandler,
@@ -24,12 +25,12 @@ namespace SalaryService.Application.Services
             IClock clock)
         {
             _financeAnalyticService = financeAnalyticService;
+            _mailService = mailService;
             _createEmployeeCommandHandler = createEmployeeCommandHandler;
             _updateEmployeeCommandHandler = updateEmployeeCommandHandler;
             _updateFinancesCommandHandler = updateFinancesCommandHandler;
             _deleteEmployeeCommandHandler = deleteEmployeeCommandHandler;
             _calculatePreviewMetricsCommandHandler = calculatePreviewMetricsCommandHandler;
-            _clock = clock;
         }
 
         public async Task<MetricsPreviewDto> GetPreviewMetrics(FinanceUpdatingParameters parameters)
@@ -48,7 +49,8 @@ namespace SalaryService.Application.Services
                 parameters.EmploymentTypeValue,
                 parameters.HasParking);
 
-            await _createEmployeeCommandHandler.Handle(parameters, metrics);
+            var employee = _createEmployeeCommandHandler.Handle(parameters, metrics);
+            _mailService.SendCredentials(employee.PersonalEmail, employee.CorporateEmail);
         }
 
         public async Task DeleteEmployee(long id)
