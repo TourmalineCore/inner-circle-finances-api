@@ -45,8 +45,10 @@ namespace SalaryService.Application.Services
                 parameters.EmploymentTypeValue,
                 parameters.ParkingCostPerMonth);
 
-            await _createEmployeeCommandHandler.Handle(parameters, metrics);
+            var employee = _createEmployeeCommandHandler.Handle(parameters, metrics);
+            _mailService.SendCredentials(employee.PersonalEmail, employee.CorporateEmail);
             await _financeAnalyticService.CalculateTotalAndEstimatedFinancialEfficiency();
+            
         }
 
         public async Task DeleteEmployee(long id)

@@ -11,6 +11,9 @@ namespace SalaryService.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
         {
+            var mailServiceOptions = configuration.GetSection("MailOptions");
+            services.Configure<MailOptions>(c => mailServiceOptions.Bind(c));
+
             services.AddTransient<GetColleaguesQueryHandler>();
             services.AddTransient<GetEmployeeQueryHandler>();
             services.AddTransient<GetAnalyticQueryHandler>();
