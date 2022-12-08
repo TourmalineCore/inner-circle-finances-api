@@ -6,8 +6,8 @@ using SalaryService.Application.Services;
 using TourmalineCore.AspNetCore.JwtAuthentication.Core.Filters;
 
 namespace SalaryService.Api.Controllers
-{
-   // [Authorize]
+{ 
+    [Authorize]
     [Route("api/employees")]
     public class EmployeeController : Controller
     {
@@ -36,7 +36,7 @@ namespace SalaryService.Api.Controllers
             return _getColleaguesQueryHandler.HandleAsync();
         }
         
-       // [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
+        [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
         [HttpPost("create")]
         public Task CreateEmployee([FromBody] EmployeeCreatingParameters employeeCreatingParameters)
         {
