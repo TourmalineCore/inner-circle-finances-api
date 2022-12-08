@@ -44,7 +44,7 @@ namespace SalaryService.Application.Commands
                 _employeeDbContext.Update(lastTotals);
             }
             
-            _employeeDbContext.SaveChanges();
+            _employeeDbContext.SaveChangesAsync();
             return lastTotals;
         }
     }

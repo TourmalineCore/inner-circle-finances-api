@@ -60,7 +60,7 @@ namespace SalaryService.Application.Commands
 
             }
 
-            _employeeDbContext.SaveChanges();
+            _employeeDbContext.SaveChangesAsync();
             return employee;
         }
     }
