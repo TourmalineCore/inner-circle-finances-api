@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.EventLog;
 using SalaryService.Api;
 using SalaryService.Application;
-using SalaryService.Application.Services;
 using SalaryService.DataAccess;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -11,6 +10,15 @@ using TourmalineCore.AspNetCore.JwtAuthentication.Core.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("SalarySpecificOrigins",
+                      policy =>
+                      {
+                          policy.WithOrigins("*")
+                          .AllowAnyHeader().AllowAnyMethod();
+                      });
+});
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -103,6 +111,8 @@ using (var serviceScope = app.Services.CreateScope())
 
 app.UseRouting();
 
+app.UseCors("SalarySpecificOrigins");
+
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -110,6 +120,6 @@ app
     .UseDefaultLoginMiddleware()
     .UseJwtAuthentication();
 
-app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+app.UseEndpoints(endpoints => { endpoints.MapControllers().RequireCors("SalarySpecificOrigins"); });
 
 app.Run();
