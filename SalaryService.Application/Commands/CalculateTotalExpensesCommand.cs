@@ -22,16 +22,13 @@ namespace SalaryService.Application.Commands
             _clock = clock;
         }
 
-        public async Task Handle(TotalFinances totalFinances, EstimatedFinancialEfficiency estimatedFinancialEfficiency)
+        public TotalFinances Handle(TotalFinances totalFinances)
         {
-            var lastTotals = await _employeeDbContext.Queryable<TotalFinances>().SingleOrDefaultAsync();
+            var lastTotals = _employeeDbContext.Queryable<TotalFinances>().SingleOrDefaultAsync().Result;
 
-            var lastEstimatedFinancialEfficiency = await _employeeDbContext.Queryable<EstimatedFinancialEfficiency>().SingleOrDefaultAsync();
-
-            if (lastTotals == null && lastEstimatedFinancialEfficiency == null)
+            if (lastTotals == null)
             {
                 _employeeDbContext.Add(totalFinances);
-                _employeeDbContext.Add(estimatedFinancialEfficiency);
             }
             else
             {
@@ -42,18 +39,13 @@ namespace SalaryService.Application.Commands
                     TotalExpense = lastTotals.TotalExpense
                 };
                 _employeeDbContext.Add(historyTotals);
-                lastTotals.Update(totalFinances.ActualFromUtc, totalFinances.PayrollExpense, totalFinances.TotalExpense);
-                lastEstimatedFinancialEfficiency.Update(estimatedFinancialEfficiency.DesiredEarnings,
-                    estimatedFinancialEfficiency.DesiredProfit,
-                    estimatedFinancialEfficiency.DesiredProfitability,
-                    estimatedFinancialEfficiency.ReserveForQuarter,
-                    estimatedFinancialEfficiency.ReserveForHalfYear,
-                    estimatedFinancialEfficiency.ReserveForYear);
-                _employeeDbContext.Update(lastTotals);
-                _employeeDbContext.Update(lastEstimatedFinancialEfficiency);
-            }
 
-            await _employeeDbContext.SaveChangesAsync();
+                lastTotals.Update(totalFinances.ActualFromUtc, totalFinances.PayrollExpense, totalFinances.TotalExpense);
+                _employeeDbContext.Update(lastTotals);
+            }
+            
+            _employeeDbContext.SaveChanges();
+            return lastTotals;
         }
     }
 }

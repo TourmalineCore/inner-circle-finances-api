@@ -1,5 +1,6 @@
 ﻿using NodaTime;
 using SalaryService.Application.Dtos;
+using SalaryService.Application.Services;
 using SalaryService.DataAccess;
 using SalaryService.Domain;
 
@@ -21,7 +22,7 @@ namespace SalaryService.Application.Commands
             _clock = clock;
         }
 
-        public Task Handle(EmployeeCreatingParameters request, EmployeeFinancialMetrics metrics)
+        public Employee Handle(EmployeeCreatingParameters request, EmployeeFinancialMetrics metrics)
         {
             var employee = new Employee(request.Name,
                 request.Surname,
@@ -31,7 +32,7 @@ namespace SalaryService.Application.Commands
                 request.Phone,
                 request.GitHub,
                 request.GitLab,
-                _clock.GetCurrentInstant()); ;
+                _clock.GetCurrentInstant());
 
             var financeForPayroll = new EmployeeFinanceForPayroll(request.RatePerHour,
                 request.Pay,
@@ -58,7 +59,9 @@ namespace SalaryService.Application.Commands
                 }
 
             }
-            return _employeeDbContext.SaveChangesAsync();
+
+            _employeeDbContext.SaveChanges();
+            return employee;
         }
     }
 }

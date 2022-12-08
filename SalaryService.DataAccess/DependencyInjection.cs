@@ -16,7 +16,7 @@ namespace SalaryService.DataAccess
                 options.UseNpgsql(connectionString,
                                 o => o.UseNodaTime());
             });
-            services.AddScoped<EmployeeDbContext>();
+            services.AddTransient<EmployeeDbContext>();
             return services;
         }
     }
