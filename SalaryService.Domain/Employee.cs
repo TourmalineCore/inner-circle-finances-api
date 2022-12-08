@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using NodaTime;
+﻿using NodaTime;
 
 namespace SalaryService.Domain
 {
@@ -63,6 +62,7 @@ namespace SalaryService.Domain
         public void Update(string name, 
             string surname, 
             string middleName,
+            string corporateEmail,
             string personalEmail,
             string phone,
             string gitHub,
@@ -71,6 +71,7 @@ namespace SalaryService.Domain
             Name = name;
             Surname = surname;
             MiddleName = middleName;
+            CorporateEmail = corporateEmail;
             PersonalEmail = personalEmail;
             Phone = phone;
             GitHub = gitHub;

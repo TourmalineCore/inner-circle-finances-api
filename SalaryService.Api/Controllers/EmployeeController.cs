@@ -6,7 +6,7 @@ using SalaryService.Application.Services;
 using TourmalineCore.AspNetCore.JwtAuthentication.Core.Filters;
 
 namespace SalaryService.Api.Controllers
-{
+{ 
     [Authorize]
     [Route("api/employees")]
     public class EmployeeController : Controller
@@ -27,13 +27,13 @@ namespace SalaryService.Api.Controllers
         [HttpGet("get-profile")]
         public Task<EmployeeProfileDto> GetProfile()
         {
-            return _getEmployeeQueryHandler.Handle();
+            return _getEmployeeQueryHandler.HandleAsync();
         }
         
         [HttpGet("get-colleagues")]
         public Task<ColleagueDto> GetColleagues()
         {
-            return _getColleaguesQueryHandler.Handle();
+            return _getColleaguesQueryHandler.HandleAsync();
         }
         
         [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]

@@ -22,7 +22,7 @@ namespace SalaryService.Application.Commands
             _clock = clock;
         }
 
-        public Employee Handle(EmployeeCreatingParameters request, EmployeeFinancialMetrics metrics)
+        public async Task<Employee> HandleAsync(EmployeeCreatingParameters request, EmployeeFinancialMetrics metrics)
         {
             var employee = new Employee(request.Name,
                 request.Surname,
@@ -37,7 +37,7 @@ namespace SalaryService.Application.Commands
             var financeForPayroll = new EmployeeFinanceForPayroll(request.RatePerHour,
                 request.Pay,
                 request.EmploymentType,
-                request.HasParking);
+                request.ParkingCostPerMonth);
 
             using (var transaction = _employeeDbContext.Database.BeginTransaction())
             {
@@ -60,7 +60,7 @@ namespace SalaryService.Application.Commands
 
             }
 
-            _employeeDbContext.SaveChangesAsync();
+            await _employeeDbContext.SaveChangesAsync();
             return employee;
         }
     }

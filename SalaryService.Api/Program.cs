@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.EventLog;
 using SalaryService.Api;
 using SalaryService.Application;
+using SalaryService.Application.Services;
 using SalaryService.DataAccess;
 using System.Reflection;
 using System.Runtime.InteropServices;

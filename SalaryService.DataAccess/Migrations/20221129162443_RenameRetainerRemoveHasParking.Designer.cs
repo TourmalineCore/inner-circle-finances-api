@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,10 @@ using SalaryService.DataAccess;
 namespace SalaryService.DataAccess.Migrations
 {
     [DbContext(typeof(EmployeeDbContext))]
-    partial class EmployeeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221129162443_RenameRetainerRemoveHasParking")]
+    partial class RenameRetainerRemoveHasParking
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,41 +24,6 @@ namespace SalaryService.DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("SalaryService.Domain.CoefficientOptions", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<double>("DistrictCoefficient")
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("IncomeTaxPercent")
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("MinimumWage")
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("OfficeExpenses")
-                        .HasColumnType("double precision");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CoefficientOptions");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            DistrictCoefficient = 0.14999999999999999,
-                            IncomeTaxPercent = 0.13,
-                            MinimumWage = 15279.0,
-                            OfficeExpenses = 49000.0
-                        });
-                });
 
             modelBuilder.Entity("SalaryService.Domain.Employee", b =>
                 {
@@ -168,9 +135,6 @@ namespace SalaryService.DataAccess.Migrations
 
                     b.Property<Instant>("ActualFromUtc")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<double>("DistrictCoefficient")
-                        .HasColumnType("double precision");
 
                     b.Property<double>("Earnings")
                         .HasColumnType("double precision");
@@ -318,78 +282,6 @@ namespace SalaryService.DataAccess.Migrations
                     b.ToTable("EmployeeFinancialMetricsHistory");
                 });
 
-            modelBuilder.Entity("SalaryService.Domain.EstimatedFinancialEfficiency", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<double>("DesiredEarnings")
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("DesiredProfit")
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("DesiredProfitability")
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("ReserveForHalfYear")
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("ReserveForQuarter")
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("ReserveForYear")
-                        .HasColumnType("double precision");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("EstimatedFinancialEfficiency");
-                });
-
-            modelBuilder.Entity("SalaryService.Domain.TotalFinancesHistory", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<double>("PayrollExpense")
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("TotalExpense")
-                        .HasColumnType("double precision");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TotalFinancesHistory");
-                });
-
-            modelBuilder.Entity("TotalFinances", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<Instant>("ActualFromUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<double>("PayrollExpense")
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("TotalExpense")
-                        .HasColumnType("double precision");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TotalFinances");
-                });
-
             modelBuilder.Entity("SalaryService.Domain.EmployeeFinanceForPayroll", b =>
                 {
                     b.HasOne("SalaryService.Domain.Employee", "Employee")
@@ -427,11 +319,11 @@ namespace SalaryService.DataAccess.Migrations
 
                             b1.Property<Instant>("FromUtc")
                                 .HasColumnType("timestamp with time zone")
-                                .HasColumnName("FromUtc");
+                                .HasColumnName("StartedAtUtc");
 
                             b1.Property<Instant?>("ToUtc")
                                 .HasColumnType("timestamp with time zone")
-                                .HasColumnName("ToUtc");
+                                .HasColumnName("UpdatedAtUtc");
 
                             b1.HasKey("EmployeeFinancialMetricsHistoryId");
 
@@ -442,33 +334,6 @@ namespace SalaryService.DataAccess.Migrations
                         });
 
                     b.Navigation("Employee");
-
-                    b.Navigation("Period")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("SalaryService.Domain.TotalFinancesHistory", b =>
-                {
-                    b.OwnsOne("SalaryService.Domain.Common.Period", "Period", b1 =>
-                        {
-                            b1.Property<long>("TotalFinancesHistoryId")
-                                .HasColumnType("bigint");
-
-                            b1.Property<Instant>("FromUtc")
-                                .HasColumnType("timestamp with time zone")
-                                .HasColumnName("FromUtc");
-
-                            b1.Property<Instant?>("ToUtc")
-                                .HasColumnType("timestamp with time zone")
-                                .HasColumnName("ToUtc");
-
-                            b1.HasKey("TotalFinancesHistoryId");
-
-                            b1.ToTable("TotalFinancesHistory");
-
-                            b1.WithOwner()
-                                .HasForeignKey("TotalFinancesHistoryId");
-                        });
 
                     b.Navigation("Period")
                         .IsRequired();

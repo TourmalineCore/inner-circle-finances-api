@@ -17,15 +17,15 @@ namespace SalaryService.Application.Commands
         {
             _employeeDbContext = employeeDbContext;
         }
-        public async Task Handle(EmployeeUpdatingParameters request)
+        public async Task HandleAsync(EmployeeUpdatingParameters request)
         {
             var employee = await _employeeDbContext
-                .Set<Employee>()
+                .Queryable<Employee>()
                 .Include(x => x.EmployeeFinanceForPayroll)
                 .Include(x => x.EmployeeFinancialMetrics)
                 .SingleAsync(x => x.Id == request.EmployeeId && x.DeletedAtUtc == null);
 
-            employee.Update(request.Name, request.Surname, request.MiddleName, request.PersonalEmail, request.Phone, request.GitHub, request.GitLab);
+            employee.Update(request.Name, request.Surname, request.MiddleName, request.CorporateEmail, request.PersonalEmail, request.Phone, request.GitHub, request.GitLab);
 
             _employeeDbContext.Update(employee);
             await _employeeDbContext.SaveChangesAsync();

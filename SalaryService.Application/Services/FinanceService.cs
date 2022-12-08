@@ -1,37 +1,59 @@
-﻿using Microsoft.Extensions.Options;
-using NodaTime;
-using SalaryService.Application.Commands;
+﻿using NodaTime;
+using SalaryService.Application.Queries;
 using SalaryService.Domain;
 
 namespace SalaryService.Application.Services
 {
     public class FinanceAnalyticService
     {
-        
-        private readonly CoefficientOptions _coefficientOptions;
+        private readonly GetCoefficientsQueryHandler _getCoefficientsQueryHandler;
+        private readonly GetFinancialMetricsQueryHandler _getFinancialMetricsQueryHandler;
         private readonly IClock _clock;
 
-        public FinanceAnalyticService(IOptions<CoefficientOptions> coefficientOptions, 
+        public FinanceAnalyticService(GetCoefficientsQueryHandler getCoefficientsQueryHandler,
+            GetFinancialMetricsQueryHandler getFinancialMetricsQueryHandler,
             IClock clock)
         {
-            _coefficientOptions = coefficientOptions.Value;
+            _getCoefficientsQueryHandler = getCoefficientsQueryHandler;
+            _getFinancialMetricsQueryHandler = getFinancialMetricsQueryHandler;
             _clock = clock;
         }
 
-        public EmployeeFinancialMetrics CalculateMetrics(double ratePerHour,
+        public async Task<TotalFinances> CalculateTotalFinances()
+        {
+            var metrics = await _getFinancialMetricsQueryHandler.HandleAsync();
+            var coefficients = await _getCoefficientsQueryHandler.HandleAsync();
+
+            var totals = new TotalFinances(_clock.GetCurrentInstant());
+            totals.CalculateTotals(metrics, coefficients);
+            return totals;
+        }
+
+        public async Task<EstimatedFinancialEfficiency> CalculateEstimatedFinancialEfficiency(double totalExpenses)
+        {
+            var metrics = await _getFinancialMetricsQueryHandler.HandleAsync();
+            var coefficients = await _getCoefficientsQueryHandler.HandleAsync();
+
+            var estimatedFinancialEfficiency = new EstimatedFinancialEfficiency();
+            estimatedFinancialEfficiency.CalculateEstimatedFinancialEfficiency(metrics, coefficients, totalExpenses);
+            return estimatedFinancialEfficiency;
+        }
+
+        public async Task<EmployeeFinancialMetrics> CalculateMetrics(double ratePerHour,
             double pay,
             double employmentTypeValue,
-            bool hasParking)
+            double parkingCostPerMonth)
         {
             var calculateMetrics = new EmployeeFinancialMetrics(
                 ratePerHour,
                 pay,
                 employmentTypeValue,
-                hasParking);
+                parkingCostPerMonth);
+            var coefficients = await _getCoefficientsQueryHandler.HandleAsync();
 
-            calculateMetrics.CalculateMetrics(_coefficientOptions.DistrictCoefficient,
-                _coefficientOptions.MinimumWage,
-                _coefficientOptions.IncomeTaxPercent,
+            calculateMetrics.CalculateMetrics(coefficients.DistrictCoefficient,
+                coefficients.MinimumWage,
+                coefficients.IncomeTaxPercent,
                 _clock.GetCurrentInstant());
 
             return calculateMetrics;

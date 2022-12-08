@@ -1,8 +1,5 @@
-﻿using NodaTime;
-using SalaryService.Application.Commands;
+﻿using SalaryService.Application.Commands;
 using SalaryService.Application.Dtos;
-using SalaryService.Domain;
-
 namespace SalaryService.Application.Services
 {
     public class EmployeeService
@@ -14,6 +11,8 @@ namespace SalaryService.Application.Services
         private readonly UpdateFinancesCommandHandler _updateFinancesCommandHandler;
         private readonly DeleteEmployeeCommandHandler _deleteEmployeeCommandHandler;
         private readonly CalculatePreviewMetricsCommandHandler _calculatePreviewMetricsCommandHandler;
+        private readonly CreateTotalExpensesCommandHandler _createTotalExpensesCommandHandler;
+        private readonly CreateEstimatedFinancialEfficiencyCommandHandler _createEstimatedFinancialEfficiencyCommandHandler;
 
         public EmployeeService(FinanceAnalyticService financeAnalyticService,
             MailService mailService,
@@ -21,8 +20,9 @@ namespace SalaryService.Application.Services
             UpdateEmployeeCommandHandler updateEmployeeCommandHandler,
             UpdateFinancesCommandHandler updateFinancesCommandHandler,
             DeleteEmployeeCommandHandler deleteEmployeeCommandHandler,
-            CalculatePreviewMetricsCommandHandler calculatePreviewMetricsCommandHandler,
-            IClock clock)
+            CalculatePreviewMetricsCommandHandler calculatePreviewMetricsCommandHandler, 
+            CreateTotalExpensesCommandHandler createTotalExpensesCommandHandler,
+            CreateEstimatedFinancialEfficiencyCommandHandler createEstimatedFinancialEfficiencyCommandHandler)
         {
             _financeAnalyticService = financeAnalyticService;
             _mailService = mailService;
@@ -31,47 +31,60 @@ namespace SalaryService.Application.Services
             _updateFinancesCommandHandler = updateFinancesCommandHandler;
             _deleteEmployeeCommandHandler = deleteEmployeeCommandHandler;
             _calculatePreviewMetricsCommandHandler = calculatePreviewMetricsCommandHandler;
+            _createTotalExpensesCommandHandler = createTotalExpensesCommandHandler;
+            _createEstimatedFinancialEfficiencyCommandHandler = createEstimatedFinancialEfficiencyCommandHandler;
         }
 
         public async Task<MetricsPreviewDto> GetPreviewMetrics(FinanceUpdatingParameters parameters)
         {
-            var newMetrics = _financeAnalyticService.CalculateMetrics(parameters.RatePerHour,
-                parameters.Pay, parameters.EmploymentTypeValue, parameters.HasParking);
+            var newMetrics = await _financeAnalyticService.CalculateMetrics(parameters.RatePerHour,
+                parameters.Pay, parameters.EmploymentTypeValue, parameters.ParkingCostPerMonth);
 
-            return await _calculatePreviewMetricsCommandHandler.Handle(parameters, newMetrics);
+            return await _calculatePreviewMetricsCommandHandler.HandleAsync(parameters, newMetrics);
         }
 
         public async Task CreateEmployee(EmployeeCreatingParameters parameters)
         {
-            var metrics = _financeAnalyticService.CalculateMetrics(
+            var metrics = await _financeAnalyticService.CalculateMetrics(
                 parameters.RatePerHour,
                 parameters.Pay,
                 parameters.EmploymentTypeValue,
-                parameters.HasParking);
+                parameters.ParkingCostPerMonth);
 
-            var employee = _createEmployeeCommandHandler.Handle(parameters, metrics);
+            var employee = await _createEmployeeCommandHandler.HandleAsync(parameters, metrics);
             _mailService.SendCredentials(employee.PersonalEmail, employee.CorporateEmail);
+            var totals = await _financeAnalyticService.CalculateTotalFinances();
+            var estimatedFinancialEfficiency = await _financeAnalyticService.CalculateEstimatedFinancialEfficiency(totals.TotalExpense);
+            await _createTotalExpensesCommandHandler.HandleAsync(totals);
+            await _createEstimatedFinancialEfficiencyCommandHandler.HandleAsync(estimatedFinancialEfficiency);
         }
 
         public async Task DeleteEmployee(long id)
         {
-            await _deleteEmployeeCommandHandler.Handle(id);
+            await _deleteEmployeeCommandHandler.HandleAsync(id);
+            var totals = await _financeAnalyticService.CalculateTotalFinances();
+            var estimatedFinancialEfficiency = await _financeAnalyticService.CalculateEstimatedFinancialEfficiency(totals.TotalExpense);
+            await _createTotalExpensesCommandHandler.HandleAsync(totals);
+            await _createEstimatedFinancialEfficiencyCommandHandler.HandleAsync(estimatedFinancialEfficiency);
         }
 
         public async Task UpdateEmployee(EmployeeUpdatingParameters request)
         {
-            await _updateEmployeeCommandHandler.Handle(request);
+            await _updateEmployeeCommandHandler.HandleAsync(request);
         }
 
         public async Task UpdateFinances(FinanceUpdatingParameters parameters)
         {
-
-            var metrics = _financeAnalyticService.CalculateMetrics(parameters.RatePerHour,
+            var metrics = await _financeAnalyticService.CalculateMetrics(parameters.RatePerHour,
                 parameters.Pay,
                 parameters.EmploymentTypeValue,
-                parameters.HasParking);
+                parameters.ParkingCostPerMonth);
 
-            await _updateFinancesCommandHandler.Handle(parameters, metrics);
+            await _updateFinancesCommandHandler.HandleAsync(parameters, metrics);
+            var totals = await _financeAnalyticService.CalculateTotalFinances();
+            var estimatedFinancialEfficiency = await _financeAnalyticService.CalculateEstimatedFinancialEfficiency(totals.TotalExpense);
+            await _createTotalExpensesCommandHandler.HandleAsync(totals);
+            await _createEstimatedFinancialEfficiencyCommandHandler.HandleAsync(estimatedFinancialEfficiency);
         }
     }
 }

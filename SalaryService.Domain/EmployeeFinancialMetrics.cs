@@ -13,244 +13,54 @@ namespace SalaryService.Domain
 
         public Instant ActualFromUtc { get; set; }
 
-        private double salary;
-        public double Salary
-        {
-            get { return salary; }
-            set
-            {
-                if (value >= 0)
-                    salary = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double Salary { get; set; }
+        
+        public double HourlyCostFact { get; set; }
 
-        private double hourlyCostFact;
-        public double HourlyCostFact
-        {
-            get { return hourlyCostFact; }
-            set
-            {
-                if (value >= 0)
-                    hourlyCostFact = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double HourlyCostHand { get; set; }
 
-        private double hourlyCostHand;
-        public double HourlyCostHand
-        {
-            get { return hourlyCostHand; }
-            set
-            {
-                if (value >= 0)
-                    hourlyCostHand = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double Earnings { get; set; }
+        
+        public double DistrictCoefficient { get; set; }
 
-        private double earnings;
-        public double Earnings
-        {
-            get { return earnings; }
-            set
-            {
-                if (value >= 0)
-                    earnings = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double IncomeTaxContributions { get; set; }
 
-        private double incomeTaxContributions;
-        public double IncomeTaxContributions
-        {
-            get { return incomeTaxContributions; }
-            set
-            {
-                if (value >= 0)
-                    incomeTaxContributions = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double PensionContributions { get; set; }
 
-        private double pensionContributions;
-        public double PensionContributions
-        {
-            get { return pensionContributions; }
-            set
-            {
-                if (value >= 0)
-                    pensionContributions = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double MedicalContributions { get; set; }
 
-        private double medicalContributions;
-        public double MedicalContributions
-        {
-            get { return medicalContributions; }
-            set
-            {
-                if (value >= 0)
-                    medicalContributions = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double SocialInsuranceContributions { get; set; }
 
-        private double socialInsuranceContributions;
-        public double SocialInsuranceContributions
-        {
-            get { return socialInsuranceContributions; }
-            set
-            {
-                if (value >= 0)
-                    socialInsuranceContributions = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double InjuriesContributions { get; set; }
 
-        private double injuriesContributions;
-        public double InjuriesContributions
-        {
-            get { return injuriesContributions; }
-            set
-            {
-                if (value >= 0)
-                    injuriesContributions = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double Expenses { get; set; }
 
-        private double expenses;
-        public double Expenses
-        {
-            get { return expenses; }
-            set
-            {
-                if (value >= 0)
-                    expenses = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double Profit { get; set; }
 
-        private double profit;
-        public double Profit
-        {
-            get { return profit; }
-            set
-            {
-                if (value >= 0)
-                    profit = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double ProfitAbility { get; set; }
 
-        private double profitability;
-        public double ProfitAbility
-        {
-            get { return profitability; }
-            set
-            {
-                if (value >= 0)
-                    profitability = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double GrossSalary { get; set; }
 
-        private double grossSalary;
-        public double GrossSalary
-        {
-            get { return grossSalary; }
-            set
-            {
-                if (value >= 0)
-                    grossSalary = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double NetSalary { get; set; }
 
-        private double netSalary;
-        public double NetSalary
-        {
-            get { return netSalary; }
-            set
-            {
-                if (value >= 0)
-                    netSalary = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double RatePerHour { get; set; }
 
-        private double ratePerHour;
+        public double Pay { get; set; }
 
-        public double RatePerHour
-        {
-            get { return ratePerHour; }
-            set
-            {
-                if (value >= 0)
-                    ratePerHour = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
-
-        private double pay;
-
-        public double Pay
-        {
-            get { return pay; }
-            set
-            {
-                if (value >= 0)
-                    pay = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
-
-        private double retainer;
-        public double Retainer
-        {
-            get { return retainer; }
-            set
-            {
-                if (value >= 0)
-                    retainer = value;
-                else
-                    throw new ArgumentException();
-            }
-        }
+        public double Prepayment { get; set; }
 
         public double EmploymentType { get; set; }
-
-        public bool HasParking { get; set; }
 
         public double ParkingCostPerMonth { get; set; }
 
         public double AccountingPerMonth { get; set; }
 
-        public EmployeeFinancialMetrics(double ratePerHour, double pay, double employmentType, bool hasParking)
+        public EmployeeFinancialMetrics(double ratePerHour, double pay, double employmentType, double parkingCostPerMonth)
         {
             RatePerHour = ratePerHour;
             Pay = pay;
             EmploymentType = employmentType;
-            HasParking = hasParking;
-            ParkingCostPerMonth = hasParking ? ThirdPartyServicesPriceConsts.ParkingCostPerMonth : 0;
+            ParkingCostPerMonth = parkingCostPerMonth;
             AccountingPerMonth = ThirdPartyServicesPriceConsts.AccountingPerMonth;
         }
 
@@ -263,6 +73,7 @@ namespace SalaryService.Domain
             Salary = CalculateSalary();
             GrossSalary = CalculateGrossSalary(districtCoeff);
             NetSalary = CalculateNetSalary(tax);
+            DistrictCoefficient = CalculateDistrictCoefficient(districtCoeff);
             Earnings = CalculateEarnings();
             IncomeTaxContributions = GetNdflValue();
             PensionContributions = GetPensionContributions(mrot);
@@ -272,7 +83,7 @@ namespace SalaryService.Domain
             Expenses = CalculateExpenses();
             HourlyCostFact = CalculateHourlyCostFact();
             HourlyCostHand = CalculateHourlyCostHand();
-            Retainer = CalculateRetainer();
+            Prepayment = CalculatePrepayment();
             Profit = CalculateProfit();
             ProfitAbility = CalculateProfitability();
         }
@@ -280,6 +91,7 @@ namespace SalaryService.Domain
         public void Update(double salary,
             double grossSalary,
             double netSalary,
+            double districtCoefficient,
             double earnings,
             double incomeTaxContributions,
             double pensionContributions,
@@ -289,22 +101,23 @@ namespace SalaryService.Domain
             double expenses,
             double hourlyCostFact,
             double hourlyCostHand,
-            double retainer,
+            double prepayment,
             double profit,
             double profitability,
             double ratePerHour,
             double pay,
             double employmentType,
-            bool hasParking,
+            double parkingCostPerMonth,
             Instant actualFromUtc)
         {
             RatePerHour = ratePerHour;
             Pay = pay;
             EmploymentType = employmentType;
-            HasParking = hasParking;
+            ParkingCostPerMonth = parkingCostPerMonth;
             Salary = salary;
             GrossSalary = grossSalary;
             NetSalary = netSalary;
+            DistrictCoefficient = districtCoefficient;
             Earnings = earnings;
             IncomeTaxContributions = incomeTaxContributions;
             PensionContributions = pensionContributions;
@@ -314,10 +127,15 @@ namespace SalaryService.Domain
             Expenses = expenses;
             HourlyCostFact = hourlyCostFact;
             HourlyCostHand = hourlyCostHand;
-            Retainer = retainer;
+            Prepayment = prepayment;
             Profit = profit;
             ProfitAbility = profitability;
             ActualFromUtc = actualFromUtc;
+        }
+
+        private double CalculateDistrictCoefficient(double districtCoeff)
+        {
+            return Salary * districtCoeff;
         }
 
         private double CalculateHourlyCostFact()
@@ -325,7 +143,7 @@ namespace SalaryService.Domain
             return Expenses / WorkingPlanConsts.WorkingHoursInMonth;
         }
 
-        private double CalculateRetainer()
+        private double CalculatePrepayment()
         {
             return NetSalary / 2;
         }

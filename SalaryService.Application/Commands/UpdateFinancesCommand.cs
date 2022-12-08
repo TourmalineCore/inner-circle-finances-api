@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-using NodaTime;
-using SalaryService.Application.Services;
+﻿using NodaTime;
 using Period = SalaryService.Domain.Common.Period;
 using SalaryService.Domain;
 using SalaryService.DataAccess;
@@ -25,15 +23,15 @@ namespace SalaryService.Application.Commands
             _clock = clock;
         }
 
-        public async Task Handle(FinanceUpdatingParameters request, EmployeeFinancialMetrics metrics)
+        public async Task HandleAsync(FinanceUpdatingParameters request, EmployeeFinancialMetrics metrics)
         {
             var financeForPayroll = new EmployeeFinanceForPayroll(request.RatePerHour,
                 request.Pay,
                 request.EmploymentType,
-                request.HasParking);
+                request.ParkingCostPerMonth);
 
             var latestMetrics = (await _employeeDbContext
-                .Set<Employee>()
+                .Queryable<Employee>()
                 .Include(x => x.EmployeeFinanceForPayroll)
                 .Include(x => x.EmployeeFinancialMetrics)
                 .SingleAsync(x => x.Id == request.EmployeeId && x.DeletedAtUtc == null)).EmployeeFinancialMetrics;
@@ -58,15 +56,14 @@ namespace SalaryService.Application.Commands
                 NetSalary = latestMetrics.NetSalary,
                 RatePerHour = latestMetrics.RatePerHour,
                 Pay = latestMetrics.Pay,
-                Retainer = latestMetrics.Retainer,
+                Prepayment = latestMetrics.Prepayment,
                 EmploymentType = latestMetrics.EmploymentType,
-                HasParking = latestMetrics.HasParking,
                 ParkingCostPerMonth = latestMetrics.ParkingCostPerMonth,
                 AccountingPerMonth = latestMetrics.AccountingPerMonth
             };
 
             var currentFinanceForPayroll = (await _employeeDbContext
-                .Set<Employee>()
+                .Queryable<Employee>()
                 .Include(x => x.EmployeeFinanceForPayroll)
                 .Include(x => x.EmployeeFinancialMetrics)
                 .SingleAsync(x => x.Id == request.EmployeeId && x.DeletedAtUtc == null)).EmployeeFinanceForPayroll;
@@ -74,10 +71,10 @@ namespace SalaryService.Application.Commands
             currentFinanceForPayroll.Update(financeForPayroll.RatePerHour,
                 financeForPayroll.Pay,
                 financeForPayroll.EmploymentType,
-                financeForPayroll.HasParking);
+                financeForPayroll.ParkingCostPerMonth);
 
             var currentFinancialMetrics = (await _employeeDbContext
-                .Set<Employee>()
+                .Queryable<Employee>()
                 .Include(x => x.EmployeeFinanceForPayroll)
                 .Include(x => x.EmployeeFinancialMetrics)
                 .SingleAsync(x => x.Id == request.EmployeeId && x.DeletedAtUtc == null)).EmployeeFinancialMetrics;
@@ -85,6 +82,7 @@ namespace SalaryService.Application.Commands
             currentFinancialMetrics.Update(metrics.Salary,
                 metrics.GrossSalary,
                 metrics.NetSalary,
+                metrics.DistrictCoefficient,
                 metrics.Earnings,
                 metrics.IncomeTaxContributions,
                 metrics.PensionContributions,
@@ -94,13 +92,13 @@ namespace SalaryService.Application.Commands
                 metrics.Expenses,
                 metrics.HourlyCostFact,
                 metrics.HourlyCostHand,
-                metrics.Retainer,
+                metrics.Prepayment,
                 metrics.Profit,
                 metrics.ProfitAbility,
                 metrics.RatePerHour,
                 metrics.Pay,
                 metrics.EmploymentType,
-                metrics.HasParking,
+                metrics.ParkingCostPerMonth,
             _clock.GetCurrentInstant());
 
             using (var transaction = _employeeDbContext.Database.BeginTransaction())

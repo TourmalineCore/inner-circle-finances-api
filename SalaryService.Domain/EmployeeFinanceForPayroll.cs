@@ -19,22 +19,22 @@
 
         public EmploymentTypes EmploymentType { get; private set; }
 
-        public bool HasParking { get; private set; }
+        public double ParkingCostPerMonth { get; private set; }
         
-        public EmployeeFinanceForPayroll(double ratePerHour, double pay, EmploymentTypes employmentType, bool hasParking)
+        public EmployeeFinanceForPayroll(double ratePerHour, double pay, EmploymentTypes employmentType, double parkingCostPerMonth)
         {
             RatePerHour = ratePerHour;
             Pay = pay;
             EmploymentType = employmentType;
-            HasParking = hasParking;
+            ParkingCostPerMonth = parkingCostPerMonth;
         }
 
-        public void Update(double ratePerHour, double pay, EmploymentTypes employmentType, bool hasParking)
+        public void Update(double ratePerHour, double pay, EmploymentTypes employmentType, double parkingCostPerMonth)
         {
             RatePerHour = ratePerHour;
             Pay = pay;
             EmploymentType = employmentType;
-            HasParking = hasParking;
+            ParkingCostPerMonth = parkingCostPerMonth;
         }
     }
 }

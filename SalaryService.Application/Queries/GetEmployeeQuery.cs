@@ -18,10 +18,10 @@ namespace SalaryService.Application.Queries
             _employeeDbContext = employeeDbContext;
         }
 
-        public async Task<EmployeeProfileDto> Handle()
+        public async Task<EmployeeProfileDto> HandleAsync()
         {
             var employee = await _employeeDbContext
-                .Set<Employee>()
+                .Queryable<Employee>()
                 .Include(x => x.EmployeeFinanceForPayroll)
                 .Include(x => x.EmployeeFinancialMetrics)
                 .SingleAsync(x => x.AccountId == 1 && x.DeletedAtUtc == null);

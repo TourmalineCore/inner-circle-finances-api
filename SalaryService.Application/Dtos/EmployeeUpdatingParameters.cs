@@ -10,6 +10,8 @@
 
         public string MiddleName { get; set; }
 
+        public string CorporateEmail { get; set; }
+
         public string PersonalEmail { get; set; }
 
         public string Phone { get; set; }

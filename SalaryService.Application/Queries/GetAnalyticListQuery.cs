@@ -19,7 +19,7 @@ namespace SalaryService.Application.Queries
             _employeeDbContext = employeeDbContext;
         }
 
-        public async Task<IEnumerable<AnalyticDto>> Handle()
+        public async Task<IEnumerable<AnalyticDto>> HandleAsync()
         {
             var employee = await _employeeDbContext
                 .QueryableAsNoTracking<Employee>()
@@ -35,11 +35,14 @@ namespace SalaryService.Application.Queries
                 Math.Round(x.EmployeeFinancialMetrics.Pay, 2),
                 Math.Round(x.EmployeeFinancialMetrics.RatePerHour, 2),
                 Math.Round(x.EmployeeFinancialMetrics.EmploymentType, 2),
+                Math.Round(x.EmployeeFinancialMetrics.Salary,2),
                 Math.Round(x.EmployeeFinancialMetrics.ParkingCostPerMonth, 2),
+                Math.Round(x.EmployeeFinancialMetrics.AccountingPerMonth, 2),
                 Math.Round(x.EmployeeFinancialMetrics.HourlyCostFact, 2),
                 Math.Round(x.EmployeeFinancialMetrics.HourlyCostHand, 2),
                 Math.Round(x.EmployeeFinancialMetrics.Earnings, 2),
                 Math.Round(x.EmployeeFinancialMetrics.IncomeTaxContributions, 2),
+                Math.Round(x.EmployeeFinancialMetrics.DistrictCoefficient, 2),
                 Math.Round(x.EmployeeFinancialMetrics.PensionContributions, 2),
                 Math.Round(x.EmployeeFinancialMetrics.MedicalContributions, 2),
                 Math.Round(x.EmployeeFinancialMetrics.SocialInsuranceContributions, 2),
@@ -48,7 +51,7 @@ namespace SalaryService.Application.Queries
                 Math.Round(x.EmployeeFinancialMetrics.Profit, 2),
                 Math.Round(x.EmployeeFinancialMetrics.ProfitAbility, 2),
                 Math.Round(x.EmployeeFinancialMetrics.GrossSalary, 2),
-                Math.Round(x.EmployeeFinancialMetrics.Retainer, 2),
+                Math.Round(x.EmployeeFinancialMetrics.Prepayment, 2),
                 Math.Round(x.EmployeeFinancialMetrics.NetSalary, 2)));
         }
     }

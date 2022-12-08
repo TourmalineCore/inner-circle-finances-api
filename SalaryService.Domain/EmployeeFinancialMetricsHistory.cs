@@ -44,11 +44,9 @@ namespace SalaryService.Domain
 
         public double Pay { get; set; }
 
-        public double Retainer { get; set; }
+        public double Prepayment { get; set; }
 
         public double EmploymentType { get; set; }
-
-        public bool HasParking { get; set; }
 
         public double ParkingCostPerMonth { get; set; }
 
