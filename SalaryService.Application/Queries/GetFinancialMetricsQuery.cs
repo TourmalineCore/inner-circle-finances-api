@@ -1,0 +1,29 @@
+﻿using Microsoft.EntityFrameworkCore;
+using SalaryService.DataAccess;
+using SalaryService.Domain;
+
+namespace SalaryService.Application.Queries
+{
+    public partial class GetFinancialMetricsQuery
+    {
+    }
+    
+    public partial class GetFinancialMetricsQueryHandler
+    {
+        private readonly EmployeeDbContext _employeeDbContext;
+
+        public GetFinancialMetricsQueryHandler(EmployeeDbContext employeeDbContext)
+        {
+            _employeeDbContext = employeeDbContext;
+        }
+
+        public async Task<IEnumerable<EmployeeFinancialMetrics>> Handle()
+        {
+            var metrics = await _employeeDbContext
+                .QueryableAsNoTracking<EmployeeFinancialMetrics>()
+                .ToListAsync();
+
+            return metrics;
+        }
+    }
+}

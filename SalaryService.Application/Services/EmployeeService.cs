@@ -10,15 +10,13 @@ namespace SalaryService.Application.Services
         private readonly UpdateFinancesCommandHandler _updateFinancesCommandHandler;
         private readonly DeleteEmployeeCommandHandler _deleteEmployeeCommandHandler;
         private readonly CalculatePreviewMetricsCommandHandler _calculatePreviewMetricsCommandHandler;
-        private readonly CalculateTotalExpensesCommandHandler _calculateTotalExpensesCommandHandler;
 
         public EmployeeService(FinanceAnalyticService financeAnalyticService,
             CreateEmployeeCommandHandler createEmployeeCommandHandler,
             UpdateEmployeeCommandHandler updateEmployeeCommandHandler,
             UpdateFinancesCommandHandler updateFinancesCommandHandler,
             DeleteEmployeeCommandHandler deleteEmployeeCommandHandler,
-            CalculatePreviewMetricsCommandHandler calculatePreviewMetricsCommandHandler,
-            CalculateTotalExpensesCommandHandler calculateTotalExpensesCommandHandler)
+            CalculatePreviewMetricsCommandHandler calculatePreviewMetricsCommandHandler)
         {
             _financeAnalyticService = financeAnalyticService;
             _createEmployeeCommandHandler = createEmployeeCommandHandler;
@@ -26,7 +24,6 @@ namespace SalaryService.Application.Services
             _updateFinancesCommandHandler = updateFinancesCommandHandler;
             _deleteEmployeeCommandHandler = deleteEmployeeCommandHandler;
             _calculatePreviewMetricsCommandHandler = calculatePreviewMetricsCommandHandler;
-            _calculateTotalExpensesCommandHandler = calculateTotalExpensesCommandHandler;
         }
 
         public async Task<MetricsPreviewDto> GetPreviewMetrics(FinanceUpdatingParameters parameters)
@@ -46,13 +43,13 @@ namespace SalaryService.Application.Services
                 parameters.ParkingCostPerMonth);
 
             await _createEmployeeCommandHandler.Handle(parameters, metrics);
-            await _calculateTotalExpensesCommandHandler.Handle();
+            await _financeAnalyticService.CalculateTotalAndEstimatedFinancialEfficiency();
         }
 
         public async Task DeleteEmployee(long id)
         {
             await _deleteEmployeeCommandHandler.Handle(id);
-            await _calculateTotalExpensesCommandHandler.Handle();
+            await _financeAnalyticService.CalculateTotalAndEstimatedFinancialEfficiency();
         }
 
         public async Task UpdateEmployee(EmployeeUpdatingParameters request)
@@ -68,7 +65,7 @@ namespace SalaryService.Application.Services
                 parameters.ParkingCostPerMonth);
 
             await _updateFinancesCommandHandler.Handle(parameters, metrics);
-            await _calculateTotalExpensesCommandHandler.Handle();
+            await _financeAnalyticService.CalculateTotalAndEstimatedFinancialEfficiency();
         }
     }
 }
