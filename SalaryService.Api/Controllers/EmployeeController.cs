@@ -14,20 +14,30 @@ namespace SalaryService.Api.Controllers
         private readonly EmployeeService _employeeService;
         private readonly GetEmployeeQueryHandler _getEmployeeQueryHandler;
         private readonly GetColleaguesQueryHandler _getColleaguesQueryHandler;
+        private readonly GetEmployeeContactDetailsQueryHandler _getEmployeeContactDetailsQueryHandler;
 
         public EmployeeController(EmployeeService employeeService,
         GetEmployeeQueryHandler getEmployeeQueryHandler,
-        GetColleaguesQueryHandler getColleaguesQueryHandler)
+        GetColleaguesQueryHandler getColleaguesQueryHandler, 
+        GetEmployeeContactDetailsQueryHandler getEmployeeContactDetailsQueryHandler)
         {
             _employeeService = employeeService;
             _getEmployeeQueryHandler = getEmployeeQueryHandler;
             _getColleaguesQueryHandler = getColleaguesQueryHandler;
+            _getEmployeeContactDetailsQueryHandler = getEmployeeContactDetailsQueryHandler;
         }
         
         [HttpGet("get-profile")]
         public Task<EmployeeProfileDto> GetProfile()
         {
             return _getEmployeeQueryHandler.HandleAsync();
+        }
+
+        [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
+        [HttpGet("get-contact-details/{employeeId}")]
+        public Task<EmployeeProfileDto> GetProfile([FromRoute] long employeeId)
+        {
+            return _getEmployeeContactDetailsQueryHandler.HandleAsync(employeeId);
         }
         
         [HttpGet("get-colleagues")]
