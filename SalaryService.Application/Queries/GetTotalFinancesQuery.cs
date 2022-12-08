@@ -16,7 +16,7 @@ namespace SalaryService.Application.Queries
         {
             _employeeDbContext = employeeDbContext;
         }
-        public async Task<TotalFinancesDto> Handle()
+        public async Task<TotalFinancesDto> HandleAsync()
         {
             var totals = await _employeeDbContext.Queryable<TotalFinances>().SingleAsync();
             var coefficients = await _employeeDbContext.Queryable<CoefficientOptions>().SingleAsync();

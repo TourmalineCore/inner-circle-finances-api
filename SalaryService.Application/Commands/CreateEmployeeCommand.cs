@@ -22,7 +22,7 @@ namespace SalaryService.Application.Commands
             _clock = clock;
         }
 
-        public Employee Handle(EmployeeCreatingParameters request, EmployeeFinancialMetrics metrics)
+        public async Task<Employee> HandleAsync(EmployeeCreatingParameters request, EmployeeFinancialMetrics metrics)
         {
             var employee = new Employee(request.Name,
                 request.Surname,
@@ -60,7 +60,7 @@ namespace SalaryService.Application.Commands
 
             }
 
-            _employeeDbContext.SaveChangesAsync();
+            await _employeeDbContext.SaveChangesAsync();
             return employee;
         }
     }

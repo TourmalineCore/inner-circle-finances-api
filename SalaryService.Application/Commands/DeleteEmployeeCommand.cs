@@ -23,7 +23,7 @@ namespace SalaryService.Application.Commands
             _clock = clock;
         }
 
-        public async Task Handle(long employeeId)
+        public async Task HandleAsync(long employeeId)
         {
             var employee = await _employeeDbContext
                 .Queryable<Employee>()

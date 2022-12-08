@@ -17,9 +17,9 @@ namespace SalaryService.Application.Commands
             _employeeDbContext = employeeDbContext;
         }
 
-        public void Handle(EstimatedFinancialEfficiency estimatedFinancialEfficiency)
+        public async Task HandleAsync(EstimatedFinancialEfficiency estimatedFinancialEfficiency)
         {
-            var lastEstimatedFinancialEfficiency = _employeeDbContext.Queryable<EstimatedFinancialEfficiency>().SingleOrDefaultAsync().Result;
+            var lastEstimatedFinancialEfficiency = await _employeeDbContext.Queryable<EstimatedFinancialEfficiency>().SingleOrDefaultAsync();
 
             if (lastEstimatedFinancialEfficiency == null)
             {
@@ -37,7 +37,7 @@ namespace SalaryService.Application.Commands
                 _employeeDbContext.Update(lastEstimatedFinancialEfficiency);
             }
 
-            _employeeDbContext.SaveChangesAsync();
+            await _employeeDbContext.SaveChangesAsync();
         }
     }
 }

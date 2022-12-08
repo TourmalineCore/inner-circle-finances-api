@@ -17,7 +17,7 @@ namespace SalaryService.Application.Commands
         {
             _employeeDbContext = employeeDbContext;
         }
-        public async Task Handle(EmployeeUpdatingParameters request)
+        public async Task HandleAsync(EmployeeUpdatingParameters request)
         {
             var employee = await _employeeDbContext
                 .Queryable<Employee>()

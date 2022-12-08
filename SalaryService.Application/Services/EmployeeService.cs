@@ -40,7 +40,7 @@ namespace SalaryService.Application.Services
             var newMetrics = await _financeAnalyticService.CalculateMetrics(parameters.RatePerHour,
                 parameters.Pay, parameters.EmploymentTypeValue, parameters.ParkingCostPerMonth);
 
-            return await _calculatePreviewMetricsCommandHandler.Handle(parameters, newMetrics);
+            return await _calculatePreviewMetricsCommandHandler.HandleAsync(parameters, newMetrics);
         }
 
         public async Task CreateEmployee(EmployeeCreatingParameters parameters)
@@ -51,26 +51,26 @@ namespace SalaryService.Application.Services
                 parameters.EmploymentTypeValue,
                 parameters.ParkingCostPerMonth);
 
-            var employee = _createEmployeeCommandHandler.Handle(parameters, metrics);
-            _mailService.SendCredentials(employee.PersonalEmail, employee.CorporateEmail);
+            var employee = await _createEmployeeCommandHandler.HandleAsync(parameters, metrics);
+         //   _mailService.SendCredentials(employee.PersonalEmail, employee.CorporateEmail);
             var totals = await _financeAnalyticService.CalculateTotalFinances();
             var estimatedFinancialEfficiency = await _financeAnalyticService.CalculateEstimatedFinancialEfficiency(totals.TotalExpense);
-            _createTotalExpensesCommandHandler.Handle(totals);
-            _createEstimatedFinancialEfficiencyCommandHandler.Handle(estimatedFinancialEfficiency);
+            await _createTotalExpensesCommandHandler.HandleAsync(totals);
+            await _createEstimatedFinancialEfficiencyCommandHandler.HandleAsync(estimatedFinancialEfficiency);
         }
 
         public async Task DeleteEmployee(long id)
         {
-            await _deleteEmployeeCommandHandler.Handle(id);
+            await _deleteEmployeeCommandHandler.HandleAsync(id);
             var totals = await _financeAnalyticService.CalculateTotalFinances();
             var estimatedFinancialEfficiency = await _financeAnalyticService.CalculateEstimatedFinancialEfficiency(totals.TotalExpense);
-            _createTotalExpensesCommandHandler.Handle(totals);
-            _createEstimatedFinancialEfficiencyCommandHandler.Handle(estimatedFinancialEfficiency);
+            _createTotalExpensesCommandHandler.HandleAsync(totals);
+            _createEstimatedFinancialEfficiencyCommandHandler.HandleAsync(estimatedFinancialEfficiency);
         }
 
         public async Task UpdateEmployee(EmployeeUpdatingParameters request)
         {
-            await _updateEmployeeCommandHandler.Handle(request);
+            await _updateEmployeeCommandHandler.HandleAsync(request);
         }
 
         public async Task UpdateFinances(FinanceUpdatingParameters parameters)
@@ -80,11 +80,11 @@ namespace SalaryService.Application.Services
                 parameters.EmploymentTypeValue,
                 parameters.ParkingCostPerMonth);
 
-            await _updateFinancesCommandHandler.Handle(parameters, metrics);
+            await _updateFinancesCommandHandler.HandleAsync(parameters, metrics);
             var totals = await _financeAnalyticService.CalculateTotalFinances();
             var estimatedFinancialEfficiency = await _financeAnalyticService.CalculateEstimatedFinancialEfficiency(totals.TotalExpense);
-            _createTotalExpensesCommandHandler.Handle(totals);
-            _createEstimatedFinancialEfficiencyCommandHandler.Handle(estimatedFinancialEfficiency);
+            _createTotalExpensesCommandHandler.HandleAsync(totals);
+            _createEstimatedFinancialEfficiencyCommandHandler.HandleAsync(estimatedFinancialEfficiency);
         }
     }
 }
