@@ -25,6 +25,7 @@ namespace SalaryService.Application
             services.AddTransient<CalculateTotalExpensesCommandHandler>();
             services.AddTransient<EmployeeService>();
             services.AddTransient<FinanceAnalyticService>();
+            services.AddTransient<MailService>();
             services.AddTransient<IClock, Clock>();
             return services;
         }

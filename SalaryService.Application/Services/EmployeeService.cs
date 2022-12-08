@@ -5,6 +5,7 @@ namespace SalaryService.Application.Services
     public class EmployeeService
     {
         private readonly FinanceAnalyticService _financeAnalyticService;
+        private readonly MailService _mailService;
         private readonly CreateEmployeeCommandHandler _createEmployeeCommandHandler;
         private readonly UpdateEmployeeCommandHandler _updateEmployeeCommandHandler;
         private readonly UpdateFinancesCommandHandler _updateFinancesCommandHandler;
@@ -12,6 +13,7 @@ namespace SalaryService.Application.Services
         private readonly CalculatePreviewMetricsCommandHandler _calculatePreviewMetricsCommandHandler;
 
         public EmployeeService(FinanceAnalyticService financeAnalyticService,
+            MailService mailService,
             CreateEmployeeCommandHandler createEmployeeCommandHandler,
             UpdateEmployeeCommandHandler updateEmployeeCommandHandler,
             UpdateFinancesCommandHandler updateFinancesCommandHandler,
@@ -19,6 +21,7 @@ namespace SalaryService.Application.Services
             CalculatePreviewMetricsCommandHandler calculatePreviewMetricsCommandHandler)
         {
             _financeAnalyticService = financeAnalyticService;
+            _mailService = mailService;
             _createEmployeeCommandHandler = createEmployeeCommandHandler;
             _updateEmployeeCommandHandler = updateEmployeeCommandHandler;
             _updateFinancesCommandHandler = updateFinancesCommandHandler;
