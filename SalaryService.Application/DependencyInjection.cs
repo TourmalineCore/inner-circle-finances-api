@@ -26,6 +26,7 @@ namespace SalaryService.Application
             services.AddTransient<DeleteEmployeeCommandHandler>();
             services.AddTransient<CalculatePreviewMetricsCommandHandler>();
             services.AddTransient<CalculateTotalExpensesCommandHandler>();
+            services.AddTransient<CalculateEstimatedFinancialEfficiencyCommandHandler>();
             services.AddTransient<EmployeeService>();
             services.AddTransient<FinanceAnalyticService>();
             services.AddTransient<MailService>();

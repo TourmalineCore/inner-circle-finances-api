@@ -11,6 +11,8 @@ namespace SalaryService.Application.Services
         private readonly UpdateFinancesCommandHandler _updateFinancesCommandHandler;
         private readonly DeleteEmployeeCommandHandler _deleteEmployeeCommandHandler;
         private readonly CalculatePreviewMetricsCommandHandler _calculatePreviewMetricsCommandHandler;
+        private readonly CalculateTotalExpensesCommandHandler _calculateTotalExpensesCommandHandler;
+        private readonly CalculateEstimatedFinancialEfficiencyCommandHandler _calculateEstimatedFinancialEfficiencyCommandHandler;
 
         public EmployeeService(FinanceAnalyticService financeAnalyticService,
             MailService mailService,
@@ -18,7 +20,9 @@ namespace SalaryService.Application.Services
             UpdateEmployeeCommandHandler updateEmployeeCommandHandler,
             UpdateFinancesCommandHandler updateFinancesCommandHandler,
             DeleteEmployeeCommandHandler deleteEmployeeCommandHandler,
-            CalculatePreviewMetricsCommandHandler calculatePreviewMetricsCommandHandler)
+            CalculatePreviewMetricsCommandHandler calculatePreviewMetricsCommandHandler, 
+            CalculateTotalExpensesCommandHandler calculateTotalExpensesCommandHandler,
+            CalculateEstimatedFinancialEfficiencyCommandHandler calculateEstimatedFinancialEfficiencyCommandHandler)
         {
             _financeAnalyticService = financeAnalyticService;
             _mailService = mailService;
@@ -27,6 +31,8 @@ namespace SalaryService.Application.Services
             _updateFinancesCommandHandler = updateFinancesCommandHandler;
             _deleteEmployeeCommandHandler = deleteEmployeeCommandHandler;
             _calculatePreviewMetricsCommandHandler = calculatePreviewMetricsCommandHandler;
+            _calculateTotalExpensesCommandHandler = calculateTotalExpensesCommandHandler;
+            _calculateEstimatedFinancialEfficiencyCommandHandler = calculateEstimatedFinancialEfficiencyCommandHandler;
         }
 
         public async Task<MetricsPreviewDto> GetPreviewMetrics(FinanceUpdatingParameters parameters)
@@ -47,14 +53,19 @@ namespace SalaryService.Application.Services
 
             var employee = _createEmployeeCommandHandler.Handle(parameters, metrics);
             _mailService.SendCredentials(employee.PersonalEmail, employee.CorporateEmail);
-            await _financeAnalyticService.CalculateTotalAndEstimatedFinancialEfficiency();
-            
+            var totals = await _financeAnalyticService.CalculateTotalFinances();
+            var estimatedFinancialEfficiency = await _financeAnalyticService.CalculateEstimatedFinancialEfficiency(totals.TotalExpense);
+            _calculateTotalExpensesCommandHandler.Handle(totals);
+            _calculateEstimatedFinancialEfficiencyCommandHandler.Handle(estimatedFinancialEfficiency);
         }
 
         public async Task DeleteEmployee(long id)
         {
             await _deleteEmployeeCommandHandler.Handle(id);
-            await _financeAnalyticService.CalculateTotalAndEstimatedFinancialEfficiency();
+            var totals = await _financeAnalyticService.CalculateTotalFinances();
+            var estimatedFinancialEfficiency = await _financeAnalyticService.CalculateEstimatedFinancialEfficiency(totals.TotalExpense);
+            _calculateTotalExpensesCommandHandler.Handle(totals);
+            _calculateEstimatedFinancialEfficiencyCommandHandler.Handle(estimatedFinancialEfficiency);
         }
 
         public async Task UpdateEmployee(EmployeeUpdatingParameters request)
@@ -70,7 +81,10 @@ namespace SalaryService.Application.Services
                 parameters.ParkingCostPerMonth);
 
             await _updateFinancesCommandHandler.Handle(parameters, metrics);
-            await _financeAnalyticService.CalculateTotalAndEstimatedFinancialEfficiency();
+            var totals = await _financeAnalyticService.CalculateTotalFinances();
+            var estimatedFinancialEfficiency = await _financeAnalyticService.CalculateEstimatedFinancialEfficiency(totals.TotalExpense);
+            _calculateTotalExpensesCommandHandler.Handle(totals);
+            _calculateEstimatedFinancialEfficiencyCommandHandler.Handle(estimatedFinancialEfficiency);
         }
     }
 }
