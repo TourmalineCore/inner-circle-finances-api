@@ -61,7 +61,7 @@ namespace SalaryService.Application.Commands
             preview.RatePerHourDelta = Math.Round(preview.RatePerHour - employee.EmployeeFinancialMetrics.RatePerHour, 2);
             preview.HourlyCostFactDelta = Math.Round(preview.HourlyCostFact - employee.EmployeeFinancialMetrics.HourlyCostFact, 2);
             preview.HourlyCostHandDelta = Math.Round(preview.HourlyCostHand - employee.EmployeeFinancialMetrics.HourlyCostHand, 2);
-            preview.ParkingCostPerMonth = Math.Round(preview.ParkingCostPerMonth - employee.EmployeeFinancialMetrics.ParkingCostPerMonth, 2);
+            preview.ParkingCostPerMonthDelta = Math.Round(preview.ParkingCostPerMonth - employee.EmployeeFinancialMetrics.ParkingCostPerMonth, 2);
             preview.EarningsDelta = Math.Round(preview.Earnings - employee.EmployeeFinancialMetrics.Earnings, 2);
             preview.IncomeTaxContributionsDelta = Math.Round(preview.IncomeTaxContributions - employee.EmployeeFinancialMetrics.IncomeTaxContributions, 2);
             preview.DistrictCoefficientDelta = Math.Round(preview.DistrictCoefficient - employee.EmployeeFinancialMetrics.DistrictCoefficient, 2);
