@@ -14,6 +14,9 @@ namespace SalaryService.Application
             var mailServiceOptions = configuration.GetSection("MailOptions");
             services.Configure<MailOptions>(c => mailServiceOptions.Bind(c));
 
+            var helpUrls = configuration.GetSection("HelpUrls");
+            services.Configure<HelpUrls>(u => helpUrls.Bind(u));
+
             services.AddTransient<GetColleaguesQueryHandler>();
             services.AddTransient<GetEmployeeQueryHandler>();
             services.AddTransient<GetAnalyticQueryHandler>();

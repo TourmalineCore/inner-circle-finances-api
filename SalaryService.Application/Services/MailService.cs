@@ -30,5 +30,10 @@ namespace SalaryService.Application.Services
         {
             _client.Send(_mailOptions.SenderMailAddress, personalEmail, null, $"Your credentials: \nEmail: {corporateEmail} \nPassword: {GeneratePassword(15)}");
         }
+
+        public void SendWelcomeLink(string personalEmail, string welcomeLink)
+        {
+            _client.Send(_mailOptions.SenderMailAddress, personalEmail, null, $"Go to this link to set a password for your account: {welcomeLink}");
+        }
     }
 }
