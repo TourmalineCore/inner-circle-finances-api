@@ -16,7 +16,7 @@
 
         public double ParkingCostPerMonth { get; private set; }
 
-        public double AccountingCostPerMonth { get; private set; }
+        public double AccountingPerMonth { get; private set; }
 
         public double HourlyCostFact { get; private set; }
 
@@ -57,7 +57,7 @@
             double employmentType,
             double salary,
             double parkingCostPerMonth,
-            double accountingCostPerMonth,
+            double accountingPerMonth,
             double hourlyCostFact,
             double hourlyCostHand,
             double earnings,
@@ -81,7 +81,7 @@
             EmploymentType = employmentType;
             Salary = salary;
             ParkingCostPerMonth = parkingCostPerMonth;
-            AccountingCostPerMonth = accountingCostPerMonth;
+            AccountingPerMonth = accountingPerMonth;
             HourlyCostFact = hourlyCostFact;
             HourlyCostHand = hourlyCostHand;
             Earnings = earnings;
