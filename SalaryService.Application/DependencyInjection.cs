@@ -14,8 +14,8 @@ namespace SalaryService.Application
             var mailServiceOptions = configuration.GetSection("MailOptions");
             services.Configure<MailOptions>(c => mailServiceOptions.Bind(c));
 
-            var helpUrls = configuration.GetSection("HelpUrls");
-            services.Configure<HelpUrls>(u => helpUrls.Bind(u));
+            var helpUrls = configuration.GetSection("InnerCircleServiceUrl");
+            services.Configure<InnerCircleServiceUrl>(u => helpUrls.Bind(u));
 
             services.AddTransient<GetColleaguesQueryHandler>();
             services.AddTransient<GetEmployeeQueryHandler>();
@@ -35,6 +35,7 @@ namespace SalaryService.Application
             services.AddTransient<EmployeeService>();
             services.AddTransient<FinanceAnalyticService>();
             services.AddTransient<MailService>();
+            services.AddTransient<RequestsService>();
             services.AddTransient<IClock, Clock>();
             return services;
         }

@@ -8,9 +8,8 @@ namespace SalaryService.Application.Services
     public class EmployeeService
     {
         private readonly FinanceAnalyticService _financeAnalyticService;
-        private readonly HttpClient _client;
-        private readonly HelpUrls _urls;
-        private readonly MailService _mailService;
+        private readonly RequestsService _requestsService;
+        private readonly InnerCircleServiceUrl _urls;
         private readonly CreateEmployeeCommandHandler _createEmployeeCommandHandler;
         private readonly UpdateEmployeeCommandHandler _updateEmployeeCommandHandler;
         private readonly UpdateFinancesCommandHandler _updateFinancesCommandHandler;
@@ -20,8 +19,8 @@ namespace SalaryService.Application.Services
         private readonly CreateEstimatedFinancialEfficiencyCommandHandler _createEstimatedFinancialEfficiencyCommandHandler;
 
         public EmployeeService(FinanceAnalyticService financeAnalyticService,
-            IOptions<HelpUrls> urls,
-            MailService mailService,
+            RequestsService requestsService,
+            IOptions<InnerCircleServiceUrl> urls,
             CreateEmployeeCommandHandler createEmployeeCommandHandler,
             UpdateEmployeeCommandHandler updateEmployeeCommandHandler,
             UpdateFinancesCommandHandler updateFinancesCommandHandler,
@@ -31,9 +30,8 @@ namespace SalaryService.Application.Services
             CreateEstimatedFinancialEfficiencyCommandHandler createEstimatedFinancialEfficiencyCommandHandler)
         {
             _financeAnalyticService = financeAnalyticService;
-            _client = new HttpClient();
+            _requestsService = requestsService;
             _urls = urls.Value;
-            _mailService = mailService;
             _createEmployeeCommandHandler = createEmployeeCommandHandler;
             _updateEmployeeCommandHandler = updateEmployeeCommandHandler;
             _updateFinancesCommandHandler = updateFinancesCommandHandler;
@@ -62,10 +60,8 @@ namespace SalaryService.Application.Services
             var employee = await _createEmployeeCommandHandler.HandleAsync(parameters, metrics);
 
             var securityCode = Guid.NewGuid();
-            await _client.PostAsJsonAsync(
-                _urls.RegistrationUrl,
-                new { Login = employee.CorporateEmail, Password = GeneratePassword(15), Code = securityCode });
-            _mailService.SendWelcomeLink(employee.PersonalEmail, _urls.UIAuthLink + $"invitation?code={securityCode}");
+            await _requestsService.SendPostRequest(_urls.AuthServiceUrl + "auth/register",
+                new { Login = employee.CorporateEmail, Password = "", Code = securityCode });
 
             var totals = await _financeAnalyticService.CalculateTotalFinances();
             var estimatedFinancialEfficiency = await _financeAnalyticService.CalculateEstimatedFinancialEfficiency(totals.TotalExpense);
@@ -99,13 +95,6 @@ namespace SalaryService.Application.Services
             var estimatedFinancialEfficiency = await _financeAnalyticService.CalculateEstimatedFinancialEfficiency(totals.TotalExpense);
             await _createTotalExpensesCommandHandler.HandleAsync(totals);
             await _createEstimatedFinancialEfficiencyCommandHandler.HandleAsync(estimatedFinancialEfficiency);
-        }
-
-        private static string GeneratePassword(int length)
-        {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijqklnoprstuvwxyz0123456789!#@%&*-_";
-            return new string(Enumerable.Repeat(chars, length)
-                .Select(s => s[new Random().Next(s.Length)]).ToArray());
         }
     }
 }
