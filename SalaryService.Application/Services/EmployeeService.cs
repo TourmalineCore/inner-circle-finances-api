@@ -1,6 +1,5 @@
 ﻿using SalaryService.Application.Commands;
 using SalaryService.Application.Dtos;
-using System.Net.Http.Json;
 using Microsoft.Extensions.Options;
 
 namespace SalaryService.Application.Services
@@ -13,6 +12,7 @@ namespace SalaryService.Application.Services
         private readonly CreateEmployeeCommandHandler _createEmployeeCommandHandler;
         private readonly UpdateEmployeeCommandHandler _updateEmployeeCommandHandler;
         private readonly UpdateFinancesCommandHandler _updateFinancesCommandHandler;
+        private readonly UpdateProfileCommandHandler _updateProfileCommandHandler;
         private readonly DeleteEmployeeCommandHandler _deleteEmployeeCommandHandler;
         private readonly CalculatePreviewMetricsCommandHandler _calculatePreviewMetricsCommandHandler;
         private readonly CreateTotalExpensesCommandHandler _createTotalExpensesCommandHandler;
@@ -24,6 +24,7 @@ namespace SalaryService.Application.Services
             CreateEmployeeCommandHandler createEmployeeCommandHandler,
             UpdateEmployeeCommandHandler updateEmployeeCommandHandler,
             UpdateFinancesCommandHandler updateFinancesCommandHandler,
+            UpdateProfileCommandHandler updateProfileCommandHandler,
             DeleteEmployeeCommandHandler deleteEmployeeCommandHandler,
             CalculatePreviewMetricsCommandHandler calculatePreviewMetricsCommandHandler, 
             CreateTotalExpensesCommandHandler createTotalExpensesCommandHandler,
@@ -35,6 +36,7 @@ namespace SalaryService.Application.Services
             _createEmployeeCommandHandler = createEmployeeCommandHandler;
             _updateEmployeeCommandHandler = updateEmployeeCommandHandler;
             _updateFinancesCommandHandler = updateFinancesCommandHandler;
+            _updateProfileCommandHandler = updateProfileCommandHandler;
             _deleteEmployeeCommandHandler = deleteEmployeeCommandHandler;
             _calculatePreviewMetricsCommandHandler = calculatePreviewMetricsCommandHandler;
             _createTotalExpensesCommandHandler = createTotalExpensesCommandHandler;
@@ -81,6 +83,11 @@ namespace SalaryService.Application.Services
         public async Task UpdateEmployee(EmployeeUpdatingParameters request)
         {
             await _updateEmployeeCommandHandler.HandleAsync(request);
+        }
+
+        public async Task UpdateProfile(ProfileUpdatingParameters request)
+        {
+            await _updateProfileCommandHandler.HandleAsync(request);
         }
 
         public async Task UpdateFinances(FinanceUpdatingParameters parameters)
