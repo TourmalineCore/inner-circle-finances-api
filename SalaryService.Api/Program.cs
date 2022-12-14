@@ -53,10 +53,6 @@ builder.Services.AddSwaggerGen(c =>
 });
 var configuration = builder.Configuration;
 
-var authenticationOptions = (configuration.GetSection(nameof(AuthenticationOptions)).Get<AuthenticationOptions>());
-builder.Services.AddJwtAuthentication(authenticationOptions).AddUserCredentialValidator<UserCredentialsValidator>()
-    .WithUserClaimsProvider<UserClaimsProvider>(UserClaimsProvider.PermissionClaimType);
-
 builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
 {
     var env = hostingContext.HostingEnvironment;
@@ -81,6 +77,10 @@ builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
         config.AddCommandLine(args);
     }
 });
+
+var authenticationOptions = (configuration.GetSection(nameof(AuthenticationOptions)).Get<AuthenticationOptions>());
+builder.Services.AddJwtAuthentication(authenticationOptions).AddUserCredentialValidator<UserCredentialsValidator>()
+    .WithUserClaimsProvider<UserClaimsProvider>(UserClaimsProvider.PermissionClaimType);
 
 builder.Services.AddPersistence(configuration);
 
