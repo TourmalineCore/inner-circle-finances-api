@@ -2,8 +2,6 @@
 {
     public class ProfileUpdatingParameters
     {
-        public long AccountId { get; set; }
-
         public string PersonalEmail { get; set; }
 
         public string Phone { get; set; }
