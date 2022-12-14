@@ -12,3 +12,13 @@ deployment:
     ConnectionStrings:
       DefaultConnection:
         "" # fill with your dev connection
+    AuthenticationOptions:
+      PublicSigningKey:
+        "" # fill with your dev key
+      PrivateSigningKey:
+        "" # fill with your dev key
+    MailOptions:
+      SenderMailAddress:
+        "" # fill with your dev option
+      SenderMailPassword:
+        "" # fill with your dev option
