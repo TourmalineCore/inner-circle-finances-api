@@ -7,7 +7,7 @@ namespace SalaryService.Application.Services
     public class EmployeeService
     {
         private readonly FinanceAnalyticService _financeAnalyticService;
-        private readonly RequestsService _requestsService;
+        private readonly IRequestService _requestsService;
         private readonly InnerCircleServiceUrl _urls;
         private readonly CreateEmployeeCommandHandler _createEmployeeCommandHandler;
         private readonly UpdateEmployeeCommandHandler _updateEmployeeCommandHandler;
@@ -19,7 +19,7 @@ namespace SalaryService.Application.Services
         private readonly CreateEstimatedFinancialEfficiencyCommandHandler _createEstimatedFinancialEfficiencyCommandHandler;
 
         public EmployeeService(FinanceAnalyticService financeAnalyticService,
-            RequestsService requestsService,
+            IRequestService requestsService,
             IOptions<InnerCircleServiceUrl> urls,
             CreateEmployeeCommandHandler createEmployeeCommandHandler,
             UpdateEmployeeCommandHandler updateEmployeeCommandHandler,
@@ -64,6 +64,9 @@ namespace SalaryService.Application.Services
             var securityCode = Guid.NewGuid();
             await _requestsService.SendPostRequest(_urls.AuthServiceUrl + "auth/register",
                 new { Login = employee.CorporateEmail, Password = "", Code = securityCode });
+
+            await _requestsService.SendPostRequest(_urls.EmailSenderServiceUrl + "api/mail/send",
+                new { To = employee.PersonalEmail, Body = $"Go to this link to set a password for your account: {_urls.AuthUIServiceUrl}invitation?code={securityCode}" });
 
             var totals = await _financeAnalyticService.CalculateTotalFinances();
             var estimatedFinancialEfficiency = await _financeAnalyticService.CalculateEstimatedFinancialEfficiency(totals.TotalExpense);

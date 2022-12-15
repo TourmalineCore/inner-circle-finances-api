@@ -2,7 +2,7 @@
 
 namespace SalaryService.Application.Services
 {
-    public class RequestsService
+    public class RequestsService : IRequestService
     {
         private readonly HttpClient _client;
 

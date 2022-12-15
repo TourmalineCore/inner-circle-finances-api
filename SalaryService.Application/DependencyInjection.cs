@@ -11,11 +11,8 @@ namespace SalaryService.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
         {
-            var mailServiceOptions = configuration.GetSection("MailOptions");
-            services.Configure<MailOptions>(c => mailServiceOptions.Bind(c));
-
-            var helpUrls = configuration.GetSection("InnerCircleServiceUrl");
-            services.Configure<InnerCircleServiceUrl>(u => helpUrls.Bind(u));
+            var innerCircleServiceUrl = configuration.GetSection("InnerCircleServiceUrl");
+            services.Configure<InnerCircleServiceUrl>(u => innerCircleServiceUrl.Bind(u));
 
             services.AddTransient<GetColleaguesQueryHandler>();
             services.AddTransient<GetEmployeeQueryHandler>();
@@ -35,8 +32,14 @@ namespace SalaryService.Application
             services.AddTransient<CreateEstimatedFinancialEfficiencyCommandHandler>();
             services.AddTransient<EmployeeService>();
             services.AddTransient<FinanceAnalyticService>();
-            services.AddTransient<MailService>();
-            services.AddTransient<RequestsService>();
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Debug")
+            {
+                services.AddTransient<IRequestService, FakeRequestService>();
+            }
+            else
+            {
+                services.AddTransient<IRequestService, RequestsService>();
+            }
             services.AddTransient<IClock, Clock>();
             return services;
         }
