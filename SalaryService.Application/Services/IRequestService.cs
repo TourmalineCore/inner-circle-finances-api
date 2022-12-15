@@ -1,7 +1,10 @@
-﻿namespace SalaryService.Application.Services
+﻿using SalaryService.Domain;
+
+namespace SalaryService.Application.Services
 {
     public interface IRequestService
     {
-        Task SendPostRequest(string url, object? requestBody);
+        Task SendRequestToRegister(Employee employee, string securityCode);
+        Task SendPasswordCreatingLink(Employee employee, string securityCode);
     }
 }

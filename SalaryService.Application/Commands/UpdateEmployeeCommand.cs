@@ -21,8 +21,6 @@ namespace SalaryService.Application.Commands
         {
             var employee = await _employeeDbContext
                 .Queryable<Employee>()
-                .Include(x => x.EmployeeFinanceForPayroll)
-                .Include(x => x.EmployeeFinancialMetrics)
                 .SingleAsync(x => x.Id == request.EmployeeId && x.DeletedAtUtc == null);
 
             employee.Update(request.Name, request.Surname, request.MiddleName, request.CorporateEmail, request.PersonalEmail, request.Phone, request.GitHub, request.GitLab);

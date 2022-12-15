@@ -1,6 +1,6 @@
 ﻿namespace SalaryService.Application.Services
 {
-    public class InnerCircleServiceUrl
+    public class InnerCircleServiceUrls
     {
         public string AuthServiceUrl { get; set; }
 

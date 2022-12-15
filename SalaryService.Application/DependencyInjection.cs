@@ -11,8 +11,8 @@ namespace SalaryService.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
         {
-            var innerCircleServiceUrl = configuration.GetSection("InnerCircleServiceUrl");
-            services.Configure<InnerCircleServiceUrl>(u => innerCircleServiceUrl.Bind(u));
+            var innerCircleServiceUrl = configuration.GetSection("InnerCircleServiceUrls");
+            services.Configure<InnerCircleServiceUrls>(u => innerCircleServiceUrl.Bind(u));
 
             services.AddTransient<GetColleaguesQueryHandler>();
             services.AddTransient<GetEmployeeQueryHandler>();
