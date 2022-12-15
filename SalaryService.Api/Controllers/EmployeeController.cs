@@ -29,11 +29,19 @@ namespace SalaryService.Api.Controllers
             _getEmployeeContactDetailsQueryHandler = getEmployeeContactDetailsQueryHandler;
             _getEmployeeFinanceForPayrollQueryHandler = getEmployeeFinanceForPayrollQueryHandler;
         }
-        
+
+        [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
         [HttpGet("get-profile")]
         public Task<EmployeeProfileDto> GetProfile()
         {
             return _getEmployeeQueryHandler.HandleAsync();
+        }
+
+        [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
+        [HttpPut("update-profile")]
+        public Task UpdateProfile([FromBody] ProfileUpdatingParameters profileUpdatingParameters)
+        {
+            return _employeeService.UpdateProfile(profileUpdatingParameters);
         }
         
         [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]

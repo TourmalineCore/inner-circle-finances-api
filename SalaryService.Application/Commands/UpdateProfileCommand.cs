@@ -5,25 +5,25 @@ using SalaryService.Domain;
 
 namespace SalaryService.Application.Commands
 {
-    public partial class UpdateEmployeeCommand
+    public partial class UpdateProfileCommand
     {
-        
     }
-    public class UpdateEmployeeCommandHandler
+
+    public class UpdateProfileCommandHandler
     {
         private readonly EmployeeDbContext _employeeDbContext;
 
-        public UpdateEmployeeCommandHandler(EmployeeDbContext employeeDbContext)
+        public UpdateProfileCommandHandler(EmployeeDbContext employeeDbContext)
         {
             _employeeDbContext = employeeDbContext;
         }
-        public async Task HandleAsync(EmployeeUpdatingParameters request)
+        public async Task HandleAsync(ProfileUpdatingParameters request)
         {
             var employee = await _employeeDbContext
                 .Queryable<Employee>()
-                .SingleAsync(x => x.Id == request.EmployeeId && x.DeletedAtUtc == null);
+                .SingleAsync(x => x.AccountId == 1 && x.DeletedAtUtc == null);
 
-            employee.Update(request.Name, request.Surname, request.MiddleName, request.CorporateEmail, request.PersonalEmail, request.Phone, request.GitHub, request.GitLab);
+            employee.Update(request.PersonalEmail, request.Phone, request.GitHub, request.GitLab);
 
             _employeeDbContext.Update(employee);
             await _employeeDbContext.SaveChangesAsync();

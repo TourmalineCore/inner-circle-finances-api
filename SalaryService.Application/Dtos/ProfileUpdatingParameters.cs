@@ -1,6 +1,6 @@
 ﻿namespace SalaryService.Application.Dtos
 {
-    public partial class CEOUpdatingParameters
+    public class ProfileUpdatingParameters
     {
         public string PersonalEmail { get; set; }
 
