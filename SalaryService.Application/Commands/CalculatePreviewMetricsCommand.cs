@@ -22,6 +22,8 @@ namespace SalaryService.Application.Commands
         {
             var employee = await _employeeDbContext
                 .Queryable<Employee>()
+                .Include(x => x.EmployeeFinanceForPayroll)
+                .Include(x => x.EmployeeFinancialMetrics)
                 .SingleAsync(x => x.Id == request.EmployeeId && x.DeletedAtUtc == null);
 
             var preview = CalculateDelta(new MetricsPreviewDto(employee.Id,
