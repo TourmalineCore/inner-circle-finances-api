@@ -16,7 +16,7 @@ namespace SalaryService.DataAccess.Mapping
             builder.HasIndex(x => x.Phone).IsUnique();
             builder.HasIndex(x => x.GitHub).IsUnique();
             builder.HasIndex(x => x.GitLab).IsUnique();
-            
+
         }
     }
 }

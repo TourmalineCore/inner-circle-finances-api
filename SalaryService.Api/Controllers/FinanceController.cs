@@ -13,15 +13,15 @@ namespace SalaryService.Api.Controllers
     {
         private readonly EmployeeService _employeeService;
         private readonly GetAnalyticQueryHandler _getAnalyticQueryHandler;
-        private readonly GetTotalFinancesQueryHandler _getTotalFinancesQueryHandler;
+        private readonly GetIndicatorsQueryHandler _getIndicatorsQueryHandler;
 
         public FinanceController(GetAnalyticQueryHandler getAnalyticQueryHandler,
             EmployeeService employeeService,
-            GetTotalFinancesQueryHandler getTotalFinancesQueryHandler)
+            GetIndicatorsQueryHandler getIndicatorsQueryHandler)
         {
             _getAnalyticQueryHandler = getAnalyticQueryHandler;
             _employeeService = employeeService;
-            _getTotalFinancesQueryHandler = getTotalFinancesQueryHandler;
+            _getIndicatorsQueryHandler = getIndicatorsQueryHandler;
         }
         
         [RequiresPermission(UserClaimsProvider.CanViewAnalyticPermission)]
@@ -39,9 +39,9 @@ namespace SalaryService.Api.Controllers
         }
 
         [HttpGet("get-total-finance")]
-        public Task<TotalFinancesDto> GetTotalFinance()
+        public Task<IndicatorsDto> GetTotalFinance()
         {
-            return _getTotalFinancesQueryHandler.HandleAsync();
+            return _getIndicatorsQueryHandler.HandleAsync();
         }
     }
 }

@@ -21,6 +21,8 @@ namespace SalaryService.DataAccess
 
         public DbSet<TotalFinancesHistory> TotalFinancesHistory { get; set; }
 
+        public DbSet<WorkingPlan> WorkingPlan { get; set; }
+
         public EmployeeDbContext(DbContextOptions<EmployeeDbContext> options) : base(options)
         {
             
