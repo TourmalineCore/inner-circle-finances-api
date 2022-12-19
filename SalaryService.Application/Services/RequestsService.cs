@@ -15,18 +15,11 @@ namespace SalaryService.Application.Services
             _urls = urls.Value;
         }
 
-        public async Task SendRequestToRegister(Employee employee, string securityCode)
+        public async Task SendRequestToRegister(Employee employee)
         {
-            var registrationLink = $"{_urls.AuthServiceUrl}auth/register";
+            var registrationLink = $"{_urls.AuthServiceUrl}api/register";
             await _client.PostAsJsonAsync(registrationLink,
-                new { Login = employee.CorporateEmail, Password = "", Code = securityCode });
-        }
-
-        public async Task SendPasswordCreatingLink(Employee employee, string securityCode)
-        {
-            var mailSenderLink = $"{_urls.EmailSenderServiceUrl}api/mail/send";
-            await _client.PostAsJsonAsync(mailSenderLink,
-            new { To = employee.PersonalEmail, Body = $"Go to this link to set a password for your account: {_urls.AuthUIServiceUrl}invitation?code={securityCode}" });
+                new { Login = employee.CorporateEmail, PersonalEmail = employee.PersonalEmail });
         }
     }
 }

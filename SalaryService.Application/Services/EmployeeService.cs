@@ -58,10 +58,7 @@ namespace SalaryService.Application.Services
 
             var employee = await _createEmployeeCommandHandler.HandleAsync(parameters, metrics);
 
-            var securityCode = Guid.NewGuid().ToString();
-
-            await _requestsService.SendRequestToRegister(employee, securityCode);
-            await _requestsService.SendPasswordCreatingLink(employee, securityCode);
+            await _requestsService.SendRequestToRegister(employee);
 
             var totals = await _financeAnalyticService.CalculateTotalFinances();
             var estimatedFinancialEfficiency = await _financeAnalyticService.CalculateEstimatedFinancialEfficiency(totals.TotalExpense);
