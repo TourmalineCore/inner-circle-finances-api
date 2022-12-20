@@ -5,7 +5,7 @@ namespace SalaryService.Api
 {
     public class UserClaimsProvider : IUserClaimsProvider
     {
-        public const string PermissionClaimType = "Permissions";
+        public const string PermissionClaimType = "permissions";
 
         public const string CanViewFinanceForPayrollPermission = "CanViewFinanceForPayroll";
 
