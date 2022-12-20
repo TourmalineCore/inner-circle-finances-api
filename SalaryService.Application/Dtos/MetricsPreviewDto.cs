@@ -1,6 +1,4 @@
-﻿using SalaryService.Domain;
-
-namespace SalaryService.Application.Dtos
+﻿namespace SalaryService.Application.Dtos
 {
     public class MetricsPreviewDto
     {

@@ -24,14 +24,14 @@ namespace SalaryService.Api.Controllers
             _getIndicatorsQueryHandler = getIndicatorsQueryHandler;
         }
         
-        [RequiresPermission(UserClaimsProvider.CanViewAnalyticPermission)]
+        [RequiresPermission(Privileges.CanViewAnalyticPermission)]
         [HttpGet("get-analytic")]
         public Task<IEnumerable<AnalyticDto>> GetAnalytic()
         {
             return _getAnalyticQueryHandler.HandleAsync();
         }
         
-        [RequiresPermission(UserClaimsProvider.CanViewAnalyticPermission)]
+        [RequiresPermission(Privileges.CanViewAnalyticPermission)]
         [HttpPost("get-preview")]
         public Task<MetricsPreviewDto> GetPreview([FromBody] FinanceUpdatingParameters financeUpdatingParameters)
         {

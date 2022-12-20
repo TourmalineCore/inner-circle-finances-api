@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.EventLog;
-using SalaryService.Api;
 using SalaryService.Application;
 using SalaryService.DataAccess;
 using System.Reflection;
@@ -78,9 +77,8 @@ builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
     }
 });
 
-var authenticationOptions = (configuration.GetSection(nameof(AuthenticationOptions)).Get<AuthenticationOptions>());
-builder.Services.AddJwtAuthentication(authenticationOptions).AddUserCredentialValidator<UserCredentialsValidator>()
-    .WithUserClaimsProvider<UserClaimsProvider>(UserClaimsProvider.PermissionClaimType);
+var authenticationOptions = configuration.GetSection(nameof(AuthenticationOptions)).Get<AuthenticationOptions>();
+builder.Services.AddJwtAuthentication(authenticationOptions);
 
 builder.Services.AddPersistence(configuration);
 
@@ -141,12 +139,7 @@ app.UseRouting();
 
 app.UseCors("SalarySpecificOrigins");
 
-app.UseAuthentication();
-app.UseAuthorization();
-
-app
-    .UseDefaultLoginMiddleware()
-    .UseJwtAuthentication();
+app.UseJwtAuthentication();
 
 app.UseEndpoints(endpoints => { endpoints.MapControllers().RequireCors("SalarySpecificOrigins"); });
 

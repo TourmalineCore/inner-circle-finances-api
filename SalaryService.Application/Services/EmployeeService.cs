@@ -1,6 +1,5 @@
 ﻿using SalaryService.Application.Commands;
 using SalaryService.Application.Dtos;
-using Microsoft.Extensions.Options;
 
 namespace SalaryService.Application.Services
 {
@@ -80,9 +79,9 @@ namespace SalaryService.Application.Services
             await _updateEmployeeCommandHandler.HandleAsync(request);
         }
 
-        public async Task UpdateProfile(ProfileUpdatingParameters request)
+        public async Task UpdateProfile(ProfileUpdatingParameters request, long accountId)
         {
-            await _updateProfileCommandHandler.HandleAsync(request);
+            await _updateProfileCommandHandler.HandleAsync(request, accountId);
         }
 
         public async Task UpdateFinances(FinanceUpdatingParameters parameters)
