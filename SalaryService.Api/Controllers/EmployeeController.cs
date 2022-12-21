@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using SalaryService.Application.Dtos;
 using SalaryService.Application.Queries;
 using SalaryService.Application.Services;
-using System.Security.Claims;
 using TourmalineCore.AspNetCore.JwtAuthentication.Core.Filters;
 
 namespace SalaryService.Api.Controllers
@@ -34,14 +33,14 @@ namespace SalaryService.Api.Controllers
         [HttpGet("get-profile")]
         public Task<EmployeeProfileDto> GetProfile()
         {
-            return _getEmployeeQueryHandler.HandleAsync(GetCurrentUser());
+            return _getEmployeeQueryHandler.HandleAsync(ClaimsHelper.GetCurrentUser(HttpContext));
         }
 
         [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
         [HttpPut("update-profile")]
         public Task UpdateProfile([FromBody] ProfileUpdatingParameters profileUpdatingParameters)
         {
-            return _employeeService.UpdateProfile(profileUpdatingParameters, GetCurrentUser());
+            return _employeeService.UpdateProfile(profileUpdatingParameters, ClaimsHelper.GetCurrentUser(HttpContext));
         }
         
         [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
@@ -91,12 +90,6 @@ namespace SalaryService.Api.Controllers
         public Task DeleteEmployee([FromRoute] long id)
         {
             return _employeeService.DeleteEmployee(id);
-        }
-
-        private long GetCurrentUser()
-        {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            return long.Parse(identity.Claims.Single(x => x.Type == "accountId").Value);
         }
     }
 }
