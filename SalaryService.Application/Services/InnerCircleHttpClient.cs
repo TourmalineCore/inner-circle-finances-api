@@ -17,7 +17,7 @@ namespace SalaryService.Application.Services
 
         public async Task SendRequestToRegister(Employee employee)
         {
-            var registrationLink = $"{_urls.AuthServiceUrl}api/register";
+            var registrationLink = $"{_urls.AuthServiceUrl}/register";
             await _client.PostAsJsonAsync(registrationLink,
                 new { Login = employee.CorporateEmail, PersonalEmail = employee.PersonalEmail, AccountId = employee.Id });
         }
