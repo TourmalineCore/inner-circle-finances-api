@@ -34,11 +34,11 @@ namespace SalaryService.Application
             services.AddTransient<FinanceAnalyticService>();
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Debug")
             {
-                services.AddTransient<IRequestService, FakeRequestService>();
+                services.AddTransient<IInnerCircleHttpClient, FakeInnerCircleHttpClient>();
             }
             else
             {
-                services.AddTransient<IRequestService, RequestsService>();
+                services.AddTransient<IInnerCircleHttpClient, InnerCircleHttpClient>();
             }
             services.AddTransient<IClock, Clock>();
             return services;

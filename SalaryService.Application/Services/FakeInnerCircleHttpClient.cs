@@ -2,7 +2,7 @@
 
 namespace SalaryService.Application.Services
 {
-    public class FakeRequestService : IRequestService
+    public class FakeInnerCircleHttpClient : IInnerCircleHttpClient
     {
         public async Task SendRequestToRegister(Employee employee)
         {

@@ -2,7 +2,7 @@
 
 namespace SalaryService.Application.Services
 {
-    public interface IRequestService
+    public interface IInnerCircleHttpClient
     {
         Task SendRequestToRegister(Employee employee);
     }

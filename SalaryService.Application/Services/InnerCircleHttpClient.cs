@@ -4,12 +4,12 @@ using System.Net.Http.Json;
 
 namespace SalaryService.Application.Services
 {
-    public class RequestsService : IRequestService
+    public class InnerCircleHttpClient : IInnerCircleHttpClient
     {
         private readonly HttpClient _client;
         private readonly InnerCircleServiceUrls _urls;
 
-        public RequestsService(IOptions<InnerCircleServiceUrls> urls)
+        public InnerCircleHttpClient(IOptions<InnerCircleServiceUrls> urls)
         {
             _client = new HttpClient();
             _urls = urls.Value;
@@ -19,7 +19,7 @@ namespace SalaryService.Application.Services
         {
             var registrationLink = $"{_urls.AuthServiceUrl}api/register";
             await _client.PostAsJsonAsync(registrationLink,
-                new { Login = employee.CorporateEmail, PersonalEmail = employee.PersonalEmail });
+                new { Login = employee.CorporateEmail, PersonalEmail = employee.PersonalEmail, AccountId = employee.Id });
         }
     }
 }
