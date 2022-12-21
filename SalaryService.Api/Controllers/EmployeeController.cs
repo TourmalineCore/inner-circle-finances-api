@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SalaryService.Application.Dtos;
 using SalaryService.Application.Queries;
@@ -33,14 +34,14 @@ namespace SalaryService.Api.Controllers
         [HttpGet("get-profile")]
         public Task<EmployeeProfileDto> GetProfile()
         {
-            return _getEmployeeQueryHandler.HandleAsync(HttpContext.GetCurrentUser());
+            return _getEmployeeQueryHandler.HandleAsync(HttpContext.User.GetUserAccountId());
         }
 
         [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
         [HttpPut("update-profile")]
         public Task UpdateProfile([FromBody] ProfileUpdatingParameters profileUpdatingParameters)
         {
-            return _employeeService.UpdateProfile(profileUpdatingParameters, HttpContext.GetCurrentUser());
+            return _employeeService.UpdateProfile(profileUpdatingParameters, HttpContext.User.GetUserAccountId());
         }
         
         [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
