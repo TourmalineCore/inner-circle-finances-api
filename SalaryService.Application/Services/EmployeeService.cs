@@ -6,7 +6,7 @@ namespace SalaryService.Application.Services
     public class EmployeeService
     {
         private readonly FinanceAnalyticService _financeAnalyticService;
-        private readonly IInnerCircleHttpClient _requestsService;
+        private readonly IInnerCircleHttpClient _innerCircleHttpClient;
         private readonly CreateEmployeeCommandHandler _createEmployeeCommandHandler;
         private readonly UpdateEmployeeCommandHandler _updateEmployeeCommandHandler;
         private readonly UpdateFinancesCommandHandler _updateFinancesCommandHandler;
@@ -16,7 +16,7 @@ namespace SalaryService.Application.Services
         private readonly CreateEstimatedFinancialEfficiencyCommandHandler _createEstimatedFinancialEfficiencyCommandHandler;
 
         public EmployeeService(FinanceAnalyticService financeAnalyticService,
-            IInnerCircleHttpClient requestsService,
+            IInnerCircleHttpClient innerCircleHttpClient,
             CreateEmployeeCommandHandler createEmployeeCommandHandler,
             UpdateEmployeeCommandHandler updateEmployeeCommandHandler,
             UpdateFinancesCommandHandler updateFinancesCommandHandler,
@@ -26,7 +26,7 @@ namespace SalaryService.Application.Services
             CreateEstimatedFinancialEfficiencyCommandHandler createEstimatedFinancialEfficiencyCommandHandler)
         {
             _financeAnalyticService = financeAnalyticService;
-            _requestsService = requestsService;
+            _innerCircleHttpClient = innerCircleHttpClient;
             _createEmployeeCommandHandler = createEmployeeCommandHandler;
             _updateEmployeeCommandHandler = updateEmployeeCommandHandler;
             _updateFinancesCommandHandler = updateFinancesCommandHandler;
@@ -74,7 +74,7 @@ namespace SalaryService.Application.Services
 
             var employee = await _createEmployeeCommandHandler.HandleAsync(parameters, metrics);
 
-            await _requestsService.SendRequestToRegister(employee);
+            await _innerCircleHttpClient.SendRequestToRegister(employee);
 
             var totals = await _financeAnalyticService.CalculateTotalFinances();
             var estimatedFinancialEfficiency = await _financeAnalyticService.CalculateEstimatedFinancialEfficiency(totals.TotalExpense);
