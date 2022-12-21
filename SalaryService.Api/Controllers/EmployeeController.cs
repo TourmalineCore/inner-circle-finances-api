@@ -33,14 +33,14 @@ namespace SalaryService.Api.Controllers
         [HttpGet("get-profile")]
         public Task<EmployeeProfileDto> GetProfile()
         {
-            return _getEmployeeQueryHandler.HandleAsync(ClaimsHelper.GetCurrentUser(HttpContext));
+            return _getEmployeeQueryHandler.HandleAsync(HttpContext.GetCurrentUser());
         }
 
         [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
         [HttpPut("update-profile")]
         public Task UpdateProfile([FromBody] ProfileUpdatingParameters profileUpdatingParameters)
         {
-            return _employeeService.UpdateProfile(profileUpdatingParameters, ClaimsHelper.GetCurrentUser(HttpContext));
+            return _employeeService.UpdateProfile(profileUpdatingParameters, HttpContext.GetCurrentUser());
         }
         
         [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
