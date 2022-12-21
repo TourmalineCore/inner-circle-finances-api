@@ -37,55 +37,56 @@ namespace SalaryService.Api.Controllers
             return _getEmployeeQueryHandler.HandleAsync(GetCurrentUser());
         }
 
-        [RequiresPermission(Privileges.CanManageEmployeesPermission)]
+        [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
         [HttpPut("update-profile")]
         public Task UpdateProfile([FromBody] ProfileUpdatingParameters profileUpdatingParameters)
         {
             return _employeeService.UpdateProfile(profileUpdatingParameters, GetCurrentUser());
         }
         
-        [RequiresPermission(Privileges.CanManageEmployeesPermission)]
+        [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
         [HttpGet("get-finance-for-payroll/{employeeId}")]
         public Task<ColleagueFinancesDto> GetFinanceForPayroll([FromRoute] long employeeId)
         {
             return _getEmployeeFinanceForPayrollQueryHandler.HandleAsync(employeeId);
         }
         
-        [RequiresPermission(Privileges.CanManageEmployeesPermission)]
+        [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
         [HttpGet("get-contact-details/{employeeId}")]
         public Task<ColleagueContactsDto> GetContactDetails([FromRoute] long employeeId)
         {
             return _getEmployeeContactDetailsQueryHandler.HandleAsync(employeeId);
         }
-        
+
+        [RequiresPermission(UserClaimsProvider.CanViewFinanceForPayrollPermission)]
         [HttpGet("get-colleagues")]
         public Task<ColleagueDto> GetColleagues()
         {
             return _getColleaguesQueryHandler.HandleAsync();
         }
         
-        [RequiresPermission(Privileges.CanManageEmployeesPermission)]
+        [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
         [HttpPost("create")]
         public Task CreateEmployee([FromBody] EmployeeCreatingParameters employeeCreatingParameters)
         {
             return _employeeService.CreateEmployee(employeeCreatingParameters);
         }
         
-        [RequiresPermission(Privileges.CanManageEmployeesPermission)]
+        [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
         [HttpPut("update-employee-contacts")]
         public Task UpdateEmployeeContacts([FromBody] EmployeeUpdatingParameters employeeUpdatingParameters)
         {
             return _employeeService.UpdateEmployee(employeeUpdatingParameters);
         }
         
-        [RequiresPermission(Privileges.CanManageEmployeesPermission)]
+        [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
         [HttpPut("update-employee-finances")]
         public Task UpdateEmployeeFinances([FromBody] FinanceUpdatingParameters financeUpdatingParameters)
         {
             return _employeeService.UpdateFinances(financeUpdatingParameters);
         }
         
-        [RequiresPermission(Privileges.CanManageEmployeesPermission)]
+        [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
         [HttpDelete("delete/{id}")]
         public Task DeleteEmployee([FromRoute] long id)
         {

@@ -12,7 +12,6 @@ namespace SalaryService.Application.Services
         private readonly UpdateFinancesCommandHandler _updateFinancesCommandHandler;
         private readonly UpdateProfileCommandHandler _updateProfileCommandHandler;
         private readonly DeleteEmployeeCommandHandler _deleteEmployeeCommandHandler;
-        private readonly CalculatePreviewMetricsCommandHandler _calculatePreviewMetricsCommandHandler;
         private readonly CreateTotalExpensesCommandHandler _createTotalExpensesCommandHandler;
         private readonly CreateEstimatedFinancialEfficiencyCommandHandler _createEstimatedFinancialEfficiencyCommandHandler;
 
@@ -23,7 +22,6 @@ namespace SalaryService.Application.Services
             UpdateFinancesCommandHandler updateFinancesCommandHandler,
             UpdateProfileCommandHandler updateProfileCommandHandler,
             DeleteEmployeeCommandHandler deleteEmployeeCommandHandler,
-            CalculatePreviewMetricsCommandHandler calculatePreviewMetricsCommandHandler, 
             CreateTotalExpensesCommandHandler createTotalExpensesCommandHandler,
             CreateEstimatedFinancialEfficiencyCommandHandler createEstimatedFinancialEfficiencyCommandHandler)
         {
@@ -34,17 +32,36 @@ namespace SalaryService.Application.Services
             _updateFinancesCommandHandler = updateFinancesCommandHandler;
             _updateProfileCommandHandler = updateProfileCommandHandler;
             _deleteEmployeeCommandHandler = deleteEmployeeCommandHandler;
-            _calculatePreviewMetricsCommandHandler = calculatePreviewMetricsCommandHandler;
             _createTotalExpensesCommandHandler = createTotalExpensesCommandHandler;
             _createEstimatedFinancialEfficiencyCommandHandler = createEstimatedFinancialEfficiencyCommandHandler;
         }
 
-        public async Task<MetricsPreviewDto> GetPreviewMetrics(FinanceUpdatingParameters parameters)
+        public async Task<MetricsPreviewDto> GetPreviewMetrics(GetPreviewParameters parameters)
         {
             var newMetrics = await _financeAnalyticService.CalculateMetrics(parameters.RatePerHour,
                 parameters.Pay, parameters.EmploymentTypeValue, parameters.ParkingCostPerMonth);
 
-            return await _calculatePreviewMetricsCommandHandler.HandleAsync(parameters, newMetrics);
+            return new MetricsPreviewDto(newMetrics.Pay, 
+                newMetrics.RatePerHour, 
+                newMetrics.EmploymentType, 
+                newMetrics.Salary,
+                newMetrics.ParkingCostPerMonth,
+                newMetrics.AccountingPerMonth,
+                newMetrics.HourlyCostFact,
+                newMetrics.HourlyCostHand,
+                newMetrics.Earnings,
+                newMetrics.IncomeTaxContributions, 
+                newMetrics.DistrictCoefficient,
+                newMetrics.PensionContributions,
+                newMetrics.MedicalContributions,
+                newMetrics.SocialInsuranceContributions,
+                newMetrics.InjuriesContributions,
+                newMetrics.Expenses,
+                newMetrics.Profit,
+                newMetrics.ProfitAbility,
+                newMetrics.GrossSalary,
+                newMetrics.Prepayment,
+                newMetrics.NetSalary);
         }
 
         public async Task CreateEmployee(EmployeeCreatingParameters parameters)

@@ -5,6 +5,7 @@ using SalaryService.DataAccess;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Microsoft.OpenApi.Models;
+using SalaryService.Api;
 using TourmalineCore.AspNetCore.JwtAuthentication.Core;
 using TourmalineCore.AspNetCore.JwtAuthentication.Core.Options;
 
@@ -78,8 +79,7 @@ builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
 });
 
 var authenticationOptions = configuration.GetSection(nameof(AuthenticationOptions)).Get<AuthenticationOptions>();
-builder.Services.AddJwtAuthentication(authenticationOptions);
-
+builder.Services.AddJwtAuthentication(authenticationOptions).WithUserClaimsProvider<UserClaimsProvider>(UserClaimsProvider.PermissionClaimType); 
 builder.Services.AddPersistence(configuration);
 
 builder.Host.ConfigureLogging((hostingContext, logging) =>
