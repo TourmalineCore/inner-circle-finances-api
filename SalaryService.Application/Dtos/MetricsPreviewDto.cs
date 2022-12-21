@@ -1,77 +1,50 @@
-﻿using SalaryService.Domain;
-
-namespace SalaryService.Application.Dtos
+﻿namespace SalaryService.Application.Dtos
 {
     public class MetricsPreviewDto
     {
-        public long Id { get; set; }
-
-        public string FullName { get; set; }
-
         public double Pay { get; set; }
-        public double PayDelta { get; set; }
 
         public double RatePerHour { get; set; }
-        public double RatePerHourDelta { get; set; }
 
         public double EmploymentType { get; set; }
 
         public double Salary { get; set; }
-        public double SalaryDelta { get; set; }
 
         public double ParkingCostPerMonth { get; set; }
-        public double ParkingCostPerMonthDelta { get; set; }
 
         public double AccountingPerMonth { get; set; }
-        public double AccountingPerMonthDelta { get; set; }
 
         public double HourlyCostFact { get; set; }
-        public double HourlyCostFactDelta { get; set; }
 
         public double HourlyCostHand { get; set; }
-        public double HourlyCostHandDelta { get; set; }
 
         public double Earnings { get; set; }
-        public double EarningsDelta { get; set; }
 
         public double IncomeTaxContributions { get; set; }
-        public double IncomeTaxContributionsDelta { get; set; }
 
         public double DistrictCoefficient { get; set; }
-        public double DistrictCoefficientDelta { get; set; }
 
         public double PensionContributions { get; set; }
-        public double PensionContributionsDelta { get; set; }
 
         public double MedicalContributions { get; set; }
-        public double MedicalContributionsDelta { get; set; }
 
         public double SocialInsuranceContributions { get; set; }
-        public double SocialInsuranceContributionsDelta { get; set; }
 
         public double InjuriesContributions { get; set; }
-        public double InjuriesContributionsDelta { get; set; }
 
         public double Expenses { get; set; }
-        public double ExpensesDelta { get; set; }
 
         public double Profit { get; set; }
-        public double ProfitDelta { get; set; }
 
         public double ProfitAbility { get; set; }
-        public double ProfitAbilityDelta { get; set; }
 
         public double GrossSalary { get; set; }
-        public double GrossSalaryDelta { get; set; }
 
         public double Prepayment { get; set; }
-        public double PrepaymentDelta { get; set; }
 
         public double NetSalary { get; set; }
-        public double NetSalaryDelta { get; set; }
 
-        public MetricsPreviewDto(long id, 
-            string fullName, 
+        public MetricsPreviewDto(
             double pay, 
             double ratePerHour, 
             double employmentType, 
@@ -94,8 +67,6 @@ namespace SalaryService.Application.Dtos
             double prepayment,
             double netSalary)
         {
-            Id = id;
-            FullName = fullName;
             Pay = Math.Round(pay, 2);
             RatePerHour = Math.Round(ratePerHour, 2);
             EmploymentType = Math.Round(employmentType, 2);

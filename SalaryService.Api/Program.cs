@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.EventLog;
-using SalaryService.Api;
 using SalaryService.Application;
 using SalaryService.DataAccess;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Microsoft.OpenApi.Models;
+using SalaryService.Api;
 using TourmalineCore.AspNetCore.JwtAuthentication.Core;
 using TourmalineCore.AspNetCore.JwtAuthentication.Core.Options;
 
@@ -78,10 +78,8 @@ builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
     }
 });
 
-var authenticationOptions = (configuration.GetSection(nameof(AuthenticationOptions)).Get<AuthenticationOptions>());
-builder.Services.AddJwtAuthentication(authenticationOptions).AddUserCredentialValidator<UserCredentialsValidator>()
-    .WithUserClaimsProvider<UserClaimsProvider>(UserClaimsProvider.PermissionClaimType);
-
+var authenticationOptions = configuration.GetSection(nameof(AuthenticationOptions)).Get<AuthenticationOptions>();
+builder.Services.AddJwtAuthentication(authenticationOptions).WithUserClaimsProvider<UserClaimsProvider>(UserClaimsProvider.PermissionClaimType); 
 builder.Services.AddPersistence(configuration);
 
 builder.Host.ConfigureLogging((hostingContext, logging) =>
@@ -141,12 +139,7 @@ app.UseRouting();
 
 app.UseCors("SalarySpecificOrigins");
 
-app.UseAuthentication();
-app.UseAuthorization();
-
-app
-    .UseDefaultLoginMiddleware()
-    .UseJwtAuthentication();
+app.UseJwtAuthentication();
 
 app.UseEndpoints(endpoints => { endpoints.MapControllers().RequireCors("SalarySpecificOrigins"); });
 

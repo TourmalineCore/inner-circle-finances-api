@@ -1,30 +1,27 @@
 ﻿using SalaryService.Application.Commands;
 using SalaryService.Application.Dtos;
-using Microsoft.Extensions.Options;
 
 namespace SalaryService.Application.Services
 {
     public class EmployeeService
     {
         private readonly FinanceAnalyticService _financeAnalyticService;
-        private readonly IRequestService _requestsService;
+        private readonly IInnerCircleHttpClient _requestsService;
         private readonly CreateEmployeeCommandHandler _createEmployeeCommandHandler;
         private readonly UpdateEmployeeCommandHandler _updateEmployeeCommandHandler;
         private readonly UpdateFinancesCommandHandler _updateFinancesCommandHandler;
         private readonly UpdateProfileCommandHandler _updateProfileCommandHandler;
         private readonly DeleteEmployeeCommandHandler _deleteEmployeeCommandHandler;
-        private readonly CalculatePreviewMetricsCommandHandler _calculatePreviewMetricsCommandHandler;
         private readonly CreateTotalExpensesCommandHandler _createTotalExpensesCommandHandler;
         private readonly CreateEstimatedFinancialEfficiencyCommandHandler _createEstimatedFinancialEfficiencyCommandHandler;
 
         public EmployeeService(FinanceAnalyticService financeAnalyticService,
-            IRequestService requestsService,
+            IInnerCircleHttpClient requestsService,
             CreateEmployeeCommandHandler createEmployeeCommandHandler,
             UpdateEmployeeCommandHandler updateEmployeeCommandHandler,
             UpdateFinancesCommandHandler updateFinancesCommandHandler,
             UpdateProfileCommandHandler updateProfileCommandHandler,
             DeleteEmployeeCommandHandler deleteEmployeeCommandHandler,
-            CalculatePreviewMetricsCommandHandler calculatePreviewMetricsCommandHandler, 
             CreateTotalExpensesCommandHandler createTotalExpensesCommandHandler,
             CreateEstimatedFinancialEfficiencyCommandHandler createEstimatedFinancialEfficiencyCommandHandler)
         {
@@ -35,17 +32,36 @@ namespace SalaryService.Application.Services
             _updateFinancesCommandHandler = updateFinancesCommandHandler;
             _updateProfileCommandHandler = updateProfileCommandHandler;
             _deleteEmployeeCommandHandler = deleteEmployeeCommandHandler;
-            _calculatePreviewMetricsCommandHandler = calculatePreviewMetricsCommandHandler;
             _createTotalExpensesCommandHandler = createTotalExpensesCommandHandler;
             _createEstimatedFinancialEfficiencyCommandHandler = createEstimatedFinancialEfficiencyCommandHandler;
         }
 
-        public async Task<MetricsPreviewDto> GetPreviewMetrics(FinanceUpdatingParameters parameters)
+        public async Task<MetricsPreviewDto> GetPreviewMetrics(GetPreviewParameters parameters)
         {
             var newMetrics = await _financeAnalyticService.CalculateMetrics(parameters.RatePerHour,
                 parameters.Pay, parameters.EmploymentTypeValue, parameters.ParkingCostPerMonth);
 
-            return await _calculatePreviewMetricsCommandHandler.HandleAsync(parameters, newMetrics);
+            return new MetricsPreviewDto(newMetrics.Pay, 
+                newMetrics.RatePerHour, 
+                newMetrics.EmploymentType, 
+                newMetrics.Salary,
+                newMetrics.ParkingCostPerMonth,
+                newMetrics.AccountingPerMonth,
+                newMetrics.HourlyCostFact,
+                newMetrics.HourlyCostHand,
+                newMetrics.Earnings,
+                newMetrics.IncomeTaxContributions, 
+                newMetrics.DistrictCoefficient,
+                newMetrics.PensionContributions,
+                newMetrics.MedicalContributions,
+                newMetrics.SocialInsuranceContributions,
+                newMetrics.InjuriesContributions,
+                newMetrics.Expenses,
+                newMetrics.Profit,
+                newMetrics.ProfitAbility,
+                newMetrics.GrossSalary,
+                newMetrics.Prepayment,
+                newMetrics.NetSalary);
         }
 
         public async Task CreateEmployee(EmployeeCreatingParameters parameters)
@@ -58,10 +74,7 @@ namespace SalaryService.Application.Services
 
             var employee = await _createEmployeeCommandHandler.HandleAsync(parameters, metrics);
 
-            var securityCode = Guid.NewGuid().ToString();
-
-            await _requestsService.SendRequestToRegister(employee, securityCode);
-            await _requestsService.SendPasswordCreatingLink(employee, securityCode);
+            await _requestsService.SendRequestToRegister(employee);
 
             var totals = await _financeAnalyticService.CalculateTotalFinances();
             var estimatedFinancialEfficiency = await _financeAnalyticService.CalculateEstimatedFinancialEfficiency(totals.TotalExpense);
@@ -83,9 +96,9 @@ namespace SalaryService.Application.Services
             await _updateEmployeeCommandHandler.HandleAsync(request);
         }
 
-        public async Task UpdateProfile(ProfileUpdatingParameters request)
+        public async Task UpdateProfile(ProfileUpdatingParameters request, long accountId)
         {
-            await _updateProfileCommandHandler.HandleAsync(request);
+            await _updateProfileCommandHandler.HandleAsync(request, accountId);
         }
 
         public async Task UpdateFinances(FinanceUpdatingParameters parameters)

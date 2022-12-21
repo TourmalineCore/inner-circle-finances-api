@@ -8,14 +8,17 @@ namespace SalaryService.Application.Services
     {
         private readonly GetCoefficientsQueryHandler _getCoefficientsQueryHandler;
         private readonly GetFinancialMetricsQueryHandler _getFinancialMetricsQueryHandler;
+        private readonly GetWorkingPlanQueryHandler _getWorkingPlanQueryHandler;
         private readonly IClock _clock;
 
         public FinanceAnalyticService(GetCoefficientsQueryHandler getCoefficientsQueryHandler,
             GetFinancialMetricsQueryHandler getFinancialMetricsQueryHandler,
+            GetWorkingPlanQueryHandler getWorkingPlanQueryHandler,
             IClock clock)
         {
             _getCoefficientsQueryHandler = getCoefficientsQueryHandler;
             _getFinancialMetricsQueryHandler = getFinancialMetricsQueryHandler;
+            _getWorkingPlanQueryHandler = getWorkingPlanQueryHandler;
             _clock = clock;
         }
 
@@ -50,10 +53,12 @@ namespace SalaryService.Application.Services
                 employmentTypeValue,
                 parkingCostPerMonth);
             var coefficients = await _getCoefficientsQueryHandler.HandleAsync();
+            var workingPlan = await _getWorkingPlanQueryHandler.HandleAsync();
 
             calculateMetrics.CalculateMetrics(coefficients.DistrictCoefficient,
                 coefficients.MinimumWage,
                 coefficients.IncomeTaxPercent,
+                workingPlan.WorkingHoursInMonth,
                 _clock.GetCurrentInstant());
 
             return calculateMetrics;

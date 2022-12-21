@@ -17,8 +17,9 @@ namespace SalaryService.Application
             services.AddTransient<GetColleaguesQueryHandler>();
             services.AddTransient<GetEmployeeQueryHandler>();
             services.AddTransient<GetAnalyticQueryHandler>();
-            services.AddTransient<GetTotalFinancesQueryHandler>();
+            services.AddTransient<GetIndicatorsQueryHandler>();
             services.AddTransient<GetCoefficientsQueryHandler>();
+            services.AddTransient<GetWorkingPlanQueryHandler>();
             services.AddTransient<GetFinancialMetricsQueryHandler>();
             services.AddTransient<GetEmployeeContactDetailsQueryHandler>();
             services.AddTransient<GetEmployeeFinanceForPayrollQueryHandler>();
@@ -27,18 +28,17 @@ namespace SalaryService.Application
             services.AddTransient<UpdateProfileCommandHandler>();
             services.AddTransient<UpdateFinancesCommandHandler>();
             services.AddTransient<DeleteEmployeeCommandHandler>();
-            services.AddTransient<CalculatePreviewMetricsCommandHandler>();
             services.AddTransient<CreateTotalExpensesCommandHandler>();
             services.AddTransient<CreateEstimatedFinancialEfficiencyCommandHandler>();
             services.AddTransient<EmployeeService>();
             services.AddTransient<FinanceAnalyticService>();
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Debug")
             {
-                services.AddTransient<IRequestService, FakeRequestService>();
+                services.AddTransient<IInnerCircleHttpClient, FakeInnerCircleHttpClient>();
             }
             else
             {
-                services.AddTransient<IRequestService, RequestsService>();
+                services.AddTransient<IInnerCircleHttpClient, InnerCircleHttpClient>();
             }
             services.AddTransient<IClock, Clock>();
             return services;

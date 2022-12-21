@@ -13,15 +13,15 @@ namespace SalaryService.Api.Controllers
     {
         private readonly EmployeeService _employeeService;
         private readonly GetAnalyticQueryHandler _getAnalyticQueryHandler;
-        private readonly GetTotalFinancesQueryHandler _getTotalFinancesQueryHandler;
+        private readonly GetIndicatorsQueryHandler _getIndicatorsQueryHandler;
 
         public FinanceController(GetAnalyticQueryHandler getAnalyticQueryHandler,
             EmployeeService employeeService,
-            GetTotalFinancesQueryHandler getTotalFinancesQueryHandler)
+            GetIndicatorsQueryHandler getIndicatorsQueryHandler)
         {
             _getAnalyticQueryHandler = getAnalyticQueryHandler;
             _employeeService = employeeService;
-            _getTotalFinancesQueryHandler = getTotalFinancesQueryHandler;
+            _getIndicatorsQueryHandler = getIndicatorsQueryHandler;
         }
         
         [RequiresPermission(UserClaimsProvider.CanViewAnalyticPermission)]
@@ -33,15 +33,16 @@ namespace SalaryService.Api.Controllers
         
         [RequiresPermission(UserClaimsProvider.CanViewAnalyticPermission)]
         [HttpPost("get-preview")]
-        public Task<MetricsPreviewDto> GetPreview([FromBody] FinanceUpdatingParameters financeUpdatingParameters)
+        public Task<MetricsPreviewDto> GetPreview([FromBody] GetPreviewParameters financeUpdatingParameters)
         {
             return _employeeService.GetPreviewMetrics(financeUpdatingParameters);
         }
 
+        [RequiresPermission(UserClaimsProvider.CanViewAnalyticPermission)]
         [HttpGet("get-total-finance")]
-        public Task<TotalFinancesDto> GetTotalFinance()
+        public Task<IndicatorsDto> GetTotalFinance()
         {
-            return _getTotalFinancesQueryHandler.HandleAsync();
+            return _getIndicatorsQueryHandler.HandleAsync();
         }
     }
 }

@@ -67,6 +67,7 @@ namespace SalaryService.Domain
         public void CalculateMetrics(double districtCoeff,
             double mrot,
             double tax,
+            double workingHoursInMonth,
             Instant actualFromUtc)
         {
             ActualFromUtc = actualFromUtc;
@@ -74,14 +75,14 @@ namespace SalaryService.Domain
             GrossSalary = CalculateGrossSalary(districtCoeff);
             NetSalary = CalculateNetSalary(tax);
             DistrictCoefficient = CalculateDistrictCoefficient(districtCoeff);
-            Earnings = CalculateEarnings();
+            Earnings = CalculateEarnings(workingHoursInMonth);
             IncomeTaxContributions = GetNdflValue();
             PensionContributions = GetPensionContributions(mrot);
             MedicalContributions = GetMedicalContributions(mrot);
             SocialInsuranceContributions = GetSocialInsuranceContributions(mrot);
             InjuriesContributions = GetInjuriesContributions();
             Expenses = CalculateExpenses();
-            HourlyCostFact = CalculateHourlyCostFact();
+            HourlyCostFact = CalculateHourlyCostFact(workingHoursInMonth);
             HourlyCostHand = CalculateHourlyCostHand();
             Prepayment = CalculatePrepayment();
             Profit = CalculateProfit();
@@ -138,9 +139,9 @@ namespace SalaryService.Domain
             return Salary * districtCoeff;
         }
 
-        private double CalculateHourlyCostFact()
+        private double CalculateHourlyCostFact(double workingHoursInMonth)
         {
-            return Expenses / WorkingPlanConsts.WorkingHoursInMonth;
+            return Expenses / workingHoursInMonth;
         }
 
         private double CalculatePrepayment()
@@ -153,9 +154,9 @@ namespace SalaryService.Domain
             return Salary / 160;
         }
 
-        private double CalculateEarnings()
+        private double CalculateEarnings(double workingHoursInMonth)
         {
-            return RatePerHour * WorkingPlanConsts.WorkingHoursInMonth * EmploymentType;
+            return RatePerHour * workingHoursInMonth * EmploymentType;
         }
 
         private double CalculateExpenses()
