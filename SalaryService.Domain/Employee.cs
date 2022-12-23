@@ -4,9 +4,9 @@ namespace SalaryService.Domain
 {
     public class Employee : IIdentityEntity
     {
-        public long Id { get; private set; }
+        public long Id { get; set; }
 
-        public long AccountId { get; private set; }
+        public long AccountId { get; set; }
 
         public string Name { get; private set; }
 
