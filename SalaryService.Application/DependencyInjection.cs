@@ -1,9 +1,12 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using FluentValidation;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NodaTime;
 using SalaryService.Application.Commands;
+using SalaryService.Application.Dtos;
 using SalaryService.Application.Queries;
 using SalaryService.Application.Services;
+using SalaryService.Application.Validators;
 
 namespace SalaryService.Application
 {
@@ -41,6 +44,11 @@ namespace SalaryService.Application
                 services.AddTransient<IInnerCircleHttpClient, InnerCircleHttpClient>();
             }
             services.AddTransient<IClock, Clock>();
+
+            services.AddScoped<IValidator<EmployeeCreatingParameters>, EmployeeCreatingParametersValidator>();
+            services.AddScoped<IValidator<FinanceUpdatingParameters>, FinanceUpdatingParametersValidator>();
+            services.AddScoped<IValidator<GetPreviewParameters>, GetPreviewParametersValidator>();
+
             return services;
         }
     }

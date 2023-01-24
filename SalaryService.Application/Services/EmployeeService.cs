@@ -1,5 +1,8 @@
-﻿using SalaryService.Application.Commands;
+﻿using FluentValidation;
+using Microsoft.Extensions.Logging;
+using SalaryService.Application.Commands;
 using SalaryService.Application.Dtos;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace SalaryService.Application.Services
 {
@@ -14,6 +17,9 @@ namespace SalaryService.Application.Services
         private readonly DeleteEmployeeCommandHandler _deleteEmployeeCommandHandler;
         private readonly CreateTotalExpensesCommandHandler _createTotalExpensesCommandHandler;
         private readonly CreateEstimatedFinancialEfficiencyCommandHandler _createEstimatedFinancialEfficiencyCommandHandler;
+        private IValidator<EmployeeCreatingParameters> _employeeCreatingParametersValidator;
+        private IValidator<FinanceUpdatingParameters> _financeUpdatingParametersValidator;
+        private IValidator<GetPreviewParameters> _getPreviewParametersValidator;
 
         public EmployeeService(FinanceAnalyticService financeAnalyticService,
             IInnerCircleHttpClient innerCircleHttpClient,
@@ -23,7 +29,10 @@ namespace SalaryService.Application.Services
             UpdateProfileCommandHandler updateProfileCommandHandler,
             DeleteEmployeeCommandHandler deleteEmployeeCommandHandler,
             CreateTotalExpensesCommandHandler createTotalExpensesCommandHandler,
-            CreateEstimatedFinancialEfficiencyCommandHandler createEstimatedFinancialEfficiencyCommandHandler)
+            CreateEstimatedFinancialEfficiencyCommandHandler createEstimatedFinancialEfficiencyCommandHandler,
+            IValidator<EmployeeCreatingParameters> employeeCreatingParametersValidator,
+            IValidator<FinanceUpdatingParameters> financeUpdatingParametersValidator, 
+            IValidator<GetPreviewParameters> getPreviewParametersValidator)
         {
             _financeAnalyticService = financeAnalyticService;
             _innerCircleHttpClient = innerCircleHttpClient;
@@ -34,10 +43,20 @@ namespace SalaryService.Application.Services
             _deleteEmployeeCommandHandler = deleteEmployeeCommandHandler;
             _createTotalExpensesCommandHandler = createTotalExpensesCommandHandler;
             _createEstimatedFinancialEfficiencyCommandHandler = createEstimatedFinancialEfficiencyCommandHandler;
+            _employeeCreatingParametersValidator = employeeCreatingParametersValidator;
+            _financeUpdatingParametersValidator = financeUpdatingParametersValidator;
+            _getPreviewParametersValidator = getPreviewParametersValidator;
         }
 
         public async Task<MetricsPreviewDto> GetPreviewMetrics(GetPreviewParameters parameters)
         {
+            var resultValidation = await _getPreviewParametersValidator.ValidateAsync(parameters);
+
+            if (!resultValidation.IsValid)
+            {
+                throw new Exception("Incorrect salary rate");
+            }
+
             var newMetrics = await _financeAnalyticService.CalculateMetrics(parameters.RatePerHour,
                 parameters.Pay, parameters.EmploymentTypeValue, parameters.ParkingCostPerMonth);
 
@@ -66,6 +85,13 @@ namespace SalaryService.Application.Services
 
         public async Task CreateEmployee(EmployeeCreatingParameters parameters)
         {
+            var resultValidation = await _employeeCreatingParametersValidator.ValidateAsync(parameters);
+
+            if (!resultValidation.IsValid)
+            {
+                throw new Exception("Incorrect salary rate");
+            }
+
             var metrics = await _financeAnalyticService.CalculateMetrics(
                 parameters.RatePerHour,
                 parameters.Pay,
@@ -103,6 +129,13 @@ namespace SalaryService.Application.Services
 
         public async Task UpdateFinances(FinanceUpdatingParameters parameters)
         {
+            var resultValidation = await _financeUpdatingParametersValidator.ValidateAsync(parameters);
+
+            if (!resultValidation.IsValid)
+            {
+                throw new Exception("Incorrect salary rate");
+            }
+
             var metrics = await _financeAnalyticService.CalculateMetrics(parameters.RatePerHour,
                 parameters.Pay,
                 parameters.EmploymentTypeValue,

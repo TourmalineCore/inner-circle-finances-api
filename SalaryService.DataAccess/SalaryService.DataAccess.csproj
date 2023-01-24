@@ -26,8 +26,4 @@
     <ProjectReference Include="..\SalaryService.Domain\SalaryService.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Validators\" />
-  </ItemGroup>
-
 </Project>
