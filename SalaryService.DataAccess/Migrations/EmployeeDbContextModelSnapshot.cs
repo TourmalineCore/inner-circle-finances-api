@@ -151,8 +151,8 @@ namespace SalaryService.DataAccess.Migrations
                     b.Property<long>("EmployeeId")
                         .HasColumnType("bigint");
 
-                    b.Property<double>("EmploymentType")
-                        .HasColumnType("double precision");
+                    b.Property<int>("EmploymentType")
+                        .HasColumnType("integer");
 
                     b.Property<double>("ParkingCostPerMonth")
                         .HasColumnType("double precision");

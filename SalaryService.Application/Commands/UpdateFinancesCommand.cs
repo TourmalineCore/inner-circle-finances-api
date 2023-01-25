@@ -27,7 +27,7 @@ namespace SalaryService.Application.Commands
         {
             var financeForPayroll = new EmployeeFinanceForPayroll(request.RatePerHour,
                 request.Pay,
-                request.EmploymentTypeValue,
+                request.EmploymentType,
                 request.ParkingCostPerMonth);
 
             var latestMetrics = (await _employeeDbContext
@@ -68,12 +68,10 @@ namespace SalaryService.Application.Commands
                 .Include(x => x.EmployeeFinancialMetrics)
                 .SingleAsync(x => x.Id == request.EmployeeId && x.DeletedAtUtc == null)).EmployeeFinanceForPayroll;
 
-            currentFinanceForPayroll.Update(
-                    financeForPayroll.RatePerHour,
-                    financeForPayroll.Pay,
-                    financeForPayroll.EmploymentType,
-                    financeForPayroll.ParkingCostPerMonth
-                );
+            currentFinanceForPayroll.Update(financeForPayroll.RatePerHour,
+                financeForPayroll.Pay,
+                financeForPayroll.EmploymentType,
+                financeForPayroll.ParkingCostPerMonth);
 
             var currentFinancialMetrics = (await _employeeDbContext
                 .Queryable<Employee>()

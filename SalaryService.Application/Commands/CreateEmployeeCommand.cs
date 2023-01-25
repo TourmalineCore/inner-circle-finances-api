@@ -33,12 +33,10 @@ namespace SalaryService.Application.Commands
                 request.GitLab,
                 _clock.GetCurrentInstant());
 
-            var financeForPayroll = new EmployeeFinanceForPayroll(
-                    request.RatePerHour,
-                    request.Pay,
-                    request.EmploymentTypeValue,
-                    request.ParkingCostPerMonth
-                );
+            var financeForPayroll = new EmployeeFinanceForPayroll(request.RatePerHour,
+                request.Pay,
+                request.EmploymentType,
+                request.ParkingCostPerMonth);
 
             using (var transaction = _employeeDbContext.Database.BeginTransaction())
             {
