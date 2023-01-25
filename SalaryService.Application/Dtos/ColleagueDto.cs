@@ -40,13 +40,13 @@ namespace SalaryService.Application.Dtos
 
         public double Pay { get; private set; }
 
-        public EmploymentTypes EmploymentType { get; private set; }
+        public double EmploymentType { get; private set; }
 
         public double NetSalary { get; private set; }
 
         public double Parking { get; private set; }
 
-        public ColleagueFinancesDto(long id, string fullName, double ratePerHour, double pay, EmploymentTypes employmentType, double netSalary, double parking)
+        public ColleagueFinancesDto(long id, string fullName, double ratePerHour, double pay, double employmentType, double netSalary, double parking)
         {
             Id = id;
             FullName = fullName;
