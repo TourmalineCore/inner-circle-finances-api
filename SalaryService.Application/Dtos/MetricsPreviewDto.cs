@@ -6,7 +6,21 @@
 
         public double RatePerHour { get; set; }
 
-        public double EmploymentType { get; set; }
+        public double EmploymentType
+        {
+            get => employmentType;
+            private set
+            {
+                if (!_availableEmploymentRateTypes.Contains(value))
+                {
+                    throw new ArgumentException("Employment rate type can accept only the following values: 0.5, 1");
+                }
+
+                employmentType = value;
+            }
+        }
+        private double employmentType;
+        private readonly List<double> _availableEmploymentRateTypes = new() { 0.5, 1 };
 
         public double Salary { get; set; }
 
