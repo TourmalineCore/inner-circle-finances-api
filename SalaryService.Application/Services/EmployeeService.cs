@@ -38,8 +38,12 @@ namespace SalaryService.Application.Services
 
         public async Task<MetricsPreviewDto> GetPreviewMetrics(GetPreviewParameters parameters)
         {
-            var newMetrics = await _financeAnalyticService.CalculateMetrics(parameters.RatePerHour,
-                parameters.Pay, parameters.EmploymentTypeValue, parameters.ParkingCostPerMonth);
+            var newMetrics = await _financeAnalyticService.CalculateMetrics(
+                parameters.RatePerHour,
+                parameters.Pay, 
+                parameters.EmploymentType, 
+                parameters.ParkingCostPerMonth
+            );
 
             return new MetricsPreviewDto(newMetrics.Pay, 
                 newMetrics.RatePerHour, 
@@ -69,7 +73,7 @@ namespace SalaryService.Application.Services
             var metrics = await _financeAnalyticService.CalculateMetrics(
                 parameters.RatePerHour,
                 parameters.Pay,
-                parameters.EmploymentTypeValue,
+                parameters.EmploymentType,
                 parameters.ParkingCostPerMonth);
 
             var employee = await _createEmployeeCommandHandler.HandleAsync(parameters, metrics);
@@ -103,10 +107,12 @@ namespace SalaryService.Application.Services
 
         public async Task UpdateFinances(FinanceUpdatingParameters parameters)
         {
-            var metrics = await _financeAnalyticService.CalculateMetrics(parameters.RatePerHour,
+            var metrics = await _financeAnalyticService.CalculateMetrics(
+                parameters.RatePerHour,
                 parameters.Pay,
-                parameters.EmploymentTypeValue,
-                parameters.ParkingCostPerMonth);
+                parameters.EmploymentType,
+                parameters.ParkingCostPerMonth
+            );
 
             await _updateFinancesCommandHandler.HandleAsync(parameters, metrics);
             var totals = await _financeAnalyticService.CalculateTotalFinances();

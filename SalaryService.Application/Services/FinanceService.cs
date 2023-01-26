@@ -10,6 +10,7 @@ namespace SalaryService.Application.Services
         private readonly GetFinancialMetricsQueryHandler _getFinancialMetricsQueryHandler;
         private readonly GetWorkingPlanQueryHandler _getWorkingPlanQueryHandler;
         private readonly IClock _clock;
+        private readonly List<double> _availableEmploymentTypes = new() { 0.5, 1 };
 
         public FinanceAnalyticService(GetCoefficientsQueryHandler getCoefficientsQueryHandler,
             GetFinancialMetricsQueryHandler getFinancialMetricsQueryHandler,
@@ -47,6 +48,13 @@ namespace SalaryService.Application.Services
             double employmentTypeValue,
             double parkingCostPerMonth)
         {
+            //TODO: #861m9k5f6: make refactoring of using employee finances for payroll in an employee model
+
+            if (!_availableEmploymentTypes.Contains(employmentTypeValue))
+            {
+                throw new ArgumentException("Employment type can accept only the following values: 0.5, 1");
+            }
+
             var calculateMetrics = new EmployeeFinancialMetrics(
                 ratePerHour,
                 pay,
