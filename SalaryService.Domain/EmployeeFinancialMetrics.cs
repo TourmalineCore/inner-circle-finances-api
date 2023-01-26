@@ -203,7 +203,11 @@ namespace SalaryService.Domain
 
         private double CalculateProfitability()
         {
-            return (Earnings - Expenses) / Earnings * 100;
+            const double profitabilityWhenZeroEarnings = -100;
+
+            return Earnings != 0
+                ? Profit / Earnings * 100
+                : profitabilityWhenZeroEarnings;
         }
 
         private double CalculateGrossSalary(double districtCoeff)
