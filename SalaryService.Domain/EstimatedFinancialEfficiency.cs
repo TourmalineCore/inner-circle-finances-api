@@ -19,12 +19,16 @@
 
         public void CalculateEstimatedFinancialEfficiency(IEnumerable<EmployeeFinancialMetrics> metrics, CoefficientOptions coefficients, double totalExpense)
         {
+            const double desiredProfitabilityWhenZeroDesiredEarnings = -100;
+
             DesiredEarnings = metrics.Select(x => x.Earnings).Sum();
             DesiredProfit = metrics.Select(x => x.Profit).Sum() - coefficients.OfficeExpenses;
-            DesiredProfitability = DesiredProfit / DesiredEarnings * 100;
             ReserveForQuarter = totalExpense * 3;
             ReserveForHalfYear = ReserveForQuarter * 2;
             ReserveForYear = ReserveForHalfYear * 2;
+            DesiredProfitability = DesiredEarnings != 0
+                ? DesiredProfit / DesiredEarnings * 100
+                : desiredProfitabilityWhenZeroDesiredEarnings;
         }
 
         public void Update(double desiredEarnings, double desiredProfit, double desiredProfitability, double reserveForQuarter, double reserveForHalfYear, double reserveForYear)
