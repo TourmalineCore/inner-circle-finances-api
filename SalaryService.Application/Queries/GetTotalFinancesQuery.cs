@@ -8,6 +8,7 @@ namespace SalaryService.Application.Queries
     public class GetIndicatorsQuery
     {
     }
+
     public class GetIndicatorsQueryHandler
     {
         private readonly EmployeeDbContext _employeeDbContext;
@@ -18,10 +19,11 @@ namespace SalaryService.Application.Queries
         }
         public async Task<IndicatorsDto> HandleAsync()
         {
-            var totals = await _employeeDbContext.Queryable<TotalFinances>().SingleAsync();
-            var coefficients = await _employeeDbContext.Queryable<CoefficientOptions>().SingleAsync();
-            var desiredFinances = await _employeeDbContext.Queryable<EstimatedFinancialEfficiency>().SingleAsync();
-            var workingPlan = await _employeeDbContext.Queryable<WorkingPlan>().SingleAsync();
+            var totals = await getTotalFinances();
+            var coefficients = await getCoefficientOptions();
+            var desiredFinances = await getEstimatedFinancialEfficiency();
+            var workingPlan = await getWorkingPlan();
+            
             return new IndicatorsDto(
                 new ExpensesDto(
                     Math.Round(totals.PayrollExpense, 2),
@@ -42,8 +44,41 @@ namespace SalaryService.Application.Queries
                     Math.Round(workingPlan.WorkingHoursInMonth, 1)),
                 coefficients.IncomeTaxPercent,
                 coefficients.DistrictCoefficient,
-                coefficients.MinimumWage
-                );
+                coefficients.MinimumWage);
+        }
+
+        private async Task<TotalFinances> getTotalFinances()
+        {
+            var totals = await _employeeDbContext.Queryable<TotalFinances>().SingleOrDefaultAsync();
+
+            if (totals == null)
+            {
+                return new TotalFinances();
+            }
+
+            return totals;
+        }
+
+        private Task<CoefficientOptions> getCoefficientOptions()
+        {
+            return _employeeDbContext.Queryable<CoefficientOptions>().SingleAsync();
+        }
+
+        private async Task<EstimatedFinancialEfficiency> getEstimatedFinancialEfficiency()
+        {
+            var desiredFinances = await _employeeDbContext.Queryable<EstimatedFinancialEfficiency>().SingleOrDefaultAsync();
+            
+            if (desiredFinances == null)
+            {
+                return new EstimatedFinancialEfficiency();
+            }
+
+            return desiredFinances;
+        }
+
+        private Task<WorkingPlan> getWorkingPlan()
+        {
+            return _employeeDbContext.Queryable<WorkingPlan>().SingleAsync();
         }
     }
 }
