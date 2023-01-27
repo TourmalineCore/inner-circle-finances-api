@@ -11,6 +11,9 @@ public class TotalFinances : IIdentityEntity
 
     public double TotalExpense { get; set; }
 
+    public TotalFinances()
+    {
+    }
 
     public TotalFinances(Instant actualFromUtc)
     {
