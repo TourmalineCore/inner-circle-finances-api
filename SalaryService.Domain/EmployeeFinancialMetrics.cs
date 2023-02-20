@@ -19,41 +19,42 @@ namespace SalaryService.Domain
 
         public double HourlyCostHand { get; set; }
 
-        public double Earnings { get; set; }
-        
-        public double DistrictCoefficient { get; set; }
+        public double Earnings { get; set; } //Доход
 
-        public double IncomeTaxContributions { get; set; }
+        public double DistrictCoefficient { get; set; } //Рай.коэф.
 
-        public double PensionContributions { get; set; }
+        public double IncomeTaxContributions { get; set; } //НДФЛ
 
-        public double MedicalContributions { get; set; }
+        public double PensionContributions { get; set; } //ОПС
 
-        public double SocialInsuranceContributions { get; set; }
+        public double MedicalContributions { get; set; } //ОМС
 
-        public double InjuriesContributions { get; set; }
+        public double SocialInsuranceContributions { get; set; } //ОСС
 
-        public double Expenses { get; set; }
+        public double InjuriesContributions { get; set; } //Взносы на травматизм
 
-        public double Profit { get; set; }
+        public double Expenses { get; set; } //Расход
 
-        public double ProfitAbility { get; set; }
+        public double Profit { get; set; } //Прибыль
 
-        public double GrossSalary { get; set; }
+        public double ProfitAbility { get; set; } //Рентабельность
 
-        public double NetSalary { get; set; }
+        public double GrossSalary { get; set; } //Зарплата до вычета НДФЛ
 
-        public double RatePerHour { get; set; }
+        public double NetSalary { get; set; } //Зарплата
+
+        public double RatePerHour { get; set; } 
 
         public double Pay { get; set; }
 
-        public double Prepayment { get; set; }
+        public double Prepayment { get; set; } //Аванас 
 
         public double EmploymentType { get; set; }
 
         public double ParkingCostPerMonth { get; set; }
 
         public double AccountingPerMonth { get; set; }
+        public EmployeeFinancialMetrics() { }
 
         public EmployeeFinancialMetrics(double ratePerHour, double pay, double employmentType, double parkingCostPerMonth)
         {
@@ -136,93 +137,96 @@ namespace SalaryService.Domain
 
         private double CalculateDistrictCoefficient(double districtCoeff)
         {
-            return Salary * districtCoeff;
+            return Math.Round(Salary * districtCoeff, 2);
         }
 
         private double CalculateHourlyCostFact(double workingHoursInMonth)
         {
-            return Expenses / workingHoursInMonth;
+            return Math.Round(Expenses / workingHoursInMonth, 2);
         }
 
         private double CalculatePrepayment()
         {
-            return NetSalary / 2;
+            return Math.Round(NetSalary / 2, 2);
         }
 
         private double CalculateHourlyCostHand()
         {
-            return Salary / 160;
+            return Math.Round(Salary / 160, 2);
         }
 
         private double CalculateEarnings(double workingHoursInMonth)
         {
-            return RatePerHour * workingHoursInMonth * EmploymentType;
+            return Math.Round(RatePerHour * workingHoursInMonth * EmploymentType, 2);
         }
 
         private double CalculateExpenses()
         {
-            return IncomeTaxContributions +
-                   NetSalary +
-                   PensionContributions +
-                   MedicalContributions +
-                   SocialInsuranceContributions +
-                   InjuriesContributions +
-                   AccountingPerMonth +
-                   ParkingCostPerMonth;
+            return Math.Round(
+                IncomeTaxContributions +
+                NetSalary +
+                PensionContributions +
+                MedicalContributions +
+                SocialInsuranceContributions +
+                InjuriesContributions +
+                AccountingPerMonth +
+                ParkingCostPerMonth,
+                2
+            );
         }
 
         private double GetNdflValue()
         {
-            return GrossSalary * 0.13;
+            return Math.Round(GrossSalary * 0.13, 2);
         }
 
         private double GetPensionContributions(double mrot)
         {
-            return mrot * 0.22 + (GrossSalary - mrot) * 0.1;
+            return Math.Round(mrot * 0.22 + (GrossSalary - mrot) * 0.1, 2);
         }
 
         private double GetMedicalContributions(double mrot)
         {
-            return mrot * 0.051 + (GrossSalary - mrot) * 0.05;
+            return Math.Round(mrot * 0.051 + (GrossSalary - mrot) * 0.05, 2);
         }
 
         private double GetSocialInsuranceContributions(double mrot)
         {
-            return mrot * 0.029;
+            return Math.Round(mrot * 0.029, 2);
         }
 
         private double GetInjuriesContributions()
         {
-            return GrossSalary * 0.002;
+            return Math.Round(GrossSalary * 0.002, 2);
         }
 
         private double CalculateProfit()
         {
-            return Earnings - Expenses;
+            return Math.Round(Earnings - Expenses, 2);
         }
 
         private double CalculateProfitability()
         {
             const double profitabilityWhenZeroEarnings = -100;
 
-            return Earnings != 0
+            return Math.Round(Earnings != 0
                 ? Profit / Earnings * 100
-                : profitabilityWhenZeroEarnings;
+                : profitabilityWhenZeroEarnings, 2);
         }
 
         private double CalculateGrossSalary(double districtCoeff)
         {
-            return Salary + Salary * districtCoeff;
+            return Math.Round(Salary + Salary * districtCoeff, 2);
         }
 
         private double CalculateNetSalary(double tax)
         {
-            return GrossSalary - GrossSalary * tax;
+            return Math.Round(GrossSalary - GrossSalary * tax, 2);
         }
 
         private double CalculateSalary()
         {
-            return Pay * EmploymentType;
+            return Math.Round(Pay * EmploymentType, 2);
         }
     }
 }
