@@ -137,96 +137,93 @@ namespace SalaryService.Domain
 
         private double CalculateDistrictCoefficient(double districtCoeff)
         {
-            return Math.Round(Salary * districtCoeff, 2);
+            return Salary * districtCoeff;
         }
 
         private double CalculateHourlyCostFact(double workingHoursInMonth)
         {
-            return Math.Round(Expenses / workingHoursInMonth, 2);
+            return Expenses / workingHoursInMonth;
         }
 
         private double CalculatePrepayment()
         {
-            return Math.Round(NetSalary / 2, 2);
+            return NetSalary / 2;
         }
 
         private double CalculateHourlyCostHand()
         {
-            return Math.Round(Salary / 160, 2);
+            return Salary / 160;
         }
 
         private double CalculateEarnings(double workingHoursInMonth)
         {
-            return Math.Round(RatePerHour * workingHoursInMonth * EmploymentType, 2);
+            return RatePerHour * workingHoursInMonth * EmploymentType;
         }
 
         private double CalculateExpenses()
         {
-            return Math.Round(
-                IncomeTaxContributions +
+            return IncomeTaxContributions +
                 NetSalary +
                 PensionContributions +
                 MedicalContributions +
                 SocialInsuranceContributions +
                 InjuriesContributions +
                 AccountingPerMonth +
-                ParkingCostPerMonth,
-                2
-            );
+                ParkingCostPerMonth;
         }
 
         private double GetNdflValue()
         {
-            return Math.Round(GrossSalary * 0.13, 2);
+            return GrossSalary * 0.13;
         }
 
         private double GetPensionContributions(double mrot)
         {
-            return Math.Round(mrot * 0.22 + (GrossSalary - mrot) * 0.1, 2);
+            return mrot * 0.22 + (GrossSalary - mrot) * 0.1;
         }
 
         private double GetMedicalContributions(double mrot)
         {
-            return Math.Round(mrot * 0.051 + (GrossSalary - mrot) * 0.05, 2);
+            return mrot * 0.051 + (GrossSalary - mrot) * 0.05;
         }
 
         private double GetSocialInsuranceContributions(double mrot)
         {
-            return Math.Round(mrot * 0.029, 2);
+            return mrot * 0.029;
         }
 
         private double GetInjuriesContributions()
         {
-            return Math.Round(GrossSalary * 0.002, 2);
+            return GrossSalary * 0.002;
         }
 
         private double CalculateProfit()
         {
-            return Math.Round(Earnings - Expenses, 2);
+            return Earnings - Expenses;
         }
 
         private double CalculateProfitability()
         {
             const double profitabilityWhenZeroEarnings = -100;
 
-            return Math.Round(Earnings != 0
+            return Earnings != 0
                 ? Profit / Earnings * 100
-                : profitabilityWhenZeroEarnings, 2);
+                : profitabilityWhenZeroEarnings;
         }
 
         private double CalculateGrossSalary(double districtCoeff)
         {
-            return Math.Round(Salary + Salary * districtCoeff, 2);
+            return Salary + Salary * districtCoeff;
         }
 
         private double CalculateNetSalary(double tax)
         {
-            return Math.Round(GrossSalary - GrossSalary * tax, 2);
+            return GrossSalary - GrossSalary * tax;
         }
 
         private double CalculateSalary()
         {
-            return Math.Round(Pay * EmploymentType, 2);
+            return Pay * EmploymentType;
         }
     }
 }
