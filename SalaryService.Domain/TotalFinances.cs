@@ -7,9 +7,9 @@ public class TotalFinances : IIdentityEntity
 
     public Instant ActualFromUtc { get; set; }
 
-    public double PayrollExpense { get; set; }
+    public decimal PayrollExpense { get; set; }
 
-    public double TotalExpense { get; set; }
+    public decimal TotalExpense { get; set; }
 
     public TotalFinances()
     {
@@ -26,7 +26,7 @@ public class TotalFinances : IIdentityEntity
         TotalExpense = PayrollExpense + coefficients.OfficeExpenses;
     }
 
-    public void Update(Instant actualFromUtc, double payrollExpense, double totalExpense)
+    public void Update(Instant actualFromUtc, decimal payrollExpense, decimal totalExpense)
     {
         ActualFromUtc = actualFromUtc;
         PayrollExpense = payrollExpense;

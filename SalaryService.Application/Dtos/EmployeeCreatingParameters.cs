@@ -20,12 +20,12 @@ namespace SalaryService.Application.Dtos
 
         public string GitLab { get; set; }
 
-        public double RatePerHour { get; set; }
+        public decimal RatePerHour { get; set; }
 
-        public double Pay { get; set; }
+        public decimal Pay { get; set; }
 
-        public double EmploymentType { get; set; }
+        public decimal EmploymentType { get; set; }
 
-        public double ParkingCostPerMonth { get; set; }
+        public decimal ParkingCostPerMonth { get; set; }
     }
 }

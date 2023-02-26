@@ -36,17 +36,17 @@ namespace SalaryService.Application.Dtos
 
         public string FullName { get; private set; }
 
-        public double RatePerHour { get; private set; }
+        public decimal RatePerHour { get; private set; }
 
-        public double Pay { get; private set; }
+        public decimal Pay { get; private set; }
 
-        public double EmploymentType { get; private set; }
+        public decimal EmploymentType { get; private set; }
 
-        public double NetSalary { get; private set; }
+        public decimal NetSalary { get; private set; }
 
-        public double Parking { get; private set; }
+        public decimal Parking { get; private set; }
 
-        public ColleagueFinancesDto(long id, string fullName, double ratePerHour, double pay, double employmentType, double netSalary, double parking)
+        public ColleagueFinancesDto(long id, string fullName, decimal ratePerHour, decimal pay, decimal employmentType, decimal netSalary, decimal parking)
         {
             Id = id;
             FullName = fullName;

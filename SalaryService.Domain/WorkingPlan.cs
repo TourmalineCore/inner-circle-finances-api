@@ -4,22 +4,22 @@
     {
         public long Id { get; set; }
 
-        public double WorkingDaysInYear { get; private set; }
+        public decimal WorkingDaysInYear { get; private set; }
 
-        public double WorkingDaysInYearWithoutVacation { get; private set; }
+        public decimal WorkingDaysInYearWithoutVacation { get; private set; }
 
-        public double WorkingDaysInYearWithoutVacationAndSick { get; private set; }
+        public decimal WorkingDaysInYearWithoutVacationAndSick { get; private set; }
 
-        public double WorkingDaysInMonth { get; private set; }
+        public decimal WorkingDaysInMonth { get; private set; }
 
-        public double WorkingHoursInMonth { get; private set; }
+        public decimal WorkingHoursInMonth { get; private set; }
 
         public WorkingPlan(long id,
-            double workingDaysInYear, 
-            double workingDaysInYearWithoutVacation, 
-            double workingDaysInYearWithoutVacationAndSick, 
-            double workingDaysInMonth, 
-            double workingHoursInMonth)
+            decimal workingDaysInYear,
+            decimal workingDaysInYearWithoutVacation,
+            decimal workingDaysInYearWithoutVacationAndSick,
+            decimal workingDaysInMonth,
+            decimal workingHoursInMonth)
         {
             Id = id;
             WorkingDaysInYear = workingDaysInYear;

@@ -2,70 +2,70 @@
 {
     public class MetricsPreviewDto
     {
-        public double Pay { get; set; }
+        public decimal Pay { get; set; }
 
-        public double RatePerHour { get; set; }
+        public decimal RatePerHour { get; set; }
 
-        public double EmploymentType { get; set; }
+        public decimal EmploymentType { get; set; }
 
-        public double Salary { get; set; }
+        public decimal Salary { get; set; }
 
-        public double ParkingCostPerMonth { get; set; }
+        public decimal ParkingCostPerMonth { get; set; }
 
-        public double AccountingPerMonth { get; set; }
+        public decimal AccountingPerMonth { get; set; }
 
-        public double HourlyCostFact { get; set; }
+        public decimal HourlyCostFact { get; set; }
 
-        public double HourlyCostHand { get; set; }
+        public decimal HourlyCostHand { get; set; }
 
-        public double Earnings { get; set; }
+        public decimal Earnings { get; set; }
 
-        public double IncomeTaxContributions { get; set; }
+        public decimal IncomeTaxContributions { get; set; }
 
-        public double DistrictCoefficient { get; set; }
+        public decimal DistrictCoefficient { get; set; }
 
-        public double PensionContributions { get; set; }
+        public decimal PensionContributions { get; set; }
 
-        public double MedicalContributions { get; set; }
+        public decimal MedicalContributions { get; set; }
 
-        public double SocialInsuranceContributions { get; set; }
+        public decimal SocialInsuranceContributions { get; set; }
 
-        public double InjuriesContributions { get; set; }
+        public decimal InjuriesContributions { get; set; }
 
-        public double Expenses { get; set; }
+        public decimal Expenses { get; set; }
 
-        public double Profit { get; set; }
+        public decimal Profit { get; set; }
 
-        public double ProfitAbility { get; set; }
+        public decimal ProfitAbility { get; set; }
 
-        public double GrossSalary { get; set; }
+        public decimal GrossSalary { get; set; }
 
-        public double Prepayment { get; set; }
+        public decimal Prepayment { get; set; }
 
-        public double NetSalary { get; set; }
+        public decimal NetSalary { get; set; }
 
         public MetricsPreviewDto(
-            double pay, 
-            double ratePerHour, 
-            double employmentType, 
-            double salary,
-            double parkingCostPerMonth,
-            double accountingPerMonth,
-            double hourlyCostFact, 
-            double hourlyCostHand, 
-            double earnings, 
-            double incomeTaxContributions, 
-            double districtCoefficient, 
-            double pensionContributions, 
-            double medicalContributions, 
-            double socialInsuranceContributions, 
-            double injuriesContributions, 
-            double expenses, 
-            double profit, 
-            double profitAbility,
-            double grossSalary,
-            double prepayment,
-            double netSalary)
+            decimal pay,
+            decimal ratePerHour,
+            decimal employmentType,
+            decimal salary,
+            decimal parkingCostPerMonth,
+            decimal accountingPerMonth,
+            decimal hourlyCostFact,
+            decimal hourlyCostHand,
+            decimal earnings,
+            decimal incomeTaxContributions,
+            decimal districtCoefficient,
+            decimal pensionContributions,
+            decimal medicalContributions,
+            decimal socialInsuranceContributions,
+            decimal injuriesContributions,
+            decimal expenses,
+            decimal profit,
+            decimal profitAbility,
+            decimal grossSalary,
+            decimal prepayment,
+            decimal netSalary)
         {
             Pay = Math.Round(pay, 2);
             RatePerHour = Math.Round(ratePerHour, 2);

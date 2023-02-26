@@ -6,73 +6,73 @@
 
         public string FullName { get; private set; }
 
-        public double Pay { get; private set; }
+        public decimal Pay { get; private set; }
 
-        public double RatePerHour { get; private set; }
+        public decimal RatePerHour { get; private set; }
 
-        public double EmploymentType { get; private set; }
+        public decimal EmploymentType { get; private set; }
 
-        public double Salary { get; private set; }
+        public decimal Salary { get; private set; }
 
-        public double ParkingCostPerMonth { get; private set; }
+        public decimal ParkingCostPerMonth { get; private set; }
 
-        public double AccountingPerMonth { get; private set; }
+        public decimal AccountingPerMonth { get; private set; }
 
-        public double HourlyCostFact { get; private set; }
+        public decimal HourlyCostFact { get; private set; }
 
-        public double HourlyCostHand { get; private set; }
+        public decimal HourlyCostHand { get; private set; }
 
-        public double Earnings { get; private set; }
+        public decimal Earnings { get; private set; }
 
-        public double IncomeTaxContributions { get; private set; }
+        public decimal IncomeTaxContributions { get; private set; }
 
-        public double DistrictCoefficient { get; private set; }
+        public decimal DistrictCoefficient { get; private set; }
 
-        public double PensionContributions { get; set; }
+        public decimal PensionContributions { get; set; }
 
-        public double MedicalContributions { get; set; }
+        public decimal MedicalContributions { get; set; }
 
-        public double SocialInsuranceContributions { get; set; }
+        public decimal SocialInsuranceContributions { get; set; }
 
-        public double InjuriesContributions { get; set; }
+        public decimal InjuriesContributions { get; set; }
 
-        public double Expenses { get; private set; }
+        public decimal Expenses { get; private set; }
 
-        public double Profit { get; private set; }
+        public decimal Profit { get; private set; }
 
-        public double ProfitAbility { get; private set; }
+        public decimal ProfitAbility { get; private set; }
 
-        public double GrossSalary { get; private set; }
+        public decimal GrossSalary { get; private set; }
 
-        public double Prepayment { get; private set; }
+        public decimal Prepayment { get; private set; }
 
-        public double NetSalary { get; private set; }
+        public decimal NetSalary { get; private set; }
 
         public AnalyticDto(long id,
             string name,
             string surname,
             string middleName,
-            double pay,
-            double ratePerHour,
-            double employmentType,
-            double salary,
-            double parkingCostPerMonth,
-            double accountingPerMonth,
-            double hourlyCostFact,
-            double hourlyCostHand,
-            double earnings,
-            double incomeTaxContributions,
-            double districtCoefficient,
-            double pensionContributions,
-            double medicalContributions,
-            double socialInsuranceContributions,
-            double injuriesContributions,
-            double expenses,
-            double profit,
-            double profitAbility,
-            double grossSalary,
-            double prepayment,
-            double netSalary)
+            decimal pay,
+            decimal ratePerHour,
+            decimal employmentType,
+            decimal salary,
+            decimal parkingCostPerMonth,
+            decimal accountingPerMonth,
+            decimal hourlyCostFact,
+            decimal hourlyCostHand,
+            decimal earnings,
+            decimal incomeTaxContributions,
+            decimal districtCoefficient,
+            decimal pensionContributions,
+            decimal medicalContributions,
+            decimal socialInsuranceContributions,
+            decimal injuriesContributions,
+            decimal expenses,
+            decimal profit,
+            decimal profitAbility,
+            decimal grossSalary,
+            decimal prepayment,
+            decimal netSalary)
         {
             Id = id;
             FullName = name + " " + surname + " " + middleName;

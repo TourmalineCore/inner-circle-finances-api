@@ -12,44 +12,44 @@ namespace SalaryService.Domain
         
         public Period Period { get; set; }
 
-        public double Salary { get; set; }
+        public decimal Salary { get; set; }
 
-        public double HourlyCostFact { get; set; }
+        public decimal HourlyCostFact { get; set; }
 
-        public double HourlyCostHand { get; set; }
+        public decimal HourlyCostHand { get; set; }
 
-        public double Earnings { get; set; }
+        public decimal Earnings { get; set; }
 
-        public double IncomeTaxContributions { get; set; }
+        public decimal IncomeTaxContributions { get; set; }
 
-        public double PensionContributions { get; set; }
+        public decimal PensionContributions { get; set; }
 
-        public double MedicalContributions { get; set; }
+        public decimal MedicalContributions { get; set; }
 
-        public double SocialInsuranceContributions { get; set; }
+        public decimal SocialInsuranceContributions { get; set; }
 
-        public double InjuriesContributions { get; set; }
+        public decimal InjuriesContributions { get; set; }
 
-        public double Expenses { get; set; }
+        public decimal Expenses { get; set; }
 
-        public double Profit { get; set; }
+        public decimal Profit { get; set; }
 
-        public double ProfitAbility { get; set; }
+        public decimal ProfitAbility { get; set; }
 
-        public double GrossSalary { get; set; }
+        public decimal GrossSalary { get; set; }
 
-        public double NetSalary { get; set; }
+        public decimal NetSalary { get; set; }
 
-        public double RatePerHour { get; set; }
+        public decimal RatePerHour { get; set; }
 
-        public double Pay { get; set; }
+        public decimal Pay { get; set; }
 
-        public double Prepayment { get; set; }
+        public decimal Prepayment { get; set; }
 
-        public double EmploymentType { get; set; }
+        public decimal EmploymentType { get; set; }
 
-        public double ParkingCostPerMonth { get; set; }
+        public decimal ParkingCostPerMonth { get; set; }
 
-        public double AccountingPerMonth { get; set; }
+        public decimal AccountingPerMonth { get; set; }
     }
 }

@@ -12,8 +12,8 @@ namespace SalaryService.DataAccess.Mapping
                 247, 
                 223, 
                 203, 
-                16.91666667, 
-                135.3333333)
+                16.91666667m, 
+                135.3333333m)
             );
         }
     }

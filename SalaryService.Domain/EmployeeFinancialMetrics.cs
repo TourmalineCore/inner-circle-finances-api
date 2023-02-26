@@ -13,50 +13,50 @@ namespace SalaryService.Domain
 
         public Instant ActualFromUtc { get; set; }
 
-        public double Salary { get; set; }
+        public decimal Salary { get; set; }
         
-        public double HourlyCostFact { get; set; }
+        public decimal HourlyCostFact { get; set; }
 
-        public double HourlyCostHand { get; set; }
+        public decimal HourlyCostHand { get; set; }
 
-        public double Earnings { get; set; } //Доход
+        public decimal Earnings { get; set; } //Доход
 
-        public double DistrictCoefficient { get; set; } //Рай.коэф.
+        public decimal DistrictCoefficient { get; set; } //Рай.коэф.
 
-        public double IncomeTaxContributions { get; set; } //НДФЛ
+        public decimal IncomeTaxContributions { get; set; } //НДФЛ
 
-        public double PensionContributions { get; set; } //ОПС
+        public decimal PensionContributions { get; set; } //ОПС
 
-        public double MedicalContributions { get; set; } //ОМС
+        public decimal MedicalContributions { get; set; } //ОМС
 
-        public double SocialInsuranceContributions { get; set; } //ОСС
+        public decimal SocialInsuranceContributions { get; set; } //ОСС
 
-        public double InjuriesContributions { get; set; } //Взносы на травматизм
+        public decimal InjuriesContributions { get; set; } //Взносы на травматизм
 
-        public double Expenses { get; set; } //Расход
+        public decimal Expenses { get; set; } //Расход
 
-        public double Profit { get; set; } //Прибыль
+        public decimal Profit { get; set; } //Прибыль
 
-        public double ProfitAbility { get; set; } //Рентабельность
+        public decimal ProfitAbility { get; set; } //Рентабельность
 
-        public double GrossSalary { get; set; } //Зарплата до вычета НДФЛ
+        public decimal GrossSalary { get; set; } //Зарплата до вычета НДФЛ
 
-        public double NetSalary { get; set; } //Зарплата
+        public decimal NetSalary { get; set; } //Зарплата
 
-        public double RatePerHour { get; set; } 
+        public decimal RatePerHour { get; set; } 
 
-        public double Pay { get; set; }
+        public decimal Pay { get; set; }
 
-        public double Prepayment { get; set; } //Аванас 
+        public decimal Prepayment { get; set; } //Аванас 
 
-        public double EmploymentType { get; set; }
+        public decimal EmploymentType { get; set; }
 
-        public double ParkingCostPerMonth { get; set; }
+        public decimal ParkingCostPerMonth { get; set; }
 
-        public double AccountingPerMonth { get; set; }
+        public decimal AccountingPerMonth { get; set; }
         public EmployeeFinancialMetrics() { }
 
-        public EmployeeFinancialMetrics(double ratePerHour, double pay, double employmentType, double parkingCostPerMonth)
+        public EmployeeFinancialMetrics(decimal ratePerHour, decimal pay, decimal employmentType, decimal parkingCostPerMonth)
         {
             RatePerHour = ratePerHour;
             Pay = pay;
@@ -65,10 +65,10 @@ namespace SalaryService.Domain
             AccountingPerMonth = ThirdPartyServicesPriceConsts.AccountingPerMonth;
         }
 
-        public void CalculateMetrics(double districtCoeff,
-            double mrot,
-            double tax,
-            double workingHoursInMonth,
+        public void CalculateMetrics(decimal districtCoeff,
+            decimal mrot,
+            decimal tax,
+            decimal workingHoursInMonth,
             Instant actualFromUtc)
         {
             ActualFromUtc = actualFromUtc;
@@ -90,26 +90,26 @@ namespace SalaryService.Domain
             ProfitAbility = CalculateProfitability();
         }
 
-        public void Update(double salary,
-            double grossSalary,
-            double netSalary,
-            double districtCoefficient,
-            double earnings,
-            double incomeTaxContributions,
-            double pensionContributions,
-            double medicalContributions,
-            double socialInsuranceContributions,
-            double injuriesContributions,
-            double expenses,
-            double hourlyCostFact,
-            double hourlyCostHand,
-            double prepayment,
-            double profit,
-            double profitability,
-            double ratePerHour,
-            double pay,
-            double employmentType,
-            double parkingCostPerMonth,
+        public void Update(decimal salary,
+            decimal grossSalary,
+            decimal netSalary,
+            decimal districtCoefficient,
+            decimal earnings,
+            decimal incomeTaxContributions,
+            decimal pensionContributions,
+            decimal medicalContributions,
+            decimal socialInsuranceContributions,
+            decimal injuriesContributions,
+            decimal expenses,
+            decimal hourlyCostFact,
+            decimal hourlyCostHand,
+            decimal prepayment,
+            decimal profit,
+            decimal profitability,
+            decimal ratePerHour,
+            decimal pay,
+            decimal employmentType,
+            decimal parkingCostPerMonth,
             Instant actualFromUtc)
         {
             RatePerHour = ratePerHour;
@@ -135,32 +135,32 @@ namespace SalaryService.Domain
             ActualFromUtc = actualFromUtc;
         }
 
-        private double CalculateDistrictCoefficient(double districtCoeff)
+        private decimal CalculateDistrictCoefficient(decimal districtCoeff)
         {
             return Salary * districtCoeff;
         }
 
-        private double CalculateHourlyCostFact(double workingHoursInMonth)
+        private decimal CalculateHourlyCostFact(decimal workingHoursInMonth)
         {
             return Expenses / workingHoursInMonth;
         }
 
-        private double CalculatePrepayment()
+        private decimal CalculatePrepayment()
         {
             return NetSalary / 2;
         }
 
-        private double CalculateHourlyCostHand()
+        private decimal CalculateHourlyCostHand()
         {
             return Salary / 160;
         }
 
-        private double CalculateEarnings(double workingHoursInMonth)
+        private decimal CalculateEarnings(decimal workingHoursInMonth)
         {
             return RatePerHour * workingHoursInMonth * EmploymentType;
         }
 
-        private double CalculateExpenses()
+        private decimal CalculateExpenses()
         {
             return IncomeTaxContributions +
                 NetSalary +
@@ -172,56 +172,56 @@ namespace SalaryService.Domain
                 ParkingCostPerMonth;
         }
 
-        private double GetNdflValue()
+        private decimal GetNdflValue()
         {
-            return GrossSalary * 0.13;
+            return GrossSalary * (decimal)0.13;
         }
 
-        private double GetPensionContributions(double mrot)
+        private decimal GetPensionContributions(decimal mrot)
         {
-            return mrot * 0.22 + (GrossSalary - mrot) * 0.1;
+            return mrot * (decimal)0.22 + (GrossSalary - mrot) * (decimal)0.1;
         }
 
-        private double GetMedicalContributions(double mrot)
+        private decimal GetMedicalContributions(decimal mrot)
         {
-            return mrot * 0.051 + (GrossSalary - mrot) * 0.05;
+            return mrot * (decimal)0.051 + (GrossSalary - mrot) * (decimal)0.05;
         }
 
-        private double GetSocialInsuranceContributions(double mrot)
+        private decimal GetSocialInsuranceContributions(decimal mrot)
         {
-            return mrot * 0.029;
+            return mrot * (decimal)0.029;
         }
 
-        private double GetInjuriesContributions()
+        private decimal GetInjuriesContributions()
         {
-            return GrossSalary * 0.002;
+            return GrossSalary * (decimal)0.002;
         }
 
-        private double CalculateProfit()
+        private decimal CalculateProfit()
         {
             return Earnings - Expenses;
         }
 
-        private double CalculateProfitability()
+        private decimal CalculateProfitability()
         {
-            const double profitabilityWhenZeroEarnings = -100;
+            const decimal profitabilityWhenZeroEarnings = -100;
 
             return Earnings != 0
                 ? Profit / Earnings * 100
                 : profitabilityWhenZeroEarnings;
         }
 
-        private double CalculateGrossSalary(double districtCoeff)
+        private decimal CalculateGrossSalary(decimal districtCoeff)
         {
             return Salary + Salary * districtCoeff;
         }
 
-        private double CalculateNetSalary(double tax)
+        private decimal CalculateNetSalary(decimal tax)
         {
             return GrossSalary - GrossSalary * tax;
         }
 
-        private double CalculateSalary()
+        private decimal CalculateSalary()
         {
             return Pay * EmploymentType;
         }
