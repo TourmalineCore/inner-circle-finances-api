@@ -22,13 +22,13 @@ namespace SalaryService.Application.Queries
         {
             var employees = await _employeeDbContext
                 .QueryableAsNoTracking<Employee>()
-                .Where(x => x.DeletedAtUtc == null && x.AccountId != 1)
+                .Where(x => x.DeletedAtUtc == null)
                 .Include(x => x.EmployeeFinanceForPayroll)
                 .Include(x => x.EmployeeFinancialMetrics)
                 .ToListAsync();
 
             var employeesContacts = employees.Select(x => new ColleagueContactsDto(x.Id,
-                x.Name + " " + x.Surname + " " + x.MiddleName,
+                x.FirstName + " " + x.LastName + " " + x.MiddleName,
                 x.CorporateEmail,
                 x.PersonalEmail,
                 x.Phone,
@@ -36,9 +36,9 @@ namespace SalaryService.Application.Queries
                 x.GitLab));
 
             var employeesFinances = employees.Select(x => new ColleagueFinancesDto(x.Id,
-                x.Name + " " + x.Surname + " " + x.MiddleName,
+                x.FirstName + " " + x.LastName + " " + x.MiddleName,
                 x.EmployeeFinanceForPayroll.RatePerHour,
-                x.EmployeeFinanceForPayroll.Pay,
+                x.EmployeeFinanceForPayroll.Pay.Value,
                 x.EmployeeFinanceForPayroll.EmploymentType,
                 x.EmployeeFinancialMetrics.NetSalary,
                 x.EmployeeFinancialMetrics.ParkingCostPerMonth));

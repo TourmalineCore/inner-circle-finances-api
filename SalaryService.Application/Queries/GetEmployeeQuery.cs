@@ -18,17 +18,17 @@ namespace SalaryService.Application.Queries
             _employeeDbContext = employeeDbContext;
         }
 
-        public async Task<EmployeeProfileDto> HandleAsync(long accountId)
+        public async Task<EmployeeProfileDto> HandleAsync(string corporateEmail)
         {
             var employee = await _employeeDbContext
                 .Queryable<Employee>()
                 .Include(x => x.EmployeeFinanceForPayroll)
                 .Include(x => x.EmployeeFinancialMetrics)
-                .SingleAsync(x => x.AccountId == accountId && x.DeletedAtUtc == null);
+                .SingleAsync(x => x.CorporateEmail == corporateEmail);
 
             return new EmployeeProfileDto(employee.Id,
-                employee.Name,
-                employee.Surname,
+                employee.FirstName,
+                employee.LastName,
                 employee.MiddleName,
                 employee.CorporateEmail,
                 employee.PersonalEmail,

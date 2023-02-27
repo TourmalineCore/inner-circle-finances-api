@@ -1,13 +1,15 @@
 ﻿namespace SalaryService.Application.Dtos
 {
-    public class ProfileUpdatingParameters
+    public readonly struct ProfileUpdatingParameters
     {
-        public string PersonalEmail { get; set; }
+        public long EmployeeId { get; init; }
 
-        public string Phone { get; set; }
+        public string PersonalEmail { get; init; }
 
-        public string GitHub { get; set; }
+        public string Phone { get; init; }
 
-        public string GitLab { get; set; }
+        public string GitHub { get; init; }
+
+        public string GitLab { get; init; }
     }
 }

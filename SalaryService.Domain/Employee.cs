@@ -6,17 +6,15 @@ namespace SalaryService.Domain
     {
         public long Id { get; set; }
 
-        public long AccountId { get; set; }
+        public string FirstName { get; private set; }
 
-        public string Name { get; private set; }
-
-        public string Surname { get; private set; }
+        public string LastName { get; private set; }
 
         public string MiddleName { get; private set; }
 
         public string CorporateEmail { get; private set; }
 
-        public string PersonalEmail { get; private set; }
+        public string? PersonalEmail { get; private set; }
 
         public string? Phone { get; private set; }
 
@@ -24,34 +22,28 @@ namespace SalaryService.Domain
 
         public string? GitLab { get; private set; }
 
-        public EmployeeFinanceForPayroll EmployeeFinanceForPayroll { get; set; }
+        public EmployeeFinanceForPayroll? EmployeeFinanceForPayroll { get; set; }
 
-        public EmployeeFinancialMetrics EmployeeFinancialMetrics { get; set; }
+        public EmployeeFinancialMetrics? EmployeeFinancialMetrics { get; set; }
 
-        public Instant HireDate { get; private set; }
+        public Instant? HireDate { get; private set; }
 
-        public Instant? DeletedAtUtc { get; private set; } = null;
+        public bool IsBlankEmployee { get; private set; }
 
-        public Employee(string name, 
-            string surname, 
-            string middleName, 
-            string corporateEmail, 
-            string personalEmail,
-            string phone,
-            string gitHub, 
-            string gitLab,
-            Instant hireDate)
+        public bool IsCurrentEmployee { get; private set; }
+
+        public Instant? DeletedAtUtc { get; private set; }
+
+        public Employee(string firstName, string lastName, string middleName, string corporateEmail)
         {
-            Name = name;
-            Surname = surname;
+            FirstName = firstName;
+            LastName = lastName;
             MiddleName = middleName;
             CorporateEmail = corporateEmail;
-            PersonalEmail = personalEmail;
-            Phone = phone;
-            GitHub = gitHub;
-            GitLab = gitLab;
-            HireDate = hireDate;
-            
+            EmployeeFinanceForPayroll = null;
+            EmployeeFinancialMetrics = null;
+            IsBlankEmployee = true;
+            IsCurrentEmployee = true;
         }
 
         public void Delete(Instant deletedAtUtc)
@@ -68,8 +60,8 @@ namespace SalaryService.Domain
             string gitHub,
             string gitLab)
         {
-            Name = name;
-            Surname = surname;
+            FirstName = name;
+            LastName = surname;
             MiddleName = middleName;
             CorporateEmail = corporateEmail;
             PersonalEmail = personalEmail;

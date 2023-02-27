@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SalaryService.Application.Dtos;
 using SalaryService.Application.Queries;
@@ -34,14 +33,14 @@ namespace SalaryService.Api.Controllers
         [HttpGet("get-profile")]
         public Task<EmployeeProfileDto> GetProfile()
         {
-            return _getEmployeeQueryHandler.HandleAsync(User.GetAccountId());
+            return _getEmployeeQueryHandler.HandleAsync(User.GetCorporateEmail());
         }
 
         [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
         [HttpPut("update-profile")]
         public Task UpdateProfile([FromBody] ProfileUpdatingParameters profileUpdatingParameters)
         {
-            return _employeeService.UpdateProfile(profileUpdatingParameters, User.GetAccountId());
+            return _employeeService.UpdateProfileAsync(profileUpdatingParameters);
         }
         
         [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
@@ -64,14 +63,7 @@ namespace SalaryService.Api.Controllers
         {
             return _getColleaguesQueryHandler.HandleAsync();
         }
-        
-        [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
-        [HttpPost("create")]
-        public Task CreateEmployee([FromBody] EmployeeCreatingParameters employeeCreatingParameters)
-        {
-            return _employeeService.CreateEmployee(employeeCreatingParameters);
-        }
-        
+
         [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
         [HttpPut("update-employee-contacts")]
         public Task UpdateEmployeeContacts([FromBody] EmployeeUpdatingParameters employeeUpdatingParameters)

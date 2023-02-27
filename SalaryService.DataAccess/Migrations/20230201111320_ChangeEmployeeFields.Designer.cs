@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,10 @@ using SalaryService.DataAccess;
 namespace SalaryService.DataAccess.Migrations
 {
     [DbContext(typeof(EmployeeDbContext))]
-    partial class EmployeeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230201111320_ChangeEmployeeFields")]
+    partial class ChangeEmployeeFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,6 +68,9 @@ namespace SalaryService.DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<long>("AccountId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("CorporateEmail")
                         .IsRequired()
                         .HasColumnType("text");
@@ -86,22 +91,11 @@ namespace SalaryService.DataAccess.Migrations
                     b.Property<Instant?>("HireDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<bool>("IsBlankEmployee")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(true);
-
-                    b.Property<bool>("IsCurrentEmployee")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(true);
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("MiddleName")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("PersonalEmail")
@@ -130,13 +124,12 @@ namespace SalaryService.DataAccess.Migrations
                         new
                         {
                             Id = 50L,
+                            AccountId = 1L,
                             CorporateEmail = "ceo@tourmalinecore.com",
                             FirstName = "Ceo",
                             GitHub = "@ceo.github",
                             GitLab = "@ceo.gitlab",
                             HireDate = NodaTime.Instant.FromUnixTimeTicks(15778368000000000L),
-                            IsBlankEmployee = false,
-                            IsCurrentEmployee = true,
                             LastName = "Ceo",
                             MiddleName = "Ceo",
                             PersonalEmail = "ceo@gmail.com",
@@ -161,7 +154,7 @@ namespace SalaryService.DataAccess.Migrations
                     b.Property<double>("ParkingCostPerMonth")
                         .HasColumnType("double precision");
 
-                    b.Property<double?>("Pay")
+                    b.Property<double>("Pay")
                         .HasColumnType("double precision");
 
                     b.Property<double>("RatePerHour")
@@ -535,9 +528,11 @@ namespace SalaryService.DataAccess.Migrations
 
             modelBuilder.Entity("SalaryService.Domain.Employee", b =>
                 {
-                    b.Navigation("EmployeeFinanceForPayroll");
+                    b.Navigation("EmployeeFinanceForPayroll")
+                        .IsRequired();
 
-                    b.Navigation("EmployeeFinancialMetrics");
+                    b.Navigation("EmployeeFinancialMetrics")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

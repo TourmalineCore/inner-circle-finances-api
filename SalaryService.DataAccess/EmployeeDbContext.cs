@@ -3,6 +3,8 @@ using SalaryService.Domain;
 
 namespace SalaryService.DataAccess
 {
+    //Use next command in Package Manager Console to update Dev env DB
+    //PM> $env:ASPNETCORE_ENVIRONMENT = 'Debug'; Update-Database
     public class EmployeeDbContext : DbContext
     {
         public DbSet<Employee> Employees { get; set; }

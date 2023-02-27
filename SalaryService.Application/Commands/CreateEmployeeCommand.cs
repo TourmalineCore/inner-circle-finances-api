@@ -1,5 +1,4 @@
-﻿using NodaTime;
-using SalaryService.Application.Dtos;
+﻿using SalaryService.Application.Dtos;
 using SalaryService.DataAccess;
 using SalaryService.Domain;
 
@@ -12,55 +11,21 @@ namespace SalaryService.Application.Commands
     public class CreateEmployeeCommandHandler
     {
         private readonly EmployeeDbContext _employeeDbContext;
-        private readonly IClock _clock;
 
-        public CreateEmployeeCommandHandler(EmployeeDbContext employeeDbContext,
-            IClock clock)
+        public CreateEmployeeCommandHandler(EmployeeDbContext employeeDbContext)
         {
             _employeeDbContext = employeeDbContext;
-            _clock = clock;
         }
 
-        public async Task<Employee> HandleAsync(EmployeeCreatingParameters request, EmployeeFinancialMetrics metrics)
+        public async Task HandleAsync(EmployeeCreationParameters employeeCreationParameters)
         {
-            var employee = new Employee(request.Name,
-                request.Surname,
-                request.MiddleName,
-                request.CorporateEmail,
-                request.PersonalEmail,
-                request.Phone,
-                request.GitHub,
-                request.GitLab,
-                _clock.GetCurrentInstant());
+            var employee = new Employee(employeeCreationParameters.FirstName,
+                employeeCreationParameters.LastName,
+                employeeCreationParameters.MiddleName,
+                employeeCreationParameters.CorporateEmail);
 
-            var financeForPayroll = new EmployeeFinanceForPayroll(request.RatePerHour,
-                request.Pay,
-                request.EmploymentType,
-                request.ParkingCostPerMonth);
-
-            using (var transaction = _employeeDbContext.Database.BeginTransaction())
-            {
-                try
-                {
-                    employee.EmployeeFinanceForPayroll = financeForPayroll;
-                    employee.EmployeeFinancialMetrics = metrics;
-                    financeForPayroll.Employee = employee;
-                    metrics.Employee = employee;
-                    _employeeDbContext.Add(employee);
-                    _employeeDbContext.Add(financeForPayroll);
-                    _employeeDbContext.Add(metrics);
-                    transaction.Commit();
-
-                }
-                catch (Exception exception)
-                {
-                    transaction.Rollback();
-                }
-
-            }
-
+            await _employeeDbContext.AddAsync(employee);
             await _employeeDbContext.SaveChangesAsync();
-            return employee;
         }
     }
 }

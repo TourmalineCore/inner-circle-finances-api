@@ -69,7 +69,7 @@ namespace SalaryService.Application.Commands
                 .SingleAsync(x => x.Id == request.EmployeeId && x.DeletedAtUtc == null)).EmployeeFinanceForPayroll;
 
             currentFinanceForPayroll.Update(financeForPayroll.RatePerHour,
-                financeForPayroll.Pay,
+                financeForPayroll.Pay.Value,
                 financeForPayroll.EmploymentType,
                 financeForPayroll.ParkingCostPerMonth);
 

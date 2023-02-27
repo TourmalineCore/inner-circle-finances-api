@@ -71,5 +71,15 @@ namespace SalaryService.Application.Services
 
             return calculateMetrics;
         }
+
+        public async Task<EmployeeFinancialMetrics> CalculateMetrics(
+            EmployeeFinanceForPayroll employeeFinanceForPayroll)
+        {
+            return await CalculateMetrics(
+                employeeFinanceForPayroll.RatePerHour, 
+                employeeFinanceForPayroll.Pay.Value,
+                employeeFinanceForPayroll.EmploymentType, 
+                employeeFinanceForPayroll.ParkingCostPerMonth);
+        }
     }
 }

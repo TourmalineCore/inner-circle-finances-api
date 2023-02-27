@@ -10,13 +10,13 @@
 
         public double RatePerHour { get; private set; }
 
-        public double Pay { get; private set; }
+        public double? Pay { get; private set; }
 
         public double ParkingCostPerMonth { get; private set; }
 
         public double EmploymentType { get; private set; }
 
-        public EmployeeFinanceForPayroll(double ratePerHour, double pay, double employmentType, double parkingCostPerMonth)
+        public EmployeeFinanceForPayroll(double ratePerHour, double? pay, double employmentType, double parkingCostPerMonth)
         {
             RatePerHour = ratePerHour;
             Pay = pay;
