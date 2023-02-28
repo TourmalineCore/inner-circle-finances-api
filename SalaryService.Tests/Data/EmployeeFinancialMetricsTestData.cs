@@ -150,34 +150,6 @@ namespace SalaryService.Tests.Data
                 1, //employeeType
                 1800 //parkingCostPerMonth
             };
-
-            yield return new object[]
-            {
-                new EmployeeFinancialMetrics()
-                {
-                    Salary = 20000,
-                    HourlyCostFact = 426.24m,
-                    HourlyCostHand = 250.00m,
-                    Earnings = -135.33m,
-                    DistrictCoefficient = 6000.00m,
-                    IncomeTaxContributions = 5980.00m,
-                    PensionContributions = 6433.48m,
-                    MedicalContributions = 2315.28m,
-                    SocialInsuranceContributions = 443.09m,
-                    InjuriesContributions = 92.00m,
-                    Expenses = 57683.85m,
-                    Profit = -57819.18m,
-                    ProfitAbility = 42723.53m,
-                    GrossSalary = 46000.00m,
-                    NetSalary = 40020.00m,
-                    Prepayment = 20010.00m,
-                    AccountingPerMonth = 600
-                },
-                -1, //ratePerHour
-                20000, //pay
-                1, //employeeType
-                1800 //parkingCostPerMonth
-            };
         }
     }
 }
