@@ -415,11 +415,11 @@ namespace SalaryService.DataAccess.Migrations
                         new
                         {
                             Id = 1L,
-                            WorkingDaysInMonth = 16.91666667m,
+                            WorkingDaysInMonth = 16.916666666666666666666666667m,
                             WorkingDaysInYear = 247m,
                             WorkingDaysInYearWithoutVacation = 223m,
                             WorkingDaysInYearWithoutVacationAndSick = 203m,
-                            WorkingHoursInMonth = 135.3333333m
+                            WorkingHoursInMonth = 135.33333333333333333333333334m
                         });
                 });
 
