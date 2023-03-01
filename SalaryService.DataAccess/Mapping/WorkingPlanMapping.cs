@@ -8,12 +8,18 @@ namespace SalaryService.DataAccess.Mapping
     {
         public void Configure(EntityTypeBuilder<WorkingPlan> builder)
         {
+            decimal workingDaysInYear = 247;
+            decimal workingDaysInYearWithoutVacation = workingDaysInYear - 24;
+            decimal workingDaysInYearWithoutVacationAndSick = workingDaysInYearWithoutVacation - 20;
+            decimal workingDaysInMonth = workingDaysInYearWithoutVacationAndSick / 12;
+            decimal workingHoursInMonth = workingDaysInMonth * 8;
+
             builder.HasData(new WorkingPlan(1L,
-                247, 
-                223, 
-                203, 
-                16.91666667m, 
-                135.3333333m)
+                workingDaysInYear,
+                workingDaysInYearWithoutVacation,
+                workingDaysInYearWithoutVacationAndSick,
+                workingDaysInMonth,
+                workingHoursInMonth)
             );
         }
     }
