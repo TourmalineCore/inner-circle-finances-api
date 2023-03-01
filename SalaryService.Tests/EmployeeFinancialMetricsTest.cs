@@ -11,9 +11,9 @@ namespace SalaryService.Tests
         public decimal IncomeTaxPercent = 0.13m;
         public decimal OfficeExpenses = 49000;
         public decimal WorkingHoursInYear = 247;
-        public decimal FreeDays => WorkingHoursInYear - 24;
-        public decimal HealfDays => FreeDays - 20;
-        public decimal WorkingDaysInMouth => HealfDays / 12;
+        public decimal workingDaysInYearWithoutVacation => WorkingHoursInYear - 24;
+        public decimal workingDaysInYearWithoutVacationAndSick => workingDaysInYearWithoutVacation - 20;
+        public decimal WorkingDaysInMouth => workingDaysInYearWithoutVacationAndSick / 12;
         public decimal WorkingHoursInMouth => WorkingDaysInMouth * 8;
 
         public CoefficientOptions()
