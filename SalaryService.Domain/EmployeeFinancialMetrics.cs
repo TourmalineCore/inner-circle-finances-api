@@ -19,35 +19,35 @@ namespace SalaryService.Domain
 
         public decimal HourlyCostHand { get; set; }
 
-        public decimal Earnings { get; set; } //Доход
+        public decimal Earnings { get; set; }
 
-        public decimal DistrictCoefficient { get; set; } //Рай.коэф.
+        public decimal DistrictCoefficient { get; set; }
 
-        public decimal IncomeTaxContributions { get; set; } //НДФЛ
+        public decimal IncomeTaxContributions { get; set; }
 
-        public decimal PensionContributions { get; set; } //ОПС
+        public decimal PensionContributions { get; set; }
 
-        public decimal MedicalContributions { get; set; } //ОМС
+        public decimal MedicalContributions { get; set; }
 
-        public decimal SocialInsuranceContributions { get; set; } //ОСС
+        public decimal SocialInsuranceContributions { get; set; }
 
-        public decimal InjuriesContributions { get; set; } //Взносы на травматизм
+        public decimal InjuriesContributions { get; set; }
 
-        public decimal Expenses { get; set; } //Расход
+        public decimal Expenses { get; set; }
 
-        public decimal Profit { get; set; } //Прибыль
+        public decimal Profit { get; set; }
 
-        public decimal ProfitAbility { get; set; } //Рентабельность
+        public decimal ProfitAbility { get; set; }
 
-        public decimal GrossSalary { get; set; } //Зарплата до вычета НДФЛ
+        public decimal GrossSalary { get; set; }
 
-        public decimal NetSalary { get; set; } //Зарплата
+        public decimal NetSalary { get; set; }
 
         public decimal RatePerHour { get; set; } 
 
         public decimal Pay { get; set; }
 
-        public decimal Prepayment { get; set; } //Аванас 
+        public decimal Prepayment { get; set; }
 
         public decimal EmploymentType { get; set; }
 
@@ -174,27 +174,27 @@ namespace SalaryService.Domain
 
         private decimal GetNdflValue()
         {
-            return GrossSalary * (decimal)0.13;
+            return GrossSalary * 0.13m;
         }
 
         private decimal GetPensionContributions(decimal mrot)
         {
-            return mrot * (decimal)0.22 + (GrossSalary - mrot) * (decimal)0.1;
+            return mrot * 0.22m + (GrossSalary - mrot) * 0.1m;
         }
 
         private decimal GetMedicalContributions(decimal mrot)
         {
-            return mrot * (decimal)0.051 + (GrossSalary - mrot) * (decimal)0.05;
+            return mrot * 0.051m + (GrossSalary - mrot) * 0.05m;
         }
 
         private decimal GetSocialInsuranceContributions(decimal mrot)
         {
-            return mrot * (decimal)0.029;
+            return mrot * 0.029m;
         }
 
         private decimal GetInjuriesContributions()
         {
-            return GrossSalary * (decimal)0.002;
+            return GrossSalary * 0.002m;
         }
 
         private decimal CalculateProfit()
