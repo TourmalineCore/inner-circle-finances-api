@@ -33,10 +33,10 @@ namespace SalaryService.Tests.Data
                     Prepayment = 10005.00m,
                     AccountingPerMonth = 600,
                 },
-                0, //ratePerHour
-                20000, //pay
-                1, //employeeType
-                1800 //parkingCostPerMonth
+                0,
+                20000,
+                1,
+                1800
             };
 
             yield return new object[]
@@ -61,10 +61,10 @@ namespace SalaryService.Tests.Data
                     Prepayment = 10005.00m,
                     AccountingPerMonth = 600
                 },
-                1, //ratePerHour
-                20000, //pay
-                1, //employeeType
-                1800 //parkingCostPerMonth
+                1,
+                20000,
+                1,
+                1800
             };
 
             yield return new object[]
@@ -89,10 +89,10 @@ namespace SalaryService.Tests.Data
                     Prepayment = 30015.00m,
                     AccountingPerMonth = 600
                 },
-                400, //ratePerHour
-                60000, //pay
-                1, //employeeType
-                1800 //parkingCostPerMonth
+                400,
+                60000,
+                1,
+                1800
             };
 
             yield return new object[]
@@ -117,10 +117,10 @@ namespace SalaryService.Tests.Data
                     Prepayment = 5002.50m,
                     AccountingPerMonth = 600
                 },
-                400, //ratePerHour
-                20000, //pay
-                0.5, //employeeType
-                1800 //parkingCostPerMonth
+                400,
+                20000,
+                0.5,
+                1800
             };
 
             yield return new object[]
@@ -145,10 +145,10 @@ namespace SalaryService.Tests.Data
                     Prepayment = 0.50m,
                     AccountingPerMonth = 600
                 },
-                400, //ratePerHour
-                1, //pay
-                1, //employeeType
-                1800 //parkingCostPerMonth
+                400,
+                1,
+                1,
+                1800
             };
         }
     }

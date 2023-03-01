@@ -56,19 +56,19 @@ namespace SalaryService.Tests
             Assert.Equal(employeeFinancialMetricsTest.Salary, employeeFinancialMetrics.Salary);
             Assert.Equal(employeeFinancialMetricsTest.HourlyCostFact, Math.Round(employeeFinancialMetrics.HourlyCostFact, 2));
             Assert.Equal(employeeFinancialMetricsTest.HourlyCostHand, Math.Round(employeeFinancialMetrics.HourlyCostHand, 2));
-            Assert.Equal(employeeFinancialMetricsTest.Earnings, Math.Round(employeeFinancialMetrics.Earnings, 2)); //Доход
-            Assert.Equal(employeeFinancialMetricsTest.DistrictCoefficient, Math.Round(employeeFinancialMetrics.DistrictCoefficient, 2)); //Рай.коэф.
-            Assert.Equal(employeeFinancialMetricsTest.IncomeTaxContributions, Math.Round(employeeFinancialMetrics.IncomeTaxContributions, 2)); //НДФЛ
-            Assert.Equal(employeeFinancialMetricsTest.PensionContributions, Math.Round(employeeFinancialMetrics.PensionContributions, 2)); //ОПС
-            Assert.Equal(employeeFinancialMetricsTest.MedicalContributions, Math.Round(employeeFinancialMetrics.MedicalContributions, 2)); //ОМС
-            Assert.Equal(employeeFinancialMetricsTest.SocialInsuranceContributions, Math.Round(employeeFinancialMetrics.SocialInsuranceContributions, 2)); //ОСС
-            Assert.Equal(employeeFinancialMetricsTest.InjuriesContributions, Math.Round(employeeFinancialMetrics.InjuriesContributions, 2)); //Взносы на травматизм
-            Assert.Equal(employeeFinancialMetricsTest.Expenses, Math.Round(employeeFinancialMetrics.Expenses, 2)); //Расход
-            Assert.Equal(employeeFinancialMetricsTest.Profit, Math.Round(employeeFinancialMetrics.Profit, 2)); //Прибыль
-            Assert.Equal(employeeFinancialMetricsTest.ProfitAbility, Math.Round(employeeFinancialMetrics.ProfitAbility, 2)); //Рентабельность
-            Assert.Equal(employeeFinancialMetricsTest.GrossSalary, Math.Round(employeeFinancialMetrics.GrossSalary, 2)); //Зарплата до вычета НДФЛ
-            Assert.Equal(employeeFinancialMetricsTest.NetSalary, Math.Round(employeeFinancialMetrics.NetSalary, 2)); //Зарплата
-            Assert.Equal(employeeFinancialMetricsTest.Prepayment, Math.Round(employeeFinancialMetrics.Prepayment, 2)); //Аванас 
+            Assert.Equal(employeeFinancialMetricsTest.Earnings, Math.Round(employeeFinancialMetrics.Earnings, 2));
+            Assert.Equal(employeeFinancialMetricsTest.DistrictCoefficient, Math.Round(employeeFinancialMetrics.DistrictCoefficient, 2));
+            Assert.Equal(employeeFinancialMetricsTest.IncomeTaxContributions, Math.Round(employeeFinancialMetrics.IncomeTaxContributions, 2));
+            Assert.Equal(employeeFinancialMetricsTest.PensionContributions, Math.Round(employeeFinancialMetrics.PensionContributions, 2));
+            Assert.Equal(employeeFinancialMetricsTest.MedicalContributions, Math.Round(employeeFinancialMetrics.MedicalContributions, 2));
+            Assert.Equal(employeeFinancialMetricsTest.SocialInsuranceContributions, Math.Round(employeeFinancialMetrics.SocialInsuranceContributions, 2));
+            Assert.Equal(employeeFinancialMetricsTest.InjuriesContributions, Math.Round(employeeFinancialMetrics.InjuriesContributions, 2));
+            Assert.Equal(employeeFinancialMetricsTest.Expenses, Math.Round(employeeFinancialMetrics.Expenses, 2));
+            Assert.Equal(employeeFinancialMetricsTest.Profit, Math.Round(employeeFinancialMetrics.Profit, 2));
+            Assert.Equal(employeeFinancialMetricsTest.ProfitAbility, Math.Round(employeeFinancialMetrics.ProfitAbility, 2));
+            Assert.Equal(employeeFinancialMetricsTest.GrossSalary, Math.Round(employeeFinancialMetrics.GrossSalary, 2));
+            Assert.Equal(employeeFinancialMetricsTest.NetSalary, Math.Round(employeeFinancialMetrics.NetSalary, 2));
+            Assert.Equal(employeeFinancialMetricsTest.Prepayment, Math.Round(employeeFinancialMetrics.Prepayment, 2));
             Assert.Equal(employeeFinancialMetricsTest.AccountingPerMonth, Math.Round(employeeFinancialMetrics.AccountingPerMonth, 2));
         }        
     }
