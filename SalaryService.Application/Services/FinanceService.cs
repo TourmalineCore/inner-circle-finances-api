@@ -42,7 +42,7 @@ namespace SalaryService.Application.Services
             estimatedFinancialEfficiency.CalculateEstimatedFinancialEfficiency(metrics, coefficients, totalExpenses);
             return estimatedFinancialEfficiency;
         }
-
+        
         public async Task<EmployeeFinancialMetrics> CalculateMetrics(decimal ratePerHour,
             decimal pay,
             decimal employmentTypeValue,

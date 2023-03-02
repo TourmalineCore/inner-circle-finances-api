@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,10 @@ using SalaryService.DataAccess;
 namespace SalaryService.DataAccess.Migrations
 {
     [DbContext(typeof(EmployeeDbContext))]
-    partial class EmployeeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230201111320_ChangeEmployeeFields")]
+    partial class ChangeEmployeeFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,17 +33,17 @@ namespace SalaryService.DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<decimal>("DistrictCoefficient")
-                        .HasColumnType("numeric");
+                    b.Property<double>("DistrictCoefficient")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("IncomeTaxPercent")
-                        .HasColumnType("numeric");
+                    b.Property<double>("IncomeTaxPercent")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("MinimumWage")
-                        .HasColumnType("numeric");
+                    b.Property<double>("MinimumWage")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("OfficeExpenses")
-                        .HasColumnType("numeric");
+                    b.Property<double>("OfficeExpenses")
+                        .HasColumnType("double precision");
 
                     b.HasKey("Id");
 
@@ -51,10 +53,10 @@ namespace SalaryService.DataAccess.Migrations
                         new
                         {
                             Id = 1L,
-                            DistrictCoefficient = 0.15m,
-                            IncomeTaxPercent = 0.13m,
-                            MinimumWage = 15279m,
-                            OfficeExpenses = 49000m
+                            DistrictCoefficient = 0.14999999999999999,
+                            IncomeTaxPercent = 0.13,
+                            MinimumWage = 15279.0,
+                            OfficeExpenses = 49000.0
                         });
                 });
 
@@ -65,6 +67,9 @@ namespace SalaryService.DataAccess.Migrations
                         .HasColumnType("bigint");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("AccountId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("CorporateEmail")
                         .IsRequired()
@@ -86,22 +91,11 @@ namespace SalaryService.DataAccess.Migrations
                     b.Property<Instant?>("HireDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<bool>("IsBlankEmployee")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(true);
-
-                    b.Property<bool>("IsCurrentEmployee")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(true);
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("MiddleName")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("PersonalEmail")
@@ -130,13 +124,12 @@ namespace SalaryService.DataAccess.Migrations
                         new
                         {
                             Id = 50L,
+                            AccountId = 1L,
                             CorporateEmail = "ceo@tourmalinecore.com",
                             FirstName = "Ceo",
                             GitHub = "@ceo.github",
                             GitLab = "@ceo.gitlab",
                             HireDate = NodaTime.Instant.FromUnixTimeTicks(15778368000000000L),
-                            IsBlankEmployee = false,
-                            IsCurrentEmployee = true,
                             LastName = "Ceo",
                             MiddleName = "Ceo",
                             PersonalEmail = "ceo@gmail.com",
@@ -155,17 +148,17 @@ namespace SalaryService.DataAccess.Migrations
                     b.Property<long>("EmployeeId")
                         .HasColumnType("bigint");
 
-                    b.Property<decimal>("EmploymentType")
-                        .HasColumnType("numeric");
+                    b.Property<double>("EmploymentType")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("ParkingCostPerMonth")
-                        .HasColumnType("numeric");
+                    b.Property<double>("ParkingCostPerMonth")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("Pay")
-                        .HasColumnType("numeric");
+                    b.Property<double>("Pay")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("RatePerHour")
-                        .HasColumnType("numeric");
+                    b.Property<double>("RatePerHour")
+                        .HasColumnType("double precision");
 
                     b.HasKey("Id");
 
@@ -183,74 +176,74 @@ namespace SalaryService.DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<decimal>("AccountingPerMonth")
-                        .HasColumnType("numeric");
+                    b.Property<double>("AccountingPerMonth")
+                        .HasColumnType("double precision");
 
                     b.Property<Instant>("ActualFromUtc")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<decimal>("DistrictCoefficient")
-                        .HasColumnType("numeric");
+                    b.Property<double>("DistrictCoefficient")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("Earnings")
-                        .HasColumnType("numeric");
+                    b.Property<double>("Earnings")
+                        .HasColumnType("double precision");
 
                     b.Property<long>("EmployeeId")
                         .HasColumnType("bigint");
 
-                    b.Property<decimal>("EmploymentType")
-                        .HasColumnType("numeric");
+                    b.Property<double>("EmploymentType")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("Expenses")
-                        .HasColumnType("numeric");
+                    b.Property<double>("Expenses")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("GrossSalary")
-                        .HasColumnType("numeric");
+                    b.Property<double>("GrossSalary")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("HourlyCostFact")
-                        .HasColumnType("numeric");
+                    b.Property<double>("HourlyCostFact")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("HourlyCostHand")
-                        .HasColumnType("numeric");
+                    b.Property<double>("HourlyCostHand")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("IncomeTaxContributions")
-                        .HasColumnType("numeric");
+                    b.Property<double>("IncomeTaxContributions")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("InjuriesContributions")
-                        .HasColumnType("numeric");
+                    b.Property<double>("InjuriesContributions")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("MedicalContributions")
-                        .HasColumnType("numeric");
+                    b.Property<double>("MedicalContributions")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("NetSalary")
-                        .HasColumnType("numeric");
+                    b.Property<double>("NetSalary")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("ParkingCostPerMonth")
-                        .HasColumnType("numeric");
+                    b.Property<double>("ParkingCostPerMonth")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("Pay")
-                        .HasColumnType("numeric");
+                    b.Property<double>("Pay")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("PensionContributions")
-                        .HasColumnType("numeric");
+                    b.Property<double>("PensionContributions")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("Prepayment")
-                        .HasColumnType("numeric");
+                    b.Property<double>("Prepayment")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("Profit")
-                        .HasColumnType("numeric");
+                    b.Property<double>("Profit")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("ProfitAbility")
-                        .HasColumnType("numeric");
+                    b.Property<double>("ProfitAbility")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("RatePerHour")
-                        .HasColumnType("numeric");
+                    b.Property<double>("RatePerHour")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("Salary")
-                        .HasColumnType("numeric");
+                    b.Property<double>("Salary")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("SocialInsuranceContributions")
-                        .HasColumnType("numeric");
+                    b.Property<double>("SocialInsuranceContributions")
+                        .HasColumnType("double precision");
 
                     b.HasKey("Id");
 
@@ -268,68 +261,68 @@ namespace SalaryService.DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<decimal>("AccountingPerMonth")
-                        .HasColumnType("numeric");
+                    b.Property<double>("AccountingPerMonth")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("Earnings")
-                        .HasColumnType("numeric");
+                    b.Property<double>("Earnings")
+                        .HasColumnType("double precision");
 
                     b.Property<long>("EmployeeId")
                         .HasColumnType("bigint");
 
-                    b.Property<decimal>("EmploymentType")
-                        .HasColumnType("numeric");
+                    b.Property<double>("EmploymentType")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("Expenses")
-                        .HasColumnType("numeric");
+                    b.Property<double>("Expenses")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("GrossSalary")
-                        .HasColumnType("numeric");
+                    b.Property<double>("GrossSalary")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("HourlyCostFact")
-                        .HasColumnType("numeric");
+                    b.Property<double>("HourlyCostFact")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("HourlyCostHand")
-                        .HasColumnType("numeric");
+                    b.Property<double>("HourlyCostHand")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("IncomeTaxContributions")
-                        .HasColumnType("numeric");
+                    b.Property<double>("IncomeTaxContributions")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("InjuriesContributions")
-                        .HasColumnType("numeric");
+                    b.Property<double>("InjuriesContributions")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("MedicalContributions")
-                        .HasColumnType("numeric");
+                    b.Property<double>("MedicalContributions")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("NetSalary")
-                        .HasColumnType("numeric");
+                    b.Property<double>("NetSalary")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("ParkingCostPerMonth")
-                        .HasColumnType("numeric");
+                    b.Property<double>("ParkingCostPerMonth")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("Pay")
-                        .HasColumnType("numeric");
+                    b.Property<double>("Pay")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("PensionContributions")
-                        .HasColumnType("numeric");
+                    b.Property<double>("PensionContributions")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("Prepayment")
-                        .HasColumnType("numeric");
+                    b.Property<double>("Prepayment")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("Profit")
-                        .HasColumnType("numeric");
+                    b.Property<double>("Profit")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("ProfitAbility")
-                        .HasColumnType("numeric");
+                    b.Property<double>("ProfitAbility")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("RatePerHour")
-                        .HasColumnType("numeric");
+                    b.Property<double>("RatePerHour")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("Salary")
-                        .HasColumnType("numeric");
+                    b.Property<double>("Salary")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("SocialInsuranceContributions")
-                        .HasColumnType("numeric");
+                    b.Property<double>("SocialInsuranceContributions")
+                        .HasColumnType("double precision");
 
                     b.HasKey("Id");
 
@@ -346,23 +339,23 @@ namespace SalaryService.DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<decimal>("DesiredEarnings")
-                        .HasColumnType("numeric");
+                    b.Property<double>("DesiredEarnings")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("DesiredProfit")
-                        .HasColumnType("numeric");
+                    b.Property<double>("DesiredProfit")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("DesiredProfitability")
-                        .HasColumnType("numeric");
+                    b.Property<double>("DesiredProfitability")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("ReserveForHalfYear")
-                        .HasColumnType("numeric");
+                    b.Property<double>("ReserveForHalfYear")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("ReserveForQuarter")
-                        .HasColumnType("numeric");
+                    b.Property<double>("ReserveForQuarter")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("ReserveForYear")
-                        .HasColumnType("numeric");
+                    b.Property<double>("ReserveForYear")
+                        .HasColumnType("double precision");
 
                     b.HasKey("Id");
 
@@ -377,11 +370,11 @@ namespace SalaryService.DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<decimal>("PayrollExpense")
-                        .HasColumnType("numeric");
+                    b.Property<double>("PayrollExpense")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("TotalExpense")
-                        .HasColumnType("numeric");
+                    b.Property<double>("TotalExpense")
+                        .HasColumnType("double precision");
 
                     b.HasKey("Id");
 
@@ -396,20 +389,20 @@ namespace SalaryService.DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<decimal>("WorkingDaysInMonth")
-                        .HasColumnType("numeric");
+                    b.Property<double>("WorkingDaysInMonth")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("WorkingDaysInYear")
-                        .HasColumnType("numeric");
+                    b.Property<double>("WorkingDaysInYear")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("WorkingDaysInYearWithoutVacation")
-                        .HasColumnType("numeric");
+                    b.Property<double>("WorkingDaysInYearWithoutVacation")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("WorkingDaysInYearWithoutVacationAndSick")
-                        .HasColumnType("numeric");
+                    b.Property<double>("WorkingDaysInYearWithoutVacationAndSick")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("WorkingHoursInMonth")
-                        .HasColumnType("numeric");
+                    b.Property<double>("WorkingHoursInMonth")
+                        .HasColumnType("double precision");
 
                     b.HasKey("Id");
 
@@ -419,11 +412,11 @@ namespace SalaryService.DataAccess.Migrations
                         new
                         {
                             Id = 1L,
-                            WorkingDaysInMonth = 16.916666666666666666666666667m,
-                            WorkingDaysInYear = 247m,
-                            WorkingDaysInYearWithoutVacation = 223m,
-                            WorkingDaysInYearWithoutVacationAndSick = 203m,
-                            WorkingHoursInMonth = 135.33333333333333333333333334m
+                            WorkingDaysInMonth = 16.916666670000001,
+                            WorkingDaysInYear = 247.0,
+                            WorkingDaysInYearWithoutVacation = 223.0,
+                            WorkingDaysInYearWithoutVacationAndSick = 203.0,
+                            WorkingHoursInMonth = 135.33333329999999
                         });
                 });
 
@@ -438,11 +431,11 @@ namespace SalaryService.DataAccess.Migrations
                     b.Property<Instant>("ActualFromUtc")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<decimal>("PayrollExpense")
-                        .HasColumnType("numeric");
+                    b.Property<double>("PayrollExpense")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("TotalExpense")
-                        .HasColumnType("numeric");
+                    b.Property<double>("TotalExpense")
+                        .HasColumnType("double precision");
 
                     b.HasKey("Id");
 
@@ -535,9 +528,11 @@ namespace SalaryService.DataAccess.Migrations
 
             modelBuilder.Entity("SalaryService.Domain.Employee", b =>
                 {
-                    b.Navigation("EmployeeFinanceForPayroll");
+                    b.Navigation("EmployeeFinanceForPayroll")
+                        .IsRequired();
 
-                    b.Navigation("EmployeeFinancialMetrics");
+                    b.Navigation("EmployeeFinancialMetrics")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

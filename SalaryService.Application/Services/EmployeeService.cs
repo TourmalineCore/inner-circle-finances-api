@@ -68,22 +68,9 @@ namespace SalaryService.Application.Services
                 newMetrics.NetSalary);
         }
 
-        public async Task CreateEmployee(EmployeeCreatingParameters parameters)
+        public async Task CreateEmployeeAsync(EmployeeCreationParameters parameters)
         {
-            var metrics = await _financeAnalyticService.CalculateMetrics(
-                parameters.RatePerHour,
-                parameters.Pay,
-                parameters.EmploymentType,
-                parameters.ParkingCostPerMonth);
-
-            var employee = await _createEmployeeCommandHandler.HandleAsync(parameters, metrics);
-
-            await _innerCircleHttpClient.SendRequestToRegister(employee);
-
-            var totals = await _financeAnalyticService.CalculateTotalFinances();
-            var estimatedFinancialEfficiency = await _financeAnalyticService.CalculateEstimatedFinancialEfficiency(totals.TotalExpense);
-            await _createTotalExpensesCommandHandler.HandleAsync(totals);
-            await _createEstimatedFinancialEfficiencyCommandHandler.HandleAsync(estimatedFinancialEfficiency);
+            await _createEmployeeCommandHandler.HandleAsync(parameters);
         }
 
         public async Task DeleteEmployee(long id)
@@ -100,9 +87,9 @@ namespace SalaryService.Application.Services
             await _updateEmployeeCommandHandler.HandleAsync(request);
         }
 
-        public async Task UpdateProfile(ProfileUpdatingParameters request, long accountId)
+        public async Task UpdateProfileAsync(ProfileUpdatingParameters updatingParameters)
         {
-            await _updateProfileCommandHandler.HandleAsync(request, accountId);
+            await _updateProfileCommandHandler.HandleAsync(updatingParameters);
         }
 
         public async Task UpdateFinances(FinanceUpdatingParameters parameters)

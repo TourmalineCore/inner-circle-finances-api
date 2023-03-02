@@ -4,9 +4,11 @@ namespace SalaryService.Api
 {
     public static class UserExtensions
     {
-        public static long GetAccountId(this ClaimsPrincipal context)
+        private const string CorporateEmailClaimType = "corporateEmail";
+
+        public static string GetCorporateEmail(this ClaimsPrincipal context)
         {
-            return long.Parse(context.FindFirstValue("accountId"));
+            return context.FindFirstValue(CorporateEmailClaimType);
         }
     }
 }

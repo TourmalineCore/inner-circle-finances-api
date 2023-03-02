@@ -27,7 +27,7 @@ namespace SalaryService.Application.Queries
                 .SingleAsync(x => x.Id == employeeId && x.DeletedAtUtc == null);
 
             return new ColleagueFinancesDto(employee.Id,
-                employee.Name + " " + employee.Surname + " " + employee.MiddleName,
+                employee.FirstName + " " + employee.LastName + " " + employee.MiddleName,
                 employee.EmployeeFinanceForPayroll.RatePerHour,
                 employee.EmployeeFinanceForPayroll.Pay,
                 employee.EmployeeFinanceForPayroll.EmploymentType,
