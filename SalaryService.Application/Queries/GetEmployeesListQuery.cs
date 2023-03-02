@@ -38,7 +38,7 @@ namespace SalaryService.Application.Queries
             var employeesFinances = employees.Select(x => new ColleagueFinancesDto(x.Id,
                 x.FirstName + " " + x.LastName + " " + x.MiddleName,
                 x.EmployeeFinanceForPayroll.RatePerHour,
-                x.EmployeeFinanceForPayroll.Pay.Value,
+                x.EmployeeFinanceForPayroll.Pay,
                 x.EmployeeFinanceForPayroll.EmploymentType,
                 x.EmployeeFinancialMetrics.NetSalary,
                 x.EmployeeFinancialMetrics.ParkingCostPerMonth));

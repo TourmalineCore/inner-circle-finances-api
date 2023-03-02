@@ -4,15 +4,15 @@
     {
         public long Id { get; set; }
 
-        public double DistrictCoefficient { get; set; }
+        public decimal DistrictCoefficient { get; set; }
 
-        public double MinimumWage { get; set; }
+        public decimal MinimumWage { get; set; }
 
-        public double IncomeTaxPercent { get; set; }
+        public decimal IncomeTaxPercent { get; set; }
 
-        public double OfficeExpenses { get; set; }
+        public decimal OfficeExpenses { get; set; }
 
-        public CoefficientOptions(long id, double districtCoefficient, double minimumWage, double incomeTaxPercent, double officeExpenses)
+        public CoefficientOptions(long id, decimal districtCoefficient, decimal minimumWage, decimal incomeTaxPercent, decimal officeExpenses)
         {
             Id = id;
             DistrictCoefficient = districtCoefficient;

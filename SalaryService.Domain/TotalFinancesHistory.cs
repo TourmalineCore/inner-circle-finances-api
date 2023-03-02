@@ -8,9 +8,9 @@ namespace SalaryService.Domain
 
         public Period Period { get; set; }
 
-        public double PayrollExpense { get; set; }
+        public decimal PayrollExpense { get; set; }
 
-        public double TotalExpense { get; set; }
+        public decimal TotalExpense { get; set; }
         
     }
 }

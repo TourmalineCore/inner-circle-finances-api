@@ -10,7 +10,7 @@ namespace SalaryService.Application.Services
         private readonly GetFinancialMetricsQueryHandler _getFinancialMetricsQueryHandler;
         private readonly GetWorkingPlanQueryHandler _getWorkingPlanQueryHandler;
         private readonly IClock _clock;
-        private readonly List<double> _availableEmploymentTypes = new() { 0.5, 1 };
+        private readonly List<decimal> _availableEmploymentTypes = new() { 0.5m, 1 };
 
         public FinanceAnalyticService(GetCoefficientsQueryHandler getCoefficientsQueryHandler,
             GetFinancialMetricsQueryHandler getFinancialMetricsQueryHandler,
@@ -33,7 +33,7 @@ namespace SalaryService.Application.Services
             return totals;
         }
 
-        public async Task<EstimatedFinancialEfficiency> CalculateEstimatedFinancialEfficiency(double totalExpenses)
+        public async Task<EstimatedFinancialEfficiency> CalculateEstimatedFinancialEfficiency(decimal totalExpenses)
         {
             var metrics = await _getFinancialMetricsQueryHandler.HandleAsync();
             var coefficients = await _getCoefficientsQueryHandler.HandleAsync();
@@ -42,11 +42,11 @@ namespace SalaryService.Application.Services
             estimatedFinancialEfficiency.CalculateEstimatedFinancialEfficiency(metrics, coefficients, totalExpenses);
             return estimatedFinancialEfficiency;
         }
-
-        public async Task<EmployeeFinancialMetrics> CalculateMetrics(double ratePerHour,
-            double pay,
-            double employmentTypeValue,
-            double parkingCostPerMonth)
+        
+        public async Task<EmployeeFinancialMetrics> CalculateMetrics(decimal ratePerHour,
+            decimal pay,
+            decimal employmentTypeValue,
+            decimal parkingCostPerMonth)
         {
             //TODO: #861m9k5f6: make refactoring of using employee finances for payroll in an employee model
 
@@ -70,16 +70,6 @@ namespace SalaryService.Application.Services
                 _clock.GetCurrentInstant());
 
             return calculateMetrics;
-        }
-
-        public async Task<EmployeeFinancialMetrics> CalculateMetrics(
-            EmployeeFinanceForPayroll employeeFinanceForPayroll)
-        {
-            return await CalculateMetrics(
-                employeeFinanceForPayroll.RatePerHour, 
-                employeeFinanceForPayroll.Pay.Value,
-                employeeFinanceForPayroll.EmploymentType, 
-                employeeFinanceForPayroll.ParkingCostPerMonth);
         }
     }
 }

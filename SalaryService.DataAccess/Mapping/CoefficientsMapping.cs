@@ -8,7 +8,7 @@ namespace SalaryService.DataAccess.Mapping
     {
         public void Configure(EntityTypeBuilder<CoefficientOptions> builder)
         {
-            builder.HasData(new CoefficientOptions(1, 0.15, 15279, 0.13, 49000));
+            builder.HasData(new CoefficientOptions(1, 0.15m, 15279, 0.13m, 49000));
         }
     }
 }

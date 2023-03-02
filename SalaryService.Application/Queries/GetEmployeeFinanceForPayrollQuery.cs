@@ -29,7 +29,7 @@ namespace SalaryService.Application.Queries
             return new ColleagueFinancesDto(employee.Id,
                 employee.FirstName + " " + employee.LastName + " " + employee.MiddleName,
                 employee.EmployeeFinanceForPayroll.RatePerHour,
-                employee.EmployeeFinanceForPayroll.Pay.Value,
+                employee.EmployeeFinanceForPayroll.Pay,
                 employee.EmployeeFinanceForPayroll.EmploymentType,
                 employee.EmployeeFinancialMetrics.NetSalary,
                 employee.EmployeeFinancialMetrics.ParkingCostPerMonth);

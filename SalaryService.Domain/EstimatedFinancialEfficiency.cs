@@ -4,22 +4,22 @@
     {
         public long Id { get; set; }
 
-        public double DesiredEarnings { get; set; }
+        public decimal DesiredEarnings { get; set; }
 
-        public double DesiredProfit { get; set; }
+        public decimal DesiredProfit { get; set; }
 
-        public double DesiredProfitability { get; set; }
+        public decimal DesiredProfitability { get; set; }
 
-        public double ReserveForQuarter { get; set; }
+        public decimal ReserveForQuarter { get; set; }
 
-        public double ReserveForHalfYear { get; set; }
+        public decimal ReserveForHalfYear { get; set; }
 
-        public double ReserveForYear { get; set; }
+        public decimal ReserveForYear { get; set; }
         
 
-        public void CalculateEstimatedFinancialEfficiency(IEnumerable<EmployeeFinancialMetrics> metrics, CoefficientOptions coefficients, double totalExpense)
+        public void CalculateEstimatedFinancialEfficiency(IEnumerable<EmployeeFinancialMetrics> metrics, CoefficientOptions coefficients, decimal totalExpense)
         {
-            const double desiredProfitabilityWhenZeroDesiredEarnings = -100;
+            const decimal desiredProfitabilityWhenZeroDesiredEarnings = -100;
 
             DesiredEarnings = metrics.Select(x => x.Earnings).Sum();
             DesiredProfit = metrics.Select(x => x.Profit).Sum() - coefficients.OfficeExpenses;
@@ -31,7 +31,7 @@
                 : desiredProfitabilityWhenZeroDesiredEarnings;
         }
 
-        public void Update(double desiredEarnings, double desiredProfit, double desiredProfitability, double reserveForQuarter, double reserveForHalfYear, double reserveForYear)
+        public void Update(decimal desiredEarnings, decimal desiredProfit, decimal desiredProfitability, decimal reserveForQuarter, decimal reserveForHalfYear, decimal reserveForYear)
         {
             DesiredEarnings = desiredEarnings;
             DesiredProfit = desiredProfit;

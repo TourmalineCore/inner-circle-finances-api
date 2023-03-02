@@ -2,21 +2,21 @@
 {
     public class WorkingDaysDto
     {
-        public double WorkingDaysInYear { get; set; }
+        public decimal WorkingDaysInYear { get; set; }
 
-        public double WorkingDaysInYearWithoutVacation { get; set; }
+        public decimal WorkingDaysInYearWithoutVacation { get; set; }
 
-        public double WorkingDaysInYearWithoutVacationAndSick { get; set; }
+        public decimal WorkingDaysInYearWithoutVacationAndSick { get; set; }
 
-        public double WorkingDaysInMonth { get; set; }
+        public decimal WorkingDaysInMonth { get; set; }
 
-        public double WorkingHoursInMonth { get; set; }
+        public decimal WorkingHoursInMonth { get; set; }
 
-        public WorkingDaysDto(double workingDaysInYear, 
-            double workingDaysInYearWithoutVacation, 
-            double workingDaysInYearWithoutVacationAndSick, 
-            double workingDaysInMonth,
-            double workingHoursInMonth)
+        public WorkingDaysDto(decimal workingDaysInYear,
+            decimal workingDaysInYearWithoutVacation,
+            decimal workingDaysInYearWithoutVacationAndSick,
+            decimal workingDaysInMonth,
+            decimal workingHoursInMonth)
         {
             WorkingDaysInYear = workingDaysInYear;
             WorkingDaysInYearWithoutVacation = workingDaysInYearWithoutVacation;
