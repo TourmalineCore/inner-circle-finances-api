@@ -6,7 +6,6 @@ namespace SalaryService.Application.Services
     public class EmployeeService
     {
         private readonly FinanceAnalyticService _financeAnalyticService;
-        private readonly IInnerCircleHttpClient _innerCircleHttpClient;
         private readonly CreateEmployeeCommandHandler _createEmployeeCommandHandler;
         private readonly UpdateEmployeeCommandHandler _updateEmployeeCommandHandler;
         private readonly UpdateFinancesCommandHandler _updateFinancesCommandHandler;
@@ -16,7 +15,6 @@ namespace SalaryService.Application.Services
         private readonly CreateEstimatedFinancialEfficiencyCommandHandler _createEstimatedFinancialEfficiencyCommandHandler;
 
         public EmployeeService(FinanceAnalyticService financeAnalyticService,
-            IInnerCircleHttpClient innerCircleHttpClient,
             CreateEmployeeCommandHandler createEmployeeCommandHandler,
             UpdateEmployeeCommandHandler updateEmployeeCommandHandler,
             UpdateFinancesCommandHandler updateFinancesCommandHandler,
@@ -26,7 +24,6 @@ namespace SalaryService.Application.Services
             CreateEstimatedFinancialEfficiencyCommandHandler createEstimatedFinancialEfficiencyCommandHandler)
         {
             _financeAnalyticService = financeAnalyticService;
-            _innerCircleHttpClient = innerCircleHttpClient;
             _createEmployeeCommandHandler = createEmployeeCommandHandler;
             _updateEmployeeCommandHandler = updateEmployeeCommandHandler;
             _updateFinancesCommandHandler = updateFinancesCommandHandler;

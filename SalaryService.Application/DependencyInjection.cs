@@ -32,14 +32,6 @@ namespace SalaryService.Application
             services.AddTransient<CreateEstimatedFinancialEfficiencyCommandHandler>();
             services.AddTransient<EmployeeService>();
             services.AddTransient<FinanceAnalyticService>();
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Debug")
-            {
-                services.AddTransient<IInnerCircleHttpClient, FakeInnerCircleHttpClient>();
-            }
-            else
-            {
-                services.AddTransient<IInnerCircleHttpClient, InnerCircleHttpClient>();
-            }
             services.AddTransient<IClock, Clock>();
             return services;
         }
