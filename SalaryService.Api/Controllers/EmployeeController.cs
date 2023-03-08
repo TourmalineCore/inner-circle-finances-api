@@ -16,18 +16,21 @@ namespace SalaryService.Api.Controllers
         private readonly GetColleaguesQueryHandler _getColleaguesQueryHandler;
         private readonly GetEmployeeContactDetailsQueryHandler _getEmployeeContactDetailsQueryHandler;
         private readonly GetEmployeeFinanceForPayrollQueryHandler _getEmployeeFinanceForPayrollQueryHandler;
+        private readonly IGetAllColleagues _getAllColleagues;
 
         public EmployeeController(EmployeeService employeeService,
         GetEmployeeQueryHandler getEmployeeQueryHandler,
         GetColleaguesQueryHandler getColleaguesQueryHandler, 
         GetEmployeeContactDetailsQueryHandler getEmployeeContactDetailsQueryHandler,
-        GetEmployeeFinanceForPayrollQueryHandler getEmployeeFinanceForPayrollQueryHandler)
+        GetEmployeeFinanceForPayrollQueryHandler getEmployeeFinanceForPayrollQueryHandler,
+        IGetAllColleagues getAllColleagues)
         {
             _employeeService = employeeService;
             _getEmployeeQueryHandler = getEmployeeQueryHandler;
             _getColleaguesQueryHandler = getColleaguesQueryHandler;
             _getEmployeeContactDetailsQueryHandler = getEmployeeContactDetailsQueryHandler;
             _getEmployeeFinanceForPayrollQueryHandler = getEmployeeFinanceForPayrollQueryHandler;
+            _getAllColleagues = getAllColleagues;
         }
 
         [HttpGet("get-profile")]
@@ -62,6 +65,13 @@ namespace SalaryService.Api.Controllers
         public Task<ColleagueDto> GetColleagues()
         {
             return _getColleaguesQueryHandler.HandleAsync();
+        }
+
+        [RequiresPermission(UserClaimsProvider.CanViewFinanceForPayrollPermission)]
+        [HttpGet("all")]
+        public Task<IEnumerable<CollegueInfoDto>> GetAllColleagues()
+        {
+            return _getAllColleagues.HandleAsync();
         }
 
         [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
