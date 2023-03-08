@@ -81,5 +81,20 @@ namespace SalaryService.Domain
             GitHub = gitHub;
             GitLab = gitLab;
         }
+        public void Update(
+            string phone,
+            string personalEmail,
+            string gitHub,
+            string gitLab,
+            Instant? hireDate,
+            bool isEmployedOfficially,
+            string personnelNumber)
+        {
+            Phone = phone;
+            PersonalEmail = personalEmail;
+            GitHub = gitHub;
+            GitLab = gitLab;
+            HireDate = hireDate;
+        }
     }
 }

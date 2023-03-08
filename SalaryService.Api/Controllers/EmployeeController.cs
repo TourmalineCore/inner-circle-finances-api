@@ -16,18 +16,21 @@ namespace SalaryService.Api.Controllers
         private readonly GetColleaguesQueryHandler _getColleaguesQueryHandler;
         private readonly GetEmployeeContactDetailsQueryHandler _getEmployeeContactDetailsQueryHandler;
         private readonly GetEmployeeFinanceForPayrollQueryHandler _getEmployeeFinanceForPayrollQueryHandler;
+        private readonly GetEmployeeUpdateHandler _getEmployeeUpdateHandler;
 
         public EmployeeController(EmployeeService employeeService,
         GetEmployeeQueryHandler getEmployeeQueryHandler,
         GetColleaguesQueryHandler getColleaguesQueryHandler, 
         GetEmployeeContactDetailsQueryHandler getEmployeeContactDetailsQueryHandler,
-        GetEmployeeFinanceForPayrollQueryHandler getEmployeeFinanceForPayrollQueryHandler)
+        GetEmployeeFinanceForPayrollQueryHandler getEmployeeFinanceForPayrollQueryHandler,
+        GetEmployeeUpdateHandler getEmployeeUpdateHandler)
         {
             _employeeService = employeeService;
             _getEmployeeQueryHandler = getEmployeeQueryHandler;
             _getColleaguesQueryHandler = getColleaguesQueryHandler;
             _getEmployeeContactDetailsQueryHandler = getEmployeeContactDetailsQueryHandler;
             _getEmployeeFinanceForPayrollQueryHandler = getEmployeeFinanceForPayrollQueryHandler;
+            _getEmployeeUpdateHandler = getEmployeeUpdateHandler;
         }
 
         [HttpGet("get-profile")]
@@ -77,7 +80,21 @@ namespace SalaryService.Api.Controllers
         {
             return _employeeService.UpdateFinances(financeUpdatingParameters);
         }
-        
+
+        [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
+        [HttpPut("update")]
+        public Task UpdateEmployee([FromBody] EmployeeUpdateParameters financeUpdatingParameters)
+        {
+            return _employeeService.UpdateEmployee(financeUpdatingParameters);
+        }
+
+        [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
+        [HttpPut("employee/{employeeId}")]
+        public Task<EmployeeUpdateInfo> UpdateEmployee([FromRoute] long employeeId)
+        {
+            return _getEmployeeUpdateHandler.HandleAsync(employeeId);
+        }
+
         [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
         [HttpDelete("delete/{id}")]
         public Task DeleteEmployee([FromRoute] long id)

@@ -14,6 +14,7 @@ namespace SalaryService.Application.Services
         private readonly DeleteEmployeeCommandHandler _deleteEmployeeCommandHandler;
         private readonly CreateTotalExpensesCommandHandler _createTotalExpensesCommandHandler;
         private readonly CreateEstimatedFinancialEfficiencyCommandHandler _createEstimatedFinancialEfficiencyCommandHandler;
+        private readonly EmployeeUpdateCommandHandler _employeeUpdateCommandHandler; 
 
         public EmployeeService(FinanceAnalyticService financeAnalyticService,
             IInnerCircleHttpClient innerCircleHttpClient,
@@ -23,7 +24,8 @@ namespace SalaryService.Application.Services
             UpdateProfileCommandHandler updateProfileCommandHandler,
             DeleteEmployeeCommandHandler deleteEmployeeCommandHandler,
             CreateTotalExpensesCommandHandler createTotalExpensesCommandHandler,
-            CreateEstimatedFinancialEfficiencyCommandHandler createEstimatedFinancialEfficiencyCommandHandler)
+            CreateEstimatedFinancialEfficiencyCommandHandler createEstimatedFinancialEfficiencyCommandHandler,
+            EmployeeUpdateCommandHandler employeeUpdateCommandHandler)
         {
             _financeAnalyticService = financeAnalyticService;
             _innerCircleHttpClient = innerCircleHttpClient;
@@ -34,6 +36,7 @@ namespace SalaryService.Application.Services
             _deleteEmployeeCommandHandler = deleteEmployeeCommandHandler;
             _createTotalExpensesCommandHandler = createTotalExpensesCommandHandler;
             _createEstimatedFinancialEfficiencyCommandHandler = createEstimatedFinancialEfficiencyCommandHandler;
+            _employeeUpdateCommandHandler = employeeUpdateCommandHandler;
         }
 
         public async Task<MetricsPreviewDto> GetPreviewMetrics(GetPreviewParameters parameters)
@@ -80,6 +83,11 @@ namespace SalaryService.Application.Services
             var estimatedFinancialEfficiency = await _financeAnalyticService.CalculateEstimatedFinancialEfficiency(totals.TotalExpense);
             await _createTotalExpensesCommandHandler.HandleAsync(totals);
             await _createEstimatedFinancialEfficiencyCommandHandler.HandleAsync(estimatedFinancialEfficiency);
+        }
+
+        public async Task UpdateEmployee(EmployeeUpdateParameters request)
+        {
+            await _employeeUpdateCommandHandler.HandleAsync(request);
         }
 
         public async Task UpdateEmployee(EmployeeUpdatingParameters request)

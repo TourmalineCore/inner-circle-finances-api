@@ -14,6 +14,9 @@ namespace SalaryService.Application
             var innerCircleServiceUrl = configuration.GetSection("InnerCircleServiceUrls");
             services.Configure<InnerCircleServiceUrls>(u => innerCircleServiceUrl.Bind(u));
 
+            services.AddTransient<EmployeeUpdateCommandHandler>();
+            services.AddTransient<GetEmployeeUpdateHandler>();
+
             services.AddTransient<GetColleaguesQueryHandler>();
             services.AddTransient<GetEmployeeQueryHandler>();
             services.AddTransient<GetAnalyticQueryHandler>();
