@@ -13,19 +13,19 @@ namespace SalaryService.Api.Controllers
     {
         private readonly EmployeeService _employeeService;
         private readonly GetEmployeeQueryHandler _getEmployeeQueryHandler;
-        private readonly GetColleaguesQueryHandler _getColleaguesQueryHandler;
+        private readonly GetEmployeesQueryHandler _getEmployeesQueryHandler;
         private readonly GetEmployeeContactDetailsQueryHandler _getEmployeeContactDetailsQueryHandler;
         private readonly GetEmployeeFinanceForPayrollQueryHandler _getEmployeeFinanceForPayrollQueryHandler;
 
         public EmployeeController(EmployeeService employeeService,
         GetEmployeeQueryHandler getEmployeeQueryHandler,
-        GetColleaguesQueryHandler getColleaguesQueryHandler, 
+        GetEmployeesQueryHandler getEmployeesQueryHandler, 
         GetEmployeeContactDetailsQueryHandler getEmployeeContactDetailsQueryHandler,
         GetEmployeeFinanceForPayrollQueryHandler getEmployeeFinanceForPayrollQueryHandler)
         {
             _employeeService = employeeService;
             _getEmployeeQueryHandler = getEmployeeQueryHandler;
-            _getColleaguesQueryHandler = getColleaguesQueryHandler;
+            _getEmployeesQueryHandler = getEmployeesQueryHandler;
             _getEmployeeContactDetailsQueryHandler = getEmployeeContactDetailsQueryHandler;
             _getEmployeeFinanceForPayrollQueryHandler = getEmployeeFinanceForPayrollQueryHandler;
         }
@@ -34,6 +34,18 @@ namespace SalaryService.Api.Controllers
         public Task<EmployeeProfileDto> GetProfile()
         {
             return _getEmployeeQueryHandler.HandleAsync(User.GetCorporateEmail());
+        }
+
+        [HttpGet("all")]
+        public Task<IEnumerable<EmployeeDto>> GetAllEmployeesAsync()
+        {
+            var includeEmployeeFinanceInfo = User.HasClaim(x => x is
+            {
+                Type: UserClaimsProvider.PermissionClaimType,
+                Value: UserClaimsProvider.CanViewFinanceForPayrollPermission
+            });
+
+            return _getEmployeesQueryHandler.HandleAsync(includeEmployeeFinanceInfo);
         }
 
         [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
@@ -55,13 +67,6 @@ namespace SalaryService.Api.Controllers
         public Task<ColleagueContactsDto> GetContactDetails([FromRoute] long employeeId)
         {
             return _getEmployeeContactDetailsQueryHandler.HandleAsync(employeeId);
-        }
-
-        [RequiresPermission(UserClaimsProvider.CanViewFinanceForPayrollPermission)]
-        [HttpGet("get-colleagues")]
-        public Task<ColleagueDto> GetColleagues()
-        {
-            return _getColleaguesQueryHandler.HandleAsync();
         }
 
         [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
