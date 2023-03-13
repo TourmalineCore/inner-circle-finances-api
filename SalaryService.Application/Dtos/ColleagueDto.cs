@@ -57,15 +57,64 @@ namespace SalaryService.Application.Dtos
             Parking = parking;
         }
     }
-    public class ColleagueDto
-    {
-        public IEnumerable<ColleagueContactsDto> ColleagueContacts { get; private set; }
-        public IEnumerable<ColleagueFinancesDto> ColleagueFinancesDto { get; private set; }
 
-        public ColleagueDto(IEnumerable<ColleagueContactsDto> colleagueContacts, IEnumerable<ColleagueFinancesDto> colleagueFinancesDto)
+    public readonly struct EmployeeDto
+    {
+        public long EmployeeId { get; init; }
+
+        public string FullName { get; init; }
+
+        public string CorporateEmail { get; init; }
+
+        public string? PersonalEmail { get; init; }
+
+        public string? Phone { get; init; }
+
+        public string? GitHub { get; init; }
+
+        public string? GitLab { get; init; }
+
+        public bool IsBlankEmployee { get; init; }
+
+        public bool IsCurrentEmployee { get; init; }
+
+        public decimal? NetSalary { get; init; } = null;
+
+        public decimal? RatePerHour { get; init; } = null;
+
+        public decimal? FullSalary { get; init; } = null;
+
+        public decimal? EmploymentType { get; init; } = null;
+
+        public decimal? Parking { get; init; } = null;
+
+        public string? PersonnelNumber { get; init; }
+
+        public DateTime? HireDate { get; init; }
+
+        public EmployeeDto(Employee employee)
         {
-            ColleagueContacts = colleagueContacts;
-            ColleagueFinancesDto = colleagueFinancesDto;
+            EmployeeId = employee.Id;
+            FullName = $"{employee.FirstName} {employee.LastName} {employee.MiddleName}";
+            CorporateEmail = employee.CorporateEmail;
+            PersonalEmail = employee.PersonalEmail;
+            Phone = employee.Phone;
+            GitHub = employee.GitHub;
+            GitLab = employee.GitLab;
+            IsBlankEmployee = employee.IsBlankEmployee;
+            IsCurrentEmployee = employee.IsCurrentEmployee;
+
+            if (employee.EmployeeFinancialMetrics != null)
+            {
+                NetSalary = employee.EmployeeFinancialMetrics.NetSalary;
+                RatePerHour = employee.EmployeeFinancialMetrics.RatePerHour;
+                FullSalary = employee.EmployeeFinancialMetrics.Pay;
+                Parking = employee.EmployeeFinancialMetrics.ParkingCostPerMonth;
+                EmploymentType = employee.EmployeeFinancialMetrics.EmploymentType;
+            }
+
+            PersonnelNumber = "01/20"; // implement set up when will do task #861mc17vg
+            HireDate = DateTime.UtcNow; // implement set up when will do task #861mc17vg
         }
     }
 }
