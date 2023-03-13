@@ -43,7 +43,7 @@ namespace SalaryService.Domain
             EmployeeFinanceForPayroll = null;
             EmployeeFinancialMetrics = null;
             IsBlankEmployee = true;
-            IsCurrentEmployee = true;
+            IsCurrentEmployee = false;
         }
 
         public void Delete(Instant deletedAtUtc)
