@@ -4,6 +4,7 @@ using NodaTime;
 using SalaryService.Application.Commands;
 using SalaryService.Application.Queries;
 using SalaryService.Application.Services;
+using SalaryService.Application.Validators;
 
 namespace SalaryService.Application
 {
@@ -14,8 +15,9 @@ namespace SalaryService.Application
             var innerCircleServiceUrl = configuration.GetSection("InnerCircleServiceUrls");
             services.Configure<InnerCircleServiceUrls>(u => innerCircleServiceUrl.Bind(u));
 
-            services.AddTransient<GetColleaguesQueryHandler>();
+            services.AddTransient<GetEmployeesQueryHandler>();
             services.AddTransient<GetEmployeeQueryHandler>();
+            services.AddTransient<GetEmployeeProfileQueryHandler>();
             services.AddTransient<GetAnalyticQueryHandler>();
             services.AddTransient<GetIndicatorsQueryHandler>();
             services.AddTransient<GetCoefficientsQueryHandler>();
@@ -24,7 +26,7 @@ namespace SalaryService.Application
             services.AddTransient<GetEmployeeContactDetailsQueryHandler>();
             services.AddTransient<GetEmployeeFinanceForPayrollQueryHandler>();
             services.AddTransient<CreateEmployeeCommandHandler>();
-            services.AddTransient<UpdateEmployeeCommandHandler>();
+            services.AddTransient<UpdateEmployeeInfoCommandHandler>();
             services.AddTransient<UpdateProfileCommandHandler>();
             services.AddTransient<UpdateFinancesCommandHandler>();
             services.AddTransient<DeleteEmployeeCommandHandler>();
@@ -32,6 +34,7 @@ namespace SalaryService.Application
             services.AddTransient<CreateEstimatedFinancialEfficiencyCommandHandler>();
             services.AddTransient<EmployeeService>();
             services.AddTransient<FinanceAnalyticService>();
+            services.AddScoped<EmployeeUpdateParametersValidator>();
             services.AddTransient<IClock, Clock>();
             return services;
         }

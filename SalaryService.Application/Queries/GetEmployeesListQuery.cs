@@ -9,41 +9,29 @@ namespace SalaryService.Application.Queries
     {
     }
 
-    public class GetColleaguesQueryHandler
+    public class GetEmployeesQueryHandler
     {
         private readonly EmployeeDbContext _employeeDbContext;
 
-        public GetColleaguesQueryHandler(EmployeeDbContext employeeDbContext)
+        public GetEmployeesQueryHandler(EmployeeDbContext employeeDbContext)
         {
             _employeeDbContext = employeeDbContext;
         }
 
-        public async Task<ColleagueDto> HandleAsync()
+        public async Task<IEnumerable<EmployeeDto>> HandleAsync(bool includeFinanceInfo)
         {
-            var employees = await _employeeDbContext
-                .QueryableAsNoTracking<Employee>()
-                .Where(x => x.DeletedAtUtc == null)
-                .Include(x => x.EmployeeFinanceForPayroll)
-                .Include(x => x.EmployeeFinancialMetrics)
-                .ToListAsync();
+            var employeesRequest = _employeeDbContext.QueryableAsNoTracking<Employee>();
 
-            var employeesContacts = employees.Select(x => new ColleagueContactsDto(x.Id,
-                x.FirstName + " " + x.LastName + " " + x.MiddleName,
-                x.CorporateEmail,
-                x.PersonalEmail,
-                x.Phone,
-                x.GitHub,
-                x.GitLab));
+            if (includeFinanceInfo)
+            {
+                employeesRequest = employeesRequest
+                    .Include(x => x.EmployeeFinanceForPayroll)
+                    .Include(x => x.EmployeeFinancialMetrics);
+            }
 
-            var employeesFinances = employees.Select(x => new ColleagueFinancesDto(x.Id,
-                x.FirstName + " " + x.LastName + " " + x.MiddleName,
-                x.EmployeeFinanceForPayroll.RatePerHour,
-                x.EmployeeFinanceForPayroll.Pay,
-                x.EmployeeFinanceForPayroll.EmploymentType,
-                x.EmployeeFinancialMetrics.NetSalary,
-                x.EmployeeFinancialMetrics.ParkingCostPerMonth));
+            var employees = await employeesRequest.ToListAsync();
 
-            return new ColleagueDto(employeesContacts, employeesFinances);
+            return employees.Select(employee => new EmployeeDto(employee));
         }
     }
 }

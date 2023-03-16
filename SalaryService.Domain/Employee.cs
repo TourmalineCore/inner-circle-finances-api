@@ -10,7 +10,7 @@ namespace SalaryService.Domain
 
         public string LastName { get; private set; }
 
-        public string MiddleName { get; private set; }
+        public string? MiddleName { get; private set; }
 
         public string CorporateEmail { get; private set; }
 
@@ -32,6 +32,10 @@ namespace SalaryService.Domain
 
         public bool IsCurrentEmployee { get; private set; }
 
+        public bool IsEmployedOfficially { get; private set; }
+
+        public string? PersonnelNumber { get; private set; }
+
         public Instant? DeletedAtUtc { get; private set; }
 
         public Employee(string firstName, string lastName, string middleName, string corporateEmail)
@@ -43,31 +47,13 @@ namespace SalaryService.Domain
             EmployeeFinanceForPayroll = null;
             EmployeeFinancialMetrics = null;
             IsBlankEmployee = true;
-            IsCurrentEmployee = true;
+            IsCurrentEmployee = false;
+            IsEmployedOfficially = false;
         }
 
         public void Delete(Instant deletedAtUtc)
         {
             DeletedAtUtc = deletedAtUtc;
-        }
-
-        public void Update(string name, 
-            string surname, 
-            string middleName,
-            string corporateEmail,
-            string personalEmail,
-            string phone,
-            string gitHub,
-            string gitLab)
-        {
-            FirstName = name;
-            LastName = surname;
-            MiddleName = middleName;
-            CorporateEmail = corporateEmail;
-            PersonalEmail = personalEmail;
-            Phone = phone;
-            GitHub = gitHub;
-            GitLab = gitLab;
         }
 
         public void Update(
@@ -80,6 +66,32 @@ namespace SalaryService.Domain
             Phone = phone;
             GitHub = gitHub;
             GitLab = gitLab;
+        }
+        public void Update(
+            string phone,
+            string? personalEmail,
+            string? gitHub,
+            string? gitLab,
+            Instant? hireDate,
+            bool isEmployedOfficially,
+            string? personnelNumber)
+        {
+            Phone = phone;
+            PersonalEmail = personalEmail;
+            GitHub = gitHub;
+            GitLab = gitLab;
+            HireDate = hireDate;
+            IsEmployedOfficially = isEmployedOfficially;
+            IsBlankEmployee = false;
+            IsCurrentEmployee = true;
+            PersonnelNumber = personnelNumber;
+        }
+
+        public string GetFullName()
+        {
+            return MiddleName == null 
+                ? $"{FirstName} {LastName}" 
+                : $"{FirstName} {LastName} {MiddleName}";
         }
     }
 }

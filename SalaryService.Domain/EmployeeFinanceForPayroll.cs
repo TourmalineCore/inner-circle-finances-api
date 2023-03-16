@@ -16,12 +16,21 @@
 
         public decimal EmploymentType { get; private set; }
 
-        public EmployeeFinanceForPayroll(decimal ratePerHour, decimal pay, decimal employmentType, decimal parkingCostPerMonth)
+        public EmployeeFinanceForPayroll(decimal ratePerHour, decimal pay, decimal employmentType, decimal parkingCostPerMonth, long? employeeId = null)
         {
             RatePerHour = ratePerHour;
             Pay = pay;
             EmploymentType = employmentType;
             ParkingCostPerMonth = parkingCostPerMonth;
+
+            if (employeeId.HasValue)
+            {
+                EmployeeId = employeeId.Value;
+            }
+        }
+
+        public EmployeeFinanceForPayroll()
+        {
         }
 
         public void Update(decimal ratePerHour, decimal pay, decimal employmentType, decimal parkingCostPerMonth)

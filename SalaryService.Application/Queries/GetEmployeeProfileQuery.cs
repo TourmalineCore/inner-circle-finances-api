@@ -5,28 +5,28 @@ using SalaryService.Domain;
 
 namespace SalaryService.Application.Queries
 {
-    public partial class GetEmployeeQuery
+    public partial class GetEmployeeProfileQuery
     {
     }
 
-    public class GetEmployeeQueryHandler
+    public class GetEmployeeProfileQueryHandler
     {
         private readonly EmployeeDbContext _employeeDbContext;
 
-        public GetEmployeeQueryHandler(EmployeeDbContext employeeDbContext)
+        public GetEmployeeProfileQueryHandler(EmployeeDbContext employeeDbContext)
         {
             _employeeDbContext = employeeDbContext;
         }
 
-        public async Task<EmployeeDto> HandleAsync(long employeeId)
+        public async Task<EmployeeProfileDto> HandleAsync(string corporateEmail)
         {
             var employee = await _employeeDbContext
                 .Queryable<Employee>()
                 .Include(x => x.EmployeeFinanceForPayroll)
                 .Include(x => x.EmployeeFinancialMetrics)
-                .SingleAsync(x => x.Id == employeeId);
+                .SingleAsync(x => x.CorporateEmail == corporateEmail);
 
-            return new EmployeeDto(employee);
+            return new EmployeeProfileDto(employee);
         }
     }
 }
