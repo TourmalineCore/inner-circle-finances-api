@@ -8,7 +8,7 @@ deployment:
 replicaCount: 1
 
 image:
-  repository: ghcr.io/tourmalinecore/inner-circle/dev-salary-service
+  repository: ghcr.io/tourmalinecore/inner-circle/dev-salary-service-api
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag:
@@ -27,10 +27,12 @@ fullnameOverride: ""
 
 podAnnotations: {}
 
-podSecurityContext: {}
+podSecurityContext:
+  {}
   # fsGroup: 2000
 
-securityContext: {}
+securityContext:
+  {}
   # capabilities:
   #   drop:
   #   - ALL
@@ -47,11 +49,11 @@ resources:
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
   limits:
-    cpu: 350m
-    memory: 512Mi
+    cpu: 100m
+    memory: 300Mi
   requests:
-    cpu: 200m
-    memory: 350Mi
+    cpu: 50m
+    memory: 200Mi
 
 autoscaling:
   enabled: false

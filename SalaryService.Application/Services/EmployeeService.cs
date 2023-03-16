@@ -8,7 +8,6 @@ namespace SalaryService.Application.Services
     public class EmployeeService
     {
         private readonly FinanceAnalyticService _financeAnalyticService;
-        private readonly IInnerCircleHttpClient _innerCircleHttpClient;
         private readonly CreateEmployeeCommandHandler _createEmployeeCommandHandler;
         private readonly UpdateEmployeeInfoCommandHandler _updateEmployeeInfoCommandHandler;
         private readonly UpdateFinancesCommandHandler _updateFinancesCommandHandler;
@@ -19,7 +18,6 @@ namespace SalaryService.Application.Services
         private readonly EmployeeUpdateParametersValidator _employeeUpdateParametersValidator;
 
         public EmployeeService(FinanceAnalyticService financeAnalyticService,
-            IInnerCircleHttpClient innerCircleHttpClient,
             CreateEmployeeCommandHandler createEmployeeCommandHandler,
             UpdateEmployeeInfoCommandHandler updateEmployeeInfoCommandHandler,
             UpdateFinancesCommandHandler updateFinancesCommandHandler,
@@ -30,7 +28,6 @@ namespace SalaryService.Application.Services
             EmployeeUpdateParametersValidator employeeUpdateParametersValidator)
         {
             _financeAnalyticService = financeAnalyticService;
-            _innerCircleHttpClient = innerCircleHttpClient;
             _createEmployeeCommandHandler = createEmployeeCommandHandler;
             _updateEmployeeInfoCommandHandler = updateEmployeeInfoCommandHandler;
             _updateFinancesCommandHandler = updateFinancesCommandHandler;
