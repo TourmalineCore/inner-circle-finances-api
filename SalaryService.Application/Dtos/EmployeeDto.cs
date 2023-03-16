@@ -78,6 +78,8 @@ namespace SalaryService.Application.Dtos
 
         public bool IsCurrentEmployee { get; init; }
 
+        public bool IsEmployedOfficially { get; init; }
+
         public decimal? NetSalary { get; init; } = null;
 
         public decimal? RatePerHour { get; init; } = null;
@@ -95,7 +97,7 @@ namespace SalaryService.Application.Dtos
         public EmployeeDto(Employee employee)
         {
             EmployeeId = employee.Id;
-            FullName = $"{employee.FirstName} {employee.LastName} {employee.MiddleName}";
+            FullName = employee.GetFullName();
             CorporateEmail = employee.CorporateEmail;
             PersonalEmail = employee.PersonalEmail;
             Phone = employee.Phone;
@@ -103,18 +105,19 @@ namespace SalaryService.Application.Dtos
             GitLab = employee.GitLab;
             IsBlankEmployee = employee.IsBlankEmployee;
             IsCurrentEmployee = employee.IsCurrentEmployee;
+            IsEmployedOfficially = employee.IsEmployedOfficially;
 
             if (employee.EmployeeFinancialMetrics != null)
             {
-                NetSalary = employee.EmployeeFinancialMetrics.NetSalary;
-                RatePerHour = employee.EmployeeFinancialMetrics.RatePerHour;
-                FullSalary = employee.EmployeeFinancialMetrics.Pay;
-                Parking = employee.EmployeeFinancialMetrics.ParkingCostPerMonth;
+                NetSalary = Math.Round(employee.EmployeeFinancialMetrics.NetSalary, 2);
+                RatePerHour = Math.Round(employee.EmployeeFinancialMetrics.RatePerHour, 2);
+                FullSalary = Math.Round(employee.EmployeeFinancialMetrics.Pay, 2);
+                Parking = Math.Round(employee.EmployeeFinancialMetrics.ParkingCostPerMonth, 2);
                 EmploymentType = employee.EmployeeFinancialMetrics.EmploymentType;
             }
 
-            PersonnelNumber = "01/20"; // implement set up when will do task #861mc17vg
-            HireDate = DateTime.UtcNow; // implement set up when will do task #861mc17vg
+            PersonnelNumber = employee.PersonnelNumber;
+            HireDate = employee.HireDate?.ToDateTimeUtc();
         }
     }
 }

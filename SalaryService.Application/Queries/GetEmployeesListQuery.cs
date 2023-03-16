@@ -24,7 +24,7 @@ namespace SalaryService.Application.Queries
 
             if (includeFinanceInfo)
             {
-                employeesRequest
+                employeesRequest = employeesRequest
                     .Include(x => x.EmployeeFinanceForPayroll)
                     .Include(x => x.EmployeeFinancialMetrics);
             }

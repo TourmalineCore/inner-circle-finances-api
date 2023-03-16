@@ -1,52 +1,55 @@
-﻿using NodaTime;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace SalaryService.Application.Dtos;
 
-namespace SalaryService.Application.Dtos
+public readonly struct EmployeeUpdateParameters
 {
-    public class EmployeeUpdateParameters
-    {
-        public long EmployeeId { get; set; }
-        public string Phone { get; set; }
-        public string PersonalEmail { get; set; }
-        public string GitHub { get; set; }
-        public string GitLab { get; set; }
-        public decimal RatePerHour { get; set; }
-        public decimal FullSalary { get; set; }
-        public decimal EmploymentType { get; set; }
-        public decimal Parking { get; set; }
-        public Instant? HireDate { get; set; }
-        public bool IsEmployedOfficially { get; set; }
-        public string PersonnelNumber { get; set; }
+    public long EmployeeId { get; init; }
 
-        public EmployeeUpdateParameters(long employeeId, 
-            string phone,
-            string personalEmail,
-            string gitHub,
-            string gitLab, 
-            decimal ratePerHour,
-            decimal fullSalary, 
-            decimal employmentType, 
-            decimal parking, 
-            Instant? hireDate, 
-            bool isEmployedOfficially, 
-            string personnelNumber)
+    public string Phone { get; init; }
+
+    public string? PersonalEmail { get; init; }
+
+    public string? GitHub { get; init; }
+
+    public string? GitLab { get; init; }
+
+    public decimal RatePerHour { get; init; }
+
+    public decimal FullSalary { get; init; }
+
+    public decimal EmploymentType { get; init; }
+
+    public decimal Parking { get; init; }
+
+    public DateTime HireDate { get; init; }
+
+    public bool IsEmployedOfficially { get; init; }
+
+    public string? PersonnelNumber { get; init; }
+
+    public FinanceUpdatingParameters GetFinanceUpdatingParameters()
+    {
+        return new FinanceUpdatingParameters
         {
-            EmployeeId = employeeId;
-            Phone = phone;
-            PersonalEmail = personalEmail;
-            GitHub = gitHub;
-            GitLab = gitLab;
-            RatePerHour = ratePerHour;
-            FullSalary = fullSalary;
-            EmploymentType = employmentType;
-            Parking = parking;
-            HireDate = hireDate;
-            IsEmployedOfficially = isEmployedOfficially;
-            PersonnelNumber = personnelNumber;
-        }
+            EmployeeId = EmployeeId,
+            RatePerHour = RatePerHour,
+            Pay = FullSalary,
+            EmploymentType = EmploymentType,
+            ParkingCostPerMonth = Parking
+        };
+    }
+
+    public EmployeeInfoUpdateParameters GetEmployeeInfoUpdateParameters()
+    {
+        return new EmployeeInfoUpdateParameters
+        {
+            EmployeeId = EmployeeId,
+            Phone = Phone,
+            PersonalEmail = PersonalEmail,
+            GitHub = GitHub,
+            GitLab = GitLab,
+            HireDate = HireDate,
+            IsEmployedOfficially = IsEmployedOfficially,
+            PersonnelNumber = PersonnelNumber,
+        };
     }
 }
