@@ -12,18 +12,21 @@ namespace SalaryService.DataAccess.Mapping
             var ceoHiringAtUtc = DateTime.SpecifyKind(new DateTime(2020, 01, 01, 0, 0, 0), DateTimeKind.Utc);
 
             builder.Property(x => x.CorporateEmail).IsRequired();
+            builder.Property(x => x.FirstName).IsRequired();
+            builder.Property(x => x.LastName).IsRequired();
 
+            builder.Property(x => x.MiddleName).IsRequired(false);
+            builder.Property(x => x.PersonalEmail).IsRequired(false);
             builder.Property(x => x.Phone).IsRequired(false);
             builder.Property(x => x.GitHub).IsRequired(false);
             builder.Property(x => x.GitLab).IsRequired(false);
+            builder.Property(x => x.PersonnelNumber).IsRequired(false);
 
             builder.Property(x => x.IsBlankEmployee).IsRequired().HasDefaultValue(true);
-            builder.Property(x => x.IsCurrentEmployee).IsRequired().HasDefaultValue(true);
+            builder.Property(x => x.IsCurrentEmployee).IsRequired().HasDefaultValue(false);
+            builder.Property(x => x.IsEmployedOfficially).IsRequired().HasDefaultValue(false);
 
             builder.HasIndex(x => x.CorporateEmail).IsUnique();
-            builder.HasIndex(x => x.Phone).IsUnique();
-            builder.HasIndex(x => x.GitHub).IsUnique();
-            builder.HasIndex(x => x.GitLab).IsUnique();
 
             builder.HasData(new
             {
@@ -37,8 +40,9 @@ namespace SalaryService.DataAccess.Mapping
                 GitHub = "@ceo.github",
                 GitLab = "@ceo.gitlab",
                 HireDate = Instant.FromDateTimeUtc(ceoHiringAtUtc),
-                IsBlankEmployee = false,
-                IsCurrentEmployee = true
+                IsBlankEmployee = true,
+                IsCurrentEmployee = true,
+                IsEmployedOfficially = true
             });
         }
     }

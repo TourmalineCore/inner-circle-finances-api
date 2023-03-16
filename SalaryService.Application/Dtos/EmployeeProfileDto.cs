@@ -1,38 +1,32 @@
-﻿namespace SalaryService.Application.Dtos
+﻿using SalaryService.Domain;
+
+namespace SalaryService.Application.Dtos
 {
-    public class EmployeeProfileDto
+    public readonly struct EmployeeProfileDto
     {
-        public long Id { get; private set; }
+        public long Id { get; init; }
 
-        public string FullName { get; private set; }
+        public string FullName { get; init; }
 
-        public string CorporateEmail { get; private set; }
+        public string CorporateEmail { get; init; }
 
-        public string PersonalEmail { get; private set; }
+        public string? PersonalEmail { get; init; }
 
-        public string Phone { get; private set; }
+        public string? Phone { get; init; }
 
-        public string GitHub { get; private set; }
+        public string? GitHub { get; init; }
 
-        public string GitLab { get; private set; }
+        public string? GitLab { get; init; }
 
-        public EmployeeProfileDto(long id, 
-            string name, 
-            string surname, 
-            string middleName, 
-            string corporateEmail, 
-            string personalEmail, 
-            string phone,
-            string gitHub,
-            string gitLab)
+        public EmployeeProfileDto(Employee employee)
         {
-            Id = id;
-            FullName = name + " " + surname + " " + middleName;
-            CorporateEmail = corporateEmail;
-            PersonalEmail = personalEmail;
-            Phone = phone;
-            GitHub = gitHub;
-            GitLab = gitLab;
+            Id = employee.Id;
+            FullName = employee.GetFullName();
+            CorporateEmail = employee.CorporateEmail;
+            PersonalEmail = employee.PersonalEmail;
+            Phone = employee.Phone;
+            GitHub = employee.GitHub;
+            GitLab = employee.GitLab;
         }
     }
 }
