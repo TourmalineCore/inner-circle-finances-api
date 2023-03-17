@@ -7,12 +7,12 @@ public class EmployeeUpdateParametersValidator : AbstractValidator<EmployeeUpdat
 {
     public EmployeeUpdateParametersValidator()
     {
-        RuleFor(x => x.EmployeeId).NotNull().NotEmpty();
+        RuleFor(x => x.EmployeeId).NotNull().GreaterThanOrEqualTo(0);
         RuleFor(x => x.Phone).NotNull().NotEmpty();
-        RuleFor(x => x.RatePerHour).NotNull().NotEmpty();
-        RuleFor(x => x.FullSalary).NotNull().NotEmpty();
-        RuleFor(x => x.EmploymentType).NotNull().NotEmpty();
-        RuleFor(x => x.Parking).NotNull().NotEmpty();
+        RuleFor(x => x.RatePerHour).NotNull().GreaterThanOrEqualTo(0);
+        RuleFor(x => x.FullSalary).NotNull().GreaterThanOrEqualTo(1);
+        RuleFor(x => x.EmploymentType).NotNull().GreaterThanOrEqualTo(0);
+        RuleFor(x => x.Parking).NotNull().GreaterThanOrEqualTo(0);
         RuleFor(x => x.HireDate).NotNull().NotEmpty();
     }
 }
