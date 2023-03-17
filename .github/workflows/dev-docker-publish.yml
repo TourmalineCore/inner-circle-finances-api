@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - "ci/improve-helm-charts"
 
     tags:
       - v*
@@ -28,23 +29,23 @@ jobs:
           docker build -t $GITHUB_REGISTRY/tourmalinecore/inner-circle/dev-salary-service-api:latest -t $GITHUB_REGISTRY/tourmalinecore/inner-circle/dev-salary-service-api:${{ github.sha }} -f SalaryService.Api/Dockerfile .
           docker push $GITHUB_REGISTRY/tourmalinecore/inner-circle/dev-salary-service-api:latest
           docker push $GITHUB_REGISTRY/tourmalinecore/inner-circle/dev-salary-service-api:${{ github.sha }}
-      - name: Deploy
-        uses: WyriHaximus/github-action-helm3@v2
-        with:
-          exec:
-            helm upgrade --namespace dev-inner-circle --create-namespace --install dev-salary-service-api
-            --set "aspnetcoreEnvironment=Development"
-            --set "ingress.host"=${{ secrets.DEV_HOST }}
-            --set "deployment.appsettings.ConnectionStrings.DefaultConnection=${{ secrets.DEV_POSTGRESQL_CONNECTION_STRING }}"
-            --set "deployment.appsettings.AuthenticationOptions.PublicSigningKey=${{ secrets.DEV_PUBLIC_SIGNING_KEY }}"
-            --set "deployment.appsettings.AuthenticationOptions.PrivateSigningKey=${{ secrets.DEV_PRIVATE_SIGNING_KEY }}"
-            --set "resources.limits.cpu=${{ secrets.DEV_APP_CPU_LIMIT }}"
-            --set "resources.limits.memory=${{ secrets.DEV_APP_MEMORY_LIMIT }}"
-            --set "resources.requests.cpu=${{ secrets.DEV_APP_CPU_REQUESTS }}"
-            --set "resources.requests.memory=${{ secrets.DEV_APP_MEMORY_REQUESTS }}"
-            --set "imageCredentials.username=${{ github.actor }}"
-            --set "imageCredentials.password=${{ secrets.GH_REGISTRY_TOKEN }}"
-            --set "image.tag=${{ github.sha }}"
-            --set "image.pullPolicy=Always"
-            ./SalaryService.Api/ci/chart
-          kubeconfig: "${{ secrets.DEV_KUBECONFIG }}"
+      # - name: Deploy
+      #   uses: WyriHaximus/github-action-helm3@v2
+      #   with:
+      #     exec:
+      #       helm upgrade --namespace dev-inner-circle --create-namespace --install dev-salary-service-api
+      #       --set "aspnetcoreEnvironment=Development"
+      #       --set "ingress.host"=${{ secrets.DEV_HOST }}
+      #       --set "deployment.appsettings.ConnectionStrings.DefaultConnection=${{ secrets.DEV_POSTGRESQL_CONNECTION_STRING }}"
+      #       --set "deployment.appsettings.AuthenticationOptions.PublicSigningKey=${{ secrets.DEV_PUBLIC_SIGNING_KEY }}"
+      #       --set "deployment.appsettings.AuthenticationOptions.PrivateSigningKey=${{ secrets.DEV_PRIVATE_SIGNING_KEY }}"
+      #       --set "resources.limits.cpu=${{ secrets.DEV_APP_CPU_LIMIT }}"
+      #       --set "resources.limits.memory=${{ secrets.DEV_APP_MEMORY_LIMIT }}"
+      #       --set "resources.requests.cpu=${{ secrets.DEV_APP_CPU_REQUESTS }}"
+      #       --set "resources.requests.memory=${{ secrets.DEV_APP_MEMORY_REQUESTS }}"
+      #       --set "imageCredentials.username=${{ github.actor }}"
+      #       --set "imageCredentials.password=${{ secrets.GH_REGISTRY_TOKEN }}"
+      #       --set "image.tag=${{ github.sha }}"
+      #       --set "image.pullPolicy=Always"
+      #       ./SalaryService.Api/ci/chart
+      #     kubeconfig: "${{ secrets.DEV_KUBECONFIG }}"

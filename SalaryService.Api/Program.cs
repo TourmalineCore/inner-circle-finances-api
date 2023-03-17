@@ -129,11 +129,11 @@ app.UseSwaggerUI(options =>
     options.RoutePrefix = string.Empty;
 });
 
-using (var serviceScope = app.Services.CreateScope())
-{
-    var context = serviceScope.ServiceProvider.GetRequiredService<EmployeeDbContext>();
-    await context.Database.MigrateAsync();
-}
+//using (var serviceScope = app.Services.CreateScope())
+//{
+//    var context = serviceScope.ServiceProvider.GetRequiredService<EmployeeDbContext>();
+//    await context.Database.MigrateAsync();
+//}
 
 app.UseRouting();
 
