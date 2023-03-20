@@ -32,10 +32,10 @@ jobs:
       - name: Deploy
         uses: WyriHaximus/github-action-helm3@v2
         with:
-          exec:
+          exec: |
             RELEASE_NAME=inner-circle-salary-service-api
             helm repo add bitnami https://charts.bitnami.com/bitnami
-            helm upgrade --namespace playground --create-namespace --values ./SalaryService.Api/ci/values-custom.yaml  --install\
+            helm upgrade --install --namespace playground --create-namespace --values ./SalaryService.Api/ci/values-custom.yaml \
             --set "image.pullSecrets={${RELEASE_NAME}-aspnet-core-docker-secret}" \
             --set "image.pullCredentials.username=${{ github.actor }}" \
             --set "image.pullCredentials.password=${{ secrets.GH_REGISTRY_TOKEN }}" \
