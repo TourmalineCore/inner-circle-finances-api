@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - feature/new-chart-to-deploy
 
     tags:
       - v*
@@ -32,19 +33,20 @@ jobs:
         uses: WyriHaximus/github-action-helm3@v2
         with:
           exec:
-            helm upgrade --namespace dev-inner-circle --create-namespace --install dev-salary-service-api
-            --set "aspnetcoreEnvironment=Development"
-            --set "ingress.host"=${{ secrets.DEV_HOST }}
-            --set "deployment.appsettings.ConnectionStrings.DefaultConnection=${{ secrets.DEV_POSTGRESQL_CONNECTION_STRING }}"
-            --set "deployment.appsettings.AuthenticationOptions.PublicSigningKey=${{ secrets.DEV_PUBLIC_SIGNING_KEY }}"
-            --set "deployment.appsettings.AuthenticationOptions.PrivateSigningKey=${{ secrets.DEV_PRIVATE_SIGNING_KEY }}"
-            --set "resources.limits.cpu=${{ secrets.DEV_APP_CPU_LIMIT }}"
-            --set "resources.limits.memory=${{ secrets.DEV_APP_MEMORY_LIMIT }}"
-            --set "resources.requests.cpu=${{ secrets.DEV_APP_CPU_REQUESTS }}"
-            --set "resources.requests.memory=${{ secrets.DEV_APP_MEMORY_REQUESTS }}"
-            --set "imageCredentials.username=${{ github.actor }}"
-            --set "imageCredentials.password=${{ secrets.GH_REGISTRY_TOKEN }}"
-            --set "image.tag=${{ github.sha }}"
-            --set "image.pullPolicy=Always"
-            ./SalaryService.Api/ci/chart
+            RELEASE_NAME=inner-circle-salary-service-api
+            helm repo add bitnami https://charts.bitnami.com/bitnami
+            helm upgrade --install --namespace playground --create-namespace --values ./SalaryService.Api/ci/values-custom.yaml \
+            --set "image.pullSecrets={${RELEASE_NAME}-aspnet-core-docker-secret}" \
+            --set "image.pullCredentials.username=${{ github.actor }}" \
+            --set "image.pullCredentials.password=${{ secrets.GH_REGISTRY_TOKEN }}" \
+            --set "ingress.hostname=${{ secrets.DEV_HOST }}" \
+            --set "image.tag=${{ github.sha }}" \
+            --set "extraConfigMapEnvVars.Logging__LogLevel__Default=Information" \
+            --set "extraSecretEnvVars.ConnectionStrings__DefaultConnection=${{ secrets.DEV_POSTGRESQL_CONNECTION_STRING }}" \
+            --set "extraSecretEnvVars.AuthenticationOptions__PublicSigningKey=${{ secrets.DEV_PUBLIC_SIGNING_KEY }}" \
+            --set "extraSecretEnvVars.AuthenticationOptions__PrivateSigningKey=${{ secrets.DEV_PRIVATE_SIGNING_KEY }}" \
+            "${RELEASE_NAME}" \
+            bitnami/aspnet-core
           kubeconfig: "${{ secrets.DEV_KUBECONFIG }}"
+
+
