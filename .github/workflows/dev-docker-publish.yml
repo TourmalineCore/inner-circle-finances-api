@@ -52,7 +52,8 @@ jobs:
   #           "${RELEASE_NAME}" \
   #           bitnami/aspnet-core
   #         kubeconfig: "${{ secrets.DEV_KUBECONFIG }}"
-    deploy-to-k8s:
+  deploy-to-k8s:
+    needs: build-image
     runs-on: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v1
