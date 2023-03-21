@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - develop
-      - feature/new-chart-to-deploy
 
     tags:
       - v*
@@ -33,7 +32,7 @@ jobs:
         uses: WyriHaximus/github-action-helm3@v2
         with:
           exec: |
-            RELEASE_NAME=inner-circle-salary-service-api
+            RELEASE_NAME=dev-inner-circle-salary-service-api
             helm repo add bitnami https://charts.bitnami.com/bitnami
             helm upgrade --install --namespace playground --create-namespace --values ./SalaryService.Api/ci/values-custom.yaml \
             --set "image.pullSecrets={${RELEASE_NAME}-aspnet-core-docker-secret}" \
