@@ -15,7 +15,7 @@ env:
   GITHUB_REGISTRY: ghcr.io
 
 jobs:
-  build-image-to-dev-k8s:
+  build-image:
     name: Build and push service image  
     if: github.event_name == 'push'
     runs-on: ubuntu-22.04
@@ -44,9 +44,6 @@ jobs:
   #           RELEASE_NAME=dev-inner-circle-salary-service-api
   #           helm repo add bitnami https://charts.bitnami.com/bitnami
   #           helm upgrade --install --namespace dev-inner-circle --create-namespace --values ./SalaryService.Api/ci/values-custom.yaml \
-  #           --set "image.pullSecrets={${RELEASE_NAME}-aspnet-core-docker-secret}" \
-  #           --set "image.pullCredentials.username=${{ github.actor }}" \
-  #           --set "image.pullCredentials.password=${{ secrets.GH_REGISTRY_TOKEN }}" \
   #           --set "ingress.hostname=${{ secrets.DEV_HOST }}" \
   #           --set "image.tag=${{ github.sha }}" \
   #           --set "extraSecretEnvVars.ConnectionStrings__DefaultConnection=${{ secrets.DEV_POSTGRESQL_CONNECTION_STRING }}" \
@@ -55,5 +52,33 @@ jobs:
   #           "${RELEASE_NAME}" \
   #           bitnami/aspnet-core
   #         kubeconfig: "${{ secrets.DEV_KUBECONFIG }}"
+    deploy-to-k8s:
+    runs-on: 'ubuntu-latest'
+    steps:
+    - uses: actions/checkout@v1
+    - name: 'Deploy'
+      uses: 'deliverybot/helm@v1'
+      with:
+        release: 'salary-service-api'
+        namespace: 'dev-inner-circle'
+        repo: 'https://charts.bitnami.com/bitnami'
+        repo-alias: 'bitnami'
+        chart: 'bitnami/aspnet-core'
+        token: '${{ github.token }}'
+        values: |
+          ingress:
+            hostname: ${{ secrets.DEV_HOST }}
+          image:
+            tag: ${{ github.sha }}
+          extraSecretEnvVars:
+            AuthenticationOptions__PublicSigningKey: ${{ secrets.DEV_PUBLIC_SIGNING_KEY }}
+            AuthenticationOptions__PrivateSigningKey: ${{ secrets.DEV_PRIVATE_SIGNING_KEY }}
+            ConnectionStrings__DefaultConnection: ${{ secrets.DEV_POSTGRESQL_CONNECTION_STRING }}
+        value-files: >-
+        [
+          "SalaryService.Api/ci/values-custom.yaml"
+        ]
+      env:
+        KUBECONFIG_FILE: '${{ secrets.DEV_KUBECONFIG }}'
 
 
