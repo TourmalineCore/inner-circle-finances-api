@@ -75,7 +75,7 @@ jobs:
             AuthenticationOptions__PublicSigningKey: ${{ secrets.DEV_PUBLIC_SIGNING_KEY }}
             AuthenticationOptions__PrivateSigningKey: ${{ secrets.DEV_PRIVATE_SIGNING_KEY }}
             ConnectionStrings__DefaultConnection: ${{ secrets.DEV_POSTGRESQL_CONNECTION_STRING }}
-        value-files: ["SalaryService.Api/ci/values-custom.yaml"]
+        value-files: '["SalaryService.Api/ci/values-custom.yaml"]'
       env:
         KUBECONFIG_FILE: '${{ secrets.DEV_KUBECONFIG }}'
 
