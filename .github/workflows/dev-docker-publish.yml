@@ -30,53 +30,27 @@ jobs:
           docker build -t $GITHUB_REGISTRY/tourmalinecore/inner-circle/salary-service-api:latest -t $GITHUB_REGISTRY/tourmalinecore/inner-circle/salary-service-api:${{ github.sha }} -f SalaryService.Api/Dockerfile .
           docker push $GITHUB_REGISTRY/tourmalinecore/inner-circle/salary-service-api:latest
           docker push $GITHUB_REGISTRY/tourmalinecore/inner-circle/salary-service-api:${{ github.sha }}
-  # deploy-to-dev-k8s:
-  #   needs: build-image-to-dev-k8s
-  #   name: Deploy service to k8s for development environment  
-  #   if: github.event_name == 'push'
-  #   runs-on: ubuntu-22.04
+  deploy-to-dev-k8s:
+    needs: build-image-to-dev-k8s
+    name: Deploy service to k8s for development environment  
+    if: github.event_name == 'push'
+    runs-on: ubuntu-22.04
 
-  #   steps:
-  #     - name: Deploy
-  #       uses: WyriHaximus/github-action-helm3@v2
-  #       with:
-  #         exec: |
-  #           RELEASE_NAME=dev-inner-circle-salary-service-api
-  #           helm repo add bitnami https://charts.bitnami.com/bitnami
-  #           helm upgrade --install --namespace dev-inner-circle --create-namespace --values ./SalaryService.Api/ci/values-custom.yaml \
-  #           --set "ingress.hostname=${{ secrets.DEV_HOST }}" \
-  #           --set "image.tag=${{ github.sha }}" \
-  #           --set "extraSecretEnvVars.ConnectionStrings__DefaultConnection=${{ secrets.DEV_POSTGRESQL_CONNECTION_STRING }}" \
-  #           --set "extraSecretEnvVars.AuthenticationOptions__PublicSigningKey=${{ secrets.DEV_PUBLIC_SIGNING_KEY }}" \
-  #           --set "extraSecretEnvVars.AuthenticationOptions__PrivateSigningKey=${{ secrets.DEV_PRIVATE_SIGNING_KEY }}" \
-  #           "${RELEASE_NAME}" \
-  #           bitnami/aspnet-core
-  #         kubeconfig: "${{ secrets.DEV_KUBECONFIG }}"
-  deploy-to-k8s:
-    needs: build-image
-    runs-on: 'ubuntu-latest'
     steps:
-    - uses: actions/checkout@v1
-    - name: 'Deploy'
-      uses: 'deliverybot/helm@v1'
-      with:
-        release: 'salary-service-api'
-        namespace: 'dev-inner-circle'
-        repo: 'https://charts.bitnami.com/bitnami'
-        repo-alias: 'bitnami'
-        chart: 'bitnami/aspnet-core'
-        token: '${{ github.token }}'
-        values: |
-          ingress:
-            hostname: ${{ secrets.DEV_HOST }}
-          image:
-            tag: ${{ github.sha }}
-          extraSecretEnvVars:
-            AuthenticationOptions__PublicSigningKey: ${{ secrets.DEV_PUBLIC_SIGNING_KEY }}
-            AuthenticationOptions__PrivateSigningKey: ${{ secrets.DEV_PRIVATE_SIGNING_KEY }}
-            ConnectionStrings__DefaultConnection: ${{ secrets.DEV_POSTGRESQL_CONNECTION_STRING }}
-        value-files: '["SalaryService.Api/ci/values-custom.yaml"]'
-      env:
-        KUBECONFIG_FILE: '${{ secrets.DEV_KUBECONFIG }}'
+      - name: Deploy
+        uses: WyriHaximus/github-action-helm3@v2
+        with:
+          exec: |
+            RELEASE_NAME=salary-service-api
+            helm repo add bitnami https://charts.bitnami.com/bitnami
+            helm upgrade --install --namespace dev-inner-circle --create-namespace --values ./SalaryService.Api/ci/values-custom.yaml \
+            --set "ingress.hostname=${{ secrets.DEV_HOST }}" \
+            --set "image.tag=${{ github.sha }}" \
+            --set "extraSecretEnvVars.ConnectionStrings__DefaultConnection=${{ secrets.DEV_POSTGRESQL_CONNECTION_STRING }}" \
+            --set "extraSecretEnvVars.AuthenticationOptions__PublicSigningKey=${{ secrets.DEV_PUBLIC_SIGNING_KEY }}" \
+            --set "extraSecretEnvVars.AuthenticationOptions__PrivateSigningKey=${{ secrets.DEV_PRIVATE_SIGNING_KEY }}" \
+            "${RELEASE_NAME}" \
+            bitnami/aspnet-core
+          kubeconfig: "${{ secrets.DEV_KUBECONFIG }}"
 
 
