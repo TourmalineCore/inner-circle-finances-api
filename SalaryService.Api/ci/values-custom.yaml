@@ -44,7 +44,7 @@ args:
 bindURLs: http://+:80
 
 # Here stored regular vars that passed to the pod environment
-extraConfigMapEnvVars:
+extraConfigMapEnvVars: {}
   # Logging__LogLevel__Default: "Error"
 
 # Here stored secrets that passed to the pod environment. You should never store them in this file.
