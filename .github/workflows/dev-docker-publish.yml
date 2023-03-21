@@ -10,7 +10,7 @@ on:
       - v*
 
   pull_request:
-
+  
 env:
   GITHUB_REGISTRY: ghcr.io
 
@@ -31,7 +31,7 @@ jobs:
           docker push $GITHUB_REGISTRY/tourmalinecore/inner-circle/salary-service-api:latest
           docker push $GITHUB_REGISTRY/tourmalinecore/inner-circle/salary-service-api:${{ github.sha }}
   deploy-to-dev-k8s:
-    needs: build-image-to-dev-k8s
+    needs: build-image
     name: Deploy service to k8s for development environment  
     if: github.event_name == 'push'
     runs-on: ubuntu-22.04
