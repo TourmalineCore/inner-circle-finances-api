@@ -210,10 +210,12 @@ extraDeploy:
       {{- include "common.tplvalues.render" ( dict "value" .Values.extraSecretEnvVarsEncoded "context" $ ) | trim | nindent 6 }}
       {{- end }}
   - |
+    {{ $docker_secret_name := printf "%s%s" ( include "aspnet-core.fullname" .) "-docker-secret" }}
+    {{- if has $docker_secret_name .Values.image.pullSecrets }}
     apiVersion: v1
     kind: Secret
     metadata:
-      name: {{ include "aspnet-core.fullname" . }}-docker-secret
+      name: {{ $docker_secret_name }}
       namespace: {{ include "common.names.namespace" . | quote }}
       labels: {{- include "common.labels.standard" . | nindent 6 }}
         {{- if .Values.commonLabels }}
@@ -225,3 +227,4 @@ extraDeploy:
     type: kubernetes.io/dockerconfigjson
     data:
       .dockerconfigjson: {{ printf "{\"auths\": {\"%s\": {\"auth\": \"%s\"}}}" .Values.image.registry (printf "%s:%s" (.Values.image.pullCredentials.username | default "") (.Values.image.pullCredentials.password | default "") | b64enc) | b64enc }}
+    {{- end }}
