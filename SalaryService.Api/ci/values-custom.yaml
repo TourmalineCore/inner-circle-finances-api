@@ -61,7 +61,7 @@ extraSecretEnvVars: {}
 
 extraSecretEnvVarsEncoded: |
   {{- range $k, $v := .Values.extraSecretEnvVars }}
-  {{ $k }}: {{ $v | quote | b64enc | quote}}
+  {{ $k }}: {{ $v | b64enc | quote}}
   {{- end }}
 
 ## @param extraEnvVarsCM ConfigMap with extra environment variables
