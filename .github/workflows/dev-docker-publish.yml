@@ -39,7 +39,7 @@ jobs:
             RELEASE_NAME=salary-service-api
             helm repo add bitnami https://charts.bitnami.com/bitnami
             helm upgrade --install --namespace dev-inner-circle --create-namespace --values ./SalaryService.Api/ci/values-custom.yaml \
-            --set "ingress.enabled=false" \
+            --set "ingress.enabled=true" \
             --set "ingress.hostname=${{ secrets.DEV_HOST }}" \
             --set "image.tag=${{ github.sha }}" \
             --set "extraSecretEnvVars.ConnectionStrings__DefaultConnection=${{ secrets.DEV_POSTGRESQL_CONNECTION_STRING }}" \
