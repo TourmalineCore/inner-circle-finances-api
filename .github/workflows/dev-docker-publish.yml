@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - develop
-      - feature/#861mhn6b6-add-pod-anno-and-fix-deploy
   pull_request:
 
 env:
