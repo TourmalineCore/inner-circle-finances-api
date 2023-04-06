@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - feature/#861mhn6b6-add-pod-anno-and-fix-deploy
   pull_request:
 
 env:
@@ -19,9 +20,9 @@ jobs:
       - name: Build and push image
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
-          docker build -t $GITHUB_REGISTRY/tourmalinecore/inner-circle/salary-service-api:latest -t $GITHUB_REGISTRY/tourmalinecore/inner-circle/salary-service-api:${{ github.sha }} -f SalaryService.Api/Dockerfile .
-          docker push $GITHUB_REGISTRY/tourmalinecore/inner-circle/salary-service-api:latest
-          docker push $GITHUB_REGISTRY/tourmalinecore/inner-circle/salary-service-api:${{ github.sha }}
+          docker build -t $GITHUB_REGISTRY/tourmalinecore/inner-circle/salary-api:latest -t $GITHUB_REGISTRY/tourmalinecore/inner-circle/salary-api:${{ github.sha }} -f SalaryService.Api/Dockerfile .
+          docker push $GITHUB_REGISTRY/tourmalinecore/inner-circle/salary-api:latest
+          docker push $GITHUB_REGISTRY/tourmalinecore/inner-circle/salary-api:${{ github.sha }}
 
   deploy-to-dev-k8s:
     needs: build-image
@@ -32,12 +33,13 @@ jobs:
       - name: checkout
         uses: actions/checkout@v1
       - name: Deploy
-        uses: WyriHaximus/github-action-helm3@v2
+        uses: WyriHaximus/github-action-helm3@v3
         with:
           exec: |
-            RELEASE_NAME=salary-service-api
+            RELEASE_NAME=salary-api
             helm repo add bitnami https://charts.bitnami.com/bitnami
             helm upgrade --install --namespace dev-inner-circle --create-namespace --values ./SalaryService.Api/ci/values-custom.yaml \
+            --set "ingress.enabled=true" \
             --set "ingress.hostname=${{ secrets.DEV_HOST }}" \
             --set "image.tag=${{ github.sha }}" \
             --set "extraSecretEnvVars.ConnectionStrings__DefaultConnection=${{ secrets.DEV_POSTGRESQL_CONNECTION_STRING }}" \
