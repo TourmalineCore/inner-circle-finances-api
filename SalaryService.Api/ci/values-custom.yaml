@@ -61,9 +61,9 @@ extraSecretEnvVars: {}
 
 extraSecretEnvVarsEncoded: |
   {{- range $k, $v := .Values.extraSecretEnvVars }}
-  {{- if kindIs "int" $v}}
+  {{- if kindIs "int64" $v}}
   {{ $k }}: {{ $v | quote | b64enc | quote}}
-  {{-else}}
+  {{- else}}
   {{ $k }}: {{ $v | b64enc | quote}}
   {{- end}}
   {{- end }}
