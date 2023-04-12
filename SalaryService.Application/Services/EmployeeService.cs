@@ -1,39 +1,41 @@
-﻿using SalaryService.Application.Commands;
+﻿using FluentValidation;
+using SalaryService.Application.Commands;
 using SalaryService.Application.Dtos;
+using SalaryService.Application.Validators;
 
 namespace SalaryService.Application.Services
 {
     public class EmployeeService
     {
         private readonly FinanceAnalyticService _financeAnalyticService;
-        private readonly IInnerCircleHttpClient _innerCircleHttpClient;
         private readonly CreateEmployeeCommandHandler _createEmployeeCommandHandler;
-        private readonly UpdateEmployeeCommandHandler _updateEmployeeCommandHandler;
+        private readonly UpdateEmployeeInfoCommandHandler _updateEmployeeInfoCommandHandler;
         private readonly UpdateFinancesCommandHandler _updateFinancesCommandHandler;
         private readonly UpdateProfileCommandHandler _updateProfileCommandHandler;
         private readonly DeleteEmployeeCommandHandler _deleteEmployeeCommandHandler;
         private readonly CreateTotalExpensesCommandHandler _createTotalExpensesCommandHandler;
         private readonly CreateEstimatedFinancialEfficiencyCommandHandler _createEstimatedFinancialEfficiencyCommandHandler;
+        private readonly EmployeeUpdateParametersValidator _employeeUpdateParametersValidator;
 
         public EmployeeService(FinanceAnalyticService financeAnalyticService,
-            IInnerCircleHttpClient innerCircleHttpClient,
             CreateEmployeeCommandHandler createEmployeeCommandHandler,
-            UpdateEmployeeCommandHandler updateEmployeeCommandHandler,
+            UpdateEmployeeInfoCommandHandler updateEmployeeInfoCommandHandler,
             UpdateFinancesCommandHandler updateFinancesCommandHandler,
             UpdateProfileCommandHandler updateProfileCommandHandler,
             DeleteEmployeeCommandHandler deleteEmployeeCommandHandler,
             CreateTotalExpensesCommandHandler createTotalExpensesCommandHandler,
-            CreateEstimatedFinancialEfficiencyCommandHandler createEstimatedFinancialEfficiencyCommandHandler)
+            CreateEstimatedFinancialEfficiencyCommandHandler createEstimatedFinancialEfficiencyCommandHandler, 
+            EmployeeUpdateParametersValidator employeeUpdateParametersValidator)
         {
             _financeAnalyticService = financeAnalyticService;
-            _innerCircleHttpClient = innerCircleHttpClient;
             _createEmployeeCommandHandler = createEmployeeCommandHandler;
-            _updateEmployeeCommandHandler = updateEmployeeCommandHandler;
+            _updateEmployeeInfoCommandHandler = updateEmployeeInfoCommandHandler;
             _updateFinancesCommandHandler = updateFinancesCommandHandler;
             _updateProfileCommandHandler = updateProfileCommandHandler;
             _deleteEmployeeCommandHandler = deleteEmployeeCommandHandler;
             _createTotalExpensesCommandHandler = createTotalExpensesCommandHandler;
             _createEstimatedFinancialEfficiencyCommandHandler = createEstimatedFinancialEfficiencyCommandHandler;
+            _employeeUpdateParametersValidator = employeeUpdateParametersValidator;
         }
 
         public async Task<MetricsPreviewDto> GetPreviewMetrics(GetPreviewParameters parameters)
@@ -68,22 +70,9 @@ namespace SalaryService.Application.Services
                 newMetrics.NetSalary);
         }
 
-        public async Task CreateEmployee(EmployeeCreatingParameters parameters)
+        public async Task CreateEmployeeAsync(EmployeeCreationParameters parameters)
         {
-            var metrics = await _financeAnalyticService.CalculateMetrics(
-                parameters.RatePerHour,
-                parameters.Pay,
-                parameters.EmploymentType,
-                parameters.ParkingCostPerMonth);
-
-            var employee = await _createEmployeeCommandHandler.HandleAsync(parameters, metrics);
-
-            await _innerCircleHttpClient.SendRequestToRegister(employee);
-
-            var totals = await _financeAnalyticService.CalculateTotalFinances();
-            var estimatedFinancialEfficiency = await _financeAnalyticService.CalculateEstimatedFinancialEfficiency(totals.TotalExpense);
-            await _createTotalExpensesCommandHandler.HandleAsync(totals);
-            await _createEstimatedFinancialEfficiencyCommandHandler.HandleAsync(estimatedFinancialEfficiency);
+            await _createEmployeeCommandHandler.HandleAsync(parameters);
         }
 
         public async Task DeleteEmployee(long id)
@@ -95,25 +84,35 @@ namespace SalaryService.Application.Services
             await _createEstimatedFinancialEfficiencyCommandHandler.HandleAsync(estimatedFinancialEfficiency);
         }
 
-        public async Task UpdateEmployee(EmployeeUpdatingParameters request)
+        public async Task UpdateEmployeeAsync(EmployeeUpdateParameters request)
         {
-            await _updateEmployeeCommandHandler.HandleAsync(request);
+            var validationResult = await _employeeUpdateParametersValidator.ValidateAsync(request);
+
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors[0].ErrorMessage);
+            }
+
+            await _updateEmployeeInfoCommandHandler.HandleAsync(request.GetEmployeeInfoUpdateParameters());
+            await UpdateFinancesAsync(request.GetFinanceUpdatingParameters());
         }
 
-        public async Task UpdateProfile(ProfileUpdatingParameters request, long accountId)
+        public async Task UpdateProfileAsync(ProfileUpdatingParameters updatingParameters)
         {
-            await _updateProfileCommandHandler.HandleAsync(request, accountId);
+            await _updateProfileCommandHandler.HandleAsync(updatingParameters);
         }
 
-        public async Task UpdateFinances(FinanceUpdatingParameters parameters)
+        private async Task UpdateFinancesAsync(FinanceUpdatingParameters parameters)
         {
             var metrics = await _financeAnalyticService.CalculateMetrics(
                 parameters.RatePerHour,
                 parameters.Pay,
                 parameters.EmploymentType,
-                parameters.ParkingCostPerMonth
+                parameters.ParkingCostPerMonth,
+                parameters.EmployeeId
             );
 
+            // TODO: #861m9k5f6: make all calculations in one transaction
             await _updateFinancesCommandHandler.HandleAsync(parameters, metrics);
             var totals = await _financeAnalyticService.CalculateTotalFinances();
             var estimatedFinancialEfficiency = await _financeAnalyticService.CalculateEstimatedFinancialEfficiency(totals.TotalExpense);

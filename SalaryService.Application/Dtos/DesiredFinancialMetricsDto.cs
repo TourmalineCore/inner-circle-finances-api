@@ -2,11 +2,11 @@
 {
     public class DesiredFinancialMetricsDto
     {
-        public double DesiredIncome { get; private set; }
-        public double DesiredProfit { get; private set; }
-        public double DesiredProfitability { get; private set; }
+        public decimal DesiredIncome { get; private set; }
+        public decimal DesiredProfit { get; private set; }
+        public decimal DesiredProfitability { get; private set; }
 
-        public DesiredFinancialMetricsDto(double desiredIncome, double desiredProfit, double desiredProfitability)
+        public DesiredFinancialMetricsDto(decimal desiredIncome, decimal desiredProfit, decimal desiredProfitability)
         {
             DesiredIncome = desiredIncome;
             DesiredProfit = desiredProfit;

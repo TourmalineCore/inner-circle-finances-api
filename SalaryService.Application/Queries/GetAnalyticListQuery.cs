@@ -23,14 +23,14 @@ namespace SalaryService.Application.Queries
         {
             var employee = await _employeeDbContext
                 .QueryableAsNoTracking<Employee>()
-                .Where(x => x.DeletedAtUtc == null && x.AccountId != 1)
+                .Where(x => x.DeletedAtUtc == null)
                 .Include(x => x.EmployeeFinanceForPayroll)
                 .Include(x => x.EmployeeFinancialMetrics)
                 .ToListAsync();
 
             return employee.Select(x => new AnalyticDto(x.Id,
-                x.Name,
-                x.Surname,
+                x.FirstName,
+                x.LastName,
                 x.MiddleName,
                 Math.Round(x.EmployeeFinancialMetrics.Pay, 2),
                 Math.Round(x.EmployeeFinancialMetrics.RatePerHour, 2),

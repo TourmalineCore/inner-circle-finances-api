@@ -10,19 +10,19 @@
 
         public WorkingDaysDto WorkingDays { get; private set; }
 
-        public double IncomeTaxPercent { get; private set; }
+        public decimal IncomeTaxPercent { get; private set; }
 
-        public double DistrictCoefficient { get; private set; }
+        public decimal DistrictCoefficient { get; private set; }
 
-        public double MinimumWage { get; private set; }
+        public decimal MinimumWage { get; private set; }
 
         public IndicatorsDto(ExpensesDto totalExpenses, 
             DesiredFinancialMetricsDto desiredFinancialMetrics, 
             ReserveFinanceDto reserveFinance, 
             WorkingDaysDto workingDays,
-            double incomeTaxPercent,
-            double districtCoefficient,
-            double minimumWage)
+            decimal incomeTaxPercent,
+            decimal districtCoefficient,
+            decimal minimumWage)
         {
             TotalExpenses = totalExpenses;
             DesiredFinancialMetrics = desiredFinancialMetrics;

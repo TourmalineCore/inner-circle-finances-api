@@ -75,91 +75,91 @@ namespace SalaryService.Application.Dtos
 
     public class EmployeeMetricsDto
     {
-        public double RatePerHour { get; init; }
+        public decimal RatePerHour { get; init; }
 
-        public double Pay { get; init; }
+        public decimal Pay { get; init; }
 
-        public double EmploymentType { get; init; }
+        public decimal EmploymentType { get; init; }
 
-        public double ParkingCostPerMonth { get; init; }
+        public decimal ParkingCostPerMonth { get; init; }
 
-        public double Salary { get; init; }
+        public decimal Salary { get; init; }
 
-        public double AccountingPerMonth { get; init; }
+        public decimal AccountingPerMonth { get; init; }
 
-        public double HourlyCostFact { get; init; }
+        public decimal HourlyCostFact { get; init; }
 
-        public double HourlyCostHand { get; init; }
+        public decimal HourlyCostHand { get; init; }
 
-        public double Earnings { get; init; }
+        public decimal Earnings { get; init; }
 
-        public double Expenses { get; init; }
+        public decimal Expenses { get; init; }
 
-        public double IncomeTaxContributions { get; init; }
+        public decimal IncomeTaxContributions { get; init; }
 
-        public double DistrictCoefficient { get; init; }
+        public decimal DistrictCoefficient { get; init; }
 
-        public double PensionContributions { get; init; }
+        public decimal PensionContributions { get; init; }
 
-        public double MedicalContributions { get; init; }
+        public decimal MedicalContributions { get; init; }
 
-        public double SocialInsuranceContributions { get; init; }
+        public decimal SocialInsuranceContributions { get; init; }
 
-        public double InjuriesContributions { get; init; }
+        public decimal InjuriesContributions { get; init; }
 
-        public double Profit { get; init; }
+        public decimal Profit { get; init; }
 
-        public double ProfitAbility { get; init; }
+        public decimal ProfitAbility { get; init; }
 
-        public double GrossSalary { get; init; }
+        public decimal GrossSalary { get; init; }
 
-        public double Prepayment { get; init; }
+        public decimal Prepayment { get; init; }
 
-        public double NetSalary { get; init; }
+        public decimal NetSalary { get; init; }
     }
 
     // can use as a base type for EmployeeMetricsDto
     public class EmployeeMetricsDiffDto
     {
-        public double RatePerHour { get; init; }
+        public decimal RatePerHour { get; init; }
 
-        public double Pay { get; init; }
+        public decimal Pay { get; init; }
 
-        public double ParkingCostPerMonth { get; init; }
+        public decimal ParkingCostPerMonth { get; init; }
 
-        public double Salary { get; init; }
+        public decimal Salary { get; init; }
 
-        public double AccountingPerMonth { get; init; }
+        public decimal AccountingPerMonth { get; init; }
 
-        public double HourlyCostFact { get; init; }
+        public decimal HourlyCostFact { get; init; }
 
-        public double HourlyCostHand { get; init; }
+        public decimal HourlyCostHand { get; init; }
 
-        public double Earnings { get; init; }
+        public decimal Earnings { get; init; }
 
-        public double Expenses { get; init; }
+        public decimal Expenses { get; init; }
 
-        public double IncomeTaxContributions { get; init; }
+        public decimal IncomeTaxContributions { get; init; }
 
-        public double DistrictCoefficient { get; init; }
+        public decimal DistrictCoefficient { get; init; }
 
-        public double PensionContributions { get; init; }
+        public decimal PensionContributions { get; init; }
 
-        public double MedicalContributions { get; init; }
+        public decimal MedicalContributions { get; init; }
 
-        public double SocialInsuranceContributions { get; init; }
+        public decimal SocialInsuranceContributions { get; init; }
 
-        public double InjuriesContributions { get; init; }
+        public decimal InjuriesContributions { get; init; }
 
-        public double Profit { get; init; }
+        public decimal Profit { get; init; }
 
-        public double ProfitAbility { get; init; }
+        public decimal ProfitAbility { get; init; }
 
-        public double GrossSalary { get; init; }
+        public decimal GrossSalary { get; init; }
 
-        public double Prepayment { get; init; }
+        public decimal Prepayment { get; init; }
 
-        public double NetSalary { get; init; }
+        public decimal NetSalary { get; init; }
     }
 
     public class TotalChangingDto
@@ -171,30 +171,30 @@ namespace SalaryService.Application.Dtos
 
     public class TotalChangingEntryDto
     {
-        public double ParkingCostPerMonth { get; init; }
+        public decimal ParkingCostPerMonth { get; init; }
 
-        public double AccountingPerMonth { get; init; }
+        public decimal AccountingPerMonth { get; init; }
 
-        public double Earnings { get; init; }
+        public decimal Earnings { get; init; }
 
-        public double Expenses { get; init; }
+        public decimal Expenses { get; init; }
 
-        public double IncomeTaxContributions { get; init; }
+        public decimal IncomeTaxContributions { get; init; }
 
-        public double PensionContributions { get; init; }
+        public decimal PensionContributions { get; init; }
 
-        public double MedicalContributions { get; init; }
+        public decimal MedicalContributions { get; init; }
 
-        public double SocialInsuranceContributions { get; init; }
+        public decimal SocialInsuranceContributions { get; init; }
 
-        public double InjuriesContributions { get; init; }
+        public decimal InjuriesContributions { get; init; }
 
-        public double Profit { get; init; }
+        public decimal Profit { get; init; }
 
-        public double ProfitAbility { get; init; }
+        public decimal ProfitAbility { get; init; }
 
-        public double Prepayment { get; init; }
+        public decimal Prepayment { get; init; }
 
-        public double NetSalary { get; init; }
+        public decimal NetSalary { get; init; }
     }
 }

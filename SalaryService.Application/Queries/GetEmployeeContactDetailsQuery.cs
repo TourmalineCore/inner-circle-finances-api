@@ -27,7 +27,7 @@ namespace SalaryService.Application.Queries
                 .SingleAsync(x => x.Id == employeeId && x.DeletedAtUtc == null);
 
             return new ColleagueContactsDto(employee.Id,
-                employee.Name + " " + employee.Surname + " " + employee.MiddleName,
+                employee.FirstName + " " + employee.LastName + " " + employee.MiddleName,
                 employee.CorporateEmail,
                 employee.PersonalEmail,
                 employee.Phone,

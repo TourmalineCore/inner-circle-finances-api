@@ -2,35 +2,35 @@
 {
     public readonly struct TotalEmployeeFinancialMetrics
     {
-        public double ParkingCostPerMonth { get; init; }
+        public decimal ParkingCostPerMonth { get; init; }
 
-        public double AccountingPerMonth { get; init; }
+        public decimal AccountingPerMonth { get; init; }
 
-        public double Earnings { get; init; }
+        public decimal Earnings { get; init; }
 
-        public double Expenses { get; init; }
+        public decimal Expenses { get; init; }
 
-        public double IncomeTaxContributions { get; init; }
+        public decimal IncomeTaxContributions { get; init; }
 
-        public double PensionContributions { get; init; }
+        public decimal PensionContributions { get; init; }
 
-        public double MedicalContributions { get; init; }
+        public decimal MedicalContributions { get; init; }
 
-        public double SocialInsuranceContributions { get; init; }
+        public decimal SocialInsuranceContributions { get; init; }
 
-        public double InjuriesContributions { get; init; }
+        public decimal InjuriesContributions { get; init; }
 
-        public double Profit { get; init; }
+        public decimal Profit { get; init; }
 
-        public double Prepayment { get; init; }
+        public decimal Prepayment { get; init; }
 
-        public double NetSalary { get; init; }
+        public decimal NetSalary { get; init; }
 
-        public double ProfitAbility => Earnings != 0
+        public decimal ProfitAbility => Earnings != 0
             ? Profit / Earnings
             : TotalProfitabilityIfEarningsIsZero;
 
 
-        private const double TotalProfitabilityIfEarningsIsZero = -100;
+        private const decimal TotalProfitabilityIfEarningsIsZero = -100;
     }
 }

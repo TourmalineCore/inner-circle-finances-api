@@ -1,17 +1,15 @@
-﻿using SalaryService.Domain;
-
-namespace SalaryService.Application.Dtos
+﻿namespace SalaryService.Application.Dtos
 {
-    public class FinanceUpdatingParameters
+    public readonly struct FinanceUpdatingParameters
     {
-        public long EmployeeId { get; set; }
+        public long EmployeeId { get; init; }
 
-        public double RatePerHour { get; set; }
+        public decimal RatePerHour { get; init; }
 
-        public double Pay { get; set; }
+        public decimal Pay { get; init; }
 
-        public double EmploymentType { get; set; }
+        public decimal EmploymentType { get; init; }
 
-        public double ParkingCostPerMonth { get; set; }
+        public decimal ParkingCostPerMonth { get; init; }
     }
 }

@@ -8,23 +8,32 @@
 
         public Employee Employee { get; set; }
 
-        public double RatePerHour { get; private set; }
+        public decimal RatePerHour { get; private set; }
 
-        public double Pay { get; private set; }
+        public decimal Pay { get; private set; }
 
-        public double ParkingCostPerMonth { get; private set; }
+        public decimal ParkingCostPerMonth { get; private set; }
 
-        public double EmploymentType { get; private set; }
+        public decimal EmploymentType { get; private set; }
 
-        public EmployeeFinanceForPayroll(double ratePerHour, double pay, double employmentType, double parkingCostPerMonth)
+        public EmployeeFinanceForPayroll(decimal ratePerHour, decimal pay, decimal employmentType, decimal parkingCostPerMonth, long? employeeId = null)
         {
             RatePerHour = ratePerHour;
             Pay = pay;
             EmploymentType = employmentType;
             ParkingCostPerMonth = parkingCostPerMonth;
+
+            if (employeeId.HasValue)
+            {
+                EmployeeId = employeeId.Value;
+            }
         }
 
-        public void Update(double ratePerHour, double pay, double employmentType, double parkingCostPerMonth)
+        public EmployeeFinanceForPayroll()
+        {
+        }
+
+        public void Update(decimal ratePerHour, decimal pay, decimal employmentType, decimal parkingCostPerMonth)
         {
             RatePerHour = ratePerHour;
             Pay = pay;
