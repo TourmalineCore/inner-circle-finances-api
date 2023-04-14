@@ -1,6 +1,6 @@
 ﻿namespace SalaryService.Application.Dtos
 {
-    public readonly struct EmployeeRowDto
+    public readonly struct MetricsRowDto
     {
         public long? EmployeeId { get; init; }
 
@@ -14,6 +14,6 @@
 
         public decimal ParkingCostPerMonth { get; init; }
 
-        public bool IsCopyRow => !EmployeeId.HasValue;
+        public bool IsCopy => !EmployeeId.HasValue;
     }
 }

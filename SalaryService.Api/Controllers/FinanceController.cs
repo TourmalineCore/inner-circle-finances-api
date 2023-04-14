@@ -49,10 +49,11 @@ namespace SalaryService.Api.Controllers
         }
 
         [RequiresPermission(UserClaimsProvider.CanViewAnalyticPermission)]
-        [HttpPost("calculate-diff")]
-        public async Task CalculateDiffAsync([FromBody] IEnumerable<EmployeeRowDto> employees)
+        [HttpPost("calculate-analytics-metric-changes")]
+        public async Task<AnalyticsMetricsChangesDto> CalculateAnalyticsMetricChangesAsync([FromBody] IEnumerable<MetricsRowDto> metricsRows)
         {
-            var changing = await _financeService.CalculateEmployeeMetricsDiffAsync(employees);
+            var metricsChanges = await _financeService.CalculateAnalyticsMetricChangesAsync(metricsRows);
+            return new AnalyticsMetricsChangesDto(metricsChanges);
         }
     }
 }

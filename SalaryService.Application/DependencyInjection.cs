@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NodaTime;
 using SalaryService.Application.Commands;
 using SalaryService.Application.Queries;
+using SalaryService.Application.Queries.Contracts;
 using SalaryService.Application.Services;
 using SalaryService.Application.Validators;
 
@@ -20,9 +21,9 @@ namespace SalaryService.Application
             services.AddTransient<GetEmployeeProfileQueryHandler>();
             services.AddTransient<GetAnalyticQueryHandler>();
             services.AddTransient<GetIndicatorsQueryHandler>();
-            services.AddTransient<GetCoefficientsQueryHandler>();
-            services.AddTransient<GetWorkingPlanQueryHandler>();
-            services.AddTransient<GetFinancialMetricsQueryHandler>();
+            services.AddTransient<IGetCoefficientsQueryHandler, GetCoefficientsQueryHandler>();
+            services.AddTransient<IGetWorkingPlanQueryHandler, GetWorkingPlanQueryHandler>();
+            services.AddTransient<IGetFinancialMetricsQueryHandler, GetFinancialMetricsQueryHandler>();
             services.AddTransient<GetEmployeeContactDetailsQueryHandler>();
             services.AddTransient<GetEmployeeFinanceForPayrollQueryHandler>();
             services.AddTransient<CreateEmployeeCommandHandler>();

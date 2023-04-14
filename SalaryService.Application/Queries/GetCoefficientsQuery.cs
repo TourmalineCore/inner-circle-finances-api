@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SalaryService.Application.Queries.Contracts;
 using SalaryService.DataAccess;
 using SalaryService.Domain;
 
@@ -8,7 +9,7 @@ namespace SalaryService.Application.Queries
     {
     }
     
-    public class GetCoefficientsQueryHandler
+    public class GetCoefficientsQueryHandler : IGetCoefficientsQueryHandler
     {
         private readonly EmployeeDbContext _employeeDbContext;
 
