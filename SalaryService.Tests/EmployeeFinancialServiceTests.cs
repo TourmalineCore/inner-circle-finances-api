@@ -25,6 +25,7 @@ namespace SalaryService.Tests
         private CoefficientOptions _coefficientOptions = new CoefficientOptions(1, 0.15m, 15279, 0.13m, 49000);
 
         private Mock<IGetFinancialMetricsQueryHandler> _financialQueryHandlerMock;
+        private Mock<IEmployeesListQueryHandler> _employeesQueryHandlerMock;
         private FinanceAnalyticService _financeAnalyticsService;
 
         public EmployeeFinancialServiceTests()
@@ -32,6 +33,7 @@ namespace SalaryService.Tests
             var coefficientsQueryHandlerMock = new Mock<IGetCoefficientsQueryHandler>();
             var workingPlanQueryHandlerMock = new Mock<IGetWorkingPlanQueryHandler>();
             _financialQueryHandlerMock = new Mock<IGetFinancialMetricsQueryHandler>();
+            _employeesQueryHandlerMock = new Mock<IEmployeesListQueryHandler>();
 
             workingPlanQueryHandlerMock.Setup(x => x.HandleAsync()).ReturnsAsync(_workingPlan);
             coefficientsQueryHandlerMock.Setup(x => x.HandleAsync()).ReturnsAsync(_coefficientOptions);
@@ -39,7 +41,8 @@ namespace SalaryService.Tests
             _financeAnalyticsService = new FinanceAnalyticService(
                 coefficientsQueryHandlerMock.Object,
                 _financialQueryHandlerMock.Object, 
-                workingPlanQueryHandlerMock.Object, 
+                workingPlanQueryHandlerMock.Object,
+                _employeesQueryHandlerMock.Object,
                 new Clock());
         }
 
@@ -80,12 +83,20 @@ namespace SalaryService.Tests
                 .Setup(x => x.HandleAsync())
                 .ReturnsAsync(new List<EmployeeFinancialMetrics>() { employeeSourceFinancialMetrics });
 
+            _employeesQueryHandlerMock
+                .Setup(x => x.HandleAsync(false))
+                .ReturnsAsync(new List<EmployeeDto>
+                {
+                    new EmployeeDto(new Employee("name", "lastName", "middleName", "test@tourmalinecore.com") { Id = 1 })
+                });
+
             var analyticsMetricChanges = await _financeAnalyticsService.CalculateAnalyticsMetricChangesAsync(metricRows);
 
             var employeeNewMetrics = analyticsMetricChanges.MetricsRowsChanges[0].NewMetrics;
 
             // check that new metrics are correct for existing employee
             Assert.Equal("1", analyticsMetricChanges.MetricsRowsChanges[0].EmployeeId);
+            Assert.Equal("lastName name middleName", analyticsMetricChanges.MetricsRowsChanges[0].EmployeeFullName);
             Assert.Equal(500, employeeNewMetrics.RatePerHour);
             Assert.Equal(20000, employeeNewMetrics.Pay);
             Assert.Equal(20000, employeeNewMetrics.Salary);
@@ -133,6 +144,7 @@ namespace SalaryService.Tests
 
             // check that new metrics are correct for an employee copy
             Assert.Equal("employee_copy", analyticsMetricChanges.MetricsRowsChanges[1].EmployeeId);
+            Assert.Null(analyticsMetricChanges.MetricsRowsChanges[1].EmployeeFullName);
             Assert.Null(analyticsMetricChanges.MetricsRowsChanges[1].MetricsDiff);
             Assert.Equal(20000, analyticsMetricChanges.MetricsRowsChanges[1].NewMetrics.Pay);
             Assert.Equal(50, analyticsMetricChanges.MetricsRowsChanges[1].NewMetrics.RatePerHour);

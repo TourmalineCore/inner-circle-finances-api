@@ -13,6 +13,7 @@ namespace SalaryService.Application.Dtos
             Rows = metricsChanges.MetricsRowsChanges.Select(x => new RowChangesDto
             {
                 EmployeeId = x.EmployeeId.ToString(),
+                EmployeeFullName = x.EmployeeFullName,
                 Metrics = new EmployeeMetricsRowDto
                 {
                     RatePerHour = Math.Round(x.NewMetrics.RatePerHour, 2),
@@ -106,6 +107,8 @@ namespace SalaryService.Application.Dtos
     public class RowChangesDto
     {
         public string EmployeeId { get; init; }
+
+        public string? EmployeeFullName { get; init; }
 
         public EmployeeMetricsRowDto Metrics { get; init; }
 

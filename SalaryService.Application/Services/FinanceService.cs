@@ -10,17 +10,20 @@ namespace SalaryService.Application.Services
         private readonly IGetCoefficientsQueryHandler _getCoefficientsQueryHandler;
         private readonly IGetFinancialMetricsQueryHandler _getFinancialMetricsQueryHandler;
         private readonly IGetWorkingPlanQueryHandler _getWorkingPlanQueryHandler;
+        private readonly IEmployeesListQueryHandler _employeesQueryHandler;
         private readonly IClock _clock;
         private readonly List<decimal> _availableEmploymentTypes = new() { 0.5m, 1 };
 
         public FinanceAnalyticService(IGetCoefficientsQueryHandler getCoefficientsQueryHandler,
             IGetFinancialMetricsQueryHandler getFinancialMetricsQueryHandler,
             IGetWorkingPlanQueryHandler getWorkingPlanQueryHandler,
+            IEmployeesListQueryHandler employeesQueryHandler,
             IClock clock)
         {
             _getCoefficientsQueryHandler = getCoefficientsQueryHandler;
             _getFinancialMetricsQueryHandler = getFinancialMetricsQueryHandler;
             _getWorkingPlanQueryHandler = getWorkingPlanQueryHandler;
+            _employeesQueryHandler = employeesQueryHandler;
             _clock = clock;
         }
 
@@ -49,6 +52,7 @@ namespace SalaryService.Application.Services
             var sourceMetrics = await _getFinancialMetricsQueryHandler.HandleAsync();
             var coefficients = await _getCoefficientsQueryHandler.HandleAsync();
             var workingPlan = await _getWorkingPlanQueryHandler.HandleAsync();
+            var employees = await _employeesQueryHandler.HandleAsync();
             var metricsRowChangesList = new List<MetricsRowChanges>();
 
             foreach (var metricsRow in metricsRows)
@@ -64,6 +68,7 @@ namespace SalaryService.Application.Services
                     continue;
                 }
 
+                var employee = employees.Single(x => x.EmployeeId == employeeId);
                 var employeeSourceMetrics = sourceMetrics.Single(x => x.EmployeeId == employeeId);
 
                 if (IsEmployeeMetricsChanged(metricsRow, employeeSourceMetrics))
@@ -71,11 +76,11 @@ namespace SalaryService.Application.Services
                     var employeeNewMetrics = await CalculateMetricsAsync(metricsRow.RatePerHour, metricsRow.Pay,
                     metricsRow.EmploymentType, metricsRow.ParkingCostPerMonth, employeeId, coefficients, workingPlan);
                     
-                    metricsRowChangesList.Add(new MetricsRowChanges(employeeId.Value, employeeSourceMetrics, employeeNewMetrics));
+                    metricsRowChangesList.Add(new MetricsRowChanges(employeeId.Value, employee.FullName, employeeSourceMetrics, employeeNewMetrics));
                     continue;
                 }
 
-                metricsRowChangesList.Add(new MetricsRowChanges(employeeId.Value, employeeSourceMetrics));
+                metricsRowChangesList.Add(new MetricsRowChanges(employeeId.Value, employee.FullName, employeeSourceMetrics));
             }
 
             var newMetrics = metricsRowChangesList.Select(x => x.NewMetrics);

@@ -90,8 +90,8 @@ namespace SalaryService.Domain
         public string GetFullName()
         {
             return MiddleName == null 
-                ? $"{FirstName} {LastName}" 
-                : $"{FirstName} {LastName} {MiddleName}";
+                ? $"{LastName} {FirstName} " 
+                : $"{LastName} {FirstName} {MiddleName}";
         }
     }
 }
