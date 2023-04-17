@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SalaryService.Application.Dtos;
 using SalaryService.Application.Queries;
+using SalaryService.Application.Queries.Contracts;
 using SalaryService.Application.Services;
 using TourmalineCore.AspNetCore.JwtAuthentication.Core.Filters;
 
@@ -14,20 +15,20 @@ namespace SalaryService.Api.Controllers
         private readonly EmployeeService _employeeService;
         private readonly GetEmployeeQueryHandler _getEmployeeQueryHandler;
         private readonly GetEmployeeProfileQueryHandler _getEmployeeProfileQueryHandler;
-        private readonly GetEmployeesQueryHandler _getEmployeesQueryHandler;
+        private readonly IEmployeesListQueryHandler _employeesQueryHandler;
         private readonly GetEmployeeContactDetailsQueryHandler _getEmployeeContactDetailsQueryHandler;
         private readonly GetEmployeeFinanceForPayrollQueryHandler _getEmployeeFinanceForPayrollQueryHandler;
 
         public EmployeeController(EmployeeService employeeService,
         GetEmployeeQueryHandler getEmployeeQueryHandler,
-        GetEmployeesQueryHandler getEmployeesQueryHandler, 
+        IEmployeesListQueryHandler employeesQueryHandler, 
         GetEmployeeContactDetailsQueryHandler getEmployeeContactDetailsQueryHandler,
         GetEmployeeFinanceForPayrollQueryHandler getEmployeeFinanceForPayrollQueryHandler,
         GetEmployeeProfileQueryHandler getEmployeeProfileQueryHandler)
         {
             _employeeService = employeeService;
             _getEmployeeQueryHandler = getEmployeeQueryHandler;
-            _getEmployeesQueryHandler = getEmployeesQueryHandler;
+            _employeesQueryHandler = employeesQueryHandler;
             _getEmployeeContactDetailsQueryHandler = getEmployeeContactDetailsQueryHandler;
             _getEmployeeFinanceForPayrollQueryHandler = getEmployeeFinanceForPayrollQueryHandler;
             _getEmployeeProfileQueryHandler = getEmployeeProfileQueryHandler;
@@ -48,7 +49,7 @@ namespace SalaryService.Api.Controllers
                 Value: UserClaimsProvider.CanViewFinanceForPayrollPermission
             });
 
-            return _getEmployeesQueryHandler.HandleAsync(includeEmployeeFinanceInfo);
+            return _employeesQueryHandler.HandleAsync(includeEmployeeFinanceInfo);
         }
 
         [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
