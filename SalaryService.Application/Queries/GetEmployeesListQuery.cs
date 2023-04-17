@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SalaryService.Application.Dtos;
+using SalaryService.Application.Queries.Contracts;
 using SalaryService.DataAccess;
 using SalaryService.Domain;
 
@@ -9,7 +10,7 @@ namespace SalaryService.Application.Queries
     {
     }
 
-    public class GetEmployeesQueryHandler
+    public class GetEmployeesQueryHandler : IEmployeesListQueryHandler
     {
         private readonly EmployeeDbContext _employeeDbContext;
 
@@ -18,7 +19,7 @@ namespace SalaryService.Application.Queries
             _employeeDbContext = employeeDbContext;
         }
 
-        public async Task<IEnumerable<EmployeeDto>> HandleAsync(bool includeFinanceInfo)
+        public async Task<IEnumerable<EmployeeDto>> HandleAsync(bool includeFinanceInfo = false)
         {
             var employeesRequest = _employeeDbContext.QueryableAsNoTracking<Employee>();
 

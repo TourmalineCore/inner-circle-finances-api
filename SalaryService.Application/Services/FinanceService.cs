@@ -1,25 +1,29 @@
 ﻿using NodaTime;
-using SalaryService.Application.Queries;
+using SalaryService.Application.Dtos;
+using SalaryService.Application.Queries.Contracts;
 using SalaryService.Domain;
 
 namespace SalaryService.Application.Services
 {
     public class FinanceAnalyticService
     {
-        private readonly GetCoefficientsQueryHandler _getCoefficientsQueryHandler;
-        private readonly GetFinancialMetricsQueryHandler _getFinancialMetricsQueryHandler;
-        private readonly GetWorkingPlanQueryHandler _getWorkingPlanQueryHandler;
+        private readonly IGetCoefficientsQueryHandler _getCoefficientsQueryHandler;
+        private readonly IGetFinancialMetricsQueryHandler _getFinancialMetricsQueryHandler;
+        private readonly IGetWorkingPlanQueryHandler _getWorkingPlanQueryHandler;
+        private readonly IEmployeesListQueryHandler _employeesQueryHandler;
         private readonly IClock _clock;
         private readonly List<decimal> _availableEmploymentTypes = new() { 0.5m, 1 };
 
-        public FinanceAnalyticService(GetCoefficientsQueryHandler getCoefficientsQueryHandler,
-            GetFinancialMetricsQueryHandler getFinancialMetricsQueryHandler,
-            GetWorkingPlanQueryHandler getWorkingPlanQueryHandler,
+        public FinanceAnalyticService(IGetCoefficientsQueryHandler getCoefficientsQueryHandler,
+            IGetFinancialMetricsQueryHandler getFinancialMetricsQueryHandler,
+            IGetWorkingPlanQueryHandler getWorkingPlanQueryHandler,
+            IEmployeesListQueryHandler employeesQueryHandler,
             IClock clock)
         {
             _getCoefficientsQueryHandler = getCoefficientsQueryHandler;
             _getFinancialMetricsQueryHandler = getFinancialMetricsQueryHandler;
             _getWorkingPlanQueryHandler = getWorkingPlanQueryHandler;
+            _employeesQueryHandler = employeesQueryHandler;
             _clock = clock;
         }
 
@@ -43,11 +47,61 @@ namespace SalaryService.Application.Services
             return estimatedFinancialEfficiency;
         }
 
-        public async Task<EmployeeFinancialMetrics> CalculateMetrics(decimal ratePerHour,
+        public async Task<AnalyticsMetricChanges> CalculateAnalyticsMetricChangesAsync(IEnumerable<MetricsRowDto> metricsRows)
+        {
+            var sourceMetrics = await _getFinancialMetricsQueryHandler.HandleAsync();
+            var coefficients = await _getCoefficientsQueryHandler.HandleAsync();
+            var workingPlan = await _getWorkingPlanQueryHandler.HandleAsync();
+            var employees = await _employeesQueryHandler.HandleAsync();
+            var metricsRowChangesList = new List<MetricsRowChanges>();
+
+            foreach (var metricsRow in metricsRows)
+            {
+                var employeeId = metricsRow.EmployeeId;
+
+                if (metricsRow.IsCopy)
+                {
+                    var employeeCopyMetrics = await CalculateMetricsAsync(metricsRow.RatePerHour, metricsRow.Pay,
+                        metricsRow.EmploymentType, metricsRow.ParkingCostPerMonth, null, coefficients, workingPlan);
+
+                    metricsRowChangesList.Add(new MetricsRowChanges(metricsRow.EmployeeCopyId, employeeCopyMetrics));
+                    continue;
+                }
+
+                var employee = employees.Single(x => x.EmployeeId == employeeId);
+                var employeeSourceMetrics = sourceMetrics.Single(x => x.EmployeeId == employeeId);
+
+                if (IsEmployeeMetricsChanged(metricsRow, employeeSourceMetrics))
+                {
+                    var employeeNewMetrics = await CalculateMetricsAsync(metricsRow.RatePerHour, metricsRow.Pay,
+                    metricsRow.EmploymentType, metricsRow.ParkingCostPerMonth, employeeId, coefficients, workingPlan);
+                    
+                    metricsRowChangesList.Add(new MetricsRowChanges(employeeId.Value, employee.FullName, employeeSourceMetrics, employeeNewMetrics));
+                    continue;
+                }
+
+                metricsRowChangesList.Add(new MetricsRowChanges(employeeId.Value, employee.FullName, employeeSourceMetrics));
+            }
+
+            var newMetrics = metricsRowChangesList.Select(x => x.NewMetrics);
+            var sourceMetricsTotal = MetricsDiffCalculator.CalculateTotalEmployeeFinancialMetrics(sourceMetrics);
+            var newMetricsTotal = MetricsDiffCalculator.CalculateTotalEmployeeFinancialMetrics(newMetrics);
+
+            return new AnalyticsMetricChanges
+            {
+                MetricsRowsChanges = metricsRowChangesList,
+                NewTotalMetrics = newMetricsTotal,
+                TotalMetricsDiff = MetricsDiffCalculator.CalculateDiffBetweenTotalEmployeeFinancialMetrics(sourceMetricsTotal, newMetricsTotal),
+            };
+        }
+
+        public async Task<EmployeeFinancialMetrics> CalculateMetricsAsync(decimal ratePerHour,
             decimal pay,
             decimal employmentTypeValue,
             decimal parkingCostPerMonth,
-            long? employeeId = null)
+            long? employeeId = null,
+            CoefficientOptions? coefficients = null,
+            WorkingPlan? workingPlan = null)
         {
             //TODO: #861m9k5f6: make refactoring of using employee finances for payroll in an employee model
 
@@ -61,8 +115,9 @@ namespace SalaryService.Application.Services
                 pay,
                 employmentTypeValue,
                 parkingCostPerMonth);
-            var coefficients = await _getCoefficientsQueryHandler.HandleAsync();
-            var workingPlan = await _getWorkingPlanQueryHandler.HandleAsync();
+
+            coefficients = coefficients ?? await _getCoefficientsQueryHandler.HandleAsync();
+            workingPlan = workingPlan ?? await _getWorkingPlanQueryHandler.HandleAsync();
 
             employeeFinancialMetrics.CalculateMetrics(coefficients.DistrictCoefficient,
                 coefficients.MinimumWage,
@@ -77,5 +132,14 @@ namespace SalaryService.Application.Services
 
             return employeeFinancialMetrics;
         }
+
+        private static bool IsEmployeeMetricsChanged(MetricsRowDto metricsRow, EmployeeFinancialMetrics employeeMetrics)
+        {
+            return employeeMetrics.RatePerHour != metricsRow.RatePerHour
+                   || employeeMetrics.Pay != metricsRow.Pay
+                   || employeeMetrics.EmploymentType != metricsRow.EmploymentType
+                   || employeeMetrics.ParkingCostPerMonth != metricsRow.ParkingCostPerMonth;
+        }
     }
 }
+

@@ -40,7 +40,7 @@ namespace SalaryService.Application.Services
 
         public async Task<MetricsPreviewDto> GetPreviewMetrics(GetPreviewParameters parameters)
         {
-            var newMetrics = await _financeAnalyticService.CalculateMetrics(
+            var newMetrics = await _financeAnalyticService.CalculateMetricsAsync(
                 parameters.RatePerHour,
                 parameters.Pay, 
                 parameters.EmploymentType, 
@@ -104,7 +104,7 @@ namespace SalaryService.Application.Services
 
         private async Task UpdateFinancesAsync(FinanceUpdatingParameters parameters)
         {
-            var metrics = await _financeAnalyticService.CalculateMetrics(
+            var metrics = await _financeAnalyticService.CalculateMetricsAsync(
                 parameters.RatePerHour,
                 parameters.Pay,
                 parameters.EmploymentType,
