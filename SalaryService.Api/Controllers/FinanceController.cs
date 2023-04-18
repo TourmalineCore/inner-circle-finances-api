@@ -28,8 +28,8 @@ namespace SalaryService.Api.Controllers
         }
         
         [RequiresPermission(UserClaimsProvider.CanViewAnalyticPermission)]
-        [HttpGet("get-analytic")]
-        public Task<IEnumerable<AnalyticDto>> GetAnalytic()
+        [HttpGet("get-analytics")]
+        public Task<IEnumerable<AnalyticDto>> GetAnalyticsAsync()
         {
             return _getAnalyticQueryHandler.HandleAsync();
         }
