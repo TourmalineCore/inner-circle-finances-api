@@ -4,7 +4,9 @@
     {
         public string EmployeeId { get; init; }
 
-        public string? EmployeeFullName { get; init; }
+        public string EmployeeFullName { get; init; }
+
+        public bool IsCopy { get; init; }
 
         public EmployeeFinancialMetrics NewMetrics { get; init; }
 
@@ -16,6 +18,7 @@
             EmployeeFullName = employeeFullName;
             NewMetrics = newMetrics;
             MetricsDiff = MetricsDiffCalculator.CalculateDiffBetweenEmployeeFinancialMetrics(sourceMetrics, newMetrics);
+            IsCopy = false;
         }
 
         public MetricsRowChanges(long employeeId, string employeeFullName, EmployeeFinancialMetrics sourceMetrics)
@@ -24,14 +27,16 @@
             EmployeeFullName = employeeFullName;
             NewMetrics = sourceMetrics;
             MetricsDiff = null;
+            IsCopy = false;
         }
 
-        public MetricsRowChanges(string employeeId, EmployeeFinancialMetrics newMetrics)
+        public MetricsRowChanges(string copyId, string copyFullName, EmployeeFinancialMetrics newMetrics)
         {
-            EmployeeId = employeeId;
-            EmployeeFullName = null;
+            EmployeeId = copyId;
+            EmployeeFullName = copyFullName;
             NewMetrics = newMetrics;
             MetricsDiff = null;
+            IsCopy = true;
         }
     }
 }

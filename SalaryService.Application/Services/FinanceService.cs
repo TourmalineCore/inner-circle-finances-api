@@ -37,6 +37,12 @@ namespace SalaryService.Application.Services
             return totals;
         }
 
+        public async Task<TotalEmployeeFinancialMetricsEntry> CalculateEmployeesTotalFinancialMetricsAsync()
+        {
+            var employeeFinancialMetrics = await _getFinancialMetricsQueryHandler.HandleAsync();
+            return MetricsDiffCalculator.CalculateTotalEmployeeFinancialMetrics(employeeFinancialMetrics);
+        }
+
         public async Task<EstimatedFinancialEfficiency> CalculateEstimatedFinancialEfficiency(decimal totalExpenses)
         {
             var metrics = await _getFinancialMetricsQueryHandler.HandleAsync();
@@ -57,17 +63,16 @@ namespace SalaryService.Application.Services
 
             foreach (var metricsRow in metricsRows)
             {
-                var employeeId = metricsRow.EmployeeId;
-
                 if (metricsRow.IsCopy)
                 {
                     var employeeCopyMetrics = await CalculateMetricsAsync(metricsRow.RatePerHour, metricsRow.Pay,
                         metricsRow.EmploymentType, metricsRow.ParkingCostPerMonth, null, coefficients, workingPlan);
 
-                    metricsRowChangesList.Add(new MetricsRowChanges(metricsRow.EmployeeCopyId, employeeCopyMetrics));
+                    metricsRowChangesList.Add(new MetricsRowChanges(metricsRow.EmployeeId, metricsRow.EmployeeFullName, employeeCopyMetrics));
                     continue;
                 }
 
+                var employeeId = long.Parse(metricsRow.EmployeeId);
                 var employee = employees.Single(x => x.EmployeeId == employeeId);
                 var employeeSourceMetrics = sourceMetrics.Single(x => x.EmployeeId == employeeId);
 
@@ -76,11 +81,11 @@ namespace SalaryService.Application.Services
                     var employeeNewMetrics = await CalculateMetricsAsync(metricsRow.RatePerHour, metricsRow.Pay,
                     metricsRow.EmploymentType, metricsRow.ParkingCostPerMonth, employeeId, coefficients, workingPlan);
                     
-                    metricsRowChangesList.Add(new MetricsRowChanges(employeeId.Value, employee.FullName, employeeSourceMetrics, employeeNewMetrics));
+                    metricsRowChangesList.Add(new MetricsRowChanges(employeeId, employee.FullName, employeeSourceMetrics, employeeNewMetrics));
                     continue;
                 }
 
-                metricsRowChangesList.Add(new MetricsRowChanges(employeeId.Value, employee.FullName, employeeSourceMetrics));
+                metricsRowChangesList.Add(new MetricsRowChanges(employeeId, employee.FullName, employeeSourceMetrics));
             }
 
             var newMetrics = metricsRowChangesList.Select(x => x.NewMetrics);

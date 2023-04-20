@@ -12,26 +12,36 @@ namespace SalaryService.Api.Controllers
     public class FinanceController : Controller
     {
         private readonly EmployeeService _employeeService;
-        private readonly GetAnalyticQueryHandler _getAnalyticQueryHandler;
         private readonly GetIndicatorsQueryHandler _getIndicatorsQueryHandler;
+        private readonly EmployeesQuery _employeesQuery;
         private readonly FinanceAnalyticService _financeService;
 
-        public FinanceController(GetAnalyticQueryHandler getAnalyticQueryHandler,
+        public FinanceController(
             EmployeeService employeeService,
-            GetIndicatorsQueryHandler getIndicatorsQueryHandler, 
-            FinanceAnalyticService financeService)
+            GetIndicatorsQueryHandler getIndicatorsQueryHandler,
+            FinanceAnalyticService financeService,
+            EmployeesQuery employeesQuery)
         {
-            _getAnalyticQueryHandler = getAnalyticQueryHandler;
             _employeeService = employeeService;
             _getIndicatorsQueryHandler = getIndicatorsQueryHandler;
             _financeService = financeService;
+            _employeesQuery = employeesQuery;
         }
-        
+
         [RequiresPermission(UserClaimsProvider.CanViewAnalyticPermission)]
-        [HttpGet("get-analytics")]
-        public Task<IEnumerable<AnalyticDto>> GetAnalyticsAsync()
+        [HttpPost("get-analytics")]
+        public async Task<AnalyticsTableDto> GetAnalyticsAsync([FromBody] IEnumerable<MetricsRowDto> metricsRows)
         {
-            return _getAnalyticQueryHandler.HandleAsync();
+            if (metricsRows == null || metricsRows.Count() == 0)
+            {
+                var employees = await _employeesQuery.HandleAsync();
+                var employeesTotalFinancialMetrics = await _financeService.CalculateEmployeesTotalFinancialMetricsAsync();
+
+                return new AnalyticsTableDto(employees, employeesTotalFinancialMetrics);
+            }
+
+            var metricsChanges = await _financeService.CalculateAnalyticsMetricChangesAsync(metricsRows);
+            return new AnalyticsTableDto(metricsChanges);
         }
         
         [RequiresPermission(UserClaimsProvider.CanViewAnalyticPermission)]
@@ -46,14 +56,6 @@ namespace SalaryService.Api.Controllers
         public Task<IndicatorsDto> GetTotalFinance()
         {
             return _getIndicatorsQueryHandler.HandleAsync();
-        }
-
-        [RequiresPermission(UserClaimsProvider.CanViewAnalyticPermission)]
-        [HttpPost("calculate-analytics-metric-changes")]
-        public async Task<AnalyticsMetricsChangesDto> CalculateAnalyticsMetricChangesAsync([FromBody] IEnumerable<MetricsRowDto> metricsRows)
-        {
-            var metricsChanges = await _financeService.CalculateAnalyticsMetricChangesAsync(metricsRows);
-            return new AnalyticsMetricsChangesDto(metricsChanges);
         }
     }
 }
