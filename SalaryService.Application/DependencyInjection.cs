@@ -18,6 +18,7 @@ namespace SalaryService.Application
 
             services.AddTransient<IEmployeesListQueryHandler, GetEmployeesQueryHandler>();
             services.AddTransient<GetEmployeeQueryHandler>();
+            services.AddTransient<EmployeesQuery>();
             services.AddTransient<GetEmployeeProfileQueryHandler>();
             services.AddTransient<GetAnalyticQueryHandler>();
             services.AddTransient<GetIndicatorsQueryHandler>();
