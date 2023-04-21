@@ -12,9 +12,9 @@ namespace SalaryService.Api.Controllers
         private const int CreatedStatusCode = (int)HttpStatusCode.Created;
         private const int InternalServerErrorCode = (int)HttpStatusCode.InternalServerError;
 
-        private readonly EmployeeService _employeeService;
+        private readonly EmployeesService _employeeService;
 
-        public InternalController(EmployeeService employeeService)
+        public InternalController(EmployeesService employeeService)
         {
             _employeeService = employeeService;
         }
@@ -24,7 +24,7 @@ namespace SalaryService.Api.Controllers
         {
             try
             {
-                await _employeeService.CreateEmployeeAsync(employeeCreationParameters);
+                await _employeeService.CreateAsync(employeeCreationParameters);
                 return StatusCode(CreatedStatusCode);
             }
             catch (Exception ex)

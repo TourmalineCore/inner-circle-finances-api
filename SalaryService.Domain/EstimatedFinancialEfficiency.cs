@@ -1,44 +1,52 @@
-﻿namespace SalaryService.Domain
+﻿using NodaTime;
+
+namespace SalaryService.Domain;
+
+public class EstimatedFinancialEfficiency
 {
-    public class EstimatedFinancialEfficiency : IIdentityEntity
+    public long Id { get; set; }
+
+    public decimal DesiredEarnings { get; private set; }
+
+    public decimal DesiredProfit { get; private set; }
+
+    public decimal DesiredProfitability { get; private set; }
+
+    public decimal ReserveForQuarter { get; private set; }
+
+    public decimal ReserveForHalfYear { get; private set; }
+
+    public decimal ReserveForYear { get; private set; }
+
+    public Instant CreatedAtUtc { get; private set; }
+
+
+    private const decimal _desiredProfitabilityWhenZeroDesiredEarnings = -100;
+
+    public EstimatedFinancialEfficiency() { }
+
+    public EstimatedFinancialEfficiency(IEnumerable<FinancialMetrics> metrics, CoefficientOptions coefficients, decimal totalExpenses, Instant createdAtUtc)
     {
-        public long Id { get; set; }
+        DesiredEarnings = metrics.Select(x => x.Earnings).Sum();
+        DesiredProfit = metrics.Select(x => x.Profit).Sum() - coefficients.OfficeExpenses;
+        ReserveForQuarter = totalExpenses * 3;
+        ReserveForHalfYear = ReserveForQuarter * 2;
+        ReserveForYear = ReserveForHalfYear * 2;
+        DesiredProfitability = DesiredEarnings != 0
+            ? DesiredProfit / DesiredEarnings * 100
+            : _desiredProfitabilityWhenZeroDesiredEarnings;
+        CreatedAtUtc = createdAtUtc;
+    }
 
-        public decimal DesiredEarnings { get; set; }
-
-        public decimal DesiredProfit { get; set; }
-
-        public decimal DesiredProfitability { get; set; }
-
-        public decimal ReserveForQuarter { get; set; }
-
-        public decimal ReserveForHalfYear { get; set; }
-
-        public decimal ReserveForYear { get; set; }
-        
-
-        public void CalculateEstimatedFinancialEfficiency(IEnumerable<EmployeeFinancialMetrics> metrics, CoefficientOptions coefficients, decimal totalExpense)
-        {
-            const decimal desiredProfitabilityWhenZeroDesiredEarnings = -100;
-
-            DesiredEarnings = metrics.Select(x => x.Earnings).Sum();
-            DesiredProfit = metrics.Select(x => x.Profit).Sum() - coefficients.OfficeExpenses;
-            ReserveForQuarter = totalExpense * 3;
-            ReserveForHalfYear = ReserveForQuarter * 2;
-            ReserveForYear = ReserveForHalfYear * 2;
-            DesiredProfitability = DesiredEarnings != 0
-                ? DesiredProfit / DesiredEarnings * 100
-                : desiredProfitabilityWhenZeroDesiredEarnings;
-        }
-
-        public void Update(decimal desiredEarnings, decimal desiredProfit, decimal desiredProfitability, decimal reserveForQuarter, decimal reserveForHalfYear, decimal reserveForYear)
-        {
-            DesiredEarnings = desiredEarnings;
-            DesiredProfit = desiredProfit;
-            DesiredProfitability = desiredProfitability;
-            ReserveForQuarter = reserveForQuarter;
-            ReserveForHalfYear = reserveForHalfYear;
-            ReserveForYear = reserveForYear;
-        }
+    public void Update(EstimatedFinancialEfficiency newEstimatedFinancialEfficiency)
+    {
+        DesiredEarnings = newEstimatedFinancialEfficiency.DesiredEarnings;
+        DesiredProfit = newEstimatedFinancialEfficiency.DesiredProfit;
+        ReserveForQuarter = newEstimatedFinancialEfficiency.ReserveForQuarter;
+        ReserveForHalfYear = newEstimatedFinancialEfficiency.ReserveForHalfYear;
+        ReserveForYear = newEstimatedFinancialEfficiency.ReserveForYear;
+        DesiredProfitability = newEstimatedFinancialEfficiency.DesiredProfitability;
+        CreatedAtUtc = newEstimatedFinancialEfficiency.CreatedAtUtc;
     }
 }
+

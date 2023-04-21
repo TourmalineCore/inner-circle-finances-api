@@ -9,10 +9,6 @@ namespace SalaryService.DataAccess
     {
         public DbSet<Employee> Employees { get; set; }
 
-        public DbSet<EmployeeFinanceForPayroll> EmployeeFinanceForPayroll { get; set; }
-
-        public DbSet<EmployeeFinancialMetrics> EmployeeFinancialMetrics { get; set; }
-
         public DbSet<EmployeeFinancialMetricsHistory> EmployeeFinancialMetricsHistory { get; set; }
 
         public DbSet<CoefficientOptions> CoefficientOptions { get; set; }

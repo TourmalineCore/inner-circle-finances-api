@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SalaryService.Api.Responses;
 using SalaryService.Application.Dtos;
 using SalaryService.Application.Queries;
 using SalaryService.Application.Services;
@@ -11,49 +12,42 @@ namespace SalaryService.Api.Controllers
     [Route("api/finance")]
     public class FinanceController : Controller
     {
-        private readonly EmployeeService _employeeService;
-        private readonly GetAnalyticQueryHandler _getAnalyticQueryHandler;
-        private readonly GetIndicatorsQueryHandler _getIndicatorsQueryHandler;
-        private readonly FinanceAnalyticService _financeService;
+        private readonly AnalyticsQuery _analyticsQuery;
+        private readonly FinancesService _financesService;
 
-        public FinanceController(GetAnalyticQueryHandler getAnalyticQueryHandler,
-            EmployeeService employeeService,
-            GetIndicatorsQueryHandler getIndicatorsQueryHandler, 
-            FinanceAnalyticService financeService)
+        public FinanceController(
+            AnalyticsQuery getAnalyticQueryHandler,
+            FinancesService financesService)
         {
-            _getAnalyticQueryHandler = getAnalyticQueryHandler;
-            _employeeService = employeeService;
-            _getIndicatorsQueryHandler = getIndicatorsQueryHandler;
-            _financeService = financeService;
+            _analyticsQuery = getAnalyticQueryHandler;
+            _financesService = financesService;
         }
         
         [RequiresPermission(UserClaimsProvider.CanViewAnalyticPermission)]
         [HttpGet("get-analytic")]
-        public Task<IEnumerable<AnalyticDto>> GetAnalytic()
+        public Task<IEnumerable<AnalyticDto>> GetAnalyticsAsync()
         {
-            return _getAnalyticQueryHandler.HandleAsync();
-        }
-        
-        [RequiresPermission(UserClaimsProvider.CanViewAnalyticPermission)]
-        [HttpPost("get-preview")]
-        public Task<MetricsPreviewDto> GetPreview([FromBody] GetPreviewParameters financeUpdatingParameters)
-        {
-            return _employeeService.GetPreviewMetrics(financeUpdatingParameters);
+            return _analyticsQuery.HandleAsync();
         }
 
         [RequiresPermission(UserClaimsProvider.CanViewAnalyticPermission)]
         [HttpGet("get-total-finance")]
-        public Task<IndicatorsDto> GetTotalFinance()
+        internal async Task<IndicatorsResponse> GetIndicatorsAsync()
         {
-            return _getIndicatorsQueryHandler.HandleAsync();
+            var coefficients = await _financesService.GetCoefficientsAsync();
+            var workingPlan = await _financesService.GetWorkingPlanAsync();
+            var totalFinances = await _financesService.GetTotalFinancesAsync();
+            var estimatedFinancialEfficiency = await _financesService.GetEstimatedFinancialEfficiencyAsync();
+
+            return new IndicatorsResponse(coefficients, workingPlan, totalFinances, estimatedFinancialEfficiency);
         }
 
         [RequiresPermission(UserClaimsProvider.CanViewAnalyticPermission)]
         [HttpPost("calculate-analytics-metric-changes")]
-        public async Task<AnalyticsMetricsChangesDto> CalculateAnalyticsMetricChangesAsync([FromBody] IEnumerable<MetricsRowDto> metricsRows)
+        public async Task<AnalyticsMetricsChangesResponse> CalculateAnalyticsMetricChangesAsync([FromBody] IEnumerable<MetricsRowDto> metricsRows)
         {
-            var metricsChanges = await _financeService.CalculateAnalyticsMetricChangesAsync(metricsRows);
-            return new AnalyticsMetricsChangesDto(metricsChanges);
+            var metricsChanges = await _financesService.CalculateAnalyticsMetricChangesAsync(metricsRows);
+            return new AnalyticsMetricsChangesResponse(metricsChanges);
         }
     }
 }
