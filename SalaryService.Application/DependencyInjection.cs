@@ -17,7 +17,6 @@ public static class DependencyInjection
         services.AddTransient<ICoefficientsQuery, CoefficientsQuery>();
         services.AddTransient<IWorkingPlanQuery, WorkingPlanQuery>();
         services.AddTransient<IFinancialMetricsQuery, FinancialMetricsQuery>();
-        services.AddTransient<AnalyticsQuery>();
         services.AddTransient<EmployeeCreationCommand>();
         services.AddTransient<ProfileUpdateCommand>();
         services.AddTransient<EmployeesService>();

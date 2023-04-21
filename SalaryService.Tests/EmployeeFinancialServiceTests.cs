@@ -40,7 +40,7 @@
 
 //            _financeAnalyticsService = new FinanceAnalyticService(
 //                coefficientsQueryHandlerMock.Object,
-//                _financialQueryHandlerMock.Object, 
+//                _financialQueryHandlerMock.Object,
 //                workingPlanQueryHandlerMock.Object,
 //                _employeesQueryHandlerMock.Object,
 //                new Clock());
@@ -52,7 +52,9 @@
 //            var metricRows = new List<MetricsRowDto>() {
 //                new MetricsRowDto
 //                {
-//                  EmployeeId = 1,
+//                  EmployeeId = "1",
+//                  EmployeeFullName = "lastName name middleName",
+//                  IsCopy = false,
 //                  RatePerHour =  500,
 //                  Pay = 20000,
 //                  EmploymentType = 1,
@@ -60,8 +62,9 @@
 //                },
 //                new MetricsRowDto
 //                {
-//                  EmployeeId = null,
-//                  EmployeeCopyId = "employee_copy",
+//                  EmployeeId = "1_copy",
+//                  EmployeeFullName = "lastName name middleName (Copy)",
+//                  IsCopy = true,
 //                  RatePerHour =  50,
 //                  Pay = 20000,
 //                  EmploymentType = 0.5M,
@@ -97,6 +100,7 @@
 //            // check that new metrics are correct for existing employee
 //            Assert.Equal("1", analyticsMetricChanges.MetricsRowsChanges[0].EmployeeId);
 //            Assert.Equal("lastName name middleName", analyticsMetricChanges.MetricsRowsChanges[0].EmployeeFullName);
+//            Assert.False(analyticsMetricChanges.MetricsRowsChanges[0].IsCopy);
 //            Assert.Equal(500, employeeNewMetrics.RatePerHour);
 //            Assert.Equal(20000, employeeNewMetrics.Pay);
 //            Assert.Equal(20000, employeeNewMetrics.Salary);
@@ -120,6 +124,7 @@
 
 //            // check that metrics diff are correct for existing employee
 //            var metricsDiff = analyticsMetricChanges.MetricsRowsChanges[0].MetricsDiff.Value;
+//            Assert.Equal(1, metricsDiff.EmployeeId);
 //            Assert.Equal(300, metricsDiff.RatePerHour);
 //            Assert.Equal(10000, metricsDiff.Pay);
 //            Assert.Equal(15000, metricsDiff.Salary);
@@ -142,8 +147,9 @@
 //            Assert.Equal(500, metricsDiff.ParkingCostPerMonth);
 
 //            // check that new metrics are correct for an employee copy
-//            Assert.Equal("employee_copy", analyticsMetricChanges.MetricsRowsChanges[1].EmployeeId);
-//            Assert.Null(analyticsMetricChanges.MetricsRowsChanges[1].EmployeeFullName);
+//            Assert.Equal("1_copy", analyticsMetricChanges.MetricsRowsChanges[1].EmployeeId);
+//            Assert.Equal("lastName name middleName (Copy)", analyticsMetricChanges.MetricsRowsChanges[1].EmployeeFullName);
+//            Assert.True(analyticsMetricChanges.MetricsRowsChanges[1].IsCopy);
 //            Assert.Null(analyticsMetricChanges.MetricsRowsChanges[1].MetricsDiff);
 //            Assert.Equal(20000, analyticsMetricChanges.MetricsRowsChanges[1].NewMetrics.Pay);
 //            Assert.Equal(50, analyticsMetricChanges.MetricsRowsChanges[1].NewMetrics.RatePerHour);
@@ -182,4 +188,4 @@
 //            Assert.Equal(1100, totalMetricsDiff.ParkingCostPerMonth);
 //        }
 //    }
-//}
+//

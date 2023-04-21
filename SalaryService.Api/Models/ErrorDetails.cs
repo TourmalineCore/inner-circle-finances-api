@@ -1,14 +1,13 @@
 ﻿using System.Text.Json;
 
-namespace SalaryService.Api.Models
+namespace SalaryService.Api.Models;
+
+public class ErrorDetails
 {
-    public class ErrorDetails
+    public int StatusCode { get; set; }
+    public string Message { get; set; }
+    public override string ToString()
     {
-        public int StatusCode { get; set; }
-        public string Message { get; set; }
-        public override string ToString()
-        {
-            return JsonSerializer.Serialize(this);
-        }
+        return JsonSerializer.Serialize(this);
     }
 }

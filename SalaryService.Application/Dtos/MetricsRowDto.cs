@@ -2,9 +2,9 @@
 
 public readonly struct MetricsRowDto
 {
-    public long? EmployeeId { get; init; }
+    public string EmployeeId { get; init; }
 
-    public string? EmployeeCopyId { get; init; }
+    public string EmployeeFullName { get; init; }
 
     public decimal RatePerHour { get; init; }
 
@@ -14,5 +14,5 @@ public readonly struct MetricsRowDto
 
     public decimal ParkingCostPerMonth { get; init; }
 
-    public bool IsCopy => !EmployeeId.HasValue;
+    public bool IsCopy { get; init; }
 }
