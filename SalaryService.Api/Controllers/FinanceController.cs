@@ -13,19 +13,19 @@ namespace SalaryService.Api.Controllers
     {
         private readonly EmployeeService _employeeService;
         private readonly GetIndicatorsQueryHandler _getIndicatorsQueryHandler;
-        private readonly EmployeesQuery _employeesQuery;
+        private readonly GetCurrentEmployeesQuery _getCurrentEmployeesQuery;
         private readonly FinanceAnalyticService _financeService;
 
         public FinanceController(
             EmployeeService employeeService,
             GetIndicatorsQueryHandler getIndicatorsQueryHandler,
             FinanceAnalyticService financeService,
-            EmployeesQuery employeesQuery)
+            GetCurrentEmployeesQuery getCurrentEmployeesQuery)
         {
             _employeeService = employeeService;
             _getIndicatorsQueryHandler = getIndicatorsQueryHandler;
             _financeService = financeService;
-            _employeesQuery = employeesQuery;
+            _getCurrentEmployeesQuery = getCurrentEmployeesQuery;
         }
 
         [RequiresPermission(UserClaimsProvider.CanViewAnalyticPermission)]
@@ -34,10 +34,10 @@ namespace SalaryService.Api.Controllers
         {
             if (metricsRows == null || metricsRows.Count() == 0)
             {
-                var employees = await _employeesQuery.HandleAsync();
+                var currentEmployees = await _getCurrentEmployeesQuery.HandleAsync();
                 var employeesTotalFinancialMetrics = await _financeService.CalculateEmployeesTotalFinancialMetricsAsync();
 
-                return new AnalyticsTableDto(employees, employeesTotalFinancialMetrics);
+                return new AnalyticsTableDto(currentEmployees, employeesTotalFinancialMetrics);
             }
 
             var metricsChanges = await _financeService.CalculateAnalyticsMetricChangesAsync(metricsRows);
