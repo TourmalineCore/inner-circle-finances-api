@@ -21,7 +21,9 @@ namespace SalaryService.Application.Queries
 
         public async Task<IEnumerable<EmployeeDto>> HandleAsync(bool includeFinanceInfo = false)
         {
-            var employeesRequest = _employeeDbContext.QueryableAsNoTracking<Employee>();
+            var employeesRequest = _employeeDbContext
+                .QueryableAsNoTracking<Employee>()
+                .Where(x => !x.IsSpecial);
 
             if (includeFinanceInfo)
             {

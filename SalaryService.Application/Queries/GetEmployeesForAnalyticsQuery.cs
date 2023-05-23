@@ -4,11 +4,11 @@ using SalaryService.Domain;
 
 namespace SalaryService.Application.Queries
 {
-    public class GetCurrentEmployeesQuery
+    public class GetEmployeesForAnalyticsQuery
     {
         private readonly EmployeeDbContext _context;
 
-        public GetCurrentEmployeesQuery(EmployeeDbContext context)
+        public GetEmployeesForAnalyticsQuery(EmployeeDbContext context)
         {
             _context = context;
         }
@@ -19,7 +19,7 @@ namespace SalaryService.Application.Queries
                 .Employees
                 .Include(x => x.EmployeeFinanceForPayroll)
                 .Include(x => x.EmployeeFinancialMetrics)
-                .Where(x => x.IsCurrentEmployee)
+                .Where(x => x.IsCurrentEmployee && !x.IsBlankEmployee && !x.IsSpecial)
                 .AsNoTracking()
                 .ToListAsync();
         }
