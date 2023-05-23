@@ -7,11 +7,13 @@ namespace SalaryService.Api
     {
         public const string PermissionClaimType = "permissions";
 
-        public const string CanViewFinanceForPayrollPermission = "CanViewFinanceForPayroll";
+        public const string ViewPersonalProfile = "View personal profile";
+        public const string EditPersonalProfile = "Edit personal profile";
+        public const string ViewContacts = "View contacts";
+        public const string ViewSalaryAndDocumentsData = "View salary and documents data";
+        public const string EditFullEmployeesData = "Edit full employees data";
+        public const string AccessAnalyticalForecastsPage = "Access to analytical forecasts page";
 
-        public const string CanViewAnalyticPermission = "CanViewAnalytic";
-
-        public const string CanManageEmployeesPermission = "CanManageEmployees";
         public Task<List<Claim>> GetUserClaimsAsync(string login)
         {
             throw new NotImplementedException();

@@ -38,6 +38,8 @@ namespace SalaryService.Domain
 
         public Instant? DeletedAtUtc { get; private set; }
 
+        public bool IsSpecial { get; private set; }
+
         public Employee(string firstName, string lastName, string? middleName, string corporateEmail)
         {
             FirstName = firstName;

@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NodaTime;
 using SalaryService.Domain;
 
@@ -28,22 +28,39 @@ namespace SalaryService.DataAccess.Mapping
 
             builder.HasIndex(x => x.CorporateEmail).IsUnique();
 
-            builder.HasData(new
-            {
-                Id = 50L,
-                FirstName = "Ceo",
-                LastName = "Ceo",
-                MiddleName = "Ceo",
-                CorporateEmail = "ceo@tourmalinecore.com",
-                PersonalEmail = "ceo@gmail.com",
-                Phone = "88006663636",
-                GitHub = "@ceo.github",
-                GitLab = "@ceo.gitlab",
-                HireDate = Instant.FromDateTimeUtc(ceoHiringAtUtc),
-                IsBlankEmployee = true,
-                IsCurrentEmployee = true,
-                IsEmployedOfficially = true
-            });
+            builder.HasData(
+                new
+                {
+                    Id = 1L,
+                    FirstName = "Ceo",
+                    LastName = "Ceo",
+                    MiddleName = "Ceo",
+                    CorporateEmail = "ceo@tourmalinecore.com",
+                    PersonalEmail = "ceo@gmail.com",
+                    Phone = "88006663636",
+                    GitHub = "@ceo.github",
+                    GitLab = "@ceo.gitlab",
+                    HireDate = Instant.FromDateTimeUtc(ceoHiringAtUtc),
+                    IsBlankEmployee = true,
+                    IsCurrentEmployee = true,
+                    IsEmployedOfficially = true,
+                    IsSpecial = false
+                },
+                new
+                {
+                    Id = 2L,
+                    FirstName = "Admin",
+                    LastName = "Admin",
+                    MiddleName = "Admin",
+                    CorporateEmail = "inner-circle-admin@tourmalinecore.com",
+                    PersonalEmail = "inner-circle-admin@gmail.com",
+                    HireDate = Instant.FromDateTimeUtc(ceoHiringAtUtc),
+                    IsBlankEmployee = true,
+                    IsCurrentEmployee = true,
+                    IsEmployedOfficially = true,
+                    IsSpecial = true
+                }
+            );
         }
     }
 }
