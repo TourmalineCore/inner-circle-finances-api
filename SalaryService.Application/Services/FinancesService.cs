@@ -1,6 +1,5 @@
 ﻿using NodaTime;
 using SalaryService.Application.Dtos;
-using SalaryService.Application.Queries;
 using SalaryService.Application.Queries.Contracts;
 using SalaryService.Domain;
 
@@ -11,18 +10,18 @@ public class FinancesService
     private readonly ICoefficientsQuery _coefficientsQuery;
     private readonly IFinancialMetricsQuery _financialMetricsQuery;
     private readonly IWorkingPlanQuery _workingPlanQuery;
-    private readonly EmployeesQuery _employeesQuery;
-    private readonly TotalFinancesQuery _totalFinancesQuery;
-    private readonly EstimatedFinancialEfficiencyQuery _estimatedFinancialEfficiencyQuery;
+    private readonly IEmployeesQuery _employeesQuery;
+    private readonly ITotalFinancesQuery _totalFinancesQuery;
+    private readonly IEstimatedFinancialEfficiencyQuery _estimatedFinancialEfficiencyQuery;
     private readonly IClock _clock;
 
     public FinancesService(ICoefficientsQuery getCoefficientsQueryHandler,
         IFinancialMetricsQuery getFinancialMetricsQueryHandler,
         IWorkingPlanQuery getWorkingPlanQueryHandler,
-        IClock clock,
-        EmployeesQuery employeesQuery,
-        TotalFinancesQuery totalFinancesQuery,
-        EstimatedFinancialEfficiencyQuery estimatedFinancialEfficiencyQuery)
+        IEmployeesQuery employeesQuery,
+        ITotalFinancesQuery totalFinancesQuery,
+        IEstimatedFinancialEfficiencyQuery estimatedFinancialEfficiencyQuery,
+        IClock clock)
     {
         _coefficientsQuery = getCoefficientsQueryHandler;
         _financialMetricsQuery = getFinancialMetricsQueryHandler;
@@ -59,7 +58,8 @@ public class FinancesService
         return MetricsDiffCalculator.CalculateTotalEmployeeFinancialMetrics(employeeFinancialMetrics);
     }
 
-    public async Task<AnalyticsMetricChanges> CalculateAnalyticsMetricChangesAsync(IEnumerable<MetricsRowDto> metricsRows)
+    public async Task<AnalyticsMetricChanges> CalculateAnalyticsMetricChangesAsync(
+        IEnumerable<MetricsRowDto> metricsRows)
     {
         var sourceMetrics = await _financialMetricsQuery.HandleAsync();
         var coefficients = await GetCoefficientsAsync();
@@ -74,7 +74,8 @@ public class FinancesService
                 var employeeCopyMetrics = await CalculateMetricsAsync(metricsRow.RatePerHour, metricsRow.Pay,
                     metricsRow.EmploymentType, metricsRow.ParkingCostPerMonth, null, coefficients, workingPlan);
 
-                metricsRowChangesList.Add(new MetricsRowChanges(metricsRow.EmployeeId, metricsRow.EmployeeFullName, employeeCopyMetrics));
+                metricsRowChangesList.Add(new MetricsRowChanges(metricsRow.EmployeeId, metricsRow.EmployeeFullName,
+                    employeeCopyMetrics));
                 continue;
             }
 
@@ -85,9 +86,10 @@ public class FinancesService
             if (IsEmployeeMetricsChanged(metricsRow, employeeSourceMetrics))
             {
                 var employeeNewMetrics = await CalculateMetricsAsync(metricsRow.RatePerHour, metricsRow.Pay,
-                metricsRow.EmploymentType, metricsRow.ParkingCostPerMonth, employeeId, coefficients, workingPlan);
+                    metricsRow.EmploymentType, metricsRow.ParkingCostPerMonth, employeeId, coefficients, workingPlan);
 
-                metricsRowChangesList.Add(new MetricsRowChanges(employeeId, employee.GetFullName(), employeeSourceMetrics, employeeNewMetrics));
+                metricsRowChangesList.Add(new MetricsRowChanges(employeeId, employee.GetFullName(),
+                    employeeSourceMetrics, employeeNewMetrics));
                 continue;
             }
 
@@ -102,7 +104,9 @@ public class FinancesService
         {
             MetricsRowsChanges = metricsRowChangesList,
             NewTotalMetrics = newMetricsTotal,
-            TotalMetricsDiff = MetricsDiffCalculator.CalculateDiffBetweenTotalEmployeeFinancialMetrics(sourceMetricsTotal, newMetricsTotal),
+            TotalMetricsDiff =
+                MetricsDiffCalculator.CalculateDiffBetweenTotalEmployeeFinancialMetrics(sourceMetricsTotal,
+                    newMetricsTotal)
         };
     }
 
@@ -114,7 +118,8 @@ public class FinancesService
         CoefficientOptions? coefficients = null,
         WorkingPlan? workingPlan = null)
     {
-        var financesForPayroll = new FinancesForPayroll(ratePerHour, pay, parkingCostPerMonth, employmentTypeValue, true);
+        var financesForPayroll =
+            new FinancesForPayroll(ratePerHour, pay, employmentTypeValue, parkingCostPerMonth, true);
         return await CalculateMetricsAsync(financesForPayroll, coefficients, workingPlan);
     }
 
@@ -137,4 +142,3 @@ public class FinancesService
                || employeeMetrics.ParkingCostPerMonth != metricsRow.ParkingCostPerMonth;
     }
 }
-

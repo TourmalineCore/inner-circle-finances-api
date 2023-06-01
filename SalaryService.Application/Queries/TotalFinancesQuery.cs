@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SalaryService.Application.Queries.Contracts;
 using SalaryService.DataAccess;
 using SalaryService.Domain;
 
 namespace SalaryService.Application.Queries;
 
-public class TotalFinancesQuery
+public class TotalFinancesQuery : ITotalFinancesQuery
 {
     private readonly EmployeeDbContext _context;
 

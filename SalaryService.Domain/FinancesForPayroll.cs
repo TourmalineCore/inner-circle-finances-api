@@ -14,8 +14,8 @@ public class FinancesForPayroll
 
     public FinancesForPayroll(decimal ratePerHour, 
         decimal pay,
-        decimal parkingCostPerMonth,
         decimal employmentType,
+        decimal parkingCostPerMonth,
         bool isEmployedOfficially)
     {
         RatePerHour = ratePerHour;

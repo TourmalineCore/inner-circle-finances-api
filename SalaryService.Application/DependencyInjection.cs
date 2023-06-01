@@ -17,6 +17,7 @@ public static class DependencyInjection
         services.AddTransient<ICoefficientsQuery, CoefficientsQuery>();
         services.AddTransient<IWorkingPlanQuery, WorkingPlanQuery>();
         services.AddTransient<IFinancialMetricsQuery, FinancialMetricsQuery>();
+        services.AddTransient<ITotalFinancesQuery, TotalFinancesQuery>();
         services.AddTransient<EmployeeCreationCommand>();
         services.AddTransient<ProfileUpdateCommand>();
         services.AddTransient<EmployeesService>();
@@ -29,7 +30,6 @@ public static class DependencyInjection
         services.AddTransient<RecalcTotalMetricsCommand>();
         services.AddTransient<EmployeeDismissalTransaction>();
         services.AddTransient<EmployeeUpdateTransaction>();
-        services.AddTransient<EmployeesQuery>();
         services.AddTransient<EmployeeQuery>();
 
         return services;

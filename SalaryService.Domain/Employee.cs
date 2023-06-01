@@ -22,7 +22,7 @@ public class Employee : IIdentityEntity
 
     public string? GitLab { get; private set; }
 
-    public FinancialMetrics? FinancialMetrics { get; set; }
+    public FinancialMetrics? FinancialMetrics { get; private set; }
 
     public Instant? HireDate { get; private set; }
 
@@ -36,7 +36,7 @@ public class Employee : IIdentityEntity
 
     public Instant? DeletedAtUtc { get; private set; }
 
-    public Employee(string firstName, string lastName, string middleName, string corporateEmail)
+    public Employee(string firstName, string lastName, string middleName, string corporateEmail, bool isEmployedOfficially = false)
     {
         FirstName = firstName;
         LastName = lastName;
@@ -44,7 +44,7 @@ public class Employee : IIdentityEntity
         CorporateEmail = corporateEmail;
         IsBlankEmployee = true;
         IsCurrentEmployee = false;
-        IsEmployedOfficially = false;
+        IsEmployedOfficially = isEmployedOfficially;
     }
 
     public void Delete(Instant deletedAtUtc)
@@ -93,7 +93,7 @@ public class Employee : IIdentityEntity
     public string GetFullName()
     {
         return MiddleName == null 
-            ? $"{LastName} {FirstName} " 
+            ? $"{LastName} {FirstName}" 
             : $"{LastName} {FirstName} {MiddleName}";
     }
 }

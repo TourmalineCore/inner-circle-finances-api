@@ -61,7 +61,7 @@ public class EmployeeController : Controller
     }
 
     [RequiresPermission(UserClaimsProvider.CanManageEmployeesPermission)]
-    [HttpDelete("dismiss/{id}")]
+    [HttpDelete("dismiss/{id:long}")]
     public async Task DismissalEmployeeAsync([FromRoute] long id)
     {
         await _employeesService.DismissAsync(id);
