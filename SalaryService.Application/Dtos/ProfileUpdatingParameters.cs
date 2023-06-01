@@ -2,8 +2,6 @@
 {
     public readonly struct ProfileUpdatingParameters
     {
-        public long EmployeeId { get; init; }
-
         public string PersonalEmail { get; init; }
 
         public string Phone { get; init; }
