@@ -72,7 +72,7 @@ namespace SalaryService.Api.Controllers
         [HttpPut("update-profile")]
         public Task UpdateProfile([FromBody] ProfileUpdatingParameters profileUpdatingParameters)
         {
-            return _employeeService.UpdateProfileAsync(profileUpdatingParameters);
+            return _employeeService.UpdateProfileAsync(User.GetCorporateEmail(), profileUpdatingParameters);
         }
         
         [RequiresPermission(UserClaimsProvider.EditFullEmployeesData)]

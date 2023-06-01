@@ -97,9 +97,9 @@ namespace SalaryService.Application.Services
             await UpdateFinancesAsync(request.GetFinanceUpdatingParameters());
         }
 
-        public async Task UpdateProfileAsync(ProfileUpdatingParameters updatingParameters)
+        public async Task UpdateProfileAsync(string corporateEmail, ProfileUpdatingParameters updatingParameters)
         {
-            await _updateProfileCommandHandler.HandleAsync(updatingParameters);
+            await _updateProfileCommandHandler.HandleAsync(corporateEmail, updatingParameters);
         }
 
         private async Task UpdateFinancesAsync(FinanceUpdatingParameters parameters)
