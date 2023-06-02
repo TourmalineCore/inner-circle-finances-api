@@ -26,4 +26,6 @@ public class UnofficialFinancialMetrics : FinancialMetrics
     protected override decimal CalculateGrossSalary() => 0;
 
     protected override decimal CalculateNetSalary() => 0;
+
+    protected override decimal CalculateAccountingPerMonth() => 0;
 }

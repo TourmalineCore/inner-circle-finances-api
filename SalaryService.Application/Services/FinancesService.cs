@@ -71,8 +71,15 @@ public class FinancesService
         {
             if (metricsRow.IsCopy)
             {
-                var employeeCopyMetrics = await CalculateMetricsAsync(metricsRow.RatePerHour, metricsRow.Pay,
-                    metricsRow.EmploymentType, metricsRow.ParkingCostPerMonth, null, coefficients, workingPlan);
+                var employeeCopyMetrics = await CalculateMetricsAsync(
+                    metricsRow.RatePerHour,
+                    metricsRow.Pay,
+                    metricsRow.EmploymentType,
+                    metricsRow.ParkingCostPerMonth,
+                    metricsRow.IsEmployedOfficially,
+                    null,
+                    coefficients,
+                    workingPlan);
 
                 metricsRowChangesList.Add(new MetricsRowChanges(metricsRow.EmployeeId, metricsRow.EmployeeFullName,
                     employeeCopyMetrics));
@@ -85,8 +92,15 @@ public class FinancesService
 
             if (IsEmployeeMetricsChanged(metricsRow, employeeSourceMetrics))
             {
-                var employeeNewMetrics = await CalculateMetricsAsync(metricsRow.RatePerHour, metricsRow.Pay,
-                    metricsRow.EmploymentType, metricsRow.ParkingCostPerMonth, employeeId, coefficients, workingPlan);
+                var employeeNewMetrics = await CalculateMetricsAsync(
+                    metricsRow.RatePerHour,
+                    metricsRow.Pay,
+                    metricsRow.EmploymentType,
+                    metricsRow.ParkingCostPerMonth,
+                    metricsRow.IsEmployedOfficially,
+                    employeeId,
+                    coefficients,
+                    workingPlan);
 
                 metricsRowChangesList.Add(new MetricsRowChanges(employeeId, employee.GetFullName(),
                     employeeSourceMetrics, employeeNewMetrics));
@@ -114,12 +128,13 @@ public class FinancesService
         decimal pay,
         decimal employmentTypeValue,
         decimal parkingCostPerMonth,
+        bool isEmployedOfficially,
         long? employeeId = null,
         CoefficientOptions? coefficients = null,
         WorkingPlan? workingPlan = null)
     {
         var financesForPayroll =
-            new FinancesForPayroll(ratePerHour, pay, employmentTypeValue, parkingCostPerMonth, true);
+            new FinancesForPayroll(ratePerHour, pay, employmentTypeValue, parkingCostPerMonth, isEmployedOfficially);
         return await CalculateMetricsAsync(financesForPayroll, coefficients, workingPlan);
     }
 
@@ -128,10 +143,13 @@ public class FinancesService
         CoefficientOptions? coefficients = null,
         WorkingPlan? workingPlan = null)
     {
-        coefficients = coefficients ?? await GetCoefficientsAsync();
-        workingPlan = workingPlan ?? await GetWorkingPlanAsync();
+        coefficients ??= await GetCoefficientsAsync();
+        workingPlan ??= await GetWorkingPlanAsync();
 
-        return new FinancialMetrics(financesForPayroll, coefficients, workingPlan, _clock.GetCurrentInstant());
+        //fix that moment
+        return financesForPayroll.IsEmployedOfficially
+            ? new FinancialMetrics(financesForPayroll, coefficients, workingPlan, _clock.GetCurrentInstant())
+            : new UnofficialFinancialMetrics(financesForPayroll, coefficients, workingPlan, _clock.GetCurrentInstant());
     }
 
     private static bool IsEmployeeMetricsChanged(MetricsRowDto metricsRow, FinancialMetrics employeeMetrics)

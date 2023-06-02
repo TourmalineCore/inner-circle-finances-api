@@ -43,11 +43,11 @@ public class EmployeeFinancialServiceTests
     }
 
     [Fact]
-    public async Task CalculateAnalyticsMetricsChangesAsync_CalculationsAreCorrect()
+    public async Task CalculateAnalyticsMetricsChangesAsync_WithEmployeeCopy_CalculationsAreCorrect()
     {
         var metricRows = new List<MetricsRowDto>
         {
-            new MetricsRowDto
+            new()
             {
                 EmployeeId = "1",
                 EmployeeFullName = "lastName name middleName",
@@ -55,9 +55,10 @@ public class EmployeeFinancialServiceTests
                 RatePerHour = 500,
                 Pay = 20000,
                 EmploymentType = 1,
-                ParkingCostPerMonth = 1000
+                ParkingCostPerMonth = 1000,
+                IsEmployedOfficially = true
             },
-            new MetricsRowDto
+            new()
             {
                 EmployeeId = "1_copy",
                 EmployeeFullName = "lastName name middleName (Copy)",
@@ -65,7 +66,8 @@ public class EmployeeFinancialServiceTests
                 RatePerHour = 50,
                 Pay = 20000,
                 EmploymentType = 0.5M,
-                ParkingCostPerMonth = 600
+                ParkingCostPerMonth = 600,
+                IsEmployedOfficially = true
             }
         };
 
@@ -76,14 +78,15 @@ public class EmployeeFinancialServiceTests
             EmployeeFinancialTestsData.WorkingPlan,
             It.IsAny<Instant>());
 
-        // where we use it?
         _financialMetricsQueryMock
             .Setup(x => x.HandleAsync())
             .ReturnsAsync(new List<FinancialMetrics> { employeeSourceFinancialMetrics });
 
         var employee = new Employee("name", "lastName", "middleName", "test@tourmalinecore.com", true) { Id = 1 };
-        employee.UpdateFinancialMetrics(employeeFinancesForPayroll, EmployeeFinancialTestsData.CoefficientOptions,
-            EmployeeFinancialTestsData.WorkingPlan, It.IsAny<Instant>());
+        employee.UpdateFinancialMetrics(employeeFinancesForPayroll,
+            EmployeeFinancialTestsData.CoefficientOptions,
+            EmployeeFinancialTestsData.WorkingPlan,
+            It.IsAny<Instant>());
 
         _employeesQueryMock
             .Setup(x => x.GetEmployeesAsync(false))
@@ -94,9 +97,8 @@ public class EmployeeFinancialServiceTests
 
         var analyticsMetricChanges = await _financeService.CalculateAnalyticsMetricChangesAsync(metricRows);
 
+        // new metrics are correct for existing employee
         var employeeNewMetrics = analyticsMetricChanges.MetricsRowsChanges[0].NewMetrics;
-
-        // check that new metrics are correct for existing employee
         Assert.Equal("1", analyticsMetricChanges.MetricsRowsChanges[0].EmployeeId);
         Assert.Equal("lastName name middleName", analyticsMetricChanges.MetricsRowsChanges[0].EmployeeFullName);
         Assert.False(analyticsMetricChanges.MetricsRowsChanges[0].IsCopy);
@@ -121,7 +123,7 @@ public class EmployeeFinancialServiceTests
         Assert.Equal(600, Math.Round(employeeNewMetrics.AccountingPerMonth, 2));
         Assert.Equal(1000, employeeNewMetrics.ParkingCostPerMonth);
 
-        // check that metrics diff are correct for existing employee
+        // metrics diff are correct for existing employee
         var metricsDiff = analyticsMetricChanges.MetricsRowsChanges[0].MetricsDiff.Value;
         Assert.Equal(300, metricsDiff.RatePerHour);
         Assert.Equal(10000, metricsDiff.Pay);
@@ -144,7 +146,7 @@ public class EmployeeFinancialServiceTests
         Assert.Equal(0, Math.Round(metricsDiff.AccountingPerMonth, 2));
         Assert.Equal(500, metricsDiff.ParkingCostPerMonth);
 
-        // check that new metrics are correct for an employee copy
+        // new metrics are correct for an employee copy
         Assert.Equal("1_copy", analyticsMetricChanges.MetricsRowsChanges[1].EmployeeId);
         Assert.Equal("lastName name middleName (Copy)", analyticsMetricChanges.MetricsRowsChanges[1].EmployeeFullName);
         Assert.True(analyticsMetricChanges.MetricsRowsChanges[1].IsCopy);
@@ -153,7 +155,7 @@ public class EmployeeFinancialServiceTests
         Assert.Equal(50, analyticsMetricChanges.MetricsRowsChanges[1].NewMetrics.RatePerHour);
         Assert.Equal(600, analyticsMetricChanges.MetricsRowsChanges[1].NewMetrics.ParkingCostPerMonth);
 
-        // check that new total metrics are correct
+        // new total metrics are correct
         var totalSourceMetrics = analyticsMetricChanges.NewTotalMetrics;
         Assert.Equal(71050, Math.Round(totalSourceMetrics.Earnings, 2));
         Assert.Equal(47127.70M, Math.Round(totalSourceMetrics.Expenses, 2));
@@ -169,7 +171,7 @@ public class EmployeeFinancialServiceTests
         Assert.Equal(1200, Math.Round(totalSourceMetrics.AccountingPerMonth, 2));
         Assert.Equal(1600, totalSourceMetrics.ParkingCostPerMonth);
 
-        // check that new total metrics diff is correct
+        // new total metrics diff is correct
         var totalMetricsDiff = analyticsMetricChanges.TotalMetricsDiff;
         Assert.Equal(57516.67M, Math.Round(totalMetricsDiff.Earnings, 2));
         Assert.Equal(37111.85M, Math.Round(totalMetricsDiff.Expenses, 2));
@@ -184,5 +186,159 @@ public class EmployeeFinancialServiceTests
         Assert.Equal(57.5M, Math.Round(totalMetricsDiff.InjuriesContributions, 2));
         Assert.Equal(600, Math.Round(totalMetricsDiff.AccountingPerMonth, 2));
         Assert.Equal(1100, totalMetricsDiff.ParkingCostPerMonth);
+    }
+
+    [Fact]
+    public async Task CalculateAnalyticsMetricsChangesAsync_WithUnofficial_CalculationsAreCorrect()
+    {
+        var metricRows = new List<MetricsRowDto>
+        {
+            new()
+            {
+                EmployeeId = "1",
+                EmployeeFullName = "Test Test Test",
+                IsCopy = false,
+                RatePerHour = 200,
+                Pay = 10000,
+                EmploymentType = 0.5m,
+                ParkingCostPerMonth = 500,
+                IsEmployedOfficially = true
+            },
+            new()
+            {
+                EmployeeId = "2",
+                EmployeeFullName = "lastName name middleName",
+                IsCopy = false,
+                RatePerHour = 250,
+                Pay = 20000,
+                EmploymentType = 0.5m,
+                ParkingCostPerMonth = 1000,
+                IsEmployedOfficially = false
+            }
+        };
+
+        var employeeFinancesForPayroll = new FinancesForPayroll(200, 10000, 0.5m, 500, true);
+
+        var employeeSourceFinancialMetrics = new FinancialMetrics(employeeFinancesForPayroll,
+            EmployeeFinancialTestsData.CoefficientOptions,
+            EmployeeFinancialTestsData.WorkingPlan,
+            It.IsAny<Instant>());
+
+        var employee2FinancesForPayroll = new FinancesForPayroll(500, 40000, 1m, 2000, true);
+
+        var employee2SourceFinancialMetrics = new FinancialMetrics(employee2FinancesForPayroll,
+            EmployeeFinancialTestsData.CoefficientOptions,
+            EmployeeFinancialTestsData.WorkingPlan,
+            It.IsAny<Instant>());
+
+        _financialMetricsQueryMock
+            .Setup(x => x.HandleAsync())
+            .ReturnsAsync(new List<FinancialMetrics>
+                { employeeSourceFinancialMetrics, employee2SourceFinancialMetrics });
+
+        var employee = new Employee("Test", "Test", "Test", "test@tourmalinecore.com", true)
+            { Id = 1 };
+
+        employee.UpdateFinancialMetrics(employeeFinancesForPayroll,
+            EmployeeFinancialTestsData.CoefficientOptions,
+            EmployeeFinancialTestsData.WorkingPlan, It.IsAny<Instant>());
+
+        var employee2 = new Employee("name", "lastName", "middleName", "corporate@tourmalinecore.com", true)
+            { Id = 2 };
+
+        employee2.UpdateFinancialMetrics(employee2FinancesForPayroll,
+            EmployeeFinancialTestsData.CoefficientOptions,
+            EmployeeFinancialTestsData.WorkingPlan, It.IsAny<Instant>());
+
+        _employeesQueryMock
+            .Setup(x => x.GetEmployeesAsync(false))
+            .ReturnsAsync(new List<Employee>
+            {
+                employee,
+                employee2
+            });
+
+        var analyticsMetricChanges = await _financeService.CalculateAnalyticsMetricChangesAsync(metricRows);
+
+        // check that new metrics are correct for unofficial employee
+        var employeeNewMetrics = analyticsMetricChanges.MetricsRowsChanges[1].NewMetrics;
+        Assert.Equal("2", analyticsMetricChanges.MetricsRowsChanges[1].EmployeeId);
+        Assert.Equal("lastName name middleName", analyticsMetricChanges.MetricsRowsChanges[1].EmployeeFullName);
+        Assert.False(analyticsMetricChanges.MetricsRowsChanges[1].IsCopy);
+        Assert.Equal(250, employeeNewMetrics.RatePerHour);
+        Assert.Equal(20000, employeeNewMetrics.Pay);
+        Assert.Equal(10000, employeeNewMetrics.Salary);
+        Assert.Equal(7.39m, Math.Round(employeeNewMetrics.HourlyCostFact, 2));
+        Assert.Equal(62.50m, Math.Round(employeeNewMetrics.HourlyCostHand, 2));
+        Assert.Equal(16916.67m, Math.Round(employeeNewMetrics.Earnings, 2));
+        Assert.Equal(1000, Math.Round(employeeNewMetrics.Expenses, 2));
+        Assert.Equal(15916.67m, Math.Round(employeeNewMetrics.Profit, 2));
+        Assert.Equal(94.09m, Math.Round(employeeNewMetrics.ProfitAbility, 2));
+        Assert.Equal(0, Math.Round(employeeNewMetrics.DistrictCoefficient, 2));
+        Assert.Equal(0, Math.Round(employeeNewMetrics.GrossSalary, 2));
+        Assert.Equal(0, Math.Round(employeeNewMetrics.Prepayment, 2));
+        Assert.Equal(0, Math.Round(employeeNewMetrics.IncomeTaxContributions, 2));
+        Assert.Equal(0, Math.Round(employeeNewMetrics.NetSalary, 2));
+        Assert.Equal(0, Math.Round(employeeNewMetrics.PensionContributions, 2));
+        Assert.Equal(0, Math.Round(employeeNewMetrics.MedicalContributions, 2));
+        Assert.Equal(0, Math.Round(employeeNewMetrics.SocialInsuranceContributions, 2));
+        Assert.Equal(0, Math.Round(employeeNewMetrics.InjuriesContributions, 2));
+        Assert.Equal(0, Math.Round(employeeNewMetrics.AccountingPerMonth, 2));
+        Assert.Equal(1000, employeeNewMetrics.ParkingCostPerMonth);
+
+        // check that metrics diff are correct for existing employee
+        var metricsDiff = analyticsMetricChanges.MetricsRowsChanges[1].MetricsDiff.Value;
+        Assert.Equal(-250, metricsDiff.RatePerHour);
+        Assert.Equal(-20000, metricsDiff.Pay);
+        Assert.Equal(-30000, metricsDiff.Salary);
+        Assert.Equal(-420.32m, Math.Round(metricsDiff.HourlyCostFact, 2));
+        Assert.Equal(-187.5m, Math.Round(metricsDiff.HourlyCostHand, 2));
+        Assert.Equal(-50750, Math.Round(metricsDiff.Earnings, 2));
+        Assert.Equal(-56883.85m, Math.Round(metricsDiff.Expenses, 2));
+        Assert.Equal(6133.85m, Math.Round(metricsDiff.Profit, 2));
+        Assert.Equal(79.63m, Math.Round(metricsDiff.ProfitAbility, 2));
+        Assert.Equal(-6000, Math.Round(metricsDiff.DistrictCoefficient, 2));
+        Assert.Equal(-46000, Math.Round(metricsDiff.GrossSalary, 2));
+        Assert.Equal(-20010, Math.Round(metricsDiff.Prepayment, 2));
+        Assert.Equal(-5980, Math.Round(metricsDiff.IncomeTaxContributions, 2));
+        Assert.Equal(-40020, Math.Round(metricsDiff.NetSalary, 2));
+        Assert.Equal(-6433.48m, Math.Round(metricsDiff.PensionContributions, 2));
+        Assert.Equal(-2315.28m, Math.Round(metricsDiff.MedicalContributions, 2));
+        Assert.Equal(-443.09m, Math.Round(metricsDiff.SocialInsuranceContributions, 2));
+        Assert.Equal(-92, Math.Round(metricsDiff.InjuriesContributions, 2));
+        Assert.Equal(-600, Math.Round(metricsDiff.AccountingPerMonth, 2));
+        Assert.Equal(-1000, metricsDiff.ParkingCostPerMonth);
+
+        // check that new total metrics are correct
+        var totalSourceMetrics = analyticsMetricChanges.NewTotalMetrics;
+        Assert.Equal(30450, Math.Round(totalSourceMetrics.Earnings, 2));
+        Assert.Equal(11015.85m, Math.Round(totalSourceMetrics.Expenses, 2));
+        Assert.Equal(19434.15m, Math.Round(totalSourceMetrics.Profit, 2));
+        Assert.Equal(63.82m, Math.Round(totalSourceMetrics.ProfitAbility, 2));
+        Assert.Equal(2501.25m, Math.Round(totalSourceMetrics.Prepayment, 2));
+        Assert.Equal(747.5m, Math.Round(totalSourceMetrics.IncomeTaxContributions, 2));
+        Assert.Equal(5002.5m, Math.Round(totalSourceMetrics.NetSalary, 2));
+        Assert.Equal(2408.48m, Math.Round(totalSourceMetrics.PensionContributions, 2));
+        Assert.Equal(302.78m, Math.Round(totalSourceMetrics.MedicalContributions, 2));
+        Assert.Equal(443.09m, Math.Round(totalSourceMetrics.SocialInsuranceContributions, 2));
+        Assert.Equal(11.5m, Math.Round(totalSourceMetrics.InjuriesContributions, 2));
+        Assert.Equal(600, Math.Round(totalSourceMetrics.AccountingPerMonth, 2));
+        Assert.Equal(1500, totalSourceMetrics.ParkingCostPerMonth);
+
+        // check that new total metrics diff is correct
+        var totalMetricsDiff = analyticsMetricChanges.TotalMetricsDiff;
+        Assert.Equal(-50750, Math.Round(totalMetricsDiff.Earnings, 2));
+        Assert.Equal(-56883.85m, Math.Round(totalMetricsDiff.Expenses, 2));
+        Assert.Equal(6133.85m, Math.Round(totalMetricsDiff.Profit, 2));
+        Assert.Equal(47.44m, Math.Round(totalMetricsDiff.ProfitAbility, 2));
+        Assert.Equal(-20010m, Math.Round(totalMetricsDiff.Prepayment, 2));
+        Assert.Equal(-5980m, Math.Round(totalMetricsDiff.IncomeTaxContributions, 2));
+        Assert.Equal(-40020m, Math.Round(totalMetricsDiff.NetSalary, 2));
+        Assert.Equal(-6433.48m, Math.Round(totalMetricsDiff.PensionContributions, 2));
+        Assert.Equal(-2315.28m, Math.Round(totalMetricsDiff.MedicalContributions, 2));
+        Assert.Equal(-443.09m, Math.Round(totalMetricsDiff.SocialInsuranceContributions, 2));
+        Assert.Equal(-92, Math.Round(totalMetricsDiff.InjuriesContributions, 2));
+        Assert.Equal(-600, Math.Round(totalMetricsDiff.AccountingPerMonth, 2));
+        Assert.Equal(-1000, totalMetricsDiff.ParkingCostPerMonth);
     }
 }

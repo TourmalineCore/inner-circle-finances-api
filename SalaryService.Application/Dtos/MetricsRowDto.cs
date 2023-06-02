@@ -15,4 +15,6 @@ public readonly struct MetricsRowDto
     public decimal ParkingCostPerMonth { get; init; }
 
     public bool IsCopy { get; init; }
+
+    public bool IsEmployedOfficially { get; init; }
 }

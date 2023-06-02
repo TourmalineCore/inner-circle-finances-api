@@ -69,7 +69,7 @@ public class FinancialMetrics
         EmploymentType = financesForPayroll.EmploymentType;
         ParkingCostPerMonth = financesForPayroll.ParkingCostPerMonth;
         IsEmployedOfficially = financesForPayroll.IsEmployedOfficially;
-        AccountingPerMonth = ThirdPartyServicesPriceConsts.AccountingPerMonth;
+        AccountingPerMonth = CalculateAccountingPerMonth();
         _coefficients = coefficients;
         _workingPlan = workingPlan;
         CalculateMetrics();
@@ -144,6 +144,8 @@ public class FinancialMetrics
     protected virtual decimal CalculateNetSalary() => GrossSalary - GrossSalary * _coefficients.IncomeTaxPercent;
 
     protected decimal CalculateSalary() => Pay * EmploymentType;
+
+    protected virtual decimal CalculateAccountingPerMonth() => ThirdPartyServicesPriceConsts.AccountingPerMonth;
 
     private FinancialMetrics() { }
 }
