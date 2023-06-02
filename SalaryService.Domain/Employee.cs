@@ -36,7 +36,10 @@ public class Employee : IIdentityEntity
 
     public Instant? DeletedAtUtc { get; private set; }
 
-    public Employee(string firstName, string lastName, string middleName, string corporateEmail, bool isEmployedOfficially = false)
+    public bool IsSpecial { get; private set; }
+
+    public Employee(string firstName, string lastName, string middleName, string corporateEmail,
+        bool isEmployedOfficially = false)
     {
         FirstName = firstName;
         LastName = lastName;
@@ -63,6 +66,7 @@ public class Employee : IIdentityEntity
         GitHub = gitHub;
         GitLab = gitLab;
     }
+
     public void Update(
         string phone,
         string? personalEmail,
@@ -83,20 +87,22 @@ public class Employee : IIdentityEntity
         PersonnelNumber = personnelNumber;
     }
 
-    public void UpdateFinancialMetrics(FinancesForPayroll financesForPayroll, CoefficientOptions coefficients, WorkingPlan workingPlan, Instant createdAtUtc)
+    public void UpdateFinancialMetrics(FinancesForPayroll financesForPayroll, CoefficientOptions coefficients,
+        WorkingPlan workingPlan, Instant createdAtUtc)
     {
         FinancialMetrics = new FinancialMetrics(
-            financesForPayroll, 
-            IsEmployedOfficially, 
-            coefficients, 
+            financesForPayroll,
+            IsEmployedOfficially,
+            coefficients,
             workingPlan,
             createdAtUtc);
     }
 
+
     public string GetFullName()
     {
-        return MiddleName == null 
-            ? $"{LastName} {FirstName}" 
+        return MiddleName == null
+            ? $"{LastName} {FirstName}"
             : $"{LastName} {FirstName} {MiddleName}";
     }
 }

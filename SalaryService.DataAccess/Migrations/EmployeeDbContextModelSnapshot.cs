@@ -101,6 +101,9 @@ namespace SalaryService.DataAccess.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
+                    b.Property<bool>("IsSpecial")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("text");
@@ -127,7 +130,7 @@ namespace SalaryService.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 50L,
+                            Id = 1L,
                             CorporateEmail = "ceo@tourmalinecore.com",
                             FirstName = "Ceo",
                             GitHub = "@ceo.github",
@@ -136,10 +139,25 @@ namespace SalaryService.DataAccess.Migrations
                             IsBlankEmployee = true,
                             IsCurrentEmployee = true,
                             IsEmployedOfficially = true,
+                            IsSpecial = false,
                             LastName = "Ceo",
                             MiddleName = "Ceo",
                             PersonalEmail = "ceo@gmail.com",
                             Phone = "88006663636"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            CorporateEmail = "inner-circle-admin@tourmalinecore.com",
+                            FirstName = "Admin",
+                            HireDate = NodaTime.Instant.FromUnixTimeTicks(15778368000000000L),
+                            IsBlankEmployee = true,
+                            IsCurrentEmployee = true,
+                            IsEmployedOfficially = true,
+                            IsSpecial = true,
+                            LastName = "Admin",
+                            MiddleName = "Admin",
+                            PersonalEmail = "inner-circle-admin@gmail.com"
                         });
                 });
 
