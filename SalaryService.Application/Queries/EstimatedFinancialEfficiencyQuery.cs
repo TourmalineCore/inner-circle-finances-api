@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SalaryService.Application.Queries.Contracts;
 using SalaryService.DataAccess;
 using SalaryService.Domain;
 
 namespace SalaryService.Application.Queries;
 
-public class EstimatedFinancialEfficiencyQuery
+public class EstimatedFinancialEfficiencyQuery : IEstimatedFinancialEfficiencyQuery
 {
     private readonly EmployeeDbContext _context;
 

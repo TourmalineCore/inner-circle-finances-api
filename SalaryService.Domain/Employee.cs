@@ -85,9 +85,12 @@ public class Employee : IIdentityEntity
 
     public void UpdateFinancialMetrics(FinancesForPayroll financesForPayroll, CoefficientOptions coefficients, WorkingPlan workingPlan, Instant createdAtUtc)
     {
-        FinancialMetrics = IsEmployedOfficially
-            ? new FinancialMetrics(financesForPayroll, coefficients, workingPlan, createdAtUtc)
-            : new UnofficialFinancialMetrics(financesForPayroll, coefficients, workingPlan, createdAtUtc);
+        FinancialMetrics = new FinancialMetrics(
+            financesForPayroll, 
+            IsEmployedOfficially, 
+            coefficients, 
+            workingPlan,
+            createdAtUtc);
     }
 
     public string GetFullName()

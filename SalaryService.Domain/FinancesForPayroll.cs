@@ -10,18 +10,14 @@ public class FinancesForPayroll
 
     public decimal EmploymentType { get; init; }
 
-    public bool IsEmployedOfficially { get; init; }
-
     public FinancesForPayroll(decimal ratePerHour, 
         decimal pay,
         decimal employmentType,
-        decimal parkingCostPerMonth,
-        bool isEmployedOfficially)
+        decimal parkingCostPerMonth)
     {
         RatePerHour = ratePerHour;
         Pay = pay;
         EmploymentType = employmentType;
         ParkingCostPerMonth = parkingCostPerMonth;
-        IsEmployedOfficially = isEmployedOfficially;
     }
 }

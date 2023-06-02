@@ -71,9 +71,10 @@ public class EmployeeFinancialServiceTests
             }
         };
 
-        var employeeFinancesForPayroll = new FinancesForPayroll(200, 10000, 0.5m, 500, true);
+        var employeeFinancesForPayroll = new FinancesForPayroll(200, 10000, 0.5m, 500);
 
         var employeeSourceFinancialMetrics = new FinancialMetrics(employeeFinancesForPayroll,
+            true,
             EmployeeFinancialTestsData.CoefficientOptions,
             EmployeeFinancialTestsData.WorkingPlan,
             It.IsAny<Instant>());
@@ -217,16 +218,18 @@ public class EmployeeFinancialServiceTests
             }
         };
 
-        var employeeFinancesForPayroll = new FinancesForPayroll(200, 10000, 0.5m, 500, true);
+        var employeeFinancesForPayroll = new FinancesForPayroll(200, 10000, 0.5m, 500);
 
         var employeeSourceFinancialMetrics = new FinancialMetrics(employeeFinancesForPayroll,
+            true,
             EmployeeFinancialTestsData.CoefficientOptions,
             EmployeeFinancialTestsData.WorkingPlan,
             It.IsAny<Instant>());
 
-        var employee2FinancesForPayroll = new FinancesForPayroll(500, 40000, 1m, 2000, true);
+        var employee2FinancesForPayroll = new FinancesForPayroll(500, 40000, 1m, 2000);
 
         var employee2SourceFinancialMetrics = new FinancialMetrics(employee2FinancesForPayroll,
+            true,
             EmployeeFinancialTestsData.CoefficientOptions,
             EmployeeFinancialTestsData.WorkingPlan,
             It.IsAny<Instant>());

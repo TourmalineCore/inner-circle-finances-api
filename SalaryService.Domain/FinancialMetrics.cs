@@ -51,33 +51,58 @@ public class FinancialMetrics
 
     public Instant CreatedAtUtc { get; private set; }
 
-    private CoefficientOptions _coefficients { get; init; }
+    private CoefficientOptions Coefficients { get; init; }
 
-    private WorkingPlan _workingPlan { get; init; }
+    private WorkingPlan WorkingPlan { get; init; }
 
     private readonly List<decimal> _availableEmploymentTypes = new() { 0.5m, 1 };
 
-    public FinancialMetrics(FinancesForPayroll financesForPayroll, CoefficientOptions coefficients, WorkingPlan workingPlan, Instant createdAtUtc)
+    public FinancialMetrics(FinancesForPayroll financesForPayroll, bool isEmployedOfficially,
+        CoefficientOptions coefficients, WorkingPlan workingPlan, Instant createdAtUtc)
     {
         if (!_availableEmploymentTypes.Contains(financesForPayroll.EmploymentType))
-        {
-            throw new ArgumentException($"Employment type can accept only the following values: {string.Join(",", _availableEmploymentTypes)}");
-        }
+            throw new ArgumentException(
+                $"Employment type can accept only the following values: {string.Join(",", _availableEmploymentTypes)}");
 
         RatePerHour = financesForPayroll.RatePerHour;
         Pay = financesForPayroll.Pay;
         EmploymentType = financesForPayroll.EmploymentType;
         ParkingCostPerMonth = financesForPayroll.ParkingCostPerMonth;
-        IsEmployedOfficially = financesForPayroll.IsEmployedOfficially;
-        AccountingPerMonth = CalculateAccountingPerMonth();
-        _coefficients = coefficients;
-        _workingPlan = workingPlan;
-        CalculateMetrics();
+        IsEmployedOfficially = isEmployedOfficially;
+        Coefficients = coefficients;
+        WorkingPlan = workingPlan;
         CreatedAtUtc = createdAtUtc;
+
+        if (IsEmployedOfficially)
+            CalculateMetrics();
+        else
+            CalculateUnofficialEmployeeMetrics();
     }
 
-    protected void CalculateMetrics()
+    private void CalculateUnofficialEmployeeMetrics()
     {
+        AccountingPerMonth = 0;
+        Salary = CalculateSalary();
+        GrossSalary = 0;
+        NetSalary = 0;
+        DistrictCoefficient = 0;
+        Earnings = CalculateEarnings();
+        IncomeTaxContributions = 0;
+        PensionContributions = 0;
+        MedicalContributions = 0;
+        SocialInsuranceContributions = 0;
+        InjuriesContributions = 0;
+        Expenses = CalculateExpenses();
+        HourlyCostFact = CalculateHourlyCostFact();
+        HourlyCostHand = CalculateHourlyCostHand();
+        Prepayment = 0;
+        Profit = CalculateProfit();
+        ProfitAbility = CalculateProfitability();
+    }
+
+    private void CalculateMetrics()
+    {
+        AccountingPerMonth = ThirdPartyServicesPriceConsts.AccountingPerMonth;
         Salary = CalculateSalary();
         GrossSalary = CalculateGrossSalary();
         NetSalary = CalculateNetSalary();
@@ -96,41 +121,74 @@ public class FinancialMetrics
         ProfitAbility = CalculateProfitability();
     }
 
-    protected virtual decimal CalculateDistrictCoefficient() => Salary * _coefficients.DistrictCoefficient;
-
-    protected decimal CalculateHourlyCostFact() => Expenses / _workingPlan.WorkingHoursInMonth;
-
-    protected virtual decimal CalculatePrepayment() => NetSalary / 2;
-
-    protected decimal CalculateHourlyCostHand() => Salary / 160;
-
-    protected decimal CalculateEarnings() => RatePerHour * _workingPlan.WorkingHoursInMonth * EmploymentType;
-
-    protected decimal CalculateExpenses()
+    private decimal CalculateDistrictCoefficient()
     {
-        return IncomeTaxContributions +
-            NetSalary +
-            PensionContributions +
-            MedicalContributions +
-            SocialInsuranceContributions +
-            InjuriesContributions +
-            AccountingPerMonth +
-            ParkingCostPerMonth;
+        return Salary * Coefficients.DistrictCoefficient;
     }
 
-    protected virtual decimal GetNdflValue() => GrossSalary * 0.13m;
+    private decimal CalculateHourlyCostFact()
+    {
+        return Expenses / WorkingPlan.WorkingHoursInMonth;
+    }
 
-    protected virtual decimal GetPensionContributions() => _coefficients.MinimumWage * 0.22m + (GrossSalary - _coefficients.MinimumWage) * 0.1m;
+    private decimal CalculatePrepayment()
+    {
+        return NetSalary / 2;
+    }
 
-    protected virtual decimal GetMedicalContributions() => _coefficients.MinimumWage * 0.051m + (GrossSalary - _coefficients.MinimumWage) * 0.05m;
+    private decimal CalculateHourlyCostHand()
+    {
+        return Salary / 160;
+    }
 
-    protected virtual decimal GetSocialInsuranceContributions() => _coefficients.MinimumWage * 0.029m;
+    private decimal CalculateEarnings()
+    {
+        return RatePerHour * WorkingPlan.WorkingHoursInMonth * EmploymentType;
+    }
 
-    protected virtual decimal GetInjuriesContributions() => GrossSalary * 0.002m;
+    private decimal CalculateExpenses()
+    {
+        return IncomeTaxContributions +
+               NetSalary +
+               PensionContributions +
+               MedicalContributions +
+               SocialInsuranceContributions +
+               InjuriesContributions +
+               AccountingPerMonth +
+               ParkingCostPerMonth;
+    }
 
-    protected decimal CalculateProfit() => Earnings - Expenses;
+    private decimal GetNdflValue()
+    {
+        return GrossSalary * 0.13m;
+    }
 
-    protected decimal CalculateProfitability()
+    private decimal GetPensionContributions()
+    {
+        return Coefficients.MinimumWage * 0.22m + (GrossSalary - Coefficients.MinimumWage) * 0.1m;
+    }
+
+    private decimal GetMedicalContributions()
+    {
+        return Coefficients.MinimumWage * 0.051m + (GrossSalary - Coefficients.MinimumWage) * 0.05m;
+    }
+
+    private decimal GetSocialInsuranceContributions()
+    {
+        return Coefficients.MinimumWage * 0.029m;
+    }
+
+    private decimal GetInjuriesContributions()
+    {
+        return GrossSalary * 0.002m;
+    }
+
+    private decimal CalculateProfit()
+    {
+        return Earnings - Expenses;
+    }
+
+    private decimal CalculateProfitability()
     {
         const decimal profitabilityWhenZeroEarnings = -100;
 
@@ -139,13 +197,22 @@ public class FinancialMetrics
             : profitabilityWhenZeroEarnings;
     }
 
-    protected virtual decimal CalculateGrossSalary() => Salary + Salary * _coefficients.DistrictCoefficient;
+    private decimal CalculateGrossSalary()
+    {
+        return Salary + Salary * Coefficients.DistrictCoefficient;
+    }
 
-    protected virtual decimal CalculateNetSalary() => GrossSalary - GrossSalary * _coefficients.IncomeTaxPercent;
+    private decimal CalculateNetSalary()
+    {
+        return GrossSalary - GrossSalary * Coefficients.IncomeTaxPercent;
+    }
 
-    protected decimal CalculateSalary() => Pay * EmploymentType;
+    private decimal CalculateSalary()
+    {
+        return Pay * EmploymentType;
+    }
 
-    protected virtual decimal CalculateAccountingPerMonth() => ThirdPartyServicesPriceConsts.AccountingPerMonth;
-
-    private FinancialMetrics() { }
+    private FinancialMetrics()
+    {
+    }
 }
