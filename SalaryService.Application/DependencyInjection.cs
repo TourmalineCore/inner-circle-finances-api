@@ -13,7 +13,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        //services.AddTransient<IEmployeesQuery, EmployeesQuery>();
+        services.AddTransient<IEmployeesQuery, EmployeesQuery>();
         services.AddTransient<ICoefficientsQuery, CoefficientsQuery>();
         services.AddTransient<IWorkingPlanQuery, WorkingPlanQuery>();
         services.AddTransient<IFinancialMetricsQuery, FinancialMetricsQuery>();
@@ -25,36 +25,14 @@ public static class DependencyInjection
         services.AddTransient<FinancesService>();
         services.AddScoped<EmployeeUpdateParametersValidator>();
         services.AddTransient<IClock, Clock>();
-
         services.AddTransient<RecalcEstimatedFinancialEfficiencyCommand>();
         services.AddTransient<RecalcFinancialMetricsCommand>();
         services.AddTransient<RecalcTotalMetricsCommand>();
         services.AddTransient<EmployeeDismissalTransaction>();
         services.AddTransient<EmployeeUpdateTransaction>();
         services.AddTransient<EmployeeQuery>();
-
-        //services.AddTransient<IEmployeesListQueryHandler, GetEmployeesQueryHandler>();
-        //services.AddTransient<GetEmployeeQueryHandler>();
-        //services.AddTransient<GetEmployeesForAnalyticsQuery>();
-        //services.AddTransient<GetEmployeeProfileQueryHandler>();
-        //services.AddTransient<GetAnalyticQueryHandler>();
-        //services.AddTransient<GetIndicatorsQueryHandler>();
-        //services.AddTransient<IGetCoefficientsQueryHandler, GetCoefficientsQueryHandler>();
-        //services.AddTransient<IGetWorkingPlanQueryHandler, GetWorkingPlanQueryHandler>();
-        //services.AddTransient<IGetFinancialMetricsQueryHandler, GetFinancialMetricsQueryHandler>();
-        //services.AddTransient<GetEmployeeContactDetailsQueryHandler>();
-        //services.AddTransient<GetEmployeeFinanceForPayrollQueryHandler>();
-        //services.AddTransient<CreateEmployeeCommandHandler>();
-        //services.AddTransient<UpdateEmployeeInfoCommandHandler>();
-        //services.AddTransient<UpdateProfileCommandHandler>();
-        //services.AddTransient<UpdateFinancesCommandHandler>();
-        //services.AddTransient<DeleteEmployeeCommandHandler>();
-        //services.AddTransient<CreateTotalExpensesCommandHandler>();
-        //services.AddTransient<CreateEstimatedFinancialEfficiencyCommandHandler>();
-        //services.AddTransient<EmployeeService>();
-        //services.AddTransient<FinanceAnalyticService>();
-        //services.AddScoped<EmployeeUpdateParametersValidator>();
-        //services.AddTransient<IClock, Clock>();
+        services.AddTransient<EmployeesForAnalyticsQuery>();
+        services.AddTransient<UpdateProfileCommandHandler>();
 
         return services;
     }

@@ -59,7 +59,7 @@ public class EmployeeController : Controller
     [HttpPut("update-profile")]
     public async Task UpdateProfileAsync([FromBody] ProfileUpdatingParameters profileUpdatingParameters)
     {
-        await _employeesService.UpdateProfileAsync(profileUpdatingParameters);
+        await _employeesService.UpdateProfileAsync(User.GetCorporateEmail(), profileUpdatingParameters);
     }
 
     [RequiresPermission(UserClaimsProvider.EditFullEmployeesData)]

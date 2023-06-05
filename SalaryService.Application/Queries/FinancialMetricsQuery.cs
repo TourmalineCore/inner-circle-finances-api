@@ -19,6 +19,7 @@ public class FinancialMetricsQuery : IFinancialMetricsQuery
         return await _context
             .Employees
             .Include(x => x.FinancialMetrics)
+            .Where(x => x.FinancialMetrics != null)
             .Select(x => x.FinancialMetrics)
             .AsNoTracking()
             .ToListAsync();

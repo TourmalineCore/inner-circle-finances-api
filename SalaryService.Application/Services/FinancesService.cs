@@ -72,14 +72,23 @@ public class FinancesService
             if (metricsRow.IsCopy)
             {
                 var employeeCopyMetrics = await CalculateMetricsAsync(
-                    new FinancesForPayroll(metricsRow.RatePerHour, metricsRow.Pay, metricsRow.EmploymentType,
-                        metricsRow.ParkingCostPerMonth),
+                    new FinancesForPayroll(
+                        metricsRow.RatePerHour,
+                        metricsRow.Pay,
+                        metricsRow.EmploymentType,
+                        metricsRow.ParkingCostPerMonth
+                    ),
                     metricsRow.IsEmployedOfficially,
                     coefficients,
                     workingPlan);
 
-                metricsRowChangesList.Add(new MetricsRowChanges(metricsRow.EmployeeId, metricsRow.EmployeeFullName,
-                    employeeCopyMetrics));
+                metricsRowChangesList.Add(new MetricsRowChanges(
+                    metricsRow.EmployeeId,
+                    metricsRow.EmployeeFullName,
+                    metricsRow.IsEmployedOfficially,
+                    employeeCopyMetrics)
+                );
+
                 continue;
             }
 
@@ -90,18 +99,33 @@ public class FinancesService
             if (IsEmployeeMetricsChanged(metricsRow, employeeSourceMetrics))
             {
                 var employeeNewMetrics = await CalculateMetricsAsync(
-                    new FinancesForPayroll(metricsRow.RatePerHour, metricsRow.Pay, metricsRow.EmploymentType,
-                        metricsRow.ParkingCostPerMonth),
+                    new FinancesForPayroll(
+                        metricsRow.RatePerHour,
+                        metricsRow.Pay,
+                        metricsRow.EmploymentType,
+                        metricsRow.ParkingCostPerMonth
+                    ),
                     metricsRow.IsEmployedOfficially,
                     coefficients,
                     workingPlan);
 
-                metricsRowChangesList.Add(new MetricsRowChanges(employeeId, employee.GetFullName(),
-                    employeeSourceMetrics, employeeNewMetrics));
+                metricsRowChangesList.Add(new MetricsRowChanges(
+                    employeeId,
+                    employee.GetFullName(),
+                    metricsRow.IsEmployedOfficially,
+                    employeeSourceMetrics,
+                    employeeNewMetrics)
+                );
+
                 continue;
             }
 
-            metricsRowChangesList.Add(new MetricsRowChanges(employeeId, employee.GetFullName(), employeeSourceMetrics));
+            metricsRowChangesList.Add(new MetricsRowChanges(
+                employeeId,
+                employee.GetFullName(),
+                employee.IsEmployedOfficially,
+                employeeSourceMetrics)
+            );
         }
 
         var newMetrics = metricsRowChangesList.Select(x => x.NewMetrics);

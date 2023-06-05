@@ -20,13 +20,13 @@ public class FinanceController : Controller
         _employeesService = employeesService;
     }
 
-    [RequiresPermission(UserClaimsProvider.CanViewAnalyticPermission)]
+    [RequiresPermission(UserClaimsProvider.AccessAnalyticalForecastsPage)]
     [HttpPost("get-analytics")]
     public async Task<AnalyticsTableResponse> GetAnalyticsAsync([FromBody] IEnumerable<MetricsRowDto> metricsRows)
     {
-        if (metricsRows == null || metricsRows.Count() == 0)
+        if (!metricsRows.Any())
         {
-            var employees = await _employeesService.GetAllAsync(true);
+            var employees = await _employeesService.GetEmployeesForAnalytics();
             var employeesTotalFinancialMetrics = await _financesService.CalculateEmployeesTotalFinancialMetricsAsync();
 
             return new AnalyticsTableResponse(employees, employeesTotalFinancialMetrics);
@@ -35,10 +35,10 @@ public class FinanceController : Controller
         var metricsChanges = await _financesService.CalculateAnalyticsMetricChangesAsync(metricsRows);
         return new AnalyticsTableResponse(metricsChanges);
     }
-    
-    [RequiresPermission(UserClaimsProvider.CanViewAnalyticPermission)]
+
+    [RequiresPermission(UserClaimsProvider.AccessAnalyticalForecastsPage)]
     [HttpGet("get-total-finance")]
-    internal async Task<IndicatorsResponse> GetIndicatorsAsync()
+    public async Task<IndicatorsResponse> GetIndicatorsAsync()
     {
         var coefficients = await _financesService.GetCoefficientsAsync();
         var workingPlan = await _financesService.GetWorkingPlanAsync();

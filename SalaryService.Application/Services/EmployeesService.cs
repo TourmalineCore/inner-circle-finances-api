@@ -14,10 +14,11 @@ public class EmployeesService
     private readonly EmployeeCreationCommand _employeeCreationCommand;
     private readonly EmployeeQuery _employeeQuery;
     private readonly IEmployeesQuery _employeesQuery;
-    private readonly ProfileUpdateCommand _employeeProfileUpdateCommand;
+    private readonly ProfileUpdateCommand _profileUpdateCommand;
     private readonly EmployeeUpdateParametersValidator _employeeUpdateParametersValidator;
     private readonly EmployeeDismissalTransaction _employeeDismissalTransaction;
     private readonly EmployeeUpdateTransaction _employeeUpdateTransaction;
+    private readonly EmployeesForAnalyticsQuery _employeesForAnalyticsQuery;
 
     public EmployeesService(
         EmployeeCreationCommand createEmployeeCommandHandler,
@@ -26,15 +27,17 @@ public class EmployeesService
         EmployeeUpdateTransaction employeeUpdateTransaction,
         EmployeeDismissalTransaction employeeDismissalTransaction,
         EmployeeQuery employeeQuery,
-        IEmployeesQuery employeesQuery)
+        IEmployeesQuery employeesQuery, 
+        EmployeesForAnalyticsQuery employeesForAnalyticsQuery)
     {
         _employeeCreationCommand = createEmployeeCommandHandler;
-        _employeeProfileUpdateCommand = updateProfileCommandHandler;
+        _profileUpdateCommand = updateProfileCommandHandler;
         _employeeUpdateParametersValidator = employeeUpdateParametersValidator;
         _employeeUpdateTransaction = employeeUpdateTransaction;
         _employeeDismissalTransaction = employeeDismissalTransaction;
         _employeeQuery = employeeQuery;
         _employeesQuery = employeesQuery;
+        _employeesForAnalyticsQuery = employeesForAnalyticsQuery;
     }
 
     public async Task<Employee> GetByIdAsync(long employeeId)
@@ -50,6 +53,11 @@ public class EmployeesService
     public async Task<IEnumerable<Employee>> GetAllAsync(bool includeFinanceInfo)
     {
         return await _employeesQuery.GetEmployeesAsync(includeFinanceInfo);
+    }
+
+    public async Task<IEnumerable<Employee>> GetEmployeesForAnalytics()
+    {
+        return await _employeesForAnalyticsQuery.GetEmployeesForAnalyticsAsync();
     }
 
     public async Task CreateAsync(EmployeeCreationParameters parameters)
@@ -69,9 +77,9 @@ public class EmployeesService
         await _employeeUpdateTransaction.ExecuteAsync(request);
     }
 
-    public async Task UpdateProfileAsync(ProfileUpdatingParameters updatingParameters)
+    public async Task UpdateProfileAsync(string corporateEmail, ProfileUpdatingParameters updatingParameters)
     {
-        await _employeeProfileUpdateCommand.ExecuteAsync(updatingParameters);
+        await _profileUpdateCommand.ExecuteAsync(corporateEmail, updatingParameters);
     }
 
     public async Task DismissAsync(long id)

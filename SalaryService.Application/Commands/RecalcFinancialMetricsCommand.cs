@@ -11,23 +11,23 @@ public class RecalcFinancialMetricsCommand
     private readonly EmployeeDbContext _context;
     private readonly RecalcEstimatedFinancialEfficiencyCommand _recalcEstimatedFinancialEfficiencyCommand;
     private readonly RecalcTotalMetricsCommand _recalcTotalMetricsCommand;
-    private readonly IFinancialMetricsQuery _financialMetricsQueryHandler;
+    private readonly IFinancialMetricsQuery _financialMetricsQuery;
 
     public RecalcFinancialMetricsCommand(
         EmployeeDbContext context, 
         RecalcEstimatedFinancialEfficiencyCommand recalcEstimatedFinancialEfficiencyCommand, 
         RecalcTotalMetricsCommand recalcTotalMetricsCommand, 
-        IFinancialMetricsQuery financialMetricsQueryHandler)
+        IFinancialMetricsQuery financialMetricsQuery)
     {
         _context = context;
         _recalcEstimatedFinancialEfficiencyCommand = recalcEstimatedFinancialEfficiencyCommand;
         _recalcTotalMetricsCommand = recalcTotalMetricsCommand;
-        _financialMetricsQueryHandler = financialMetricsQueryHandler;
+        _financialMetricsQuery = financialMetricsQuery;
     }
 
     public async Task ExecuteAsync(CoefficientOptions coefficients, Instant utcNow)
     {
-        var employeeFinancialMetrics = await _financialMetricsQueryHandler.HandleAsync();
+        var employeeFinancialMetrics = await _financialMetricsQuery.HandleAsync();
         await _recalcTotalMetricsCommand.ExecuteAsync(employeeFinancialMetrics, coefficients, utcNow);
 
         var totals = await _context.Queryable<TotalFinances>().SingleAsync();
