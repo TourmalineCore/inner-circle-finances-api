@@ -25,7 +25,7 @@ public class EstimatedFinancialEfficiency
 
     public EstimatedFinancialEfficiency() { }
 
-    public EstimatedFinancialEfficiency(IEnumerable<FinancialMetrics> metrics, CoefficientOptions coefficients, decimal totalExpenses, Instant createdAtUtc)
+    public EstimatedFinancialEfficiency(IEnumerable<EmployeeFinancialMetrics> metrics, CoefficientOptions coefficients, decimal totalExpenses, Instant createdAtUtc)
     {
         DesiredEarnings = metrics.Select(x => x.Earnings).Sum();
         DesiredProfit = metrics.Select(x => x.Profit).Sum() - coefficients.OfficeExpenses;

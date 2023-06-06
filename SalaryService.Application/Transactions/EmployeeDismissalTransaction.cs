@@ -29,40 +29,46 @@ public class EmployeeDismissalTransaction
         _employeeQuery = employeeQuery;
     }
 
-    public async Task ExecuteAsync(long employeeId)
+    public Task ExecuteAsync(long employeeId)
     {
-        var employee = await _employeeQuery.GetEmployeeAsync(employeeId);
-        var coefficients = await _coefficientsQuery.GetCoefficientsAsync();
-        var now = _clock.GetCurrentInstant();
+        return Task.CompletedTask;
+    }
 
-        using var transaction = _context.Database.BeginTransaction();
+    // ToDO: temporary disabled until we get a task of employee dismissal
+    //public async Task ExecuteAsync(long employeeId)
+    //{
+    //    var employee = await _employeeQuery.GetEmployeeAsync(employeeId);
+    //    var coefficients = await _coefficientsQuery.GetCoefficientsAsync();
+    //    var now = _clock.GetCurrentInstant();
+
+    //    using var transaction = _context.Database.BeginTransaction();
         
-        try
-        {
-            await RemoveEmployeeAsync(employee, now);
-            await _recalcFinancialMetricsCommand.ExecuteAsync(coefficients, now);
-            await transaction.CommitAsync();
-        }
-        catch (Exception)
-        {
-            await transaction.RollbackAsync();
-        }
-    }
+    //    try
+    //    {
+    //        await RemoveEmployeeAsync(employee, now);
+    //        await _recalcFinancialMetricsCommand.ExecuteAsync(coefficients, now);
+    //        await transaction.CommitAsync();
+    //    }
+    //    catch (Exception)
+    //    {
+    //        await transaction.RollbackAsync();
+    //    }
+    //}
 
-    private async Task RemoveEmployeeAsync(Employee employee, Instant now)
-    {
-        var history = new EmployeeFinancialMetricsHistory(employee, now);
+    //private async Task RemoveEmployeeAsync(Employee employee, Instant now)
+    //{
+    //    var history = new EmployeeFinancialMetricsHistory(employee, now);
 
-        //Why Should we send time of removement?
-        employee.Delete(now);
+    //    //Why Should we send time of removement?
+    //    employee.Delete(now);
 
-        _context.Update(employee);
+    //    _context.Update(employee);
 
-        //Probably we should mark metrics as removed (can be bad idea)
-        _context.Remove(employee.FinancialMetrics);
-        await _context.AddAsync(history);
+    //    //Probably we should mark metrics as removed (can be bad idea)
+    //    _context.Remove(employee.FinancialMetrics);
+    //    await _context.AddAsync(history);
 
-        await _context.SaveChangesAsync();
-    }
+    //    await _context.SaveChangesAsync();
+    //}
 }
 

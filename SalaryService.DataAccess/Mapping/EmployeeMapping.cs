@@ -32,30 +32,29 @@ public class EmployeeMapping : IEntityTypeConfiguration<Employee>
             x => x.FinancialMetrics,
             fm =>
             {
-                fm.Property(x => x.Salary).HasColumnName(nameof(FinancialMetrics.Salary));
-                fm.Property(x => x.HourlyCostFact).HasColumnName(nameof(FinancialMetrics.HourlyCostFact));
-                fm.Property(x => x.HourlyCostHand).HasColumnName(nameof(FinancialMetrics.HourlyCostHand));
-                fm.Property(x => x.Earnings).HasColumnName(nameof(FinancialMetrics.Earnings));
-                fm.Property(x => x.DistrictCoefficient).HasColumnName(nameof(FinancialMetrics.DistrictCoefficient));
+                fm.Property(x => x.Salary).HasColumnName(nameof(EmployeeFinancialMetrics.Salary));
+                fm.Property(x => x.HourlyCostFact).HasColumnName(nameof(EmployeeFinancialMetrics.HourlyCostFact));
+                fm.Property(x => x.HourlyCostHand).HasColumnName(nameof(EmployeeFinancialMetrics.HourlyCostHand));
+                fm.Property(x => x.Earnings).HasColumnName(nameof(EmployeeFinancialMetrics.Earnings));
+                fm.Property(x => x.DistrictCoefficient).HasColumnName(nameof(EmployeeFinancialMetrics.DistrictCoefficient));
                 fm.Property(x => x.IncomeTaxContributions)
-                    .HasColumnName(nameof(FinancialMetrics.IncomeTaxContributions));
-                fm.Property(x => x.PensionContributions).HasColumnName(nameof(FinancialMetrics.PensionContributions));
-                fm.Property(x => x.MedicalContributions).HasColumnName(nameof(FinancialMetrics.MedicalContributions));
+                    .HasColumnName(nameof(EmployeeFinancialMetrics.IncomeTaxContributions));
+                fm.Property(x => x.PensionContributions).HasColumnName(nameof(EmployeeFinancialMetrics.PensionContributions));
+                fm.Property(x => x.MedicalContributions).HasColumnName(nameof(EmployeeFinancialMetrics.MedicalContributions));
                 fm.Property(x => x.SocialInsuranceContributions)
-                    .HasColumnName(nameof(FinancialMetrics.SocialInsuranceContributions));
-                fm.Property(x => x.Expenses).HasColumnName(nameof(FinancialMetrics.Expenses));
-                fm.Property(x => x.Profit).HasColumnName(nameof(FinancialMetrics.Profit));
-                fm.Property(x => x.ProfitAbility).HasColumnName(nameof(FinancialMetrics.ProfitAbility));
-                fm.Property(x => x.GrossSalary).HasColumnName(nameof(FinancialMetrics.GrossSalary));
-                fm.Property(x => x.NetSalary).HasColumnName(nameof(FinancialMetrics.NetSalary));
-                fm.Property(x => x.RatePerHour).HasColumnName(nameof(FinancialMetrics.RatePerHour));
-                fm.Property(x => x.Pay).HasColumnName(nameof(FinancialMetrics.Pay));
-                fm.Property(x => x.Prepayment).HasColumnName(nameof(FinancialMetrics.Prepayment));
-                fm.Property(x => x.EmploymentType).HasColumnName(nameof(FinancialMetrics.EmploymentType));
-                fm.Property(x => x.ParkingCostPerMonth).HasColumnName(nameof(FinancialMetrics.ParkingCostPerMonth));
-                fm.Property(x => x.AccountingPerMonth).HasColumnName(nameof(FinancialMetrics.AccountingPerMonth));
-                fm.Property(x => x.IsEmployedOfficially).HasColumnName(nameof(FinancialMetrics.IsEmployedOfficially));
-                fm.ToTable("EmployeeFinancialMetrics");
+                    .HasColumnName(nameof(EmployeeFinancialMetrics.SocialInsuranceContributions));
+                fm.Property(x => x.Expenses).HasColumnName(nameof(EmployeeFinancialMetrics.Expenses));
+                fm.Property(x => x.Profit).HasColumnName(nameof(EmployeeFinancialMetrics.Profit));
+                fm.Property(x => x.ProfitAbility).HasColumnName(nameof(EmployeeFinancialMetrics.ProfitAbility));
+                fm.Property(x => x.GrossSalary).HasColumnName(nameof(EmployeeFinancialMetrics.GrossSalary));
+                fm.Property(x => x.NetSalary).HasColumnName(nameof(EmployeeFinancialMetrics.NetSalary));
+                fm.Property(x => x.RatePerHour).HasColumnName(nameof(EmployeeFinancialMetrics.RatePerHour));
+                fm.Property(x => x.Pay).HasColumnName(nameof(EmployeeFinancialMetrics.Pay));
+                fm.Property(x => x.Prepayment).HasColumnName(nameof(EmployeeFinancialMetrics.Prepayment));
+                fm.Property(x => x.EmploymentType).HasColumnName(nameof(EmployeeFinancialMetrics.EmploymentType));
+                fm.Property(x => x.ParkingCostPerMonth).HasColumnName(nameof(EmployeeFinancialMetrics.ParkingCostPerMonth));
+                fm.Property(x => x.AccountingPerMonth).HasColumnName(nameof(EmployeeFinancialMetrics.AccountingPerMonth));
+                fm.ToTable(nameof(EmployeeFinancialMetrics));
             });
 
         builder.HasData(

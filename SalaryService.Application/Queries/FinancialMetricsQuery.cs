@@ -14,7 +14,7 @@ public class FinancialMetricsQuery : IFinancialMetricsQuery
         _context = employeeDbContext;
     }
 
-    public async Task<IEnumerable<FinancialMetrics>> HandleAsync()
+    public async Task<IEnumerable<EmployeeFinancialMetrics>> HandleAsync()
     {
         return await _context
             .Employees

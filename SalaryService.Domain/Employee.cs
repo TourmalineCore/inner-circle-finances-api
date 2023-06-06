@@ -22,7 +22,7 @@ public class Employee : IIdentityEntity
 
     public string? GitLab { get; private set; }
 
-    public FinancialMetrics? FinancialMetrics { get; private set; }
+    public EmployeeFinancialMetrics? FinancialMetrics { get; private set; }
 
     public Instant? HireDate { get; private set; }
 
@@ -90,15 +90,14 @@ public class Employee : IIdentityEntity
     public void UpdateFinancialMetrics(FinancesForPayroll financesForPayroll, CoefficientOptions coefficients,
         WorkingPlan workingPlan, Instant createdAtUtc)
     {
-        FinancialMetrics = new FinancialMetrics(
+        FinancialMetrics = new EmployeeFinancialMetrics(
             financesForPayroll,
             IsEmployedOfficially,
             coefficients,
             workingPlan,
             createdAtUtc);
     }
-
-
+    
     public string GetFullName()
     {
         return MiddleName == null

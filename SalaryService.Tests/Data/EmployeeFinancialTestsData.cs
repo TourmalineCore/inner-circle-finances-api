@@ -25,7 +25,7 @@ public class EmployeeFinancialTestsData
     {
         yield return new object[]
         {
-            new FinancialMetrics(
+            new EmployeeFinancialMetrics(
                 new FinancesForPayroll(0, 20000, 1, 1800),
                 true,
                 CoefficientOptions,
@@ -35,7 +35,7 @@ public class EmployeeFinancialTestsData
 
         yield return new object[]
         {
-            new FinancialMetrics(
+            new EmployeeFinancialMetrics(
                 new FinancesForPayroll(1, 20000, 1, 1800),
                 true,
                 CoefficientOptions,
@@ -45,7 +45,7 @@ public class EmployeeFinancialTestsData
 
         yield return new object[]
         {
-            new FinancialMetrics(
+            new EmployeeFinancialMetrics(
                 new FinancesForPayroll(400, 60000, 1, 1800),
                 true,
                 CoefficientOptions,
@@ -55,7 +55,7 @@ public class EmployeeFinancialTestsData
 
         yield return new object[]
         {
-            new FinancialMetrics(
+            new EmployeeFinancialMetrics(
                 new FinancesForPayroll(400, 20000, 0.5m, 1800),
                 true,
                 CoefficientOptions,
@@ -65,7 +65,7 @@ public class EmployeeFinancialTestsData
 
         yield return new object[]
         {
-            new FinancialMetrics(
+            new EmployeeFinancialMetrics(
                 new FinancesForPayroll(400, 1, 1, 1800),
                 true,
                 CoefficientOptions,

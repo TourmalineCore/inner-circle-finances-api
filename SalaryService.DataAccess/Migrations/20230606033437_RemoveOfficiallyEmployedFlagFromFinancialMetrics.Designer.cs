@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,10 @@ using SalaryService.DataAccess;
 namespace SalaryService.DataAccess.Migrations
 {
     [DbContext(typeof(EmployeeDbContext))]
-    partial class EmployeeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230606033437_RemoveOfficiallyEmployedFlagFromFinancialMetrics")]
+    partial class RemoveOfficiallyEmployedFlagFromFinancialMetrics
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,7 +47,7 @@ namespace SalaryService.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CoefficientOptions", (string)null);
+                    b.ToTable("CoefficientOptions");
 
                     b.HasData(
                         new
@@ -125,7 +127,7 @@ namespace SalaryService.DataAccess.Migrations
                     b.HasIndex("CorporateEmail")
                         .IsUnique();
 
-                    b.ToTable("Employees", (string)null);
+                    b.ToTable("Employees");
 
                     b.HasData(
                         new
@@ -236,7 +238,7 @@ namespace SalaryService.DataAccess.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.ToTable("EmployeeFinancialMetricsHistory", (string)null);
+                    b.ToTable("EmployeeFinancialMetricsHistory");
                 });
 
             modelBuilder.Entity("SalaryService.Domain.EstimatedFinancialEfficiency", b =>
@@ -270,7 +272,7 @@ namespace SalaryService.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EstimatedFinancialEfficiency", (string)null);
+                    b.ToTable("EstimatedFinancialEfficiency");
                 });
 
             modelBuilder.Entity("SalaryService.Domain.TotalFinances", b =>
@@ -292,7 +294,7 @@ namespace SalaryService.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TotalFinances", (string)null);
+                    b.ToTable("TotalFinances");
                 });
 
             modelBuilder.Entity("SalaryService.Domain.TotalFinancesHistory", b =>
@@ -311,7 +313,7 @@ namespace SalaryService.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TotalFinancesHistory", (string)null);
+                    b.ToTable("TotalFinancesHistory");
                 });
 
             modelBuilder.Entity("SalaryService.Domain.WorkingPlan", b =>
@@ -339,7 +341,7 @@ namespace SalaryService.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WorkingPlan", (string)null);
+                    b.ToTable("WorkingPlan");
 
                     b.HasData(
                         new
@@ -355,7 +357,7 @@ namespace SalaryService.DataAccess.Migrations
 
             modelBuilder.Entity("SalaryService.Domain.Employee", b =>
                 {
-                    b.OwnsOne("SalaryService.Domain.Employee.FinancialMetrics#SalaryService.Domain.FinancialMetrics", "FinancialMetrics", b1 =>
+                    b.OwnsOne("SalaryService.Domain.FinancialMetrics", "FinancialMetrics", b1 =>
                         {
                             b1.Property<long>("EmployeeId")
                                 .HasColumnType("bigint");
@@ -465,7 +467,7 @@ namespace SalaryService.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("SalaryService.Domain.EmployeeFinancialMetricsHistory.Period#SalaryService.Domain.Common.Period", "Period", b1 =>
+                    b.OwnsOne("SalaryService.Domain.Common.Period", "Period", b1 =>
                         {
                             b1.Property<long>("EmployeeFinancialMetricsHistoryId")
                                 .HasColumnType("bigint");
@@ -480,7 +482,7 @@ namespace SalaryService.DataAccess.Migrations
 
                             b1.HasKey("EmployeeFinancialMetricsHistoryId");
 
-                            b1.ToTable("EmployeeFinancialMetricsHistory", (string)null);
+                            b1.ToTable("EmployeeFinancialMetricsHistory");
 
                             b1.WithOwner()
                                 .HasForeignKey("EmployeeFinancialMetricsHistoryId");
@@ -494,7 +496,7 @@ namespace SalaryService.DataAccess.Migrations
 
             modelBuilder.Entity("SalaryService.Domain.TotalFinancesHistory", b =>
                 {
-                    b.OwnsOne("SalaryService.Domain.TotalFinancesHistory.Period#SalaryService.Domain.Common.Period", "Period", b1 =>
+                    b.OwnsOne("SalaryService.Domain.Common.Period", "Period", b1 =>
                         {
                             b1.Property<long>("TotalFinancesHistoryId")
                                 .HasColumnType("bigint");
@@ -509,7 +511,7 @@ namespace SalaryService.DataAccess.Migrations
 
                             b1.HasKey("TotalFinancesHistoryId");
 
-                            b1.ToTable("TotalFinancesHistory", (string)null);
+                            b1.ToTable("TotalFinancesHistory");
 
                             b1.WithOwner()
                                 .HasForeignKey("TotalFinancesHistoryId");

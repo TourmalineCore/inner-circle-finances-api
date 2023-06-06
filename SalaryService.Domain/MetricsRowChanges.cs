@@ -10,11 +10,11 @@ public class MetricsRowChanges
 
     public bool IsEmployedOfficially { get; init; }
 
-    public FinancialMetrics NewMetrics { get; init; }
+    public EmployeeFinancialMetrics NewMetrics { get; init; }
 
     public EmployeeFinancialMetricsDiff? MetricsDiff { get; init; }
 
-    public MetricsRowChanges(long employeeId, string employeeFullName, bool isEmployedOfficially, FinancialMetrics sourceMetrics, FinancialMetrics newMetrics)
+    public MetricsRowChanges(long employeeId, string employeeFullName, bool isEmployedOfficially, EmployeeFinancialMetrics sourceMetrics, EmployeeFinancialMetrics newMetrics)
     {
         EmployeeId = employeeId.ToString();
         EmployeeFullName = employeeFullName;
@@ -24,7 +24,7 @@ public class MetricsRowChanges
         IsCopy = false;
     }
 
-    public MetricsRowChanges(long employeeId, string employeeFullName, bool isEmployedOfficially, FinancialMetrics sourceMetrics)
+    public MetricsRowChanges(long employeeId, string employeeFullName, bool isEmployedOfficially, EmployeeFinancialMetrics sourceMetrics)
     {
         EmployeeId = employeeId.ToString();
         EmployeeFullName = employeeFullName;
@@ -34,7 +34,7 @@ public class MetricsRowChanges
         IsCopy = false;
     }
 
-    public MetricsRowChanges(string copyId, string copyFullName, bool isEmployedOfficially, FinancialMetrics newMetrics)
+    public MetricsRowChanges(string copyId, string copyFullName, bool isEmployedOfficially, EmployeeFinancialMetrics newMetrics)
     {
         EmployeeId = copyId;
         EmployeeFullName = copyFullName;

@@ -3,7 +3,7 @@ using SalaryService.Domain.Common;
 
 namespace SalaryService.Domain;
 
-public class FinancialMetrics
+public class EmployeeFinancialMetrics
 {
     public decimal Salary { get; private set; }
 
@@ -47,8 +47,6 @@ public class FinancialMetrics
 
     public decimal AccountingPerMonth { get; private set; }
 
-    public bool IsEmployedOfficially { get; private set; }
-
     public Instant CreatedAtUtc { get; private set; }
 
     private CoefficientOptions Coefficients { get; init; }
@@ -57,7 +55,7 @@ public class FinancialMetrics
 
     private readonly List<decimal> _availableEmploymentTypes = new() { 0.5m, 1 };
 
-    public FinancialMetrics(FinancesForPayroll financesForPayroll, bool isEmployedOfficially,
+    public EmployeeFinancialMetrics(FinancesForPayroll financesForPayroll, bool isEmployedOfficially,
         CoefficientOptions coefficients, WorkingPlan workingPlan, Instant createdAtUtc)
     {
         if (!_availableEmploymentTypes.Contains(financesForPayroll.EmploymentType))
@@ -68,18 +66,17 @@ public class FinancialMetrics
         Pay = financesForPayroll.Pay;
         EmploymentType = financesForPayroll.EmploymentType;
         ParkingCostPerMonth = financesForPayroll.ParkingCostPerMonth;
-        IsEmployedOfficially = isEmployedOfficially;
         Coefficients = coefficients;
         WorkingPlan = workingPlan;
         CreatedAtUtc = createdAtUtc;
 
-        if (IsEmployedOfficially)
+        if (isEmployedOfficially)
             CalculateMetrics();
         else
-            CalculateUnofficialEmployeeMetrics();
+            CalculateFreelanceEmployeeMetrics();
     }
 
-    private void CalculateUnofficialEmployeeMetrics()
+    private void CalculateFreelanceEmployeeMetrics()
     {
         AccountingPerMonth = 0;
         Salary = CalculateSalary();
@@ -212,7 +209,7 @@ public class FinancialMetrics
         return Pay * EmploymentType;
     }
 
-    private FinancialMetrics()
+    private EmployeeFinancialMetrics()
     {
     }
 }

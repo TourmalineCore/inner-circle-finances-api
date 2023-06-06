@@ -104,7 +104,7 @@ public class EmployeeMetricsRowDto
 
     public bool IsEmployedOfficially { get; init; }
 
-    public EmployeeMetricsRowDto(bool isEmployedOfficially, FinancialMetrics? employeeFinancialMetrics)
+    public EmployeeMetricsRowDto(bool isEmployedOfficially, EmployeeFinancialMetrics? employeeFinancialMetrics)
     {
         IsEmployedOfficially = isEmployedOfficially;
 

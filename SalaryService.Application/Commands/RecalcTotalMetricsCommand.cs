@@ -15,7 +15,7 @@ public class RecalcTotalMetricsCommand
         _context = dbContext;
     }
 
-    public async Task<TotalFinances> ExecuteAsync(IEnumerable<FinancialMetrics> employeeFinancialMetrics, CoefficientOptions coefficients, Instant utcNow)
+    public async Task<TotalFinances> ExecuteAsync(IEnumerable<EmployeeFinancialMetrics> employeeFinancialMetrics, CoefficientOptions coefficients, Instant utcNow)
     {
         var currentTotalFinances = await _context.Queryable<TotalFinances>().SingleOrDefaultAsync();
         var newTotalFinances = new TotalFinances(employeeFinancialMetrics, coefficients, utcNow);

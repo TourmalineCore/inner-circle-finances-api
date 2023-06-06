@@ -2,7 +2,7 @@
 
 public static class MetricsDiffCalculator
 {
-    public static EmployeeFinancialMetricsDiff CalculateDiffBetweenEmployeeFinancialMetrics(FinancialMetrics sourceMetrics, FinancialMetrics newMetrics)
+    public static EmployeeFinancialMetricsDiff CalculateDiffBetweenEmployeeFinancialMetrics(EmployeeFinancialMetrics sourceMetrics, EmployeeFinancialMetrics newMetrics)
     {
         return new EmployeeFinancialMetricsDiff
         {
@@ -31,7 +31,7 @@ public static class MetricsDiffCalculator
     }
 
     public static TotalEmployeeFinancialMetricsEntry CalculateTotalEmployeeFinancialMetrics(
-        IEnumerable<FinancialMetrics> metrics)
+        IEnumerable<EmployeeFinancialMetrics> metrics)
     {
         return new TotalEmployeeFinancialMetricsEntry
         {

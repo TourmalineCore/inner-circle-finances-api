@@ -73,7 +73,7 @@ public class EmployeeFinancialServiceTests
 
         var employeeFinancesForPayroll = new FinancesForPayroll(200, 10000, 0.5m, 500);
 
-        var employeeSourceFinancialMetrics = new FinancialMetrics(employeeFinancesForPayroll,
+        var employeeSourceFinancialMetrics = new EmployeeFinancialMetrics(employeeFinancesForPayroll,
             true,
             EmployeeFinancialTestsData.CoefficientOptions,
             EmployeeFinancialTestsData.WorkingPlan,
@@ -81,7 +81,7 @@ public class EmployeeFinancialServiceTests
 
         _financialMetricsQueryMock
             .Setup(x => x.HandleAsync())
-            .ReturnsAsync(new List<FinancialMetrics> { employeeSourceFinancialMetrics });
+            .ReturnsAsync(new List<EmployeeFinancialMetrics> { employeeSourceFinancialMetrics });
 
         var employee = new Employee("name", "lastName", "middleName", "test@tourmalinecore.com", true) { Id = 1 };
         employee.UpdateFinancialMetrics(employeeFinancesForPayroll,
@@ -220,7 +220,7 @@ public class EmployeeFinancialServiceTests
 
         var employeeFinancesForPayroll = new FinancesForPayroll(200, 10000, 0.5m, 500);
 
-        var employeeSourceFinancialMetrics = new FinancialMetrics(employeeFinancesForPayroll,
+        var employeeSourceFinancialMetrics = new EmployeeFinancialMetrics(employeeFinancesForPayroll,
             true,
             EmployeeFinancialTestsData.CoefficientOptions,
             EmployeeFinancialTestsData.WorkingPlan,
@@ -228,7 +228,7 @@ public class EmployeeFinancialServiceTests
 
         var employee2FinancesForPayroll = new FinancesForPayroll(500, 40000, 1m, 2000);
 
-        var employee2SourceFinancialMetrics = new FinancialMetrics(employee2FinancesForPayroll,
+        var employee2SourceFinancialMetrics = new EmployeeFinancialMetrics(employee2FinancesForPayroll,
             true,
             EmployeeFinancialTestsData.CoefficientOptions,
             EmployeeFinancialTestsData.WorkingPlan,
@@ -236,7 +236,7 @@ public class EmployeeFinancialServiceTests
 
         _financialMetricsQueryMock
             .Setup(x => x.HandleAsync())
-            .ReturnsAsync(new List<FinancialMetrics>
+            .ReturnsAsync(new List<EmployeeFinancialMetrics>
                 { employeeSourceFinancialMetrics, employee2SourceFinancialMetrics });
 
         var employee = new Employee("Test", "Test", "Test", "test@tourmalinecore.com", true)

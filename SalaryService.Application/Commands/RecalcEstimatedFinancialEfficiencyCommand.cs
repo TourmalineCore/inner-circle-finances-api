@@ -14,7 +14,7 @@ public class RecalcEstimatedFinancialEfficiencyCommand
         _context = employeeDbContext;
     }
 
-    public async Task ExecuteAsync(IEnumerable<FinancialMetrics> employeeFinancialMetrics, CoefficientOptions coefficients, decimal totalExpenses, Instant utcNow)
+    public async Task ExecuteAsync(IEnumerable<EmployeeFinancialMetrics> employeeFinancialMetrics, CoefficientOptions coefficients, decimal totalExpenses, Instant utcNow)
     {
         var currentEstimatedFinancialEfficiency = await _context.Queryable<EstimatedFinancialEfficiency>().SingleOrDefaultAsync();
         var newEstimatedFinancialEfficiency = new EstimatedFinancialEfficiency(employeeFinancialMetrics, coefficients, totalExpenses, utcNow);

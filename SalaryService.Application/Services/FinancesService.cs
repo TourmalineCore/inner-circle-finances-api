@@ -96,7 +96,7 @@ public class FinancesService
             var employee = employees.Single(x => x.Id == employeeId);
             var employeeSourceMetrics = employee.FinancialMetrics;
 
-            if (IsEmployeeMetricsChanged(metricsRow, employeeSourceMetrics))
+            if (IsEmployeeMetricsChanged(metricsRow, employee))
             {
                 var employeeNewMetrics = await CalculateMetricsAsync(
                     new FinancesForPayroll(
@@ -142,7 +142,7 @@ public class FinancesService
         };
     }
 
-    public async Task<FinancialMetrics> CalculateMetricsAsync(
+    public async Task<EmployeeFinancialMetrics> CalculateMetricsAsync(
         FinancesForPayroll financesForPayroll,
         bool isEmployedOfficially,
         CoefficientOptions? coefficients = null,
@@ -151,7 +151,7 @@ public class FinancesService
         coefficients ??= await GetCoefficientsAsync();
         workingPlan ??= await GetWorkingPlanAsync();
 
-        return new FinancialMetrics(
+        return new EmployeeFinancialMetrics(
             financesForPayroll,
             isEmployedOfficially,
             coefficients,
@@ -159,11 +159,14 @@ public class FinancesService
             _clock.GetCurrentInstant());
     }
 
-    private static bool IsEmployeeMetricsChanged(MetricsRowDto metricsRow, FinancialMetrics employeeMetrics)
+    private static bool IsEmployeeMetricsChanged(MetricsRowDto metricsRow, Employee employee)
     {
-        return employeeMetrics.RatePerHour != metricsRow.RatePerHour
-               || employeeMetrics.Pay != metricsRow.Pay
-               || employeeMetrics.EmploymentType != metricsRow.EmploymentType
-               || employeeMetrics.ParkingCostPerMonth != metricsRow.ParkingCostPerMonth;
+        var employeeFinancialMetrics = employee.FinancialMetrics;
+
+        return employeeFinancialMetrics.RatePerHour != metricsRow.RatePerHour
+               || employeeFinancialMetrics.Pay != metricsRow.Pay
+               || employeeFinancialMetrics.EmploymentType != metricsRow.EmploymentType
+               || employeeFinancialMetrics.ParkingCostPerMonth != metricsRow.ParkingCostPerMonth
+               || employee.IsEmployedOfficially != metricsRow.IsEmployedOfficially;
     }
 }

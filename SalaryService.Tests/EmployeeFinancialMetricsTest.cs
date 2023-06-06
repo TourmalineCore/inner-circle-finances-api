@@ -10,7 +10,7 @@ public class EmployeeFinancialMetricsTest
     [Fact]
     public void MetricsCalculationIsCorrect()
     {
-        var employeeFinancialMetrics = new FinancialMetrics(new FinancesForPayroll(0, 20000, 1, 1800),
+        var employeeFinancialMetrics = new EmployeeFinancialMetrics(new FinancesForPayroll(0, 20000, 1, 1800),
             true,
             EmployeeFinancialTestsData.CoefficientOptions,
             EmployeeFinancialTestsData.WorkingPlan,

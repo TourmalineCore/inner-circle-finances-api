@@ -17,7 +17,7 @@ public class TotalFinances
     {
     }
 
-    public TotalFinances(IEnumerable<FinancialMetrics> metrics, CoefficientOptions coefficients, Instant createdAtUtc)
+    public TotalFinances(IEnumerable<EmployeeFinancialMetrics> metrics, CoefficientOptions coefficients, Instant createdAtUtc)
     {
         PayrollExpense = metrics.Select(x => x.Expenses).Sum();
         TotalExpense = PayrollExpense + coefficients.OfficeExpenses;
