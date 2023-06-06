@@ -1,35 +1,34 @@
-﻿using NodaTime;
-using SalaryService.Domain;
+﻿using System.Data;
+using NodaTime;
 
-public class TotalFinances : IIdentityEntity
+namespace SalaryService.Domain;
+
+public class TotalFinances
 {
     public long Id { get; set; }
 
-    public Instant ActualFromUtc { get; set; }
+    public decimal PayrollExpense { get; private set; }
 
-    public decimal PayrollExpense { get; set; }
+    public decimal TotalExpense { get; private set; }
 
-    public decimal TotalExpense { get; set; }
+    public Instant CreatedAtUtc { get; private set; }
 
     public TotalFinances()
     {
     }
 
-    public TotalFinances(Instant actualFromUtc)
-    {
-        ActualFromUtc = actualFromUtc;
-    }
-
-    public void CalculateTotals(IEnumerable<EmployeeFinancialMetrics> metrics, CoefficientOptions coefficients)
+    public TotalFinances(IEnumerable<EmployeeFinancialMetrics> metrics, CoefficientOptions coefficients, Instant createdAtUtc)
     {
         PayrollExpense = metrics.Select(x => x.Expenses).Sum();
         TotalExpense = PayrollExpense + coefficients.OfficeExpenses;
+        CreatedAtUtc = createdAtUtc;
     }
 
-    public void Update(Instant actualFromUtc, decimal payrollExpense, decimal totalExpense)
+    public void Update(TotalFinances newTotalFinances)
     {
-        ActualFromUtc = actualFromUtc;
-        PayrollExpense = payrollExpense;
-        TotalExpense = totalExpense;
+        PayrollExpense = newTotalFinances.PayrollExpense;
+        TotalExpense = newTotalFinances.PayrollExpense;
+        CreatedAtUtc = newTotalFinances.CreatedAtUtc;
     }
 }
+

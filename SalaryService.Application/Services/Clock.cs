@@ -1,12 +1,11 @@
 ﻿using NodaTime;
 
-namespace SalaryService.Application.Services
+namespace SalaryService.Application.Services;
+
+public class Clock : IClock
 {
-    public class Clock : IClock
+    public Instant GetCurrentInstant()
     {
-        public Instant GetCurrentInstant()
-        {
-            return Instant.FromDateTimeUtc(DateTime.UtcNow);
-        }
+        return Instant.FromDateTimeUtc(DateTime.UtcNow);
     }
 }

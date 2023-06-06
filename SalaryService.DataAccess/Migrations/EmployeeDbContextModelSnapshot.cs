@@ -45,7 +45,7 @@ namespace SalaryService.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CoefficientOptions");
+                    b.ToTable("CoefficientOptions", (string)null);
 
                     b.HasData(
                         new
@@ -125,7 +125,7 @@ namespace SalaryService.DataAccess.Migrations
                     b.HasIndex("CorporateEmail")
                         .IsUnique();
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employees", (string)null);
 
                     b.HasData(
                         new
@@ -159,122 +159,6 @@ namespace SalaryService.DataAccess.Migrations
                             MiddleName = "Admin",
                             PersonalEmail = "inner-circle-admin@gmail.com"
                         });
-                });
-
-            modelBuilder.Entity("SalaryService.Domain.EmployeeFinanceForPayroll", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("EmployeeId")
-                        .HasColumnType("bigint");
-
-                    b.Property<decimal>("EmploymentType")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("ParkingCostPerMonth")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("Pay")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("RatePerHour")
-                        .HasColumnType("numeric");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId")
-                        .IsUnique();
-
-                    b.ToTable("EmployeeFinanceForPayroll");
-                });
-
-            modelBuilder.Entity("SalaryService.Domain.EmployeeFinancialMetrics", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<decimal>("AccountingPerMonth")
-                        .HasColumnType("numeric");
-
-                    b.Property<Instant>("ActualFromUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<decimal>("DistrictCoefficient")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("Earnings")
-                        .HasColumnType("numeric");
-
-                    b.Property<long>("EmployeeId")
-                        .HasColumnType("bigint");
-
-                    b.Property<decimal>("EmploymentType")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("Expenses")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("GrossSalary")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("HourlyCostFact")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("HourlyCostHand")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("IncomeTaxContributions")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("InjuriesContributions")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("MedicalContributions")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("NetSalary")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("ParkingCostPerMonth")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("Pay")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("PensionContributions")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("Prepayment")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("Profit")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("ProfitAbility")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("RatePerHour")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("Salary")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("SocialInsuranceContributions")
-                        .HasColumnType("numeric");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId")
-                        .IsUnique();
-
-                    b.ToTable("EmployeeFinancialMetrics");
                 });
 
             modelBuilder.Entity("SalaryService.Domain.EmployeeFinancialMetricsHistory", b =>
@@ -352,7 +236,7 @@ namespace SalaryService.DataAccess.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.ToTable("EmployeeFinancialMetricsHistory");
+                    b.ToTable("EmployeeFinancialMetricsHistory", (string)null);
                 });
 
             modelBuilder.Entity("SalaryService.Domain.EstimatedFinancialEfficiency", b =>
@@ -362,6 +246,9 @@ namespace SalaryService.DataAccess.Migrations
                         .HasColumnType("bigint");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<Instant>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<decimal>("DesiredEarnings")
                         .HasColumnType("numeric");
@@ -383,7 +270,29 @@ namespace SalaryService.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EstimatedFinancialEfficiency");
+                    b.ToTable("EstimatedFinancialEfficiency", (string)null);
+                });
+
+            modelBuilder.Entity("SalaryService.Domain.TotalFinances", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<Instant>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<decimal>("PayrollExpense")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("TotalExpense")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TotalFinances", (string)null);
                 });
 
             modelBuilder.Entity("SalaryService.Domain.TotalFinancesHistory", b =>
@@ -402,7 +311,7 @@ namespace SalaryService.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TotalFinancesHistory");
+                    b.ToTable("TotalFinancesHistory", (string)null);
                 });
 
             modelBuilder.Entity("SalaryService.Domain.WorkingPlan", b =>
@@ -430,7 +339,7 @@ namespace SalaryService.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WorkingPlan");
+                    b.ToTable("WorkingPlan", (string)null);
 
                     b.HasData(
                         new
@@ -444,48 +353,108 @@ namespace SalaryService.DataAccess.Migrations
                         });
                 });
 
-            modelBuilder.Entity("TotalFinances", b =>
+            modelBuilder.Entity("SalaryService.Domain.Employee", b =>
                 {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                    b.OwnsOne("SalaryService.Domain.Employee.FinancialMetrics#SalaryService.Domain.FinancialMetrics", "FinancialMetrics", b1 =>
+                        {
+                            b1.Property<long>("EmployeeId")
+                                .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                            b1.Property<decimal>("AccountingPerMonth")
+                                .HasColumnType("numeric")
+                                .HasColumnName("AccountingPerMonth");
 
-                    b.Property<Instant>("ActualFromUtc")
-                        .HasColumnType("timestamp with time zone");
+                            b1.Property<Instant>("CreatedAtUtc")
+                                .HasColumnType("timestamp with time zone");
 
-                    b.Property<decimal>("PayrollExpense")
-                        .HasColumnType("numeric");
+                            b1.Property<decimal>("DistrictCoefficient")
+                                .HasColumnType("numeric")
+                                .HasColumnName("DistrictCoefficient");
 
-                    b.Property<decimal>("TotalExpense")
-                        .HasColumnType("numeric");
+                            b1.Property<decimal>("Earnings")
+                                .HasColumnType("numeric")
+                                .HasColumnName("Earnings");
 
-                    b.HasKey("Id");
+                            b1.Property<decimal>("EmploymentType")
+                                .HasColumnType("numeric")
+                                .HasColumnName("EmploymentType");
 
-                    b.ToTable("TotalFinances");
-                });
+                            b1.Property<decimal>("Expenses")
+                                .HasColumnType("numeric")
+                                .HasColumnName("Expenses");
 
-            modelBuilder.Entity("SalaryService.Domain.EmployeeFinanceForPayroll", b =>
-                {
-                    b.HasOne("SalaryService.Domain.Employee", "Employee")
-                        .WithOne("EmployeeFinanceForPayroll")
-                        .HasForeignKey("SalaryService.Domain.EmployeeFinanceForPayroll", "EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            b1.Property<decimal>("GrossSalary")
+                                .HasColumnType("numeric")
+                                .HasColumnName("GrossSalary");
 
-                    b.Navigation("Employee");
-                });
+                            b1.Property<decimal>("HourlyCostFact")
+                                .HasColumnType("numeric")
+                                .HasColumnName("HourlyCostFact");
 
-            modelBuilder.Entity("SalaryService.Domain.EmployeeFinancialMetrics", b =>
-                {
-                    b.HasOne("SalaryService.Domain.Employee", "Employee")
-                        .WithOne("EmployeeFinancialMetrics")
-                        .HasForeignKey("SalaryService.Domain.EmployeeFinancialMetrics", "EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            b1.Property<decimal>("HourlyCostHand")
+                                .HasColumnType("numeric")
+                                .HasColumnName("HourlyCostHand");
 
-                    b.Navigation("Employee");
+                            b1.Property<decimal>("IncomeTaxContributions")
+                                .HasColumnType("numeric")
+                                .HasColumnName("IncomeTaxContributions");
+
+                            b1.Property<decimal>("InjuriesContributions")
+                                .HasColumnType("numeric");
+
+                            b1.Property<decimal>("MedicalContributions")
+                                .HasColumnType("numeric")
+                                .HasColumnName("MedicalContributions");
+
+                            b1.Property<decimal>("NetSalary")
+                                .HasColumnType("numeric")
+                                .HasColumnName("NetSalary");
+
+                            b1.Property<decimal>("ParkingCostPerMonth")
+                                .HasColumnType("numeric")
+                                .HasColumnName("ParkingCostPerMonth");
+
+                            b1.Property<decimal>("Pay")
+                                .HasColumnType("numeric")
+                                .HasColumnName("Pay");
+
+                            b1.Property<decimal>("PensionContributions")
+                                .HasColumnType("numeric")
+                                .HasColumnName("PensionContributions");
+
+                            b1.Property<decimal>("Prepayment")
+                                .HasColumnType("numeric")
+                                .HasColumnName("Prepayment");
+
+                            b1.Property<decimal>("Profit")
+                                .HasColumnType("numeric")
+                                .HasColumnName("Profit");
+
+                            b1.Property<decimal>("ProfitAbility")
+                                .HasColumnType("numeric")
+                                .HasColumnName("ProfitAbility");
+
+                            b1.Property<decimal>("RatePerHour")
+                                .HasColumnType("numeric")
+                                .HasColumnName("RatePerHour");
+
+                            b1.Property<decimal>("Salary")
+                                .HasColumnType("numeric")
+                                .HasColumnName("Salary");
+
+                            b1.Property<decimal>("SocialInsuranceContributions")
+                                .HasColumnType("numeric")
+                                .HasColumnName("SocialInsuranceContributions");
+
+                            b1.HasKey("EmployeeId");
+
+                            b1.ToTable("EmployeeFinancialMetrics", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("EmployeeId");
+                        });
+
+                    b.Navigation("FinancialMetrics");
                 });
 
             modelBuilder.Entity("SalaryService.Domain.EmployeeFinancialMetricsHistory", b =>
@@ -496,7 +465,7 @@ namespace SalaryService.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("SalaryService.Domain.Common.Period", "Period", b1 =>
+                    b.OwnsOne("SalaryService.Domain.EmployeeFinancialMetricsHistory.Period#SalaryService.Domain.Common.Period", "Period", b1 =>
                         {
                             b1.Property<long>("EmployeeFinancialMetricsHistoryId")
                                 .HasColumnType("bigint");
@@ -511,7 +480,7 @@ namespace SalaryService.DataAccess.Migrations
 
                             b1.HasKey("EmployeeFinancialMetricsHistoryId");
 
-                            b1.ToTable("EmployeeFinancialMetricsHistory");
+                            b1.ToTable("EmployeeFinancialMetricsHistory", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("EmployeeFinancialMetricsHistoryId");
@@ -525,7 +494,7 @@ namespace SalaryService.DataAccess.Migrations
 
             modelBuilder.Entity("SalaryService.Domain.TotalFinancesHistory", b =>
                 {
-                    b.OwnsOne("SalaryService.Domain.Common.Period", "Period", b1 =>
+                    b.OwnsOne("SalaryService.Domain.TotalFinancesHistory.Period#SalaryService.Domain.Common.Period", "Period", b1 =>
                         {
                             b1.Property<long>("TotalFinancesHistoryId")
                                 .HasColumnType("bigint");
@@ -540,7 +509,7 @@ namespace SalaryService.DataAccess.Migrations
 
                             b1.HasKey("TotalFinancesHistoryId");
 
-                            b1.ToTable("TotalFinancesHistory");
+                            b1.ToTable("TotalFinancesHistory", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("TotalFinancesHistoryId");
@@ -548,13 +517,6 @@ namespace SalaryService.DataAccess.Migrations
 
                     b.Navigation("Period")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("SalaryService.Domain.Employee", b =>
-                {
-                    b.Navigation("EmployeeFinanceForPayroll");
-
-                    b.Navigation("EmployeeFinancialMetrics");
                 });
 #pragma warning restore 612, 618
         }

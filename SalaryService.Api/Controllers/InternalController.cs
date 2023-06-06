@@ -3,38 +3,37 @@ using Microsoft.AspNetCore.Mvc;
 using SalaryService.Application.Dtos;
 using SalaryService.Application.Services;
 
-namespace SalaryService.Api.Controllers
+namespace SalaryService.Api.Controllers;
+
+[Route("api/internal")]
+[ApiController]
+public class InternalController : ControllerBase
 {
-    [Route("api/internal")]
-    [ApiController]
-    public class InternalController : ControllerBase
+    private const int CreatedStatusCode = (int)HttpStatusCode.Created;
+    private const int InternalServerErrorCode = (int)HttpStatusCode.InternalServerError;
+
+    private readonly EmployeesService _employeeService;
+
+    public InternalController(EmployeesService employeeService)
     {
-        private const int CreatedStatusCode = (int)HttpStatusCode.Created;
-        private const int InternalServerErrorCode = (int)HttpStatusCode.InternalServerError;
+        _employeeService = employeeService;
+    }
 
-        private readonly EmployeeService _employeeService;
-
-        public InternalController(EmployeeService employeeService)
+    [HttpPost("create-employee")]
+    public async Task<ActionResult> CreateEmployeeAsync([FromBody] EmployeeCreationParameters employeeCreationParameters)
+    {
+        try
         {
-            _employeeService = employeeService;
+            await _employeeService.CreateAsync(employeeCreationParameters);
+            return StatusCode(CreatedStatusCode);
         }
-
-        [HttpPost("create-employee")]
-        public async Task<ActionResult> CreateEmployeeAsync([FromBody] EmployeeCreationParameters employeeCreationParameters)
+        catch (Exception ex)
         {
-            try
-            {
-                await _employeeService.CreateEmployeeAsync(employeeCreationParameters);
-                return StatusCode(CreatedStatusCode);
-            }
-            catch (Exception ex)
-            {
-                var message = ex.InnerException != null 
-                    ? ex.InnerException.Message 
-                    : ex.Message;
+            var message = ex.InnerException != null 
+                ? ex.InnerException.Message 
+                : ex.Message;
 
-                return Problem(message, null, InternalServerErrorCode);
-            }
+            return Problem(message, null, InternalServerErrorCode);
         }
     }
 }

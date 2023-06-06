@@ -114,7 +114,7 @@ builder.Host.ConfigureLogging((hostingContext, logging) =>
         );
 });
 
-builder.Services.AddApplication(configuration);
+builder.Services.AddApplication();
 builder.Services.AddPersistence(configuration);
 
 var app = builder.Build();

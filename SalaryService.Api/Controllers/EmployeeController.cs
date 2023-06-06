@@ -1,99 +1,71 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SalaryService.Api.Responses;
 using SalaryService.Application.Dtos;
-using SalaryService.Application.Queries;
-using SalaryService.Application.Queries.Contracts;
 using SalaryService.Application.Services;
 using TourmalineCore.AspNetCore.JwtAuthentication.Core.Filters;
 
-namespace SalaryService.Api.Controllers
-{ 
-    [Authorize]
-    [Route("api/employees")]
-    public class EmployeeController : Controller
+namespace SalaryService.Api.Controllers;
+
+[Authorize]
+[Route("api/employees")]
+public class EmployeeController : Controller
+{
+    private readonly EmployeesService _employeesService;
+
+    public EmployeeController(EmployeesService employeeService)
     {
-        private readonly EmployeeService _employeeService;
-        private readonly GetEmployeeQueryHandler _getEmployeeQueryHandler;
-        private readonly GetEmployeeProfileQueryHandler _getEmployeeProfileQueryHandler;
-        private readonly IEmployeesListQueryHandler _employeesQueryHandler;
-        private readonly GetEmployeeContactDetailsQueryHandler _getEmployeeContactDetailsQueryHandler;
-        private readonly GetEmployeeFinanceForPayrollQueryHandler _getEmployeeFinanceForPayrollQueryHandler;
+        _employeesService = employeeService;
+    }
 
-        public EmployeeController(EmployeeService employeeService,
-        GetEmployeeQueryHandler getEmployeeQueryHandler,
-        IEmployeesListQueryHandler employeesQueryHandler, 
-        GetEmployeeContactDetailsQueryHandler getEmployeeContactDetailsQueryHandler,
-        GetEmployeeFinanceForPayrollQueryHandler getEmployeeFinanceForPayrollQueryHandler,
-        GetEmployeeProfileQueryHandler getEmployeeProfileQueryHandler)
-        {
-            _employeeService = employeeService;
-            _getEmployeeQueryHandler = getEmployeeQueryHandler;
-            _employeesQueryHandler = employeesQueryHandler;
-            _getEmployeeContactDetailsQueryHandler = getEmployeeContactDetailsQueryHandler;
-            _getEmployeeFinanceForPayrollQueryHandler = getEmployeeFinanceForPayrollQueryHandler;
-            _getEmployeeProfileQueryHandler = getEmployeeProfileQueryHandler;
-        }
+    [RequiresPermission(UserClaimsProvider.ViewPersonalProfile)]
+    [HttpGet("get-profile")]
+    public async Task<EmployeeProfileResponse> GetProfileAsync()
+    {
+        var employee = await _employeesService.GetByCorporateEmailAsync(User.GetCorporateEmail());
+        return new EmployeeProfileResponse(employee);
+    }
 
-        [RequiresPermission(UserClaimsProvider.ViewPersonalProfile)]
-        [HttpGet("get-profile")]
-        public Task<EmployeeProfileDto> GetProfileAsync()
+    [RequiresPermission(UserClaimsProvider.ViewContacts)]
+    [HttpGet("all")]
+    public async Task<IEnumerable<EmployeeResponse>> GetAllEmployeesAsync()
+    {
+        var includeEmployeeFinanceInfo = User.HasClaim(x => x is
         {
-            return _getEmployeeProfileQueryHandler.HandleAsync(User.GetCorporateEmail());
-        }
+            Type: UserClaimsProvider.PermissionClaimType,
+            Value: UserClaimsProvider.ViewSalaryAndDocumentsData
+        });
 
-        [RequiresPermission(UserClaimsProvider.ViewContacts)]
-        [HttpGet("all")]
-        public Task<IEnumerable<EmployeeDto>> GetAllEmployeesAsync()
-        {
-            var includeEmployeeFinanceInfo = User.HasClaim(x => x is
-            {
-                Type: UserClaimsProvider.PermissionClaimType,
-                Value: UserClaimsProvider.ViewSalaryAndDocumentsData
-            });
+        var employees = await _employeesService.GetAllAsync(includeEmployeeFinanceInfo);
+        return employees.Select(employee => new EmployeeResponse(employee));
+    }
 
-            return _employeesQueryHandler.HandleAsync(includeEmployeeFinanceInfo);
-        }
+    [RequiresPermission(UserClaimsProvider.EditFullEmployeesData)]
+    [HttpPut("update")]
+    public async Task UpdateEmployeeAsync([FromBody] EmployeeUpdateDto employeeUpdateParameters)
+    {
+        await _employeesService.UpdateAsync(employeeUpdateParameters);
+    }
 
-        [RequiresPermission(UserClaimsProvider.EditFullEmployeesData)]
-        [HttpPut("update")]
-        public Task UpdateEmployeeAsync([FromBody] EmployeeUpdateParameters employeeUpdateParameters)
-        {
-            return _employeeService.UpdateEmployeeAsync(employeeUpdateParameters);
-        }
+    [RequiresPermission(UserClaimsProvider.EditFullEmployeesData)]
+    [HttpGet("{employeeId:long}")]
+    public async Task<EmployeeResponse> GetEmployeeAsync([FromRoute] long employeeId)
+    {
+        var employee = await _employeesService.GetByIdAsync(employeeId);
+        return new EmployeeResponse(employee);
+    }
 
-        [RequiresPermission(UserClaimsProvider.EditFullEmployeesData)]
-        [HttpGet("{employeeId:long}")]
-        public Task<EmployeeDto> GetEmployeeAsync([FromRoute] long employeeId)
-        {
-            return _getEmployeeQueryHandler.HandleAsync(employeeId);
-        }
+    [RequiresPermission(UserClaimsProvider.EditPersonalProfile)]
+    [HttpPut("update-profile")]
+    public async Task UpdateProfileAsync([FromBody] ProfileUpdatingParameters profileUpdatingParameters)
+    {
+        await _employeesService.UpdateProfileAsync(User.GetCorporateEmail(), profileUpdatingParameters);
+    }
 
-        [RequiresPermission(UserClaimsProvider.EditPersonalProfile)]
-        [HttpPut("update-profile")]
-        public Task UpdateProfile([FromBody] ProfileUpdatingParameters profileUpdatingParameters)
-        {
-            return _employeeService.UpdateProfileAsync(User.GetCorporateEmail(), profileUpdatingParameters);
-        }
-        
-        [RequiresPermission(UserClaimsProvider.EditFullEmployeesData)]
-        [HttpGet("get-finance-for-payroll/{employeeId}")]
-        public Task<ColleagueFinancesDto> GetFinanceForPayroll([FromRoute] long employeeId)
-        {
-            return _getEmployeeFinanceForPayrollQueryHandler.HandleAsync(employeeId);
-        }
-        
-        [RequiresPermission(UserClaimsProvider.EditFullEmployeesData)]
-        [HttpGet("get-contact-details/{employeeId}")]
-        public Task<ColleagueContactsDto> GetContactDetails([FromRoute] long employeeId)
-        {
-            return _getEmployeeContactDetailsQueryHandler.HandleAsync(employeeId);
-        }
-
-        [RequiresPermission(UserClaimsProvider.EditFullEmployeesData)]
-        [HttpDelete("delete/{id}")]
-        public Task DeleteEmployee([FromRoute] long id)
-        {
-            return _employeeService.DeleteEmployee(id);
-        }
+    [RequiresPermission(UserClaimsProvider.EditFullEmployeesData)]
+    [HttpDelete("dismiss/{id:long}")]
+    public async Task DismissalEmployeeAsync([FromRoute] long id)
+    {
+        await _employeesService.DismissAsync(id);
     }
 }

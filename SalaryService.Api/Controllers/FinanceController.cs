@@ -1,61 +1,50 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SalaryService.Api.Responses;
 using SalaryService.Application.Dtos;
-using SalaryService.Application.Queries;
 using SalaryService.Application.Services;
 using TourmalineCore.AspNetCore.JwtAuthentication.Core.Filters;
 
-namespace SalaryService.Api.Controllers
+namespace SalaryService.Api.Controllers;
+
+[Authorize]
+[Route("api/finance")]
+public class FinanceController : Controller
 {
-    [Authorize]
-    [Route("api/finance")]
-    public class FinanceController : Controller
+    private readonly FinancesService _financesService;
+    private readonly EmployeesService _employeesService;
+
+    public FinanceController(FinancesService financesService, EmployeesService employeesService)
     {
-        private readonly EmployeeService _employeeService;
-        private readonly GetIndicatorsQueryHandler _getIndicatorsQueryHandler;
-        private readonly GetEmployeesForAnalyticsQuery _getEmployeesForAnalyticsQuery;
-        private readonly FinanceAnalyticService _financeService;
+        _financesService = financesService;
+        _employeesService = employeesService;
+    }
 
-        public FinanceController(
-            EmployeeService employeeService,
-            GetIndicatorsQueryHandler getIndicatorsQueryHandler,
-            FinanceAnalyticService financeService,
-            GetEmployeesForAnalyticsQuery getEmployeesForAnalyticsQuery)
+    [RequiresPermission(UserClaimsProvider.AccessAnalyticalForecastsPage)]
+    [HttpPost("get-analytics")]
+    public async Task<AnalyticsTableResponse> GetAnalyticsAsync([FromBody] IEnumerable<MetricsRowDto> metricsRows)
+    {
+        if (!metricsRows.Any())
         {
-            _employeeService = employeeService;
-            _getIndicatorsQueryHandler = getIndicatorsQueryHandler;
-            _financeService = financeService;
-            _getEmployeesForAnalyticsQuery = getEmployeesForAnalyticsQuery;
+            var employees = await _employeesService.GetEmployeesForAnalytics();
+            var employeesTotalFinancialMetrics = await _financesService.CalculateEmployeesTotalFinancialMetricsAsync();
+
+            return new AnalyticsTableResponse(employees, employeesTotalFinancialMetrics);
         }
 
-        [RequiresPermission(UserClaimsProvider.AccessAnalyticalForecastsPage)]
-        [HttpPost("get-analytics")]
-        public async Task<AnalyticsTableDto> GetAnalyticsAsync([FromBody] IEnumerable<MetricsRowDto> metricsRows)
-        {
-            if (metricsRows == null || metricsRows.Count() == 0)
-            {
-                var employees = await _getEmployeesForAnalyticsQuery.HandleAsync();
-                var employeesTotalFinancialMetrics = await _financeService.CalculateEmployeesTotalFinancialMetricsAsync();
+        var metricsChanges = await _financesService.CalculateAnalyticsMetricChangesAsync(metricsRows);
+        return new AnalyticsTableResponse(metricsChanges);
+    }
 
-                return new AnalyticsTableDto(employees, employeesTotalFinancialMetrics);
-            }
+    [RequiresPermission(UserClaimsProvider.AccessAnalyticalForecastsPage)]
+    [HttpGet("get-total-finance")]
+    public async Task<IndicatorsResponse> GetIndicatorsAsync()
+    {
+        var coefficients = await _financesService.GetCoefficientsAsync();
+        var workingPlan = await _financesService.GetWorkingPlanAsync();
+        var totalFinances = await _financesService.GetTotalFinancesAsync();
+        var estimatedFinancialEfficiency = await _financesService.GetEstimatedFinancialEfficiencyAsync();
 
-            var metricsChanges = await _financeService.CalculateAnalyticsMetricChangesAsync(metricsRows);
-            return new AnalyticsTableDto(metricsChanges);
-        }
-        
-        [RequiresPermission(UserClaimsProvider.AccessAnalyticalForecastsPage)]
-        [HttpPost("get-preview")]
-        public Task<MetricsPreviewDto> GetPreview([FromBody] GetPreviewParameters financeUpdatingParameters)
-        {
-            return _employeeService.GetPreviewMetrics(financeUpdatingParameters);
-        }
-
-        [RequiresPermission(UserClaimsProvider.AccessAnalyticalForecastsPage)]
-        [HttpGet("get-total-finance")]
-        public Task<IndicatorsDto> GetTotalFinance()
-        {
-            return _getIndicatorsQueryHandler.HandleAsync();
-        }
+        return new IndicatorsResponse(coefficients, workingPlan, totalFinances, estimatedFinancialEfficiency);
     }
 }
