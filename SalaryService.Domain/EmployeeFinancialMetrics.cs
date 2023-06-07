@@ -81,7 +81,6 @@ public class EmployeeFinancialMetrics
         AccountingPerMonth = 0;
         Salary = CalculateSalary();
         GrossSalary = 0;
-        NetSalary = 0;
         DistrictCoefficient = 0;
         Earnings = CalculateEarnings();
         IncomeTaxContributions = 0;
@@ -89,7 +88,8 @@ public class EmployeeFinancialMetrics
         MedicalContributions = 0;
         SocialInsuranceContributions = 0;
         InjuriesContributions = 0;
-        Expenses = CalculateExpenses();
+        NetSalary = Salary;
+        Expenses = NetSalary + ParkingCostPerMonth;
         HourlyCostFact = CalculateHourlyCostFact();
         HourlyCostHand = CalculateHourlyCostHand();
         Prepayment = 0;

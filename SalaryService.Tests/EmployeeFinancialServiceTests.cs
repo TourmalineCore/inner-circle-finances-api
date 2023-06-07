@@ -271,17 +271,17 @@ public class EmployeeFinancialServiceTests
         Assert.Equal(250, employeeNewMetrics.RatePerHour);
         Assert.Equal(20000, employeeNewMetrics.Pay);
         Assert.Equal(10000, employeeNewMetrics.Salary);
-        Assert.Equal(7.39m, Math.Round(employeeNewMetrics.HourlyCostFact, 2));
+        Assert.Equal(81.28m, Math.Round(employeeNewMetrics.HourlyCostFact, 2));
         Assert.Equal(62.50m, Math.Round(employeeNewMetrics.HourlyCostHand, 2));
         Assert.Equal(16916.67m, Math.Round(employeeNewMetrics.Earnings, 2));
-        Assert.Equal(1000, Math.Round(employeeNewMetrics.Expenses, 2));
-        Assert.Equal(15916.67m, Math.Round(employeeNewMetrics.Profit, 2));
-        Assert.Equal(94.09m, Math.Round(employeeNewMetrics.ProfitAbility, 2));
+        Assert.Equal(11000, Math.Round(employeeNewMetrics.Expenses, 2));
+        Assert.Equal(5916.67m, Math.Round(employeeNewMetrics.Profit, 2));
+        Assert.Equal(34.98m, Math.Round(employeeNewMetrics.ProfitAbility, 2));
         Assert.Equal(0, Math.Round(employeeNewMetrics.DistrictCoefficient, 2));
         Assert.Equal(0, Math.Round(employeeNewMetrics.GrossSalary, 2));
         Assert.Equal(0, Math.Round(employeeNewMetrics.Prepayment, 2));
         Assert.Equal(0, Math.Round(employeeNewMetrics.IncomeTaxContributions, 2));
-        Assert.Equal(0, Math.Round(employeeNewMetrics.NetSalary, 2));
+        Assert.Equal(10000, Math.Round(employeeNewMetrics.NetSalary, 2));
         Assert.Equal(0, Math.Round(employeeNewMetrics.PensionContributions, 2));
         Assert.Equal(0, Math.Round(employeeNewMetrics.MedicalContributions, 2));
         Assert.Equal(0, Math.Round(employeeNewMetrics.SocialInsuranceContributions, 2));
@@ -289,22 +289,22 @@ public class EmployeeFinancialServiceTests
         Assert.Equal(0, Math.Round(employeeNewMetrics.AccountingPerMonth, 2));
         Assert.Equal(1000, employeeNewMetrics.ParkingCostPerMonth);
 
-        // check that metrics diff are correct for existing employee
+        // check that metrics diff are correct for unofficial employee
         var metricsDiff = analyticsMetricChanges.MetricsRowsChanges[1].MetricsDiff.Value;
         Assert.Equal(-250, metricsDiff.RatePerHour);
         Assert.Equal(-20000, metricsDiff.Pay);
         Assert.Equal(-30000, metricsDiff.Salary);
-        Assert.Equal(-420.32m, Math.Round(metricsDiff.HourlyCostFact, 2));
+        Assert.Equal(-346.43m, Math.Round(metricsDiff.HourlyCostFact, 2));
         Assert.Equal(-187.5m, Math.Round(metricsDiff.HourlyCostHand, 2));
         Assert.Equal(-50750, Math.Round(metricsDiff.Earnings, 2));
-        Assert.Equal(-56883.85m, Math.Round(metricsDiff.Expenses, 2));
-        Assert.Equal(6133.85m, Math.Round(metricsDiff.Profit, 2));
-        Assert.Equal(79.63m, Math.Round(metricsDiff.ProfitAbility, 2));
+        Assert.Equal(-46883.85m, Math.Round(metricsDiff.Expenses, 2));
+        Assert.Equal(-3866.15m, Math.Round(metricsDiff.Profit, 2));
+        Assert.Equal(20.52m, Math.Round(metricsDiff.ProfitAbility, 2));
         Assert.Equal(-6000, Math.Round(metricsDiff.DistrictCoefficient, 2));
         Assert.Equal(-46000, Math.Round(metricsDiff.GrossSalary, 2));
         Assert.Equal(-20010, Math.Round(metricsDiff.Prepayment, 2));
         Assert.Equal(-5980, Math.Round(metricsDiff.IncomeTaxContributions, 2));
-        Assert.Equal(-40020, Math.Round(metricsDiff.NetSalary, 2));
+        Assert.Equal(-30020, Math.Round(metricsDiff.NetSalary, 2));
         Assert.Equal(-6433.48m, Math.Round(metricsDiff.PensionContributions, 2));
         Assert.Equal(-2315.28m, Math.Round(metricsDiff.MedicalContributions, 2));
         Assert.Equal(-443.09m, Math.Round(metricsDiff.SocialInsuranceContributions, 2));
@@ -315,12 +315,12 @@ public class EmployeeFinancialServiceTests
         // check that new total metrics are correct
         var totalSourceMetrics = analyticsMetricChanges.NewTotalMetrics;
         Assert.Equal(30450, Math.Round(totalSourceMetrics.Earnings, 2));
-        Assert.Equal(11015.85m, Math.Round(totalSourceMetrics.Expenses, 2));
-        Assert.Equal(19434.15m, Math.Round(totalSourceMetrics.Profit, 2));
-        Assert.Equal(63.82m, Math.Round(totalSourceMetrics.ProfitAbility, 2));
+        Assert.Equal(21015.85m, Math.Round(totalSourceMetrics.Expenses, 2));
+        Assert.Equal(9434.15m, Math.Round(totalSourceMetrics.Profit, 2));
+        Assert.Equal(30.98m, Math.Round(totalSourceMetrics.ProfitAbility, 2));
         Assert.Equal(2501.25m, Math.Round(totalSourceMetrics.Prepayment, 2));
         Assert.Equal(747.5m, Math.Round(totalSourceMetrics.IncomeTaxContributions, 2));
-        Assert.Equal(5002.5m, Math.Round(totalSourceMetrics.NetSalary, 2));
+        Assert.Equal(15002.5m, Math.Round(totalSourceMetrics.NetSalary, 2));
         Assert.Equal(2408.48m, Math.Round(totalSourceMetrics.PensionContributions, 2));
         Assert.Equal(302.78m, Math.Round(totalSourceMetrics.MedicalContributions, 2));
         Assert.Equal(443.09m, Math.Round(totalSourceMetrics.SocialInsuranceContributions, 2));
@@ -331,12 +331,12 @@ public class EmployeeFinancialServiceTests
         // check that new total metrics diff is correct
         var totalMetricsDiff = analyticsMetricChanges.TotalMetricsDiff;
         Assert.Equal(-50750, Math.Round(totalMetricsDiff.Earnings, 2));
-        Assert.Equal(-56883.85m, Math.Round(totalMetricsDiff.Expenses, 2));
-        Assert.Equal(6133.85m, Math.Round(totalMetricsDiff.Profit, 2));
-        Assert.Equal(47.44m, Math.Round(totalMetricsDiff.ProfitAbility, 2));
+        Assert.Equal(-46883.85m, Math.Round(totalMetricsDiff.Expenses, 2));
+        Assert.Equal(-3866.15m, Math.Round(totalMetricsDiff.Profit, 2));
+        Assert.Equal(14.6m, Math.Round(totalMetricsDiff.ProfitAbility, 2));
         Assert.Equal(-20010m, Math.Round(totalMetricsDiff.Prepayment, 2));
         Assert.Equal(-5980m, Math.Round(totalMetricsDiff.IncomeTaxContributions, 2));
-        Assert.Equal(-40020m, Math.Round(totalMetricsDiff.NetSalary, 2));
+        Assert.Equal(-30020m, Math.Round(totalMetricsDiff.NetSalary, 2));
         Assert.Equal(-6433.48m, Math.Round(totalMetricsDiff.PensionContributions, 2));
         Assert.Equal(-2315.28m, Math.Round(totalMetricsDiff.MedicalContributions, 2));
         Assert.Equal(-443.09m, Math.Round(totalMetricsDiff.SocialInsuranceContributions, 2));
