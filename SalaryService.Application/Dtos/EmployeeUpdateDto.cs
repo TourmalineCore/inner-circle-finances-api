@@ -20,5 +20,14 @@ public class EmployeeUpdateDto
 
     public string? PersonnelNumber { get; init; }
 
-    public FinancesForPayroll FinancesForPayroll { get; init; }
+    public decimal RatePerHour { get; init; }
+
+    public decimal FullSalary { get; init; }
+
+    public decimal ParkingCostPerMonth { get; init; }
+
+    public decimal EmploymentType { get; init; }
+
+    public FinancesForPayroll FinancesForPayroll =>
+        new(RatePerHour, FullSalary, EmploymentType, ParkingCostPerMonth);
 }
