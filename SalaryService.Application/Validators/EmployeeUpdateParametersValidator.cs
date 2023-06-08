@@ -8,7 +8,7 @@ public class EmployeeUpdateParametersValidator : AbstractValidator<EmployeeUpdat
     public EmployeeUpdateParametersValidator()
     {
         RuleFor(x => x.EmployeeId).NotNull().GreaterThanOrEqualTo(0);
-        RuleFor(x => x.Phone).NotNull().NotEmpty();
+        RuleFor(x => x.Phone).PhoneNumberMustBeValid();
         RuleFor(x => x.FinancesForPayroll.RatePerHour).NotNull().GreaterThanOrEqualTo(0);
         RuleFor(x => x.FinancesForPayroll.Pay).NotNull().GreaterThanOrEqualTo(1);
         RuleFor(x => x.FinancesForPayroll.EmploymentType).NotNull().GreaterThanOrEqualTo(0);
