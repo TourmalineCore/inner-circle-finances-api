@@ -2,7 +2,7 @@
 
 namespace SalaryService.Api.Responses;
 
-public readonly struct EmployeeResponse
+public class EmployeeResponse
 {
     public long EmployeeId { get; init; }
 
@@ -18,27 +18,27 @@ public readonly struct EmployeeResponse
 
     public string? GitLab { get; init; }
 
-    public bool IsBlankEmployee { get; init; }
+    public bool? IsBlankEmployee { get; init; }
 
-    public bool IsCurrentEmployee { get; init; }
+    public bool? IsCurrentEmployee { get; init; }
 
-    public bool IsEmployedOfficially { get; init; }
+    public bool? IsEmployedOfficially { get; init; }
 
-    public decimal? NetSalary { get; init; } = null;
+    public decimal? NetSalary { get; init; }
 
-    public decimal? RatePerHour { get; init; } = null;
+    public decimal? RatePerHour { get; init; }
 
-    public decimal? FullSalary { get; init; } = null;
+    public decimal? FullSalary { get; init; }
 
-    public decimal? EmploymentType { get; init; } = null;
+    public decimal? EmploymentType { get; init; }
 
-    public decimal? Parking { get; init; } = null;
+    public decimal? Parking { get; init; }
 
     public string? PersonnelNumber { get; init; }
 
     public DateTime? HireDate { get; init; }
 
-    public EmployeeResponse(Employee employee)
+    public EmployeeResponse(Employee employee, bool includeSalaryAndDocumentData = false)
     {
         EmployeeId = employee.Id;
         FullName = employee.GetFullName();
@@ -47,6 +47,9 @@ public readonly struct EmployeeResponse
         Phone = employee.Phone;
         GitHub = employee.GitHub;
         GitLab = employee.GitLab;
+
+        if (!includeSalaryAndDocumentData) return;
+
         IsBlankEmployee = employee.IsBlankEmployee;
         IsCurrentEmployee = employee.IsCurrentEmployee;
         IsEmployedOfficially = employee.IsEmployedOfficially;

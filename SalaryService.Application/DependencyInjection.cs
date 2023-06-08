@@ -32,6 +32,7 @@ public static class DependencyInjection
         services.AddTransient<EmployeeUpdateTransaction>();
         services.AddTransient<EmployeeQuery>();
         services.AddTransient<EmployeesForAnalyticsQuery>();
+        services.AddTransient<CurrentEmployeesQuery>();
 
         return services;
     }

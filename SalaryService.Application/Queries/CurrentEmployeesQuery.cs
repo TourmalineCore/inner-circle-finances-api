@@ -1,25 +1,24 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SalaryService.Application.Queries.Contracts;
 using SalaryService.DataAccess;
 using SalaryService.Domain;
 
 namespace SalaryService.Application.Queries;
 
-public class EmployeesQuery : IEmployeesQuery
+public class CurrentEmployeesQuery
 {
     private readonly EmployeeDbContext _context;
 
-    public EmployeesQuery(EmployeeDbContext context)
+    public CurrentEmployeesQuery(EmployeeDbContext context)
     {
         _context = context;
     }
 
-    public async Task<IEnumerable<Employee>> GetEmployeesAsync()
+    public async Task<IEnumerable<Employee>> GetCurrentEmployeesAsync()
     {
         return await _context
             .Employees
             .Include(x => x.FinancialMetrics)
-            .Where(x => !x.IsSpecial)
+            .Where(x => !x.IsSpecial && x.IsCurrentEmployee)
             .ToListAsync();
     }
 }

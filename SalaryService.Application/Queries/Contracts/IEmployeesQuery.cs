@@ -4,5 +4,5 @@ namespace SalaryService.Application.Queries.Contracts;
 
 public interface IEmployeesQuery
 {
-    Task<IEnumerable<Employee>> GetEmployeesAsync(bool includeFinanceInfo = false);
+    Task<IEnumerable<Employee>> GetEmployeesAsync();
 }
