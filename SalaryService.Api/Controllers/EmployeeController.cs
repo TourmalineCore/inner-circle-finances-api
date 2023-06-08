@@ -30,14 +30,16 @@ public class EmployeeController : Controller
     [HttpGet("all")]
     public async Task<IEnumerable<EmployeeResponse>> GetAllEmployeesAsync()
     {
-        var includeEmployeeFinanceInfo = User.HasClaim(x => x is
-        {
-            Type: UserClaimsProvider.PermissionClaimType,
-            Value: UserClaimsProvider.ViewSalaryAndDocumentsData
-        });
+        var userIsAvailableToViewSalaryAndDocumentsData = User.IsAvailableToViewSalaryAndDocumentData();
 
-        var employees = await _employeesService.GetAllAsync(includeEmployeeFinanceInfo);
-        return employees.Select(employee => new EmployeeResponse(employee));
+        if (!userIsAvailableToViewSalaryAndDocumentsData)
+        {
+            var currentEmployees = await _employeesService.GetCurrentEmployeesAsync();
+            return currentEmployees.Select(employee => new EmployeeResponse(employee));
+        }
+
+        var allEmployees = await _employeesService.GetAllAsync();
+        return allEmployees.Select(employee => new EmployeeResponse(employee, true));
     }
 
     [RequiresPermission(UserClaimsProvider.EditFullEmployeesData)]
@@ -52,7 +54,7 @@ public class EmployeeController : Controller
     public async Task<EmployeeResponse> GetEmployeeAsync([FromRoute] long employeeId)
     {
         var employee = await _employeesService.GetByIdAsync(employeeId);
-        return new EmployeeResponse(employee);
+        return new EmployeeResponse(employee, User.IsAvailableToViewSalaryAndDocumentData());
     }
 
     [RequiresPermission(UserClaimsProvider.EditPersonalProfile)]

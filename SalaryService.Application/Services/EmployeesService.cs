@@ -19,6 +19,7 @@ public class EmployeesService
     private readonly EmployeeDismissalTransaction _employeeDismissalTransaction;
     private readonly EmployeeUpdateTransaction _employeeUpdateTransaction;
     private readonly EmployeesForAnalyticsQuery _employeesForAnalyticsQuery;
+    private readonly CurrentEmployeesQuery _currentEmployeesQuery;
 
     public EmployeesService(
         EmployeeCreationCommand createEmployeeCommandHandler,
@@ -28,7 +29,8 @@ public class EmployeesService
         EmployeeDismissalTransaction employeeDismissalTransaction,
         EmployeeQuery employeeQuery,
         IEmployeesQuery employeesQuery, 
-        EmployeesForAnalyticsQuery employeesForAnalyticsQuery)
+        EmployeesForAnalyticsQuery employeesForAnalyticsQuery, 
+        CurrentEmployeesQuery currentEmployeesQuery)
     {
         _employeeCreationCommand = createEmployeeCommandHandler;
         _profileUpdateCommand = updateProfileCommandHandler;
@@ -38,6 +40,7 @@ public class EmployeesService
         _employeeQuery = employeeQuery;
         _employeesQuery = employeesQuery;
         _employeesForAnalyticsQuery = employeesForAnalyticsQuery;
+        _currentEmployeesQuery = currentEmployeesQuery;
     }
 
     public async Task<Employee> GetByIdAsync(long employeeId)
@@ -50,9 +53,14 @@ public class EmployeesService
         return await _employeeQuery.GetEmployeeAsync(corporateEmail);
     }
 
-    public async Task<IEnumerable<Employee>> GetAllAsync(bool includeFinanceInfo)
+    public async Task<IEnumerable<Employee>> GetAllAsync()
     {
-        return await _employeesQuery.GetEmployeesAsync(includeFinanceInfo);
+        return await _employeesQuery.GetEmployeesAsync();
+    }
+
+    public async Task<IEnumerable<Employee>> GetCurrentEmployeesAsync()
+    {
+        return await _currentEmployeesQuery.GetCurrentEmployeesAsync();
     }
 
     public async Task<IEnumerable<Employee>> GetEmployeesForAnalytics()

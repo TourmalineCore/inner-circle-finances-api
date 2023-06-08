@@ -90,7 +90,7 @@ public class EmployeeFinancialServiceTests
             It.IsAny<Instant>());
 
         _employeesQueryMock
-            .Setup(x => x.GetEmployeesAsync(false))
+            .Setup(x => x.GetEmployeesAsync())
             .ReturnsAsync(new List<Employee>
             {
                 employee
@@ -254,7 +254,7 @@ public class EmployeeFinancialServiceTests
             EmployeeFinancialTestsData.WorkingPlan, It.IsAny<Instant>());
 
         _employeesQueryMock
-            .Setup(x => x.GetEmployeesAsync(false))
+            .Setup(x => x.GetEmployeesAsync())
             .ReturnsAsync(new List<Employee>
             {
                 employee,

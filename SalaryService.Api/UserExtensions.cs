@@ -10,5 +10,14 @@ namespace SalaryService.Api
         {
             return context.FindFirstValue(CorporateEmailClaimType);
         }
+
+        public static bool IsAvailableToViewSalaryAndDocumentData(this ClaimsPrincipal context)
+        {
+            return context.HasClaim(x => x is
+            {
+                Type: UserClaimsProvider.PermissionClaimType,
+                Value: UserClaimsProvider.ViewSalaryAndDocumentsData
+            });
+        }
     }
 }
