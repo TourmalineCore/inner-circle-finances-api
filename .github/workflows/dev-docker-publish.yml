@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - "#864e6dqq8-sort-by-personnel-number"
   pull_request:
 
 env:
