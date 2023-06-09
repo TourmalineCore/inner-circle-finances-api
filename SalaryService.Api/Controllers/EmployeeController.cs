@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SalaryService.Api.Comparers;
 using SalaryService.Api.Responses;
 using SalaryService.Application.Dtos;
 using SalaryService.Application.Services;
@@ -35,11 +36,15 @@ public class EmployeeController : Controller
         if (!userIsAvailableToViewSalaryAndDocumentsData)
         {
             var currentEmployees = await _employeesService.GetCurrentEmployeesAsync();
-            return currentEmployees.Select(employee => new EmployeeResponse(employee));
+            return currentEmployees
+                .OrderBy(employee => employee, new EmployeesComparer())
+                .Select(employee => new EmployeeResponse(employee));
         }
 
         var allEmployees = await _employeesService.GetAllAsync();
-        return allEmployees.Select(employee => new EmployeeResponse(employee, true));
+        return allEmployees
+            .OrderBy(employee => employee, new EmployeesComparer())
+            .Select(employee => new EmployeeResponse(employee, true));
     }
 
     [RequiresPermission(UserClaimsProvider.EditFullEmployeesData)]
