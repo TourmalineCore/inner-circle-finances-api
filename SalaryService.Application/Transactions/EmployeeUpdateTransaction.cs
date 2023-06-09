@@ -1,4 +1,5 @@
-﻿using NodaTime;
+﻿using Microsoft.Extensions.Logging;
+using NodaTime;
 using SalaryService.Application.Commands;
 using SalaryService.Application.Dtos;
 using SalaryService.Application.Queries;
@@ -16,6 +17,7 @@ public class EmployeeUpdateTransaction
     private readonly ICoefficientsQuery _coefficientsQuery;
     private readonly IWorkingPlanQuery _workingPlanQuery;
     private readonly IClock _clock;
+    private readonly ILogger<EmployeeUpdateTransaction> _logger;
 
     public EmployeeUpdateTransaction(
         EmployeeDbContext context,
@@ -23,7 +25,8 @@ public class EmployeeUpdateTransaction
         ICoefficientsQuery getCoefficientsQueryHandler,
         IWorkingPlanQuery getWorkingPlanQueryHandler,
         IClock clock,
-        EmployeeQuery employeeQuery)
+        EmployeeQuery employeeQuery, 
+        ILogger<EmployeeUpdateTransaction> logger)
     {
         _context = context;
         _coefficientsQuery = getCoefficientsQueryHandler;
@@ -31,12 +34,13 @@ public class EmployeeUpdateTransaction
         _clock = clock;
         _recalcFinancialMetricsCommand = recalcFinancialMetricsCommand;
         _employeeQuery = employeeQuery;
+        _logger = logger;
     }
 
     public async Task ExecuteAsync(EmployeeUpdateDto request)
     {
         var employee = await _employeeQuery.GetEmployeeAsync(request.EmployeeId);
-        using var transaction = await _context.Database.BeginTransactionAsync();
+        await using var transaction = await _context.Database.BeginTransactionAsync();
 
         try
         {
@@ -46,8 +50,9 @@ public class EmployeeUpdateTransaction
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            _logger.LogError(ex.Message);
             await transaction.RollbackAsync();
+            throw;
         }
     }
 
