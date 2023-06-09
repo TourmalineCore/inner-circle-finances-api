@@ -32,7 +32,7 @@ public class Employee : IIdentityEntity
 
     public bool IsEmployedOfficially { get; private set; }
 
-    public string? PersonnelNumber { get; private set; }
+    public EmployeePersonnelNumber? PersonnelNumber { get; private set; }
 
     public Instant? DeletedAtUtc { get; private set; }
 
@@ -84,7 +84,11 @@ public class Employee : IIdentityEntity
         IsEmployedOfficially = isEmployedOfficially;
         IsBlankEmployee = false;
         IsCurrentEmployee = true;
-        PersonnelNumber = personnelNumber;
+
+        if (!string.IsNullOrEmpty(personnelNumber))
+        {
+            PersonnelNumber = new EmployeePersonnelNumber(personnelNumber);
+        }
     }
 
     public void UpdateFinancialMetrics(FinancesForPayroll financesForPayroll, CoefficientOptions coefficients,
@@ -97,7 +101,7 @@ public class Employee : IIdentityEntity
             workingPlan,
             createdAtUtc);
     }
-    
+
     public string GetFullName()
     {
         return MiddleName == null

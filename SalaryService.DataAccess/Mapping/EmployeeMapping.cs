@@ -26,6 +26,12 @@ public class EmployeeMapping : IEntityTypeConfiguration<Employee>
         builder.Property(x => x.IsCurrentEmployee).IsRequired().HasDefaultValue(false);
         builder.Property(x => x.IsEmployedOfficially).IsRequired().HasDefaultValue(false);
 
+        builder
+            .Property(x => x.PersonnelNumber)
+            .HasConversion(
+                personnelNumber => personnelNumber != null ? personnelNumber.ToString() : null,
+                personnelNumber => personnelNumber != null ? new EmployeePersonnelNumber(personnelNumber) : null);
+
         builder.HasIndex(x => x.CorporateEmail).IsUnique();
 
         builder.OwnsOne(
@@ -36,11 +42,14 @@ public class EmployeeMapping : IEntityTypeConfiguration<Employee>
                 fm.Property(x => x.HourlyCostFact).HasColumnName(nameof(EmployeeFinancialMetrics.HourlyCostFact));
                 fm.Property(x => x.HourlyCostHand).HasColumnName(nameof(EmployeeFinancialMetrics.HourlyCostHand));
                 fm.Property(x => x.Earnings).HasColumnName(nameof(EmployeeFinancialMetrics.Earnings));
-                fm.Property(x => x.DistrictCoefficient).HasColumnName(nameof(EmployeeFinancialMetrics.DistrictCoefficient));
+                fm.Property(x => x.DistrictCoefficient)
+                    .HasColumnName(nameof(EmployeeFinancialMetrics.DistrictCoefficient));
                 fm.Property(x => x.IncomeTaxContributions)
                     .HasColumnName(nameof(EmployeeFinancialMetrics.IncomeTaxContributions));
-                fm.Property(x => x.PensionContributions).HasColumnName(nameof(EmployeeFinancialMetrics.PensionContributions));
-                fm.Property(x => x.MedicalContributions).HasColumnName(nameof(EmployeeFinancialMetrics.MedicalContributions));
+                fm.Property(x => x.PensionContributions)
+                    .HasColumnName(nameof(EmployeeFinancialMetrics.PensionContributions));
+                fm.Property(x => x.MedicalContributions)
+                    .HasColumnName(nameof(EmployeeFinancialMetrics.MedicalContributions));
                 fm.Property(x => x.SocialInsuranceContributions)
                     .HasColumnName(nameof(EmployeeFinancialMetrics.SocialInsuranceContributions));
                 fm.Property(x => x.Expenses).HasColumnName(nameof(EmployeeFinancialMetrics.Expenses));
@@ -52,8 +61,10 @@ public class EmployeeMapping : IEntityTypeConfiguration<Employee>
                 fm.Property(x => x.Pay).HasColumnName(nameof(EmployeeFinancialMetrics.Pay));
                 fm.Property(x => x.Prepayment).HasColumnName(nameof(EmployeeFinancialMetrics.Prepayment));
                 fm.Property(x => x.EmploymentType).HasColumnName(nameof(EmployeeFinancialMetrics.EmploymentType));
-                fm.Property(x => x.ParkingCostPerMonth).HasColumnName(nameof(EmployeeFinancialMetrics.ParkingCostPerMonth));
-                fm.Property(x => x.AccountingPerMonth).HasColumnName(nameof(EmployeeFinancialMetrics.AccountingPerMonth));
+                fm.Property(x => x.ParkingCostPerMonth)
+                    .HasColumnName(nameof(EmployeeFinancialMetrics.ParkingCostPerMonth));
+                fm.Property(x => x.AccountingPerMonth)
+                    .HasColumnName(nameof(EmployeeFinancialMetrics.AccountingPerMonth));
                 fm.ToTable(nameof(EmployeeFinancialMetrics));
             });
 

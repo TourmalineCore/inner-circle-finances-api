@@ -63,7 +63,11 @@ public class EmployeeResponse
             EmploymentType = employee.FinancialMetrics.EmploymentType;
         }
 
-        PersonnelNumber = employee.PersonnelNumber;
+        if (employee.PersonnelNumber != null)
+        {
+            PersonnelNumber = employee.PersonnelNumber.ToString();
+        }
+
         HireDate = employee.HireDate?.ToDateTimeUtc();
     }
 }
