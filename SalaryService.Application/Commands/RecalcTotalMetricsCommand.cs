@@ -2,7 +2,6 @@
 using NodaTime;
 using SalaryService.DataAccess;
 using SalaryService.Domain;
-using Period = SalaryService.Domain.Common.Period;
 
 namespace SalaryService.Application.Commands;
 
@@ -26,13 +25,7 @@ public class RecalcTotalMetricsCommand
         }
         else
         {
-            await _context.AddAsync(new TotalFinancesHistory
-            {
-                Period = new Period(currentTotalFinances.CreatedAtUtc, utcNow),
-                PayrollExpense = currentTotalFinances.PayrollExpense,
-                TotalExpense = currentTotalFinances.TotalExpense
-            });
-
+            await _context.AddAsync(new TotalFinancesHistory(currentTotalFinances, utcNow));
             currentTotalFinances.Update(newTotalFinances);
             _context.Update(currentTotalFinances);
         }

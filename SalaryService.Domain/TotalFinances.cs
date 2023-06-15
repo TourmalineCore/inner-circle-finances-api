@@ -27,7 +27,7 @@ public class TotalFinances
     public void Update(TotalFinances newTotalFinances)
     {
         PayrollExpense = newTotalFinances.PayrollExpense;
-        TotalExpense = newTotalFinances.PayrollExpense;
+        TotalExpense = newTotalFinances.TotalExpense;
         CreatedAtUtc = newTotalFinances.CreatedAtUtc;
     }
 }

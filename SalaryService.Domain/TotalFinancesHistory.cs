@@ -1,4 +1,5 @@
-﻿using SalaryService.Domain.Common;
+﻿using NodaTime;
+using Period = SalaryService.Domain.Common.Period;
 
 namespace SalaryService.Domain;
 
@@ -11,5 +12,11 @@ public class TotalFinancesHistory : IIdentityEntity
     public decimal PayrollExpense { get; set; }
 
     public decimal TotalExpense { get; set; }
-    
+
+    public TotalFinancesHistory(TotalFinances currentTotalFinances, Instant utcNow)
+    {
+        Period = new Period(currentTotalFinances.CreatedAtUtc, utcNow);
+        PayrollExpense = currentTotalFinances.PayrollExpense;
+        TotalExpense = currentTotalFinances.TotalExpense;
+    }
 }
