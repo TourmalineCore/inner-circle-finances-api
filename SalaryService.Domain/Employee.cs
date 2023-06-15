@@ -56,10 +56,10 @@ public class Employee : IIdentityEntity
     }
 
     public void Update(
-        string personalEmail,
         string phone,
-        string gitHub,
-        string gitLab)
+        string? personalEmail,
+        string? gitHub,
+        string? gitLab)
     {
         PersonalEmail = personalEmail;
         Phone = phone;
