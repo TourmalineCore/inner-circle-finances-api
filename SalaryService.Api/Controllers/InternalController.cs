@@ -5,7 +5,7 @@ using SalaryService.Application.Services;
 
 namespace SalaryService.Api.Controllers;
 
-[Route("api/internal")]
+[Route("internal")]
 [ApiController]
 public class InternalController : ControllerBase
 {
