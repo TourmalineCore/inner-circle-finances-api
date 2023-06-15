@@ -33,6 +33,7 @@ public static class DependencyInjection
         services.AddTransient<EmployeeQuery>();
         services.AddTransient<EmployeesForAnalyticsQuery>();
         services.AddTransient<CurrentEmployeesQuery>();
+        services.AddScoped<ProfileUpdatingParametersValidator>();
 
         return services;
     }

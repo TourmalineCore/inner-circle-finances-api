@@ -20,6 +20,7 @@ public class EmployeesService
     private readonly EmployeeUpdateTransaction _employeeUpdateTransaction;
     private readonly EmployeesForAnalyticsQuery _employeesForAnalyticsQuery;
     private readonly CurrentEmployeesQuery _currentEmployeesQuery;
+    private readonly ProfileUpdatingParametersValidator _profileUpdatingParametersValidator;
 
     public EmployeesService(
         EmployeeCreationCommand createEmployeeCommandHandler,
@@ -30,7 +31,8 @@ public class EmployeesService
         EmployeeQuery employeeQuery,
         IEmployeesQuery employeesQuery, 
         EmployeesForAnalyticsQuery employeesForAnalyticsQuery, 
-        CurrentEmployeesQuery currentEmployeesQuery)
+        CurrentEmployeesQuery currentEmployeesQuery, 
+        ProfileUpdatingParametersValidator profileUpdatingParametersValidator)
     {
         _employeeCreationCommand = createEmployeeCommandHandler;
         _profileUpdateCommand = updateProfileCommandHandler;
@@ -41,6 +43,7 @@ public class EmployeesService
         _employeesQuery = employeesQuery;
         _employeesForAnalyticsQuery = employeesForAnalyticsQuery;
         _currentEmployeesQuery = currentEmployeesQuery;
+        _profileUpdatingParametersValidator = profileUpdatingParametersValidator;
     }
 
     public async Task<Employee> GetByIdAsync(long employeeId)
@@ -87,6 +90,13 @@ public class EmployeesService
 
     public async Task UpdateProfileAsync(string corporateEmail, ProfileUpdatingParameters updatingParameters)
     {
+        var validationResult = await _profileUpdatingParametersValidator.ValidateAsync(updatingParameters);
+
+        if (!validationResult.IsValid)
+        {
+            throw new ValidationException(validationResult.Errors[0].ErrorMessage);
+        }
+
         await _profileUpdateCommand.ExecuteAsync(corporateEmail, updatingParameters);
     }
 
