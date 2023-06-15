@@ -19,4 +19,8 @@ public class TotalFinancesHistory : IIdentityEntity
         PayrollExpense = currentTotalFinances.PayrollExpense;
         TotalExpense = currentTotalFinances.TotalExpense;
     }
+
+    private TotalFinancesHistory()
+    {
+    }
 }
