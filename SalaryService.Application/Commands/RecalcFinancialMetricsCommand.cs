@@ -28,10 +28,8 @@ public class RecalcFinancialMetricsCommand
     public async Task ExecuteAsync(CoefficientOptions coefficients, Instant utcNow)
     {
         var employeeFinancialMetrics = await _financialMetricsQuery.HandleAsync();
-        await _recalcTotalMetricsCommand.ExecuteAsync(employeeFinancialMetrics, coefficients, utcNow);
-
-        var totals = await _context.Queryable<TotalFinances>().SingleAsync();
-        await _recalcEstimatedFinancialEfficiencyCommand.ExecuteAsync(employeeFinancialMetrics, coefficients, totals.TotalExpense, utcNow);
+        var newTotals = await _recalcTotalMetricsCommand.ExecuteAsync(employeeFinancialMetrics, coefficients, utcNow);
+        await _recalcEstimatedFinancialEfficiencyCommand.ExecuteAsync(employeeFinancialMetrics, coefficients, newTotals.TotalExpense, utcNow);
     }
 }
 
