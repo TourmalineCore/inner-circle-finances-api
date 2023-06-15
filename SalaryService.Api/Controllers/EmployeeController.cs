@@ -62,7 +62,7 @@ public class EmployeeController : Controller
         return new EmployeeResponse(employee, User.IsAvailableToViewSalaryAndDocumentData());
     }
 
-    [RequiresPermission(UserClaimsProvider.EditPersonalProfile)]
+    [RequiresPermission(UserClaimsProvider.ViewPersonalProfile)]
     [HttpPut("update-profile")]
     public async Task UpdateProfileAsync([FromBody] ProfileUpdatingParameters profileUpdatingParameters)
     {

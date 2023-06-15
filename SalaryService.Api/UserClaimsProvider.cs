@@ -8,7 +8,6 @@ namespace SalaryService.Api
         public const string PermissionClaimType = "permissions";
 
         public const string ViewPersonalProfile = "ViewPersonalProfile";
-        public const string EditPersonalProfile = "EditPersonalProfile";
         public const string ViewContacts = "ViewContacts";
         public const string ViewSalaryAndDocumentsData = "ViewSalaryAndDocumentsData";
         public const string EditFullEmployeesData = "EditFullEmployeesData";
