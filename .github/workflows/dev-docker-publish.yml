@@ -71,7 +71,7 @@ jobs:
           exec: |
             RELEASE_NAME=salary-api
             helm repo add bitnami https://charts.bitnami.com/bitnami
-            helm upgrade --install --namespace dev-inner-circle --create-namespace --values ./SalaryService.Api/ci/values-custom.yaml \
+            helm upgrade --install --namespace prod-inner-circle --create-namespace --values ./SalaryService.Api/ci/values-custom.yaml \
             --set "ingress.enabled=true" \
             --set "ingress.hostname=${{ vars.HOST }}" \
             --set "image.tag=${{ github.sha }}" \
