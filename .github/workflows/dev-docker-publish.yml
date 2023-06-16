@@ -27,7 +27,7 @@ jobs:
   deploy-to-dev-k8s:
     needs: build-image
     name: Deploy service to k8s for development environment  
-    if: github.ref_name == 'develop'
+    if: github.ref_name == 'ci/#863gxmf5j-prepare-to-prod'
     runs-on: ubuntu-22.04
     environment: dev
 
@@ -58,7 +58,7 @@ jobs:
   deploy-to-prod-k8s:
     needs: build-image
     name: Deploy service to k8s for production environment  
-    if: github.ref_name == 'ci/#863gxmf5j-prepare-to-prod'
+    if: github.ref_name == 'master'
     runs-on: ubuntu-22.04
     environment: prod
 
