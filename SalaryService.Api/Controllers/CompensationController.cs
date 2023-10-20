@@ -27,31 +27,10 @@ public class CompensationController : Controller
     }
 
 
-    //[HttpGet("all")]
-    //public async Task<List<CompensationResponse>> GetAllAsync()
-    //{
-    //    var allCompensations = await _compensationCreationCommand.Get
-    //    return await _employeesQuery.GetEmployeesAsync();
+    [HttpGet("all")]
+    public async Task<CompensationListDto> GetAllAsync()
+    {
+        return await _compensationsService.GetAllAsync();
+    }
 
-
-    //}
-
-    //[HttpGet("all")]
-    //public async Task<IEnumerable<EmployeeResponse>> GetAllEmployeesAsync()
-    //{
-    //    var userIsAvailableToViewSalaryAndDocumentsData = User.IsAvailableToViewSalaryAndDocumentData();
-
-    //    if (!userIsAvailableToViewSalaryAndDocumentsData)
-    //    {
-    //        var currentEmployees = await _employeesService.GetCurrentEmployeesAsync();
-    //        return currentEmployees
-    //            .OrderBy(employee => employee, new EmployeesComparer())
-    //            .Select(employee => new EmployeeResponse(employee));
-    //    }
-
-    //    var allEmployees = await _employeesService.GetAllAsync();
-    //    return allEmployees
-    //        .OrderBy(employee => employee, new EmployeesComparer())
-    //        .Select(employee => new EmployeeResponse(employee, true));
-    //}
 }

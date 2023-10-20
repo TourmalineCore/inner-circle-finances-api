@@ -36,6 +36,7 @@ public static class DependencyInjection
         services.AddScoped<ProfileUpdatingParametersValidator>();
         services.AddTransient<CompensationCreationCommand>();
         services.AddTransient<CompensationsService>();
+        services.AddTransient<ICompensationsQuery, CompensationsQuery>();
 
         return services;
     }
