@@ -13,8 +13,8 @@ using SalaryService.DataAccess;
 namespace SalaryService.DataAccess.Migrations
 {
     [DbContext(typeof(EmployeeDbContext))]
-    [Migration("20231017043730_AddCompensations")]
-    partial class AddCompensations
+    [Migration("20231020110742_ChangeDateType")]
+    partial class ChangeDateType
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -72,14 +72,16 @@ namespace SalaryService.DataAccess.Migrations
                         .HasColumnType("double precision");
 
                     b.Property<string>("Comment")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<Instant>("CreatedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateOnly>("Date")
-                        .HasColumnType("date");
+                    b.Property<Instant>("Date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Type")
                         .IsRequired()
