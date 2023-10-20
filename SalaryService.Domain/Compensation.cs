@@ -14,21 +14,25 @@ public class Compensation
 
     public bool IsPaid { get; private set; }
 
-    //public Employee Employee { get; private set; }
+    public long EmployeeId { get; private set; }
+
+    public Employee Employee { get; set; }
 
     public Instant CreatedAtUtc { get; private set; }
 
     public Instant Date { get; private set; }
 
-    public Compensation(string type, string? comment, double amount, Instant date, bool isPaid = false)
+    public Compensation(string type, string? comment, double amount, Employee employee, Instant date, bool isPaid = false)
     {
         Type = type;
         Comment = comment;
         Amount = amount;
         IsPaid = isPaid;
-        //Employee = employee;
+        Employee = employee;
         CreatedAtUtc = SystemClock.Instance.GetCurrentInstant();
         Date = date;
     }
+
+    public Compensation() { }
 }
 
