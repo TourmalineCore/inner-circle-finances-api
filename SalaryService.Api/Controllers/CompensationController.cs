@@ -5,6 +5,7 @@ using SalaryService.Api.Responses;
 using SalaryService.Application.Commands;
 using SalaryService.Application.Dtos;
 using SalaryService.Application.Services;
+using SalaryService.Domain;
 using TourmalineCore.AspNetCore.JwtAuthentication.Core.Filters;
 
 namespace SalaryService.Api.Controllers;
@@ -31,6 +32,12 @@ public class CompensationController : Controller
     public async Task<CompensationListDto> GetAllAsync()
     {
         return await _compensationsService.GetAllAsync();
+    }
+
+    [HttpGet("types")]
+    public async Task<List<CompensationType>> GetTypesAsync()
+    {
+        return await _compensationsService.GetTypesAsync();
     }
 
 }

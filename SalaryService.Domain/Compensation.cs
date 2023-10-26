@@ -6,6 +6,8 @@ public class Compensation
 {
     public long Id { get; set; }
 
+    //public CompensationType Type { get; private set; }
+
     public string Type { get; private set; }
 
     public string? Comment { get; private set; }

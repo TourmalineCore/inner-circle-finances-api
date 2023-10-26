@@ -1,7 +1,7 @@
 ﻿using SalaryService.Application.Commands;
 using SalaryService.Application.Dtos;
-using SalaryService.Application.Queries;
 using SalaryService.Application.Queries.Contracts;
+using SalaryService.Domain;
 
 namespace SalaryService.Application.Services;
 
@@ -15,6 +15,11 @@ public class CompensationsService
     {
         _compensationCreationCommand = createCompensationCommandHandler;
         _compensationsQuery = compensationsQuery;
+    }
+
+    public async Task<List<CompensationType>> GetTypesAsync()
+    {
+        return CompensationTypes.GetTypeList();
     }
 
     public async Task<CompensationListDto> GetAllAsync()
