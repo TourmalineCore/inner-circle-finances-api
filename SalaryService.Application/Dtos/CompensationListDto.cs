@@ -2,12 +2,12 @@
 
 public class CompensationListDto
 {
-    public List<RowCompensationDto> Rows { get; init; }
+    public List<CompensationItemDto> List { get; init; }
 
     public double TotalUnpaidAmount { get; init; }
 }
 
-public class RowCompensationDto
+public class CompensationItemDto
 {
     public long Id { get; init; }
 
@@ -17,7 +17,7 @@ public class RowCompensationDto
 
     public bool IsPaid { get; init; }
 
-    public Instant CreatedAtUtc { get; init; }
+    public string DateCreateCompensation { get; init; }
 
-    public Instant Date { get; init; }
+    public string DateCompensation { get; init; }
 }

@@ -23,6 +23,8 @@ public class EmployeeDbContext : DbContext
 
     public DbSet<Compensation> Compensations { get; set; }
 
+    //public DbSet<CompensationType> CompensationTypes { get; set; }
+
     public EmployeeDbContext(DbContextOptions<EmployeeDbContext> options) : base(options)
     {
         

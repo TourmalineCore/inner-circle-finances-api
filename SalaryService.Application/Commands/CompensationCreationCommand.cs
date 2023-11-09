@@ -22,10 +22,9 @@ public class CompensationCreationCommand
     {
         var employee = await _employeeQuery.GetEmployeeAsync(dto.EmployeeId);
 
-
         var types = CompensationTypes.GetTypeList().Select(x => x.Name.ToLower());
 
-        var compensations = dto.Compensations.Select(x => new Compensation(x.Type, x.Comment, x.Amount, employee, x.Date, x.IsPaid));
+        var compensations = dto.Compensations.Select(x => new Compensation(x.Type, x.Comment, x.Amount, employee, x.DateCompensation, x.IsPaid));
 
         foreach(Compensation c in compensations)
         {

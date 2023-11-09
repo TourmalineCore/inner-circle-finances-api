@@ -1,5 +1,4 @@
 ﻿using NodaTime;
-using SalaryService.Domain;
 
 namespace SalaryService.Application.Dtos;
 
@@ -22,8 +21,8 @@ public readonly struct CompensationDto
 
     public bool IsPaid { get; init; }
 
-    public Instant CreatedAtUtc { get; init; }
+    public Instant DateCreateCompensation { get; init; }
 
-    public Instant Date { get; init; }
+    public Instant DateCompensation { get; init; }
 
 }

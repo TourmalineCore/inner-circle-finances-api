@@ -20,19 +20,19 @@ public class Compensation
 
     public Employee Employee { get; set; }
 
-    public Instant CreatedAtUtc { get; private set; }
+    public Instant DateCreateCompensation { get; private set; }
 
-    public Instant Date { get; private set; }
+    public Instant DateCompensation { get; private set; }
 
-    public Compensation(string type, string? comment, double amount, Employee employee, Instant date, bool isPaid = false)
+    public Compensation(string type, string? comment, double amount, Employee employee, Instant dateCompensation, bool isPaid = false)
     {
         Type = type;
         Comment = comment;
         Amount = amount;
         IsPaid = isPaid;
         Employee = employee;
-        CreatedAtUtc = SystemClock.Instance.GetCurrentInstant();
-        Date = date;
+        DateCreateCompensation = SystemClock.Instance.GetCurrentInstant();
+        DateCompensation = dateCompensation;
     }
 
     public Compensation() { }

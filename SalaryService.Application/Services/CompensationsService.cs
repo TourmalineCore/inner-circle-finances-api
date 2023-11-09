@@ -26,21 +26,21 @@ public class CompensationsService
     {
         var compensations = await _compensationsQuery.GetCompensationsAsync();
 
-        var compensationRows = compensations.Select(x => new RowCompensationDto()
+        var compensationList = compensations.Select(x => new CompensationItemDto()
         {
             Id = x.Id,
             Comment = x.Comment,
             Amount = x.Amount,
             IsPaid = x.IsPaid,
-            CreatedAtUtc = x.CreatedAtUtc,
-            Date = x.Date
+            DateCreateCompensation = x.DateCreateCompensation.ToString(),
+            DateCompensation = x.DateCompensation.ToString()
         }).ToList();
 
         var totalUnpaidAmount = compensations.Sum(x => x.Amount);
 
         var compensationsResponseList = new CompensationListDto()
         {
-            Rows = compensationRows,
+            List = compensationList,
             TotalUnpaidAmount = totalUnpaidAmount
         };
 
