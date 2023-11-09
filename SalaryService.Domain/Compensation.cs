@@ -24,7 +24,7 @@ public class Compensation
 
     public Instant DateCompensation { get; private set; }
 
-    public Compensation(string type, string? comment, double amount, Employee employee, Instant dateCompensation, bool isPaid = false)
+    public Compensation(string type, string? comment, double amount, Employee employee, string dateCompensation, bool isPaid = false)
     {
         Type = type;
         Comment = comment;
@@ -32,9 +32,11 @@ public class Compensation
         IsPaid = isPaid;
         Employee = employee;
         DateCreateCompensation = SystemClock.Instance.GetCurrentInstant();
-        DateCompensation = dateCompensation;
+        DateCompensation = Instant.FromDateTimeUtc(DateTime.SpecifyKind(DateTime.Parse(dateCompensation), DateTimeKind.Utc));
     }
 
     public Compensation() { }
 }
+
+   
 

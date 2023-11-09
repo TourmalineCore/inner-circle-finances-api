@@ -2,8 +2,6 @@
 using SalaryService.DataAccess;
 using SalaryService.Domain;
 using SalaryService.Application.Queries;
-using System.Reflection;
-using System.Xml.Linq;
 
 namespace SalaryService.Application.Commands;
 
@@ -24,9 +22,10 @@ public class CompensationCreationCommand
 
         var types = CompensationTypes.GetTypeList().Select(x => x.Name.ToLower());
 
-        var compensations = dto.Compensations.Select(x => new Compensation(x.Type, x.Comment, x.Amount, employee, x.DateCompensation, x.IsPaid));
+        var dateCompensation = dto.DateCompensation;
 
-        foreach(Compensation c in compensations)
+        var compensations = dto.Compensations.Select(x => new Compensation(x.Type, x.Comment, x.Amount, employee, dateCompensation, x.IsPaid));
+        foreach (Compensation c in compensations)
         {
             if (types.Contains(c.Type))
             {
