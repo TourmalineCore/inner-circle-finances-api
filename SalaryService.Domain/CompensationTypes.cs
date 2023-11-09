@@ -11,7 +11,7 @@ public static class CompensationTypes
     public const string Products = "Products";
     public const string Consumables = "Consumables";
     public const string Periphery = "Periphery";
-    public const string BusinessTrip = "BusinessTrip";
+    public const string BusinessTrip = "Business trip";
     public const string Other = "Other";
 
     public static List<CompensationType> GetTypeList()

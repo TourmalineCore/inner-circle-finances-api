@@ -20,7 +20,7 @@ public class CompensationCreationCommand
     {
         var employee = await _employeeQuery.GetEmployeeAsync(dto.EmployeeId);
 
-        var types = CompensationTypes.GetTypeList().Select(x => x.Name.ToLower());
+        var types = CompensationTypes.GetTypeList().Select(x => x.Value);
 
         var dateCompensation = dto.DateCompensation;
 
