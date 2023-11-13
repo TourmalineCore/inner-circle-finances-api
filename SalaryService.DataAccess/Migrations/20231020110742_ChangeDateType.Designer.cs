@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,10 @@ using SalaryService.DataAccess;
 namespace SalaryService.DataAccess.Migrations
 {
     [DbContext(typeof(EmployeeDbContext))]
-    partial class EmployeeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231020110742_ChangeDateType")]
+    partial class ChangeDateType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,24 +74,20 @@ namespace SalaryService.DataAccess.Migrations
                     b.Property<string>("Comment")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("DateCompensation")
+                    b.Property<Instant>("CreatedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime>("DateCreateCompensation")
+                    b.Property<Instant>("Date")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<long>("EmployeeId")
-                        .HasColumnType("bigint");
 
                     b.Property<bool>("IsPaid")
                         .HasColumnType("boolean");
 
-                    b.Property<long>("TypeId")
-                        .HasColumnType("bigint");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
 
                     b.ToTable("Compensations");
                 });
@@ -389,17 +387,6 @@ namespace SalaryService.DataAccess.Migrations
                         });
                 });
 
-            modelBuilder.Entity("SalaryService.Domain.Compensation", b =>
-                {
-                    b.HasOne("SalaryService.Domain.Employee", "Employee")
-                        .WithMany("Compensations")
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
-                });
-
             modelBuilder.Entity("SalaryService.Domain.Employee", b =>
                 {
                     b.OwnsOne("SalaryService.Domain.EmployeeFinancialMetrics", "FinancialMetrics", b1 =>
@@ -564,11 +551,6 @@ namespace SalaryService.DataAccess.Migrations
 
                     b.Navigation("Period")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("SalaryService.Domain.Employee", b =>
-                {
-                    b.Navigation("Compensations");
                 });
 #pragma warning restore 612, 618
         }

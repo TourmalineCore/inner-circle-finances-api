@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,10 @@ using SalaryService.DataAccess;
 namespace SalaryService.DataAccess.Migrations
 {
     [DbContext(typeof(EmployeeDbContext))]
-    partial class EmployeeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231020121239_AddedEmployeeToCompensations")]
+    partial class AddedEmployeeToCompensations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,10 +74,10 @@ namespace SalaryService.DataAccess.Migrations
                     b.Property<string>("Comment")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("DateCompensation")
+                    b.Property<Instant>("CreatedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime>("DateCreateCompensation")
+                    b.Property<Instant>("Date")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<long>("EmployeeId")
@@ -84,8 +86,9 @@ namespace SalaryService.DataAccess.Migrations
                     b.Property<bool>("IsPaid")
                         .HasColumnType("boolean");
 
-                    b.Property<long>("TypeId")
-                        .HasColumnType("bigint");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

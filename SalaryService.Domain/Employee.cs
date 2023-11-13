@@ -38,6 +38,8 @@ public class Employee : IIdentityEntity
 
     public bool IsSpecial { get; private set; }
 
+    public List<Compensation>? Compensations { get; private set; }
+
     public Employee(string firstName, string lastName, string middleName, string corporateEmail,
         bool isEmployedOfficially = false)
     {
