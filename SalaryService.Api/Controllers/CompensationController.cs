@@ -10,7 +10,7 @@ using TourmalineCore.AspNetCore.JwtAuthentication.Core.Filters;
 
 namespace SalaryService.Api.Controllers;
 
-//[Authorize]
+[Authorize]
 [Route("api/compensations")]
 public class CompensationController : Controller
 {

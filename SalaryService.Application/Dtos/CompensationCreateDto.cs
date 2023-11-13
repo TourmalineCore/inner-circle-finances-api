@@ -11,9 +11,7 @@ public readonly struct CompensationCreateDto
 
 public readonly struct CompensationDto
 {
-    //public CompensationType Type { get; init; }
-
-    public string Type { get; init; }
+    public long TypeId { get; init; }
 
     public string? Comment { get; init; }
 

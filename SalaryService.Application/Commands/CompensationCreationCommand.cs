@@ -19,23 +19,9 @@ public class CompensationCreationCommand
     public async Task ExecuteAsync(CompensationCreateDto dto)
     {
         var employee = await _employeeQuery.GetEmployeeAsync(dto.EmployeeId);
+        var compensations = dto.Compensations.Select(x => new Compensation(x.TypeId, x.Comment, x.Amount, employee, dto.DateCompensation, x.IsPaid));
 
-        var types = CompensationTypes.GetTypeList().Select(x => x.Value);
-
-        var dateCompensation = dto.DateCompensation;
-
-        var compensations = dto.Compensations.Select(x => new Compensation(x.Type, x.Comment, x.Amount, employee, dateCompensation, x.IsPaid));
-        foreach (Compensation c in compensations)
-        {
-            if (types.Contains(c.Type))
-            {
-                await _context.AddRangeAsync(compensations);
-                await _context.SaveChangesAsync();
-            }
-            else
-            {
-                throw new Exception($"Type [{c.Type}] doesn't exists");
-            }
-        }
+        await _context.AddRangeAsync(compensations);
+        await _context.SaveChangesAsync();
     }
 }

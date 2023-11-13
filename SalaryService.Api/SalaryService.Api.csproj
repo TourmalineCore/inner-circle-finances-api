@@ -7,7 +7,6 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(RunConfiguration)' == 'SalaryCalculation.Api' " />
   <ItemGroup>
     <_ContentIncludedByDefault Remove="appsettings.Development.json" />
   </ItemGroup>

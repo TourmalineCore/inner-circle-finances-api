@@ -6,9 +6,7 @@ public class Compensation
 {
     public long Id { get; set; }
 
-    //public CompensationType Type { get; private set; }
-
-    public string Type { get; private set; }
+    public long TypeId { get; private set; }
 
     public string? Comment { get; private set; }
 
@@ -24,9 +22,14 @@ public class Compensation
 
     public Instant DateCompensation { get; private set; }
 
-    public Compensation(string type, string? comment, double amount, Employee employee, string dateCompensation, bool isPaid = false)
+    public Compensation(long typeId, string? comment, double amount, Employee employee, string dateCompensation, bool isPaid = false)
     {
-        Type = type;
+        if (!CompensationTypes.IsTypeExist(typeId))
+        {
+            throw new ArgumentException($"Compensation type [{typeId}] doesn't exists");
+        }
+
+        TypeId = typeId;
         Comment = comment;
         Amount = amount;
         IsPaid = isPaid;
@@ -35,8 +38,5 @@ public class Compensation
         DateCompensation = Instant.FromDateTimeUtc(DateTime.SpecifyKind(DateTime.Parse(dateCompensation), DateTimeKind.Utc));
     }
 
-    public Compensation() { }
+    private Compensation() { }
 }
-
-   
-

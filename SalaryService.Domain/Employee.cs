@@ -52,11 +52,6 @@ public class Employee : IIdentityEntity
         IsEmployedOfficially = isEmployedOfficially;
     }
 
-    //public Employee()
-    //{
-
-    //}
-
     public void Delete(Instant deletedAtUtc)
     {
         DeletedAtUtc = deletedAtUtc;

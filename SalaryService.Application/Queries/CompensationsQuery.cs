@@ -18,6 +18,7 @@ public class CompensationsQuery : ICompensationsQuery
     {
         return await _context
             .Compensations
+            .AsNoTracking()
             .ToListAsync();
     }
 }

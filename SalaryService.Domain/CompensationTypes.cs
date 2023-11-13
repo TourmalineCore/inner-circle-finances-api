@@ -31,4 +31,9 @@ public static class CompensationTypes
             new CompensationType(11, Other)
         };
     }
+
+    public static bool IsTypeExist(long typeId)
+    {
+        return GetTypeList().Select(x => x.Id).Contains(typeId);
+    }
 }
