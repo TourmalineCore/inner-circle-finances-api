@@ -1,12 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SalaryService.Api.Comparers;
-using SalaryService.Api.Responses;
-using SalaryService.Application.Commands;
 using SalaryService.Application.Dtos;
 using SalaryService.Application.Services;
 using SalaryService.Domain;
-using TourmalineCore.AspNetCore.JwtAuthentication.Core.Filters;
 
 namespace SalaryService.Api.Controllers;
 
@@ -15,18 +11,22 @@ namespace SalaryService.Api.Controllers;
 public class CompensationController : Controller
 {
     private readonly CompensationsService _compensationsService;
+    private readonly EmployeesService _employeesService;
 
-    public CompensationController(CompensationsService compensationsService)
+
+    public CompensationController(CompensationsService compensationsService, EmployeesService employeesService)
     {
         _compensationsService = compensationsService;
+        _employeesService = employeesService;
     }
 
     [HttpPost("create")]
     public async Task CreateAsync([FromBody] CompensationCreateDto dto)
     {
-        await _compensationsService.CreateAsync(dto);
-    }
+        var employee = await _employeesService.GetByCorporateEmailAsync(User.GetCorporateEmail());
 
+        await _compensationsService.CreateAsync(dto, employee);
+    }
 
     [HttpGet("all")]
     public async Task<CompensationListDto> GetAllAsync()
@@ -39,5 +39,4 @@ public class CompensationController : Controller
     {
         return await _compensationsService.GetTypesAsync();
     }
-
 }
