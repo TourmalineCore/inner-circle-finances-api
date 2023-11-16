@@ -47,8 +47,8 @@ public class CompensationsService
         return compensationsResponseList;
     }
 
-    public async Task CreateAsync(CompensationCreateDto dto)
+    public async Task CreateAsync(CompensationCreateDto dto, Employee employee)
     {
-        await _compensationCreationCommand.ExecuteAsync(dto);
+        await _compensationCreationCommand.ExecuteAsync(dto, employee);
     }
 }

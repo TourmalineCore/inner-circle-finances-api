@@ -16,9 +16,8 @@ public class CompensationCreationCommand
         _employeeQuery = employeeQuery;
     }
 
-    public async Task ExecuteAsync(CompensationCreateDto dto)
+    public async Task ExecuteAsync(CompensationCreateDto dto, Employee employee)
     {
-        var employee = await _employeeQuery.GetEmployeeAsync(dto.EmployeeId);
         var compensations = dto.Compensations.Select(x => new Compensation(x.TypeId, x.Comment, x.Amount, employee, dto.DateCompensation, x.IsPaid));
 
         await _context.AddRangeAsync(compensations);

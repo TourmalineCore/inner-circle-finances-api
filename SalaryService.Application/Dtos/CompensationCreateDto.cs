@@ -4,8 +4,6 @@ public readonly struct CompensationCreateDto
 {
     public List<CompensationDto> Compensations { get; init; }
 
-    public long EmployeeId { get; init; }
-
     public string DateCompensation { get; init; }
 }
 

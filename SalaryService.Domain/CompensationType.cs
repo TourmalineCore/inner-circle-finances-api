@@ -1,6 +1,4 @@
-﻿using System.Reflection.Emit;
-
-namespace SalaryService.Domain;
+﻿namespace SalaryService.Domain;
 
 public class CompensationType
 {
