@@ -2,13 +2,13 @@
 
 public class CompensationType
 {
-    public long Id { get; set; }
+    public long TypeId { get; set; }
 
     public string Label { get; set; }
 
-    public CompensationType(long id, string label)
+    public CompensationType(long typeId, string label)
     {
-        Id = id;
+        TypeId = typeId;
         Label = label;
     }
 }
