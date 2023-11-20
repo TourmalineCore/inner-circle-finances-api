@@ -6,4 +6,5 @@ public interface ICompensationsQuery
 {
     Task<IEnumerable<Compensation>> GetCompensationsAsync();
     Task<IEnumerable<Compensation>> GetPersonalCompensationsAsync(string corporateEmail);
+    Task<Compensation> GetCompensationByIdAsync(long id);
 }

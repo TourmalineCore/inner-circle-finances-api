@@ -32,4 +32,13 @@ public class CompensationsQuery : ICompensationsQuery
             .AsNoTracking()
             .ToListAsync();
     }
+
+    public async Task<Compensation> GetCompensationByIdAsync(long id)
+    {
+        return await _context
+            .Compensations
+            .Include(x => x.Employee)
+            .Where(x => x.Id == id)
+            .SingleOrDefaultAsync();
+    }
 }

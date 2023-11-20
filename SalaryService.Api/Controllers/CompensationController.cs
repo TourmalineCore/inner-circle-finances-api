@@ -50,10 +50,10 @@ public class CompensationController : Controller
         return await _compensationsService.GetAdminAllAsync();
     }
 
-    //[RequiresPermission(UserClaimsProvider.ViewEmployeesCompensations)]
-    //[HttpPut("update?status=unpaid || paid")]
-    //public async Task<CompensationCeoListDto> UpdateStatusAsync()
-    //{
-    //    return await _compensationsService.UpdateStatusAsync();
-    //}
+    [RequiresPermission(UserClaimsProvider.ViewEmployeesCompensations)]
+    [HttpPut("update")]
+    public async Task UpdateStatusAsync([FromQuery] string status, [FromBody] long[] compensationsIds)
+    {
+        await _compensationsService.UpdateStatusAsync((status == "paid") ? true : false, compensationsIds);
+    }
 }

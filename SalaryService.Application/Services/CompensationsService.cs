@@ -9,12 +9,15 @@ public class CompensationsService
 {
     private readonly CompensationCreationCommand _compensationCreationCommand;
 
+    private readonly CompensationStatusUpdateCommand _compensationStatusUpdateCommand;
+
     private readonly ICompensationsQuery _compensationsQuery;
 
-    public CompensationsService(CompensationCreationCommand createCompensationCommandHandler, ICompensationsQuery compensationsQuery)
+    public CompensationsService(CompensationCreationCommand createCompensationCommandHandler, ICompensationsQuery compensationsQuery, CompensationStatusUpdateCommand compensationStatusUpdateCommand)
     {
         _compensationCreationCommand = createCompensationCommandHandler;
         _compensationsQuery = compensationsQuery;
+        _compensationStatusUpdateCommand = compensationStatusUpdateCommand;
     }
 
     public async Task<List<CompensationType>> GetTypesAsync()
@@ -78,9 +81,14 @@ public class CompensationsService
         return compensationsResponseList;
     }
 
-    //public async Task UpdateStatusAsync()
-    //{
+    public async Task UpdateStatusAsync(bool isPaid, long[] compensationsIds)
+    {
+        foreach(var compensationId in compensationsIds)
+        {
+            var compensation = await _compensationsQuery.GetCompensationByIdAsync(compensationId);
+            compensation.IsPaid = isPaid;
 
-    //    // await _compensationCreationCommand.ExecuteAsync(dto, employee);
-    //}
+            await _compensationStatusUpdateCommand.ExecuteAsync(compensation);
+        }
+    }
 }
