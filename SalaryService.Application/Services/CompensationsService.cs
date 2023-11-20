@@ -22,9 +22,9 @@ public class CompensationsService
         return CompensationTypes.GetTypeList();
     }
 
-    public async Task<CompensationListDto> GetAllAsync()
+    public async Task<CompensationListDto> GetAllAsync(string corporateEmail)
     {
-        var compensations = await _compensationsQuery.GetCompensationsAsync();
+        var compensations = await _compensationsQuery.GetPersonalCompensationsAsync(corporateEmail);
 
         var compensationList = compensations.Select(x => new CompensationItemDto()
         {
@@ -36,7 +36,7 @@ public class CompensationsService
             DateCompensation = x.DateCompensation.ToString()
         }).ToList();
 
-        var totalUnpaidAmount = compensations.Sum(x => x.Amount);
+        var totalUnpaidAmount = Math.Round(compensations.Sum(x => x.Amount), 2);
 
         var compensationsResponseList = new CompensationListDto()
         {
@@ -51,4 +51,36 @@ public class CompensationsService
     {
         await _compensationCreationCommand.ExecuteAsync(dto, employee);
     }
+
+    public async Task<CompensationCeoListDto> GetAdminAllAsync()
+    {
+        var compensations = await _compensationsQuery.GetCompensationsAsync();
+
+        var compensationCeoList = compensations.Select(x => new CompensationCeoItemDto()
+        {
+            Id = x.Id,
+            EmployeeFullName = x.Employee.GetFullName(),
+            Comment = x.Comment,
+            Amount = x.Amount,
+            IsPaid = x.IsPaid,
+            DateCreateCompensation = x.DateCreateCompensation.ToString(),
+            DateCompensation = x.DateCompensation.ToString()
+        }).ToList();
+
+        var totalAmount = Math.Round(compensations.Sum(x => x.Amount), 2);
+
+        var compensationsResponseList = new CompensationCeoListDto()
+        {
+            List = compensationCeoList,
+            TotalAmount = totalAmount
+        };
+
+        return compensationsResponseList;
+    }
+
+    //public async Task UpdateStatusAsync()
+    //{
+
+    //    // await _compensationCreationCommand.ExecuteAsync(dto, employee);
+    //}
 }
