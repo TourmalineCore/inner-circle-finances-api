@@ -43,14 +43,15 @@ public class CompensationController : Controller
         return await _compensationsService.GetTypesAsync();
     }
 
-    [RequiresPermission(UserClaimsProvider.ViewEmployeesCompensations)]
+    [RequiresPermission(UserClaimsProvider.CanManageCompensations)]
     [HttpGet("admin/all")]
     public async Task<CompensationCeoListDto> GetAdminAllAsync()
     {
         return await _compensationsService.GetAdminAllAsync();
     }
 
-    [RequiresPermission(UserClaimsProvider.ViewEmployeesCompensations)]
+    //TODO: probably should be admin/update
+    [RequiresPermission(UserClaimsProvider.CanManageCompensations)]
     [HttpPut("update")]
     public async Task UpdateStatusAsync([FromQuery] string status, [FromBody] long[] compensationsIds)
     {
