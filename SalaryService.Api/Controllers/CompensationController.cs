@@ -50,9 +50,8 @@ public class CompensationController : Controller
         return await _compensationsService.GetAdminAllAsync();
     }
 
-    //TODO: probably should be admin/update
     [RequiresPermission(UserClaimsProvider.CanManageCompensations)]
-    [HttpPut("update")]
+    [HttpPut("admin/update")]
     public async Task UpdateStatusAsync([FromQuery] string status, [FromBody] long[] compensationsIds)
     {
         await _compensationsService.UpdateStatusAsync(status, compensationsIds);
