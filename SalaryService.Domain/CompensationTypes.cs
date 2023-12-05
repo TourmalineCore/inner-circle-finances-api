@@ -12,6 +12,7 @@ public static class CompensationTypes
     public const string Consumables = "Consumables";
     public const string Periphery = "Periphery";
     public const string BusinessTrip = "Business trip";
+    public const string Psychotherapy = "Psychotherapy";
     public const string Other = "Other";
 
     public static List<CompensationType> GetTypeList()
@@ -28,7 +29,8 @@ public static class CompensationTypes
             new CompensationType(8, Consumables),
             new CompensationType(9, Periphery),
             new CompensationType(10, BusinessTrip),
-            new CompensationType(11, Other)
+            new CompensationType(11, Psychotherapy),
+            new CompensationType(12, Other)
         };
     }
 
