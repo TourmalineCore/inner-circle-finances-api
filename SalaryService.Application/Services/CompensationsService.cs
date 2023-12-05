@@ -85,7 +85,7 @@ public class CompensationsService
     {
         foreach(var compensationId in compensationsIds)
         {
-            var compensation = await _compensationsQuery.GetCompensationByIdAsync(compensationId);
+            var compensation = await _compensationsQuery.FindCompensationByIdAsync(compensationId);
             compensation.IsPaid = isPaid;
 
             await _compensationStatusUpdateCommand.ExecuteAsync(compensation);

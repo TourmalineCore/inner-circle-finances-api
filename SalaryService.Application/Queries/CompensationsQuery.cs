@@ -33,12 +33,11 @@ public class CompensationsQuery : ICompensationsQuery
             .ToListAsync();
     }
 
-    public async Task<Compensation> GetCompensationByIdAsync(long id)
+    public async Task<Compensation?> FindCompensationByIdAsync(long id)
     {
         return await _context
             .Compensations
             .Include(x => x.Employee)
-            .Where(x => x.Id == id)
-            .SingleOrDefaultAsync();
+            .SingleOrDefaultAsync(x => x.Id == id);
     }
 }
