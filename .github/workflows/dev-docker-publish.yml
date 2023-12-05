@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+
   pull_request:
 
 env:
@@ -45,7 +46,7 @@ jobs:
             --set "extraSecretEnvVars.AuthenticationOptions__PublicSigningKey=${{ secrets.DEV_PUBLIC_SIGNING_KEY }}" \
             --set "extraSecretEnvVars.AuthenticationOptions__PrivateSigningKey=${{ secrets.DEV_PRIVATE_SIGNING_KEY }}" \
             "${RELEASE_NAME}" \
-            bitnami/aspnet-core
+            bitnami/aspnet-core --version 4.4.7
           kubeconfig: "${{ secrets.DEV_KUBECONFIG }}"
 
 
