@@ -13,6 +13,8 @@ public class CompensationsService
 
     private readonly ICompensationsQuery _compensationsQuery;
 
+    private const string PaidStatusName = "paid";
+
     public CompensationsService(CompensationCreationCommand createCompensationCommandHandler, ICompensationsQuery compensationsQuery, CompensationStatusUpdateCommand compensationStatusUpdateCommand)
     {
         _compensationCreationCommand = createCompensationCommandHandler;
@@ -56,9 +58,9 @@ public class CompensationsService
         return compensationsResponseList;
     }
 
-    public async Task UpdateStatusAsync(bool isPaid, long[] compensationsIds)
+    public async Task UpdateStatusAsync(string status, long[] compensationsIds)
     {
-        foreach(var compensationId in compensationsIds)
+        foreach (var compensationId in compensationsIds)
         {
             var compensation = await _compensationsQuery.FindCompensationByIdAsync(compensationId);
 
@@ -67,7 +69,7 @@ public class CompensationsService
                 throw new Exception($"Compensation with id = {compensationId} not found");
             }
 
-            compensation.IsPaid = isPaid;
+            compensation.IsPaid = status == PaidStatusName;
 
             await _compensationStatusUpdateCommand.ExecuteAsync(compensation);
         }

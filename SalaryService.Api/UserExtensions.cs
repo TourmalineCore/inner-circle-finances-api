@@ -19,14 +19,5 @@ namespace SalaryService.Api
                 Value: UserClaimsProvider.ViewSalaryAndDocumentsData
             });
         }
-
-        public static bool IsAvailableToViewAllEmployeesCompensationsData(this ClaimsPrincipal context)
-        {
-            return context.HasClaim(x => x is
-            {
-                Type: UserClaimsProvider.PermissionClaimType,
-                Value: UserClaimsProvider.ViewSalaryAndDocumentsData
-            });
-        }
     }
 }

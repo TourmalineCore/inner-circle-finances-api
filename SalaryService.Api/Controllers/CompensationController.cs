@@ -55,6 +55,6 @@ public class CompensationController : Controller
     [HttpPut("update")]
     public async Task UpdateStatusAsync([FromQuery] string status, [FromBody] long[] compensationsIds)
     {
-        await _compensationsService.UpdateStatusAsync((status == "paid") ? true : false, compensationsIds);
+        await _compensationsService.UpdateStatusAsync(status, compensationsIds);
     }
 }
