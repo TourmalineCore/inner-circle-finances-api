@@ -29,23 +29,11 @@ public class CompensationsService
     {
         var compensations = await _compensationsQuery.GetPersonalCompensationsAsync(corporateEmail);
 
-        var compensationList = compensations.Select(x => new PersonalCompensationItemDto()
-        {
-            Id = x.Id,
-            Comment = x.Comment,
-            Amount = x.Amount,
-            IsPaid = x.IsPaid,
-            DateCreateCompensation = x.DateCreateCompensation.ToString(),
-            DateCompensation = x.DateCompensation.ToString()
-        }).ToList();
+        var compensationList = compensations.Select(x => new PersonalCompensationItemDto(x.Id, x.Comment, x.Amount, x.IsPaid, x.DateCreateCompensation.ToString(), x.DateCompensation.ToString())).ToList();
 
         var totalUnpaidAmount = Math.Round(compensations.Sum(x => x.Amount), 2);
 
-        var compensationsResponseList = new PersonalCompensationListDto()
-        {
-            List = compensationList,
-            TotalUnpaidAmount = totalUnpaidAmount
-        };
+        var compensationsResponseList = new PersonalCompensationListDto(compensationList, totalUnpaidAmount);
 
         return compensationsResponseList;
     }
@@ -59,24 +47,11 @@ public class CompensationsService
     {
         var compensations = await _compensationsQuery.GetCompensationsAsync();
 
-        var compensationList = compensations.Select(x => new CompensationItemDto()
-        {
-            Id = x.Id,
-            EmployeeFullName = x.Employee.GetFullName(),
-            Comment = x.Comment,
-            Amount = x.Amount,
-            IsPaid = x.IsPaid,
-            DateCreateCompensation = x.DateCreateCompensation.ToString(),
-            DateCompensation = x.DateCompensation.ToString()
-        }).ToList();
+        var compensationList = compensations.Select(x => new CompensationItemDto(x.Id, x.Employee.GetFullName(), x.Comment, x.Amount, x.IsPaid, x.DateCreateCompensation.ToString(), x.DateCompensation.ToString())).ToList();
 
         var totalAmount = Math.Round(compensations.Sum(x => x.Amount), 2);
 
-        var compensationsResponseList = new CompensationListDto()
-        {
-            List = compensationList,
-            TotalAmount = totalAmount
-        };
+        var compensationsResponseList = new CompensationListDto(compensationList, totalAmount);
 
         return compensationsResponseList;
     }
@@ -86,6 +61,12 @@ public class CompensationsService
         foreach(var compensationId in compensationsIds)
         {
             var compensation = await _compensationsQuery.FindCompensationByIdAsync(compensationId);
+
+            if (compensation == null)
+            {
+                throw new Exception($"Compensation with id = {compensationId} not found");
+            }
+
             compensation.IsPaid = isPaid;
 
             await _compensationStatusUpdateCommand.ExecuteAsync(compensation);
