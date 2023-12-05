@@ -25,11 +25,11 @@ public class CompensationsService
         return CompensationTypes.GetTypeList();
     }
 
-    public async Task<CompensationListDto> GetAllAsync(string corporateEmail)
+    public async Task<PersonalCompensationListDto> GetAllAsync(string corporateEmail)
     {
         var compensations = await _compensationsQuery.GetPersonalCompensationsAsync(corporateEmail);
 
-        var compensationList = compensations.Select(x => new CompensationItemDto()
+        var compensationList = compensations.Select(x => new PersonalCompensationItemDto()
         {
             Id = x.Id,
             Comment = x.Comment,
@@ -41,7 +41,7 @@ public class CompensationsService
 
         var totalUnpaidAmount = Math.Round(compensations.Sum(x => x.Amount), 2);
 
-        var compensationsResponseList = new CompensationListDto()
+        var compensationsResponseList = new PersonalCompensationListDto()
         {
             List = compensationList,
             TotalUnpaidAmount = totalUnpaidAmount
@@ -55,11 +55,11 @@ public class CompensationsService
         await _compensationCreationCommand.ExecuteAsync(dto, employee);
     }
 
-    public async Task<CompensationCeoListDto> GetAdminAllAsync()
+    public async Task<CompensationListDto> GetAdminAllAsync()
     {
         var compensations = await _compensationsQuery.GetCompensationsAsync();
 
-        var compensationCeoList = compensations.Select(x => new CompensationCeoItemDto()
+        var compensationList = compensations.Select(x => new CompensationItemDto()
         {
             Id = x.Id,
             EmployeeFullName = x.Employee.GetFullName(),
@@ -72,9 +72,9 @@ public class CompensationsService
 
         var totalAmount = Math.Round(compensations.Sum(x => x.Amount), 2);
 
-        var compensationsResponseList = new CompensationCeoListDto()
+        var compensationsResponseList = new CompensationListDto()
         {
-            List = compensationCeoList,
+            List = compensationList,
             TotalAmount = totalAmount
         };
 

@@ -31,7 +31,7 @@ public class CompensationController : Controller
 
     [RequiresPermission(UserClaimsProvider.ViewPersonalCompensations)]
     [HttpGet("all")]
-    public async Task<CompensationListDto> GetAllAsync()
+    public async Task<PersonalCompensationListDto> GetAllAsync()
     {
         return await _compensationsService.GetAllAsync(User.GetCorporateEmail());
     }
@@ -45,7 +45,7 @@ public class CompensationController : Controller
 
     [RequiresPermission(UserClaimsProvider.CanManageCompensations)]
     [HttpGet("admin/all")]
-    public async Task<CompensationCeoListDto> GetAdminAllAsync()
+    public async Task<CompensationListDto> GetAdminAllAsync()
     {
         return await _compensationsService.GetAdminAllAsync();
     }

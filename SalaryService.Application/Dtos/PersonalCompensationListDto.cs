@@ -1,15 +1,15 @@
-﻿public class CompensationCeoListDto
-{
-    public List<CompensationCeoItemDto> List { get; init; }
+﻿using NodaTime;
 
-    public double TotalAmount { get; init; }
+public class PersonalCompensationListDto
+{
+    public List<PersonalCompensationItemDto> List { get; init; }
+
+    public double TotalUnpaidAmount { get; init; }
 }
 
-public class CompensationCeoItemDto
+public class PersonalCompensationItemDto
 {
     public long Id { get; init; }
-
-    public string EmployeeFullName { get; init; }
 
     public string? Comment { get; init; }
 
