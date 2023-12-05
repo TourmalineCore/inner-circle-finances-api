@@ -18,7 +18,26 @@ public class CompensationsQuery : ICompensationsQuery
     {
         return await _context
             .Compensations
+            .Include(x => x.Employee)
             .AsNoTracking()
             .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Compensation>> GetPersonalCompensationsAsync(string corporateEmail)
+    {
+        return await _context
+            .Compensations
+            .Include(x => x.Employee)
+            .Where(x => x.Employee.CorporateEmail == corporateEmail)
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
+    public async Task<Compensation?> FindCompensationByIdAsync(long id)
+    {
+        return await _context
+            .Compensations
+            .Include(x => x.Employee)
+            .SingleOrDefaultAsync(x => x.Id == id);
     }
 }

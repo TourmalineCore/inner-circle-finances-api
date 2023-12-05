@@ -12,7 +12,7 @@ public class Compensation
 
     public double Amount { get; private set; }
 
-    public bool IsPaid { get; private set; }
+    public bool IsPaid { get; set; }
 
     public long EmployeeId { get; private set; }
 
