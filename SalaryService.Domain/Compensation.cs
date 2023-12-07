@@ -29,6 +29,11 @@ public class Compensation
             throw new ArgumentException($"Compensation type [{typeId}] doesn't exists");
         }
 
+        if (amount <= 0)
+        {
+            throw new ArgumentException($"Amount can't be zero or negative");
+        }
+
         TypeId = typeId;
         Comment = comment;
         Amount = amount;
