@@ -32,11 +32,10 @@ public class Compensation
         if (amount <= 0)
         {
             throw new ArgumentException($"Amount can't be zero or negative");
-
         }
 
         TypeId = typeId;
-        Comment = comment;     
+        Comment = comment;
         Amount = amount;
         IsPaid = isPaid;
         Employee = employee;
