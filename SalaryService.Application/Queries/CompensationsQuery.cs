@@ -23,6 +23,16 @@ public class CompensationsQuery : ICompensationsQuery
             .ToListAsync();
     }
 
+    public async Task<IEnumerable<Compensation>> GetCompensationsAsync(int year, int month)
+    {
+        return await _context
+            .Compensations
+            .Include(x => x.Employee)
+            .Where(x => x.DateCompensation.InUtc().Month == month && x.DateCompensation.InUtc().Year == year)
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
     public async Task<IEnumerable<Compensation>> GetPersonalCompensationsAsync(string corporateEmail)
     {
         return await _context
