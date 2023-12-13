@@ -45,9 +45,9 @@ public class CompensationController : Controller
 
     [RequiresPermission(UserClaimsProvider.CanManageCompensations)]
     [HttpGet("admin/all")]
-    public async Task<CompensationListDto> GetAdminAllAsync()
+    public async Task<CompensationListDto> GetAdminAllAsync([FromQuery] int year, [FromQuery] int month)
     {
-        return await _compensationsService.GetAdminAllAsync();
+        return await _compensationsService.GetAdminAllAsync(year, month);
     }
 
     [RequiresPermission(UserClaimsProvider.CanManageCompensations)]
