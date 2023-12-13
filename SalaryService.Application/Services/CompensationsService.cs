@@ -45,11 +45,17 @@ public class CompensationsService
         await _compensationCreationCommand.ExecuteAsync(dto, employee);
     }
 
-    public async Task<CompensationListDto> GetAdminAllAsync()
+    public async Task<CompensationListDto> GetAdminAllAsync(int month, int year)
     {
         var compensations = await _compensationsQuery.GetCompensationsAsync();
 
-        var compensationList = compensations.Select(x => new CompensationItemDto(x.Id, x.Employee.GetFullName(), x.Comment, x.Amount, x.IsPaid, x.DateCreateCompensation.ToString(), x.DateCompensation.ToString())).ToList();
+        var compensationList = compensations
+            .Select(x => new CompensationItemDto(x.Id, x.Employee.GetFullName(), x.Comment, x.Amount, x.IsPaid, x.DateCreateCompensation.ToString(), x.DateCompensation.ToString()))
+            .Where(x => {
+                var dateCompensation = DateTime.Parse(x.DateCompensation);
+                return dateCompensation.Year == year && dateCompensation.Month == month;
+            })
+            .ToList();
 
         var totalAmount = Math.Round(compensations.Sum(x => x.Amount), 2);
 
