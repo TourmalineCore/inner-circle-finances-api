@@ -38,4 +38,17 @@ public static class CompensationTypes
     {
         return GetTypeList().Select(x => x.TypeId).Contains(typeId);
     }
+
+    public static string GetTypeNameByTypeId(long typeId)
+    {
+        if(IsTypeExist(typeId))
+        {
+            var type = GetTypeList().FirstOrDefault(x => x.TypeId == typeId);
+            return type?.Label;
+        }
+        else
+        {
+            throw new ArgumentException($"Compensation type [{typeId}] doesn't exists");
+        }
+    }
 }
