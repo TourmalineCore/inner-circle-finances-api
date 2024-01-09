@@ -41,7 +41,7 @@ public static class CompensationTypes
 
     public static string GetTypeNameByTypeId(long typeId)
     {
-        if(IsTypeExist(typeId))
+        if (IsTypeExist(typeId))
         {
             var type = GetTypeList().FirstOrDefault(x => x.TypeId == typeId);
             return type?.Label;

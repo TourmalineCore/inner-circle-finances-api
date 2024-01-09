@@ -19,9 +19,13 @@ public class ItemDto
 {
     public string EmployeeFullName { get; init; }
 
+    public long ItemId { get; init; }
+
     public string DateCompensation { get; init; }
 
     public double TotalAmount { get; init; }
+
+    public bool IsPaid { get; init; }
 
     public IEnumerable<EmployeeCompensationDto> Compensations { get; init; }
 
@@ -31,6 +35,8 @@ public class ItemDto
         DateCompensation = employeeCompensations[0].DateCompensation.ToString();
         TotalAmount = Math.Round(employeeCompensations.Sum(x => x.Amount), 2);
         Compensations = employeeCompensations.Select(x => new EmployeeCompensationDto(x));
+        IsPaid = false;
+        ItemId = employeeCompensations[0].Id;
     }
 }
 
