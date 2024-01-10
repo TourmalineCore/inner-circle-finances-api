@@ -10,16 +10,16 @@ public class AllCompensationsListDto
 
     public AllCompensationsListDto(IEnumerable<Compensation> compensations)
 	{
-        TotalAmount = Math.Round(compensations.Sum(x => x.Amount), 2);
         Items = compensations.GroupBy(x => x.EmployeeId).Select(x => new ItemDto(x.ToList()));
-	}
+        TotalAmount = Math.Round(compensations.Sum(x => x.Amount), 2);
+    }
 }
 
 public class ItemDto
 {
     public string EmployeeFullName { get; init; }
 
-    public long ItemId { get; init; }
+    public long EmployeeId { get; init; }
 
     public string DateCompensation { get; init; }
 
@@ -35,8 +35,8 @@ public class ItemDto
         DateCompensation = employeeCompensations[0].DateCompensation.ToString();
         TotalAmount = Math.Round(employeeCompensations.Sum(x => x.Amount), 2);
         Compensations = employeeCompensations.Select(x => new EmployeeCompensationDto(x));
+        EmployeeId = employeeCompensations[0].Employee.Id;
         IsPaid = false;
-        ItemId = employeeCompensations[0].Id;
     }
 }
 
