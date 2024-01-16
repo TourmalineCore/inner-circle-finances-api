@@ -43,11 +43,24 @@ public class CompensationsQuery : ICompensationsQuery
             .ToListAsync();
     }
 
-    public async Task<Compensation?> FindCompensationByIdAsync(long id)
+    public async Task<List<Compensation>> GetCompensationsByIdsAsync(long[] ids)
     {
-        return await _context
+        var compensations = await _context
             .Compensations
             .Include(x => x.Employee)
-            .SingleOrDefaultAsync(x => x.Id == id);
+            .Where(x => ids.Contains(x.Id))
+            .ToListAsync();
+
+        if (compensations.Count == 0)
+        {
+            throw new ArgumentException("All compensations not found");
+        }
+
+        if (compensations.Count != ids.Length)
+        {
+            throw new ArgumentException($"Couldn't find all compensations. Found items for ids: {string.Join(", ", compensations.Select(x => x.Id))}");
+        }
+
+        return compensations;
     }
 }

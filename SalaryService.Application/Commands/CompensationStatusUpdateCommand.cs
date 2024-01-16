@@ -12,9 +12,9 @@ public class CompensationStatusUpdateCommand
         _context = employeeDbContext;
     }
 
-    public async Task ExecuteAsync(Compensation compensation)
+    public async Task ExecuteAsync(List<Compensation> compensations)
     {
-        _context.Update(compensation);
+        _context.UpdateRange(compensations);
         await _context.SaveChangesAsync();
     }
 }
