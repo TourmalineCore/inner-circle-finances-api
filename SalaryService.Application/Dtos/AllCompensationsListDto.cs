@@ -36,7 +36,7 @@ public class ItemDto
         TotalAmount = Math.Round(employeeCompensations.Sum(x => x.Amount), 2);
         Compensations = employeeCompensations.Select(x => new EmployeeCompensationDto(x));
         EmployeeId = employeeCompensations[0].Employee.Id;
-        IsPaid = false;
+        IsPaid = employeeCompensations.All(x => x.IsPaid == true);
     }
 }
 
