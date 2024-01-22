@@ -6,12 +6,15 @@ public class AllCompensationsListDto
 {
     public double TotalAmount { get; init; }
 
+    public double TotalUnpaidAmount { get; init; }
+
     public IEnumerable<ItemDto> Items { get; init; }
 
     public AllCompensationsListDto(IEnumerable<Compensation> compensations)
 	{
         Items = compensations.GroupBy(x => x.EmployeeId).Select(x => new ItemDto(x.ToList()));
         TotalAmount = Math.Round(compensations.Sum(x => x.Amount), 2);
+        TotalUnpaidAmount = Math.Round(compensations.Where(x => !x.IsPaid).Sum(x => x.Amount), 2);
     }
 }
 
