@@ -6,12 +6,15 @@ public class AllCompensationsListDto
 {
     public double TotalAmount { get; init; }
 
+    public double TotalUnpaidAmount { get; init; }
+
     public IEnumerable<ItemDto> Items { get; init; }
 
     public AllCompensationsListDto(IEnumerable<Compensation> compensations)
 	{
         Items = compensations.GroupBy(x => x.EmployeeId).Select(x => new ItemDto(x.ToList()));
         TotalAmount = Math.Round(compensations.Sum(x => x.Amount), 2);
+        TotalUnpaidAmount = Math.Round(compensations.Where(x => !x.IsPaid).Sum(x => x.Amount), 2);
     }
 }
 
@@ -25,6 +28,8 @@ public class ItemDto
 
     public double TotalAmount { get; init; }
 
+    public double UnpaidAmount { get; init; }
+
     public bool IsPaid { get; init; }
 
     public IEnumerable<EmployeeCompensationDto> Compensations { get; init; }
@@ -34,6 +39,7 @@ public class ItemDto
         EmployeeFullName = employeeCompensations[0].Employee.GetFullName();
         DateCompensation = employeeCompensations[0].DateCompensation.ToString();
         TotalAmount = Math.Round(employeeCompensations.Sum(x => x.Amount), 2);
+        UnpaidAmount = Math.Round(employeeCompensations.Where(x => !x.IsPaid).Sum(x => x.Amount), 2);
         Compensations = employeeCompensations.Select(x => new EmployeeCompensationDto(x));
         EmployeeId = employeeCompensations[0].Employee.Id;
         IsPaid = employeeCompensations.All(x => x.IsPaid == true);
