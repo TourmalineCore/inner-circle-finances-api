@@ -20,13 +20,14 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2.0.0
-
     - name: API tests
       uses: erikbos/karate-action@main
       with:
         url: https://innercircle.tourmalinecore.com/api
         tests: |
           ./SalaryService.Tests/API/e2e/KarateTests.feature
+    - name: Run karate
+      run: java -jar karate.jar KarateTests.feature -D DEV_KARATE_LOGIN=$DEV_KARATE_LOGIN DEV_KARATE_PASSWORD=$DEV_KARATE_PASSWORD
 
   build-image:
     name: Build and push service image 
