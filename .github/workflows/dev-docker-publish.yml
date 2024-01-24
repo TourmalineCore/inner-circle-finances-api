@@ -14,9 +14,9 @@ env:
 jobs:
   sandbox-karate:
     runs-on: ubuntu-latest
-    # env: 
-      # DEV_KARATE_LOGIN: ${{ secrets.DEV_KARATE_LOGIN }}
-      # DEV_KARATE_PASSWORD: ${{ secrets.DEV_KARATE_PASSWORD }}
+    env: 
+      DEV_KARATE_LOGIN: ${{ secrets.DEV_KARATE_LOGIN }}
+      DEV_KARATE_PASSWORD: ${{ secrets.DEV_KARATE_PASSWORD }}
     steps:
     - name: Checkout
       uses: actions/checkout@v2.0.0
