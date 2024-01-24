@@ -23,6 +23,16 @@ jobs:
           docker build -t $GITHUB_REGISTRY/tourmalinecore/inner-circle/salary-api:latest -t $GITHUB_REGISTRY/tourmalinecore/inner-circle/salary-api:${{ github.sha }} -f SalaryService.Api/Dockerfile .
           docker push $GITHUB_REGISTRY/tourmalinecore/inner-circle/salary-api:latest
           docker push $GITHUB_REGISTRY/tourmalinecore/inner-circle/salary-api:${{ github.sha }}
+  
+  sandbox-karate:
+  - name: API tests
+    uses: erikbos/karate-action@main
+    with:
+      url: https://innercircle.tourmalinecore.com/api
+      DEV_KARATE_LOGIN: $DEV_KARATE_LOGIN 
+      DEV_KARATE_PASSWORD: $DEV_KARATE_PASSWORD 
+      tests: |
+        ./SalaryService.Tests/API/e2e/KarateTests.feature
 
   deploy-to-dev-k8s:
     needs: build-image

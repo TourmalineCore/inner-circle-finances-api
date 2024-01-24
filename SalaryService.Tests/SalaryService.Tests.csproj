@@ -28,4 +28,12 @@
     <ProjectReference Include="..\SalaryService.Domain\SalaryService.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="API\" />
+    <None Remove="API\e2e\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="API\" />
+    <Folder Include="API\e2e\" />
+  </ItemGroup>
 </Project>
