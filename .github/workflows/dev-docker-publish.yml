@@ -12,19 +12,6 @@ env:
   GITHUB_REGISTRY: ghcr.io
 
 jobs:
-  build-image:
-    name: Build and push service image  
-    runs-on: ubuntu-22.04
-    steps:
-      - name: checkout
-        uses: actions/checkout@v1
-      - name: Build and push image
-        run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
-          docker build -t $GITHUB_REGISTRY/tourmalinecore/inner-circle/salary-api:latest -t $GITHUB_REGISTRY/tourmalinecore/inner-circle/salary-api:${{ github.sha }} -f SalaryService.Api/Dockerfile .
-          docker push $GITHUB_REGISTRY/tourmalinecore/inner-circle/salary-api:latest
-          docker push $GITHUB_REGISTRY/tourmalinecore/inner-circle/salary-api:${{ github.sha }}
-  
   sandbox-karate:
     runs-on: ubuntu-latest
     steps:
@@ -39,6 +26,21 @@ jobs:
         DEV_KARATE_PASSWORD: ${{ secrets.DEV_KARATE_PASSWORD }}
         tests: |
           ./SalaryService.Tests/API/e2e/KarateTests.feature
+
+  build-image:
+    name: Build and push service image 
+    needs: sandbox-karate
+    runs-on: ubuntu-22.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v1
+      - name: Build and push image
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
+          docker build -t $GITHUB_REGISTRY/tourmalinecore/inner-circle/salary-api:latest -t $GITHUB_REGISTRY/tourmalinecore/inner-circle/salary-api:${{ github.sha }} -f SalaryService.Api/Dockerfile .
+          docker push $GITHUB_REGISTRY/tourmalinecore/inner-circle/salary-api:latest
+          docker push $GITHUB_REGISTRY/tourmalinecore/inner-circle/salary-api:${{ github.sha }}
+  
 
   deploy-to-dev-k8s:
     needs: build-image
