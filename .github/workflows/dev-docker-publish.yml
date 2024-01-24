@@ -62,6 +62,7 @@ jobs:
           kubeconfig: "${{ secrets.DEV_KUBECONFIG }}"
 
   dev-karate:
+    needs: deploy-to-dev-k8s
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
