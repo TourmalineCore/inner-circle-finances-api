@@ -5,8 +5,6 @@ on:
     branches:
       - develop
 
-  pull_request:
-
 env:
   GITHUB_REGISTRY: ghcr.io
 
@@ -35,11 +33,9 @@ jobs:
           docker build -t $GITHUB_REGISTRY/tourmalinecore/inner-circle/salary-api:latest -t $GITHUB_REGISTRY/tourmalinecore/inner-circle/salary-api:${{ github.sha }} -f SalaryService.Api/Dockerfile .
           docker push $GITHUB_REGISTRY/tourmalinecore/inner-circle/salary-api:latest
           docker push $GITHUB_REGISTRY/tourmalinecore/inner-circle/salary-api:${{ github.sha }}
-
   deploy-to-dev-k8s:
     needs: build-image
     name: Deploy service to k8s for development environment  
-    if: github.event_name == 'push'
     runs-on: ubuntu-22.04
     steps:
       - name: checkout
@@ -60,7 +56,6 @@ jobs:
             "${RELEASE_NAME}" \
             bitnami/aspnet-core --version 4.4.7
           kubeconfig: "${{ secrets.DEV_KUBECONFIG }}"
-
   dev-karate:
     needs: deploy-to-dev-k8s
     runs-on: ubuntu-latest
