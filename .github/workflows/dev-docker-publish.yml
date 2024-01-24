@@ -14,9 +14,9 @@ env:
 jobs:
   sandbox-karate:
     runs-on: ubuntu-latest
-    env: 
-      DEV_KARATE_LOGIN: ${{ secrets.DEV_KARATE_LOGIN }}
-      DEV_KARATE_PASSWORD: ${{ secrets.DEV_KARATE_PASSWORD }}
+    # env: 
+      # DEV_KARATE_LOGIN: ${{ secrets.DEV_KARATE_LOGIN }}
+      # DEV_KARATE_PASSWORD: ${{ secrets.DEV_KARATE_PASSWORD }}
     steps:
     - name: Checkout
       uses: actions/checkout@v2.0.0
@@ -27,7 +27,7 @@ jobs:
         tests: |
           ./SalaryService.Tests/API/e2e/KarateTests.feature
     - name: Run karate
-      run: java -jar karate.jar KarateTests.feature -D DEV_KARATE_LOGIN=$DEV_KARATE_LOGIN DEV_KARATE_PASSWORD=$DEV_KARATE_PASSWORD
+      run: java -jar karate.jar KarateTests.feature -D DEV_KARATE_LOGIN=${{ secrets.DEV_KARATE_LOGIN }} DEV_KARATE_PASSWORD=${{ secrets.DEV_KARATE_PASSWORD }}
 
   build-image:
     name: Build and push service image 
