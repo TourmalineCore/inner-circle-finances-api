@@ -14,7 +14,7 @@ env:
 jobs:
   sandbox-karate:
     runs-on: ubuntu-latest
-    env: 
+    env:
       DEV_KARATE_LOGIN: ${{ secrets.DEV_KARATE_LOGIN }}
       DEV_KARATE_PASSWORD: ${{ secrets.DEV_KARATE_PASSWORD }}
     steps:
@@ -24,8 +24,8 @@ jobs:
       uses: erikbos/karate-action@main
       with:
         url: https://innercircle.tourmalinecore.com/api
-        tests: |
-          ./SalaryService.Tests/API/e2e/KarateTests.feature
+        # tests: |
+          # ./SalaryService.Tests/API/e2e/KarateTests.feature
     - name: Run karate
       run: |
         curl -L -o karate.jar https://github.com/karatelabs/karate/releases/download/v1.4.0/karate-1.4.0.jar
