@@ -26,10 +26,10 @@ jobs:
         url: https://innercircle.tourmalinecore.com/api
         tests: |
           ./SalaryService.Tests/API/e2e/KarateTests.feature -D DEV_KARATE_LOGIN=${{ secrets.DEV_KARATE_LOGIN }} DEV_KARATE_PASSWORD=${{ secrets.DEV_KARATE_PASSWORD }}
-    - name: Run karate
-      run: |
-        curl -L -o karate.jar https://github.com/karatelabs/karate/releases/download/v1.4.0/karate-1.4.0.jar
-        java -jar karate.jar KarateTests.feature 
+    # - name: Run karate
+    #   run: |
+    #     curl -L -o karate.jar https://github.com/karatelabs/karate/releases/download/v1.4.0/karate-1.4.0.jar
+    #     java -jar karate.jar KarateTests.feature 
   build-image:
     name: Build and push service image 
     needs: sandbox-karate
