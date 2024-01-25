@@ -13,7 +13,7 @@ env:
 jobs:
   sandbox-karate:
     if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
     - name: Checkout
       uses: actions/checkout@v2.0.0
@@ -64,7 +64,7 @@ jobs:
   dev-karate:
     needs: deploy-to-dev-k8s
     if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
     - name: Checkout
       uses: actions/checkout@v2.0.0
