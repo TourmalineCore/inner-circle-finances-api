@@ -10,9 +10,19 @@ env:
   GITHUB_REGISTRY: ghcr.io
 
 jobs:
+  sandbox-karate:
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2.0.0
+    - name: API tests
+      uses: erikbos/karate-action@main
+      with:
+        url: http://docker:5000/api
+        tests: |
+          ./SalaryService.Tests/API/e2e/KarateTests.feature -D DEV_KARATE_LOGIN=${{ secrets.DEV_KARATE_LOGIN }} DEV_KARATE_PASSWORD=${{ secrets.DEV_KARATE_PASSWORD }}
   build-image:
     name: Build and push service image 
-    needs: sandbox-karate
     if: github.event_name == 'push'
     runs-on: ubuntu-22.04
     steps:
@@ -47,7 +57,8 @@ jobs:
             "${RELEASE_NAME}" \
             bitnami/aspnet-core --version 4.4.7
           kubeconfig: "${{ secrets.DEV_KUBECONFIG }}"
-  sandbox-karate:
+  dev-karate:
+    needs: deploy-to-dev-k8s
     runs-on: ubuntu-22.04
     steps:
     - name: Checkout
@@ -55,6 +66,8 @@ jobs:
     - name: API tests
       uses: erikbos/karate-action@main
       with:
-        url: http://docker:5000/api
+        url: https://innercircle.tourmalinecore.com/api
         tests: |
           ./SalaryService.Tests/API/e2e/KarateTests.feature -D DEV_KARATE_LOGIN=${{ secrets.DEV_KARATE_LOGIN }} DEV_KARATE_PASSWORD=${{ secrets.DEV_KARATE_PASSWORD }}
+
+
