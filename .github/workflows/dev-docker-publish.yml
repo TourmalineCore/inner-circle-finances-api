@@ -11,6 +11,7 @@ env:
 
 jobs:
   sandbox-karate:
+    name: Run karate tests in docker 
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-22.04
     steps:
@@ -59,6 +60,7 @@ jobs:
             bitnami/aspnet-core --version 4.4.7
           kubeconfig: "${{ secrets.DEV_KUBECONFIG }}"
   dev-karate:
+    name: Run karate tests in production 
     needs: deploy-to-dev-k8s
     runs-on: ubuntu-22.04
     steps:
