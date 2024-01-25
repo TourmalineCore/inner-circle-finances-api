@@ -6,6 +6,8 @@ on:
       - develop
 
   pull_request:
+    branches:
+      - develop
 
 env:
   GITHUB_REGISTRY: ghcr.io
@@ -26,7 +28,7 @@ jobs:
   build-image:
     name: Build and push service image 
     needs: sandbox-karate
-    if: github.event.pull_request.merged == true
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
     runs-on: ubuntu-22.04
     steps:
       - name: checkout
@@ -40,7 +42,7 @@ jobs:
   deploy-to-dev-k8s:
     needs: build-image
     name: Deploy service to k8s for development environment  
-    if: github.event.pull_request.merged == true
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
     runs-on: ubuntu-22.04
     steps:
       - name: checkout
@@ -63,7 +65,7 @@ jobs:
           kubeconfig: "${{ secrets.DEV_KUBECONFIG }}"
   dev-karate:
     needs: deploy-to-dev-k8s
-    if: github.event.pull_request.merged == true
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
     runs-on: ubuntu-22.04
     steps:
     - name: Checkout
