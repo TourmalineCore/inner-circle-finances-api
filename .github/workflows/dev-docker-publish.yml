@@ -4,17 +4,13 @@ on:
   push:
     branches:
       - develop
-
   pull_request:
-    branches:
-      - 'feature/**'
 
 env:
   GITHUB_REGISTRY: ghcr.io
 
 jobs:
   sandbox-karate:
-    if: github.event_name == 'pull_request'
     runs-on: ubuntu-22.04
     steps:
     - name: Checkout
@@ -42,7 +38,6 @@ jobs:
   deploy-to-dev-k8s:
     needs: build-image
     name: Deploy service to k8s for development environment  
-    if: github.event_name == 'push'
     runs-on: ubuntu-22.04
     steps:
       - name: checkout
@@ -65,7 +60,6 @@ jobs:
           kubeconfig: "${{ secrets.DEV_KUBECONFIG }}"
   dev-karate:
     needs: deploy-to-dev-k8s
-    if: github.event_name == 'push'
     runs-on: ubuntu-22.04
     steps:
     - name: Checkout
