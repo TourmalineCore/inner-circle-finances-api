@@ -11,7 +11,6 @@ env:
 
 jobs:
   sandbox-karate:
-    if: github.event_name != 'push'
     runs-on: ubuntu-22.04
     steps:
     - name: Checkout
@@ -24,7 +23,6 @@ jobs:
           ./SalaryService.Tests/API/e2e/KarateTests.feature -D DEV_KARATE_LOGIN=${{ secrets.DEV_KARATE_LOGIN }} DEV_KARATE_PASSWORD=${{ secrets.DEV_KARATE_PASSWORD }}
   build-image:
     name: Build and push service image 
-    needs: sandbox-karate
     if: github.event_name == 'push'
     runs-on: ubuntu-22.04
     steps:
