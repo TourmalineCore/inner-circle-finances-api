@@ -6,6 +6,8 @@ on:
       - develop
 
   pull_request:
+    branches:
+      - develop
 
 env:
   GITHUB_REGISTRY: ghcr.io
@@ -13,7 +15,7 @@ env:
 jobs:
   sandbox-karate:
     if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
     - name: Checkout
       uses: actions/checkout@v2.0.0
@@ -26,7 +28,7 @@ jobs:
   build-image:
     name: Build and push service image 
     needs: sandbox-karate
-    if: github.event.pull_request.merged == true
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
     runs-on: ubuntu-22.04
     steps:
       - name: checkout
@@ -40,7 +42,7 @@ jobs:
   deploy-to-dev-k8s:
     needs: build-image
     name: Deploy service to k8s for development environment  
-    if: github.event.pull_request.merged == true
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
     runs-on: ubuntu-22.04
     steps:
       - name: checkout
@@ -63,8 +65,8 @@ jobs:
           kubeconfig: "${{ secrets.DEV_KUBECONFIG }}"
   dev-karate:
     needs: deploy-to-dev-k8s
-    if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-22.04
     steps:
     - name: Checkout
       uses: actions/checkout@v2.0.0
@@ -74,4 +76,5 @@ jobs:
         url: https://innercircle.tourmalinecore.com/api
         tests: |
           ./SalaryService.Tests/API/e2e/KarateTests.feature -D DEV_KARATE_LOGIN=${{ secrets.DEV_KARATE_LOGIN }} DEV_KARATE_PASSWORD=${{ secrets.DEV_KARATE_PASSWORD }}
+
 
