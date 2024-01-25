@@ -15,6 +15,8 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-22.04
     steps:
+    - name: Checkout
+      uses: actions/checkout@v2.0.0
     - name: API tests
       uses: erikbos/karate-action@main
       with:
