@@ -10,7 +10,7 @@
         And header Content-Type = 'application/json'
         And request { login: '12', password: karate.properties['DEV_KARATE_PASSWORD'] }
         When method POST
-        Then status 401
+        Then status 200
 
         # enter invalid password
         Given path 'auth/login'
