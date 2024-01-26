@@ -14,15 +14,21 @@ jobs:
     name: Run karate tests in docker 
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-22.04
+    services:
+      docker:
+        image: docker:latest
     steps:
     - name: Checkout
       uses: actions/checkout@v2.0.0
+    - name: Build and run tests with Docker Compose
+      run: |
+        docker-compose up -d     
     - name: API tests
       uses: erikbos/karate-action@main
       with:
-        url: http://docker:5000/api
         tests: |
-          ./SalaryService.Tests/API/e2e/KarateTests.feature -D DEV_KARATE_LOGIN=${{ secrets.DEV_KARATE_LOGIN }} DEV_KARATE_PASSWORD=${{ secrets.DEV_KARATE_PASSWORD }}
+          ./SalaryService.Tests/API/e2e/KarateTests.feature -D DEV_KARATE_LOGIN=${{ secrets.DEV_KARATE_LOGIN }} DEV_KARATE_PASSWORD=${{ secrets.DEV_KARATE_PASSWORD }} DEV_KARATE_URL=${{ secrets.LOCAL_KARATE_URL }}
+
   build-image:
     name: Build and push service image 
     if: github.event_name == 'push'
@@ -69,8 +75,7 @@ jobs:
     - name: API tests
       uses: erikbos/karate-action@main
       with:
-        url: https://innercircle.tourmalinecore.com/api
         tests: |
-          ./SalaryService.Tests/API/e2e/KarateTests.feature -D DEV_KARATE_LOGIN=${{ secrets.DEV_KARATE_LOGIN }} DEV_KARATE_PASSWORD=${{ secrets.DEV_KARATE_PASSWORD }}
+          ./SalaryService.Tests/API/e2e/KarateTests.feature -D DEV_KARATE_LOGIN=${{ secrets.DEV_KARATE_LOGIN }} DEV_KARATE_PASSWORD=${{ secrets.DEV_KARATE_PASSWORD }} DEV_KARATE_URL=${{ secrets.PROD_KARATE_URL }}
 
 

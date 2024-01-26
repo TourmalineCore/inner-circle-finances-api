@@ -5,12 +5,12 @@
     Scenario: Access denied
 
         # enter invalid login
-        Given url 'https://innercircle.tourmalinecore.com/api'
+        Given url karate.properties['DEV_KARATE_URL']
         Given path 'auth/login'
         And header Content-Type = 'application/json'
         And request { login: '12', password: karate.properties['DEV_KARATE_PASSWORD'] }
         When method POST
-        Then status 200
+        Then status 401
 
         # enter invalid password
         Given path 'auth/login'
@@ -30,7 +30,7 @@
     Scenario: Test flow
 
         # authentication
-        Given url 'https://innercircle.tourmalinecore.com/api'
+        Given url karate.properties['DEV_KARATE_URL']
         Given path 'auth/login'
         And header Content-Type = 'application/json'
         And request { login: karate.properties['DEV_KARATE_LOGIN'], password: karate.properties['DEV_KARATE_PASSWORD'] }
