@@ -24,7 +24,8 @@ jobs:
       run: docker network create ic-backend-deb
     - name: Build and run tests with Docker Compose
       run: |
-        docker-compose up -d     
+        docker-compose up -d   
+        docker-compose build  
     - name: API tests
       uses: erikbos/karate-action@main
       with:
