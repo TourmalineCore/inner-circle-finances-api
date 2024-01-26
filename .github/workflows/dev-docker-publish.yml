@@ -25,10 +25,10 @@ jobs:
         sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
         sudo chmod +x /usr/local/bin/docker-compose
     - name: Build and run tests with Docker Compose
-        run: |
-          docker-compose up -d
-          curl -L -o karate.jar https://github.com/karatelabs/karate/releases/download/v1.4.0/karate-1.4.0.jar
-          java -jar karate.jar ./SalaryService.Tests/API/e2e/KarateTests.feature -D DEV_KARATE_LOGIN=${{ secrets.DEV_KARATE_LOGIN }} DEV_KARATE_PASSWORD=${{ secrets.DEV_KARATE_PASSWORD }} DEV_KARATE_URL=${{ secrets.LOCAL_KARATE_URL }}
+      run: |
+        docker-compose up -d
+        curl -L -o karate.jar https://github.com/karatelabs/karate/releases/download/v1.4.0/karate-1.4.0.jar
+        java -jar karate.jar ./SalaryService.Tests/API/e2e/KarateTests.feature -D DEV_KARATE_LOGIN=${{ secrets.DEV_KARATE_LOGIN }} DEV_KARATE_PASSWORD=${{ secrets.DEV_KARATE_PASSWORD }} DEV_KARATE_URL=${{ secrets.LOCAL_KARATE_URL }}
   build-image:
     name: Build and push service image 
     if: github.event_name == 'push'
