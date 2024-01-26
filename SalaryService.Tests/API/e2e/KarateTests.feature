@@ -43,7 +43,7 @@
         Given path 'salary/compensations/create'
         And header Content-Type = 'application/json'
         And header Authorization = 'Bearer ' + accessToken
-        And request { 'compensations': [ { 'typeId': 1, 'comment1': 'test - I bought milk', 'amount': 760 }, { 'typeId': 2, 'comment': 'test - I bought this', 'amount': 2760.45 } ], 'dateCompensation': '2023-12-01T00:00:00Z', "employeeId": 2 }
+        And request { 'compensations': [ { 'typeId': 1, 'comment': 'test - I bought milk', 'amount': 760 }, { 'typeId': 2, 'comment': 'test - I bought this', 'amount': 2760.45 } ], 'dateCompensation': '2023-12-01T00:00:00Z', "employeeId": 2 }
         When method POST
         Then status 404
 
