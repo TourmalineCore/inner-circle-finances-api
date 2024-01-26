@@ -20,6 +20,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2.0.0
+    - name: Create Docker network
+      run: docker network create ic-backend-deb
     - name: Build and run tests with Docker Compose
       run: |
         docker-compose up -d     
