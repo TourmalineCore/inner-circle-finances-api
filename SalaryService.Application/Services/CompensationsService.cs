@@ -31,7 +31,7 @@ public class CompensationsService
 
         var compensationList = compensations.Select(x => new PersonalCompensationItemDto(x.Id, x.Comment, x.Amount, x.IsPaid, x.DateCreateCompensation.ToString(), x.DateCompensation.ToString())).ToList();
 
-        var totalUnpaidAmount = Math.Round(compensations.Sum(x => x.Amount), 2);
+        var totalUnpaidAmount = Math.Round(compensations.Where(compensation => compensation.IsPaid == false).Sum(x => x.Amount), 2);
 
         var compensationsResponseList = new PersonalCompensationListDto(compensationList, totalUnpaidAmount);
 
