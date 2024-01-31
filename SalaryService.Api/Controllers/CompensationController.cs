@@ -20,7 +20,7 @@ public class CompensationController : Controller
         _employeesService = employeesService;
     }
 
-    [RequiresPermission(UserClaimsProvider.ViewPersonalCompensations)]
+    [RequiresPermission(UserClaimsProvider.CanRequestCompensations)]
     [HttpPost("create")]
     public async Task CreateAsync([FromBody] CompensationCreateDto dto)
     {
@@ -29,14 +29,14 @@ public class CompensationController : Controller
         await _compensationsService.CreateAsync(dto, employee);
     }
 
-    [RequiresPermission(UserClaimsProvider.ViewPersonalCompensations)]
+    [RequiresPermission(UserClaimsProvider.CanRequestCompensations)]
     [HttpGet("all")]
     public async Task<PersonalCompensationListDto> GetAllAsync()
     {
         return await _compensationsService.GetAllAsync(User.GetCorporateEmail());
     }
 
-    [RequiresPermission(UserClaimsProvider.ViewPersonalCompensations)]
+    [RequiresPermission(UserClaimsProvider.CanRequestCompensations)]
     [HttpGet("types")]
     public async Task<List<CompensationType>> GetTypesAsync()
     {
