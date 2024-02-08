@@ -29,7 +29,7 @@ public class CompensationsService
     {
         var compensations = await _compensationsQuery.GetPersonalCompensationsAsync(corporateEmail);
 
-        var compensationList = compensations.Select(x => new PersonalCompensationItemDto(x.Id, x.Comment, x.Amount, x.IsPaid, x.DateCreateCompensation.ToString(), x.DateCompensation.ToString())).ToList();
+        var compensationList = compensations.Select(x => new PersonalCompensationItemDto(x.Id, x.Comment, x.Amount, x.IsPaid, x.TypeId, x.DateCreateCompensation.ToString(), x.DateCompensation.ToString())).ToList();
 
         var totalUnpaidAmount = Math.Round(compensations.Where(compensation => compensation.IsPaid == false).Sum(x => x.Amount), 2);
 
