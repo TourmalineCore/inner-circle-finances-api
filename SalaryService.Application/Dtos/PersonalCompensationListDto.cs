@@ -1,4 +1,6 @@
-﻿public class PersonalCompensationListDto
+﻿using SalaryService.Domain;
+
+public class PersonalCompensationListDto
 {
     public List<PersonalCompensationItemDto> List { get; init; }
 
@@ -21,16 +23,19 @@ public class PersonalCompensationItemDto
 
     public bool IsPaid { get; init; }
 
+    public string CompensationType { get; init; }
+
     public string DateCreateCompensation { get; init; }
 
     public string DateCompensation { get; init; }
 
-    public PersonalCompensationItemDto (long id, string? comment, double amount, bool isPaid, string dateCreateCompensation, string dateCompensation)
+    public PersonalCompensationItemDto (long id, string? comment, double amount, bool isPaid, long typeId, string dateCreateCompensation, string dateCompensation)
     {
         Id = id;
         Comment = comment;
         Amount = amount;
         IsPaid = isPaid;
+        CompensationType = CompensationTypes.GetTypeNameByTypeId(typeId);
         DateCreateCompensation = dateCreateCompensation;
         DateCompensation = dateCompensation;
     }
