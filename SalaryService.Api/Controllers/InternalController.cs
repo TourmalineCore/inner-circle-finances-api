@@ -1,11 +1,12 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Mvc;
+using SalaryService.Api.Models;
 using SalaryService.Application.Dtos;
 using SalaryService.Application.Services;
 
 namespace SalaryService.Api.Controllers;
 
-[Route("api/internal")]
+[Route("internal")]
 [ApiController]
 public class InternalController : ControllerBase
 {
@@ -35,5 +36,21 @@ public class InternalController : ControllerBase
 
             return Problem(message, null, InternalServerErrorCode);
         }
+    }
+
+    [HttpGet("get-employee")]
+    public async Task<EmployeeDto> GetEmployeeByCorporateEmailAsync([FromQuery] string corporateEmail)
+    {
+        var employee = await _employeeService.GetByCorporateEmailAsync(corporateEmail);
+        return new EmployeeDto(employee);
+    }
+
+    [HttpGet("get-employees")]
+    public async Task<List<EmployeeDto>> GetEmployeesAsync()
+    {
+        var employees = await _employeeService.GetAllAsync();
+        return employees
+            .Select(x => new EmployeeDto(x))
+            .ToList();
     }
 }
