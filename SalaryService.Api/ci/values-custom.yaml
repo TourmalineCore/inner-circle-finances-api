@@ -107,7 +107,7 @@ resources:
   ##
   requests:
     cpu: 1m
-    memory: 25Mi
+    memory: 250Mi
 ## @param containerPorts.http Port to expose at ASP.NET Core container level
 ##
 containerPorts:
