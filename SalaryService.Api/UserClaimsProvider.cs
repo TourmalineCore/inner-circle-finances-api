@@ -12,8 +12,6 @@ namespace SalaryService.Api
         public const string ViewSalaryAndDocumentsData = "ViewSalaryAndDocumentsData";
         public const string EditFullEmployeesData = "EditFullEmployeesData";
         public const string AccessAnalyticalForecastsPage = "AccessAnalyticalForecastsPage";
-        public const string CanRequestCompensations = "CanRequestCompensations";
-        public const string CanManageCompensations = "CanManageCompensations";
 
         public Task<List<Claim>> GetUserClaimsAsync(string login)
         {

@@ -34,10 +34,6 @@ public static class DependencyInjection
         services.AddTransient<EmployeesForAnalyticsQuery>();
         services.AddTransient<CurrentEmployeesQuery>();
         services.AddScoped<ProfileUpdatingParametersValidator>();
-        services.AddTransient<CompensationCreationCommand>();
-        services.AddTransient<CompensationsService>();
-        services.AddTransient<ICompensationsQuery, CompensationsQuery>();
-        services.AddTransient<CompensationStatusUpdateCommand>();
 
         return services;
     }

@@ -21,8 +21,6 @@ public class EmployeeDbContext : DbContext
 
     public DbSet<WorkingPlan> WorkingPlan { get; set; }
 
-    public DbSet<Compensation> Compensations { get; set; }
-
     public EmployeeDbContext(DbContextOptions<EmployeeDbContext> options) : base(options)
     {
         
