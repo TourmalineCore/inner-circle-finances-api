@@ -19,7 +19,9 @@ public class EmployeeCreationCommand
             parameters.FirstName,
             parameters.LastName,
             parameters.MiddleName,
-            parameters.CorporateEmail);
+            parameters.CorporateEmail,
+            parameters.TenantId
+        );
 
         await _context.AddAsync(employee);
         await _context.SaveChangesAsync();

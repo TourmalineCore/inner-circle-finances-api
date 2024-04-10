@@ -9,4 +9,6 @@ public readonly struct EmployeeCreationParameters
     public string? MiddleName { get; init; }
 
     public string CorporateEmail { get; init; }
+
+    public long TenantId { get; init; }
 }

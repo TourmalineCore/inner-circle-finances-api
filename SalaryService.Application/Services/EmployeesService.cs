@@ -56,14 +56,14 @@ public class EmployeesService
         return await _employeeQuery.GetEmployeeAsync(corporateEmail);
     }
 
-    public async Task<IEnumerable<Employee>> GetAllAsync()
+    public async Task<IEnumerable<Employee>> GetAllAsync(long tenantId)
     {
-        return await _employeesQuery.GetEmployeesAsync();
+        return await _employeesQuery.GetEmployeesAsync(tenantId);
     }
 
-    public async Task<IEnumerable<Employee>> GetCurrentEmployeesAsync()
+    public async Task<IEnumerable<Employee>> GetCurrentEmployeesAsync(long tenantId)
     {
-        return await _currentEmployeesQuery.GetCurrentEmployeesAsync();
+        return await _currentEmployeesQuery.GetCurrentEmployeesAsync(tenantId);
     }
 
     public async Task<IEnumerable<Employee>> GetEmployeesForAnalytics()

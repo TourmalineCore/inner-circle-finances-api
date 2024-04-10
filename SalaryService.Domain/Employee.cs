@@ -38,7 +38,9 @@ public class Employee : IIdentityEntity
 
     public bool IsSpecial { get; private set; }
 
-    public Employee(string firstName, string lastName, string middleName, string corporateEmail,
+    public long TenantId { get; private set; }
+
+    public Employee(string firstName, string lastName, string middleName, string corporateEmail, long tenantId,
         bool isEmployedOfficially = false)
     {
         FirstName = firstName;
@@ -48,6 +50,7 @@ public class Employee : IIdentityEntity
         IsBlankEmployee = true;
         IsCurrentEmployee = false;
         IsEmployedOfficially = isEmployedOfficially;
+        TenantId = tenantId;
     }
 
     public void Delete(Instant deletedAtUtc)

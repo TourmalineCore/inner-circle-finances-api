@@ -31,17 +31,18 @@ public class EmployeeController : Controller
     [HttpGet("all")]
     public async Task<IEnumerable<EmployeeResponse>> GetAllEmployeesAsync()
     {
+        var tenantId = User.GetTenantId();
         var userIsAvailableToViewSalaryAndDocumentsData = User.IsAvailableToViewSalaryAndDocumentData();
 
         if (!userIsAvailableToViewSalaryAndDocumentsData)
         {
-            var currentEmployees = await _employeesService.GetCurrentEmployeesAsync();
+            var currentEmployees = await _employeesService.GetCurrentEmployeesAsync(tenantId);
             return currentEmployees
                 .OrderBy(employee => employee, new EmployeesComparer())
                 .Select(employee => new EmployeeResponse(employee));
         }
 
-        var allEmployees = await _employeesService.GetAllAsync();
+        var allEmployees = await _employeesService.GetAllAsync(tenantId);
         return allEmployees
             .OrderBy(employee => employee, new EmployeesComparer())
             .Select(employee => new EmployeeResponse(employee, true));

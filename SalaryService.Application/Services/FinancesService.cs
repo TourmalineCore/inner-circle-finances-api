@@ -59,12 +59,12 @@ public class FinancesService
     }
 
     public async Task<AnalyticsMetricChanges> CalculateAnalyticsMetricChangesAsync(
-        IEnumerable<MetricsRowDto> metricsRows)
+        IEnumerable<MetricsRowDto> metricsRows, long tenantId)
     {
         var sourceMetrics = await _financialMetricsQuery.HandleAsync();
         var coefficients = await GetCoefficientsAsync();
         var workingPlan = await GetWorkingPlanAsync();
-        var employees = await _employeesQuery.GetEmployeesAsync();
+        var employees = await _employeesQuery.GetEmployeesAsync(tenantId);
         var metricsRowChangesList = new List<MetricsRowChanges>();
 
         foreach (var metricsRow in metricsRows)

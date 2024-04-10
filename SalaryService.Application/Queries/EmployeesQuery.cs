@@ -14,12 +14,12 @@ public class EmployeesQuery : IEmployeesQuery
         _context = context;
     }
 
-    public async Task<IEnumerable<Employee>> GetEmployeesAsync()
+    public async Task<IEnumerable<Employee>> GetEmployeesAsync(long tenantId)
     {
         return await _context
             .Employees
             .Include(x => x.FinancialMetrics)
-            .Where(x => !x.IsSpecial)
+            .Where(x => !x.IsSpecial && x.TenantId == tenantId)
             .ToListAsync();
     }
 }
