@@ -32,8 +32,7 @@ public class FinanceController : Controller
             return new AnalyticsTableResponse(employees, employeesTotalFinancialMetrics);
         }
 
-        var tenantId = User.GetTenantId();
-        var metricsChanges = await _financesService.CalculateAnalyticsMetricChangesAsync(metricsRows, tenantId);
+        var metricsChanges = await _financesService.CalculateAnalyticsMetricChangesAsync(metricsRows, User.GetTenantId());
         return new AnalyticsTableResponse(metricsChanges);
     }
 
