@@ -11,11 +11,14 @@ public class EmployeeDto
 
     public string CorporateEmail { get; }
 
+    public long TenantId { get; }
+
     public EmployeeDto(Employee employee)
     {
         Id = employee.Id;
         FullName = employee.GetFullName();
         CorporateEmail = employee.CorporateEmail;
+        TenantId = employee.TenantId;
     }
 }
 

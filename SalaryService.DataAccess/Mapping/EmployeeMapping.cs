@@ -84,7 +84,8 @@ public class EmployeeMapping : IEntityTypeConfiguration<Employee>
                 IsBlankEmployee = true,
                 IsCurrentEmployee = true,
                 IsEmployedOfficially = true,
-                IsSpecial = false
+                IsSpecial = false,
+                TenantId = 1L
             },
             new
             {
@@ -98,7 +99,8 @@ public class EmployeeMapping : IEntityTypeConfiguration<Employee>
                 IsBlankEmployee = true,
                 IsCurrentEmployee = true,
                 IsEmployedOfficially = true,
-                IsSpecial = true
+                IsSpecial = true,
+                TenantId = 1L
             }
         );
     }

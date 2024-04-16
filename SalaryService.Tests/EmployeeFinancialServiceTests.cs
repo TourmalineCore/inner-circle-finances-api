@@ -83,20 +83,22 @@ public class EmployeeFinancialServiceTests
             .Setup(x => x.HandleAsync())
             .ReturnsAsync(new List<EmployeeFinancialMetrics> { employeeSourceFinancialMetrics });
 
-        var employee = new Employee("name", "lastName", "middleName", "test@tourmalinecore.com", true) { Id = 1 };
+        var employee = new Employee("name", "lastName", "middleName", "test@tourmalinecore.com", 1L, true) { Id = 1 };
         employee.UpdateFinancialMetrics(employeeFinancesForPayroll,
             EmployeeFinancialTestsData.CoefficientOptions,
             EmployeeFinancialTestsData.WorkingPlan,
             It.IsAny<Instant>());
 
+        var tenantId = 1L;
+
         _employeesQueryMock
-            .Setup(x => x.GetEmployeesAsync())
+            .Setup(x => x.GetEmployeesAsync(tenantId))
             .ReturnsAsync(new List<Employee>
             {
                 employee
             });
 
-        var analyticsMetricChanges = await _financeService.CalculateAnalyticsMetricChangesAsync(metricRows);
+        var analyticsMetricChanges = await _financeService.CalculateAnalyticsMetricChangesAsync(metricRows, tenantId);
 
         // new metrics are correct for existing employee
         var employeeNewMetrics = analyticsMetricChanges.MetricsRowsChanges[0].NewMetrics;
@@ -239,29 +241,31 @@ public class EmployeeFinancialServiceTests
             .ReturnsAsync(new List<EmployeeFinancialMetrics>
                 { employeeSourceFinancialMetrics, employee2SourceFinancialMetrics });
 
-        var employee = new Employee("Test", "Test", "Test", "test@tourmalinecore.com", true)
+        var employee = new Employee("Test", "Test", "Test", "test@tourmalinecore.com", 1L, true)
             { Id = 1 };
 
         employee.UpdateFinancialMetrics(employeeFinancesForPayroll,
             EmployeeFinancialTestsData.CoefficientOptions,
             EmployeeFinancialTestsData.WorkingPlan, It.IsAny<Instant>());
 
-        var employee2 = new Employee("name", "lastName", "middleName", "corporate@tourmalinecore.com", true)
+        var employee2 = new Employee("name", "lastName", "middleName", "corporate@tourmalinecore.com", 1L, true)
             { Id = 2 };
+
+        var tenantId = 1L;
 
         employee2.UpdateFinancialMetrics(employee2FinancesForPayroll,
             EmployeeFinancialTestsData.CoefficientOptions,
             EmployeeFinancialTestsData.WorkingPlan, It.IsAny<Instant>());
 
         _employeesQueryMock
-            .Setup(x => x.GetEmployeesAsync())
+            .Setup(x => x.GetEmployeesAsync(tenantId))
             .ReturnsAsync(new List<Employee>
             {
                 employee,
                 employee2
             });
 
-        var analyticsMetricChanges = await _financeService.CalculateAnalyticsMetricChangesAsync(metricRows);
+        var analyticsMetricChanges = await _financeService.CalculateAnalyticsMetricChangesAsync(metricRows, tenantId);
 
         // check that new metrics are correct for unofficial employee
         var employeeNewMetrics = analyticsMetricChanges.MetricsRowsChanges[1].NewMetrics;
